@@ -11,14 +11,16 @@ namespace Admin.Models
     {
         [DisplayName("Group")]
         public string P_Name { get; set; }
-        [DisplayName("Display Name")]
+        [DisplayName("Name")]
         public string P_Disp_Name { get; set; }
+        [DisplayName("Manufacturer")]
+        public string P_Manufacturer { get; set; }
+        [DisplayName("Region")]
+        public string P_Region { get; set; }
         [DisplayName("PartNo")]
         public string P_Part_No { get; set; }
         [DisplayName("Description")]
         public string P_Description { get; set; }
-        [Required(ErrorMessage = "This Field is required")]
-        public string P_Rating { get; set; }
         [DisplayName("Cost")]
         public double P_Cost { get; set; }
         [DisplayName("MRP")]
@@ -26,5 +28,34 @@ namespace Admin.Models
         [DisplayName("SellPrice")]
         public double P_SP { get; set; }
         public string Reg_Success { get; set; }
+    }
+
+    public class MfdFields
+    {
+        [DisplayName("Name")]
+        public string M_Name { get; set; }
+        [DisplayName("Country")]
+        public string M_Country { get; set; }
+        [DisplayName("Region")]
+        public string M_Region { get; set; }
+        [DisplayName("Address")]
+        public string M_Address { get; set; }
+        [DisplayName("Support No")]
+        public string M_Support_No { get; set; }
+        [DisplayName("Contact No")]
+        public string M_Contact_No { get; set; }
+        [DisplayName("Sales No")]
+        public string M_Sales_No { get; set; }
+        [DisplayName("Website URL")]
+        public string M_Website { get; set; }
+        [DisplayName("Support E-mail ID")]
+        public string M_Support_Email { get; set; }
+        [DisplayName("Contact E-mail ID")]
+        public string M_Contact_Email { get; set; }
+        [DisplayName("Sales E-mail ID")]
+        public string M_Sales_Email { get; set; }
+        [DisplayName("Payment")]
+        public string M_Payment { get; set; }
+        public string Regd_Success { get; set; }
     }
 }
