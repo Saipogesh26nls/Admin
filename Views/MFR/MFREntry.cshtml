@@ -1,13 +1,16 @@
-﻿@model Admin.Models.MfdFields
+﻿@model Admin.Models.MFRFields
 
 @{
-    ViewBag.Title = "MfdEntry";
+    ViewBag.Title = "MFREntry";
 }
+<style>
+    .uppercase {
+        text-transform: uppercase;
+    }
+</style>
+<h2>Enter Manufacturer Details</h2>
 
-<h2>Enter the Manufacturer Details</h2>
-
-
-@using (Html.BeginForm("MfdEntry", "Mfd", FormMethod.Post))
+@using (Html.BeginForm("MFREntry", "MFR", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 
@@ -17,7 +20,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.M_Name, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.M_Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.M_Name, new { htmlAttributes = new { @class = "form-control uppercase" } })
             @Html.ValidationMessageFor(model => model.M_Name, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -25,7 +28,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.M_Country, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.M_Country, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.M_Country, new { htmlAttributes = new { @class = "form-control uppercase" } })
             @Html.ValidationMessageFor(model => model.M_Country, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -33,7 +36,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.M_Region, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.M_Region, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.M_Region, new { htmlAttributes = new { @class = "form-control uppercase" } })
             @Html.ValidationMessageFor(model => model.M_Region, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -41,7 +44,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.M_Address, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.M_Address, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.M_Address, new { htmlAttributes = new { @class = "form-control uppercase" } })
             @Html.ValidationMessageFor(model => model.M_Address, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -105,8 +108,14 @@
     <div class="form-group">
         @Html.LabelFor(model => model.M_Payment, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.M_Payment, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.M_Payment, new { htmlAttributes = new { @class = "form-control uppercase" } })
             @Html.ValidationMessageFor(model => model.M_Payment, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.Regd_Success)
         </div>
     </div>
 

@@ -10,46 +10,19 @@ using Admin.Models;
 
 namespace Admin.Controllers
 {
-    public class HomeController : Controller
+    public class GroupController : Controller
     {
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-        
         [HttpGet]
-        public ActionResult ProductEntry()
+        public ActionResult GroupEntry()
         {
             DB_Con_Str OCon = new DB_Con_Str();
             string ConString = OCon.DB_Data();
             SqlConnection _con = new SqlConnection(ConString);
             _con.Open();
-            SqlDataAdapter _da = new SqlDataAdapter("Select * From Product_Master where P_Level>0", ConString);
+            SqlDataAdapter _da = new SqlDataAdapter("Select * From Product_Master where P_Level=1", ConString);
             DataTable _dt = new DataTable();
             _da.Fill(_dt);
-            ViewBag.ProductList = ToSelectList(_dt,"P_Name","P_Name");
-            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Manufacturer_Details", ConString);
-            DataTable _dt1 = new DataTable();
-            _da1.Fill(_dt1);
-            ViewBag.MfdList = ToSelectList(_dt1, "M_Id", "M_Name");
-            SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Manufacturer_Details", ConString);
-            DataTable _dt2 = new DataTable();
-            _da2.Fill(_dt2);
-            ViewBag.RegList = ToSelectList(_dt2, "M_Region", "M_Region");
+            ViewBag.GroupList = ToSelectList(_dt, "P_Name", "P_Name");
 
             return View();
         }
@@ -70,15 +43,16 @@ namespace Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult ProductEntry(ProductModel newuser)
+        public ActionResult GroupEntry(GroupFields newuser)
         {
-            ProductInsert dblogin = new ProductInsert();
+            GroupInsert dblogin = new GroupInsert();
             int userid;
 
             userid = dblogin.AddData(newuser.P_Name, newuser.P_Disp_Name, newuser.P_Manufacturer, newuser.P_Region, newuser.P_Part_No, newuser.P_Description, newuser.P_Cost, newuser.P_MRP, newuser.P_SP);
             Session["P_Id"] = userid;
-            newuser.Reg_Success = "Registered Successfully !!!!";
-            return View("ProductEntry", newuser);
+            newuser.Regt_Success = "Registered Successfully !!!!";
+
+            return View("GroupEntry", newuser);
         }
     }
 }
