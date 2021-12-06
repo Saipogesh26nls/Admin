@@ -12,6 +12,7 @@ namespace Admin.Models
         [DisplayName("Group")]
         public string P_Name { get; set; }
         [DisplayName("Name")]
+        [Required]
         public string P_Disp_Name { get; set; }
         [DisplayName("Manufacturer")]
         public string P_Manufacturer { get; set; }
@@ -32,6 +33,7 @@ namespace Admin.Models
 
     public class MFRFields
     {
+        [Required]
         [DisplayName("Name")]
         public string M_Name { get; set; }
         [DisplayName("Country")]
@@ -64,6 +66,7 @@ namespace Admin.Models
         [DisplayName("Group")]
         public string P_Name { get; set; }
         [DisplayName("Name")]
+        [Required]
         public string P_Disp_Name { get; set; }
         [DisplayName("Manufacturer")]
         public string P_Manufacturer { get; set; }
@@ -80,5 +83,15 @@ namespace Admin.Models
         [DisplayName("SellPrice")]
         public double P_SP { get; set; }
         public string Regt_Success { get; set; }
+    }
+
+    public class BOMFields
+    {
+        public string SP_Part_No { get; set; }
+        public string SP_Description { get; set; }
+        public string Part_No { get; set; }
+        public string Description { get; set; }
+        public string Quantity { get; set; }
+
     }
 }

@@ -120,6 +120,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BOMController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MFRController.cs" />
@@ -172,6 +173,7 @@
     <Content Include="Views\Home\ProductEntry.cshtml" />
     <Content Include="Views\MFR\MFREntry.cshtml" />
     <Content Include="Views\Group\GroupEntry.cshtml" />
+    <Content Include="Views\BOM\BOM_AddList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

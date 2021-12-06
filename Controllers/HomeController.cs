@@ -50,7 +50,6 @@ namespace Admin.Controllers
             DataTable _dt2 = new DataTable();
             _da2.Fill(_dt2);
             ViewBag.RegList = ToSelectList(_dt2, "M_Region", "M_Region");
-
             return View();
         }
 
@@ -78,6 +77,7 @@ namespace Admin.Controllers
             userid = dblogin.AddData(newuser.P_Name, newuser.P_Disp_Name, newuser.P_Manufacturer, newuser.P_Region, newuser.P_Part_No, newuser.P_Description, newuser.P_Cost, newuser.P_MRP, newuser.P_SP);
             Session["P_Id"] = userid;
             newuser.Reg_Success = "Registered Successfully !!!!";
+            ProductEntry();
             return View("ProductEntry", newuser);
         }
     }

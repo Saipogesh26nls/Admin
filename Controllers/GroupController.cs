@@ -51,7 +51,7 @@ namespace Admin.Controllers
             userid = dblogin.AddData(newuser.P_Name, newuser.P_Disp_Name, newuser.P_Manufacturer, newuser.P_Region, newuser.P_Part_No, newuser.P_Description, newuser.P_Cost, newuser.P_MRP, newuser.P_SP);
             Session["P_Id"] = userid;
             newuser.Regt_Success = "Registered Successfully !!!!";
-
+            GroupEntry();
             return View("GroupEntry", newuser);
         }
     }
