@@ -1,0 +1,66 @@
+﻿@model Admin.Models.BOMFields
+
+@{
+    ViewBag.Title = "BOM_Add_Data";
+    var itemQm = ViewBag.ItemQ;
+}
+
+<h2>Bill Of Materials</h2>
+@using (Html.BeginForm("P_Description", "BOM", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+<table  style="border-top:none;">
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.SP_Part_No)
+            @Html.EditorFor(model => model.SP_Part_No, new { htmlAttributes = new { @class = "form-control" } })
+        </td>
+        <td>
+            <button class="btn btn-default" type="submit" style="margin-top:12%;margin-left:10%;">Insert</button>
+        </td>s
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.SP_Description)
+            @Html.EditorFor(model => model.SP_Description, itemQm as string, new { htmlAttributes = new { @class = "form-control" } })
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.Part_No)
+            @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "form-control" } })
+        </td>
+        <td style="padding-left:5%;">
+            @Html.LabelFor(model => model.Description)
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+        </td>
+        <td style="padding-left:5%;">
+            @Html.LabelFor(model => model.Quantity)
+            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+        </td>
+        <td style="padding-left: 5%;">
+            <button class="btn btn-default" type="submit" style="margin-top:100%;">Add</button>
+        </td>
+    </tr>
+</table>
+<table class="table" style="border:none;margin-top:2%;">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Part_No)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th></th>
+        </tr>
+</table>
+<div >
+    <div class="col-md-offset-8 col-md-10" style="margin-top:2%;">
+        <input type="submit" value="Submit" class="btn btn-default" />
+        <input type="reset" value="Cancel" class="btn btn-default" />
+    </div>
+</div>
+}
