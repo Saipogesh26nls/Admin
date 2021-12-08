@@ -24,7 +24,7 @@ namespace Admin.Controllers
             var values = dblogin.P_Description( newuser.SP_Part_No);
             ViewBag.ItemQ = values;
             BOM_Add_Data();
-            return View("BOM_Add_Data", values);
+            return View("BOM_Add_Data", ViewBag.ItemQ);
         }
     }
 }
