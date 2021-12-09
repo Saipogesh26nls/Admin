@@ -2,10 +2,9 @@
 
 @{
     ViewBag.Title = "BOM_Add_Data";
-    var itemQm = ViewBag.ItemQ;
 }
 
-<h2>Bill Of Materials</h2>
+<h2>Bill of Materials</h2>
 @using (Html.BeginForm("P_Description", "BOM", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
@@ -20,11 +19,19 @@
         </td>
     </tr>
     <tr>
+        <td><p class="text-danger">@ViewBag.ErrorMessage</p></td>
+    </tr>
+    <tr>
         <td>
             @Html.LabelFor(model => model.SP_Description)
-            @Html.EditorFor(model => model.SP_Description, itemQm as string, new { htmlAttributes = new { @class = "form-control" } })
         </td>
     </tr>
+    <tr>
+        <td style="width: 200px; height: 35px; border: 1px solid black; border-radius: 5px; border-collapse: separate; ">
+            @Html.DisplayFor(model => model.SP_Description)
+        </td>
+    </tr>
+    <tr></tr>
     <tr>
         <td>
             @Html.LabelFor(model => model.Part_No)

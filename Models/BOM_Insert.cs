@@ -21,7 +21,6 @@ namespace Admin.Models
             string cmd1="select P_Description from Product_Master where P_Part_No = '" + cSP_Part_No+ "'";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
             SqlDataReader dr = SqlCmd1.ExecuteReader();
-
             while (dr.Read())
             {
                 ItemQm.Add(new BOMFields

@@ -87,11 +87,19 @@ namespace Admin.Models
 
     public class BOMFields
     {
+        [DisplayName("SP Part-No")]
+        [Required]
         public string SP_Part_No { get; set; }
+        [DisplayName("SP Description")]
         public string SP_Description { get; set; }
+        [DisplayName("Part-No")]
         public string Part_No { get; set; }
+        [DisplayName("Description")]
         public string Description { get; set; }
+        [DisplayName("Quantity")]
         public string Quantity { get; set; }
+        public string hello { get; set; }
 
     }
+
 }
