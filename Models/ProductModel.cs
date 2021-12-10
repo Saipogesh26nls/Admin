@@ -98,8 +98,17 @@ namespace Admin.Models
         public string Description { get; set; }
         [DisplayName("Quantity")]
         public string Quantity { get; set; }
+        [DisplayName("Part-No")]
+        public string Part_No1 { get; set; }
+        [DisplayName("Description")]
+        public string Description1 { get; set; }
+        [DisplayName("Quantity")]
+        public string Quantity1 { get; set; }
         public string hello { get; set; }
-
+    }
+    public class OrderDetail
+    {
+        public List<BOMFields> OrderDetails { get; set; }
     }
 
 }

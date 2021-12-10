@@ -38,10 +38,11 @@ namespace Admin.Controllers
         }
         public ActionResult Product_details(BOMFields new_data)
         {
-            var Part_Nos = (new_data.Part_No, new_data.Description, new_data.Quantity);            
-            ViewBag.ItemA= Part_Nos;
+            BOM_Insert dblogin = new BOM_Insert();
+            var Part_Nos = dblogin.Table(new_data.Part_No, new_data.Description, new_data.Quantity);
+            ViewBag.ItemA = Part_Nos.Single(); 
+            BOM_Add_Data();
             return View("BOM_Add_Data", ViewBag.ItemA);
-
         }
     }
 }
