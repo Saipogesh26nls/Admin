@@ -36,11 +36,17 @@ namespace Admin.Controllers
                 return View("BOM_Add_Data", ViewBag.ItemQ);
             }
         }
+        public static List<BOMFields> data(BOMFields new_data)
+        {
+            List<BOMFields> Item = new List<BOMFields>();
+            Item.Add(new BOMFields { Part_No1 = new_data.Part_No, Description1 = new_data.Description, Quantity1 = new_data.Quantity });
+            return (Item);
+        }
         public ActionResult Product_details(BOMFields new_data)
         {
             BOM_Insert dblogin = new BOM_Insert();
             var Part_Nos = dblogin.Table(new_data.Part_No, new_data.Description, new_data.Quantity);
-            ViewBag.ItemA = Part_Nos.Single(); 
+            ViewBag.ItemA = Part_Nos.Single();
             BOM_Add_Data();
             return View("BOM_Add_Data", ViewBag.ItemA);
         }

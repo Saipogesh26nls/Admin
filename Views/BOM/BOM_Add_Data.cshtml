@@ -34,28 +34,29 @@
     <tr></tr>
  </table>
  }
-@using (Html.BeginForm("Product_details", "BOM", FormMethod.Post))
-     {
+@using (Html.BeginForm("data", "BOM",FormMethod.Post))
+{
      <table class="table" style="border-top:none;">
         <tr style="width: 250px;">
             <td>
                 @Html.LabelFor(model => model.Part_No)
-                @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "form-control" , @id = "part_no"} })
             </td>
             <td>
                 @Html.LabelFor(model => model.Description)
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @id = "description" } })
             </td>
             <td >
                 @Html.LabelFor(model => model.Quantity)
-                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control", @id = "quantity" } })
             </td>
             <td>
-                <button class="btn btn-default" type="submit" style="margin-top:25%;">Add</button>
+                <button class="btn btn-default" id="add_btn" type="button" onclick="addField(this);" style="margin-top:25%;">Add</button>
             </td>
         </tr>
     </table>
-     <table class="table" style="border:none;margin-top:2%;">
+}
+     <table class="table" id="tbl"style="border:none;margin-top:2%;">
          <tr>
              <th>
                  @Html.DisplayNameFor(model => model.Part_No)
@@ -66,18 +67,45 @@
              <th>
                  @Html.DisplayNameFor(model => model.Quantity)
              </th>
-             <th></th>
          </tr>
-                 <tr>
-                     <td>@Html.DisplayFor(model => model.Part_No1)</td>  
-                     <td>@Html.DisplayFor(model => model.Description1)</td>  
-                     <td>@Html.DisplayFor(model => model.Quantity1)</td>  
-                 </tr>
      </table>
+
 <div>
     <div class="col-md-offset-8 col-md-10" style="margin-top:2%;">
-        <input type="submit" value="Submit" class="btn btn-default" />
+        <input type="submit"  value="Submit" class="btn btn-default" />
         <input type="reset" value="Cancel" class="btn btn-default" />
     </div>
 </div>
-}
+
+<script>
+    function addField(argument) {
+        var myTable = document.getElementById("tbl");
+        var currentIndex = myTable.rows.length;
+        var currentRow = myTable.insertRow(-1);
+
+        var linksBox = document.createElement("td");
+        linksBox.setAttribute("name", "Part_No1" + currentIndex);
+
+        var keywordsBox = document.createElement("td");
+        keywordsBox.setAttribute("name", "Description1" + currentIndex);
+
+        var violationsBox = document.createElement("td");
+        violationsBox.setAttribute("name", "Quantity1" + currentIndex);
+
+        var currentCell = currentRow.insertCell(-1);
+        currentCell.appendChild(linksBox);
+        currentCell.innerHTML = document.getElementById("part_no").value;
+        currentCell.style.border = "1px solid black";
+
+        currentCell = currentRow.insertCell(-1);
+        currentCell.appendChild(keywordsBox);
+        currentCell.innerHTML = document.getElementById("description").value;
+        currentCell.style.border = "1px solid black";
+
+        currentCell = currentRow.insertCell(-1);
+        currentCell.appendChild(violationsBox);
+        currentCell.innerHTML = document.getElementById("quantity").value;
+        currentCell.style.border = "1px solid black";
+    }
+
+</script>
