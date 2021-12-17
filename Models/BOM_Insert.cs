@@ -35,7 +35,7 @@ namespace Admin.Models
         public List<BOMFields> Table(string cPart_No, string cDescription, string cQuantity)
         {
             List<BOMFields> ItemQm = new List<BOMFields>();
-            ItemQm.Add(new BOMFields {Part_No1 = cPart_No,Description1 = cDescription,Quantity1 = cQuantity});
+            ItemQm.Add(new BOMFields { Part_No1 = cPart_No, Description1 = cDescription, Quantity1 = cQuantity });
             return (ItemQm);
         }
     } 

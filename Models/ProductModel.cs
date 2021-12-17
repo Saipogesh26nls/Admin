@@ -93,10 +93,13 @@ namespace Admin.Models
         [DisplayName("SP Description")]
         public string SP_Description { get; set; }
         [DisplayName("Part-No")]
+        [Required]
         public string Part_No { get; set; }
         [DisplayName("Description")]
+        [Required]
         public string Description { get; set; }
         [DisplayName("Quantity")]
+        [Required]
         public string Quantity { get; set; }
         [DisplayName("Part-No")]
         public string Part_No1 { get; set; }
@@ -108,6 +111,27 @@ namespace Admin.Models
     }
     public class OrderDetail
     {
+        [DisplayName("SP Part-No")]
+        [Required]
+        public string SP_Part_No { get; set; }
+        [DisplayName("SP Description")]
+        public string SP_Description { get; set; }
+        [DisplayName("Part-No")]
+        [Required]
+        public string Part_No { get; set; }
+        [DisplayName("Description")]
+        [Required]
+        public string Description { get; set; }
+        [DisplayName("Quantity")]
+        [Required]
+        public string Quantity { get; set; }
+        [DisplayName("Part-No")]
+        public string Part_No1 { get; set; }
+        [DisplayName("Description")]
+        public string Description1 { get; set; }
+        [DisplayName("Quantity")]
+        public string Quantity1 { get; set; }
+        public string hello { get; set; }
         public List<BOMFields> OrderDetails { get; set; }
     }
 

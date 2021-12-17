@@ -3,109 +3,123 @@
 @{
     ViewBag.Title = "BOM_Add_Data";
 }
-
 <h2>Bill of Materials</h2>
 @using (Html.BeginForm("P_Description", "BOM", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
- <table style="border-top:none;">
-    <tr>
-        <td>
-            @Html.LabelFor(model => model.SP_Part_No)
-            @Html.EditorFor(model => model.SP_Part_No, new { htmlAttributes = new { @class = "form-control" } })
-        </td>
-        <td>
-            <button class="btn btn-default" type="submit" style="margin-top:40%;margin-left:20%;">Insert</button>
-        </td>
-    </tr>
-    <tr>
-        <td><p class="text-danger">@ViewBag.ErrorMessage</p></td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(model => model.SP_Description)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.DisplayFor(model => model.SP_Description)
-        </td>
-    </tr>
-    <tr></tr>
- </table>
- }
-@using (Html.BeginForm("data", "BOM",FormMethod.Post))
+    <table style="border-top:none;">
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.SP_Part_No)
+                @Html.EditorFor(model => model.SP_Part_No, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td>
+                <button class="btn btn-default" type="submit" style="margin-top:40%;margin-left:20%;">Insert</button>
+            </td>
+        </tr>
+        <tr>
+            <td><p class="text-danger">@ViewBag.ErrorMessage</p></td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.SP_Description)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.SP_Description)
+            </td>
+        </tr>
+        <tr></tr>
+    </table>
+}
+@using (Html.BeginForm("Product_details", "BOM", FormMethod.Post))
 {
-     <table class="table" style="border-top:none;">
+    <table class="table" style="border-top:none;">
         <tr style="width: 250px;">
             <td>
                 @Html.LabelFor(model => model.Part_No)
-                @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "form-control" , @id = "part_no"} })
+                @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "form-control", @id = "part_no" } })
             </td>
             <td>
                 @Html.LabelFor(model => model.Description)
                 @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @id = "description" } })
             </td>
-            <td >
+            <td>
                 @Html.LabelFor(model => model.Quantity)
                 @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control", @id = "quantity" } })
             </td>
             <td>
-                <button class="btn btn-default" id="add_btn" type="button" onclick="addField(this);" style="margin-top:25%;">Add</button>
+                <button class="btn btn-default" id="add_btn" type="submit" onclick="addField(this);" style="margin-top:25%;">Add</button>
             </td>
         </tr>
     </table>
-}
-     <table class="table" id="tbl"style="border:none;margin-top:2%;">
-         <tr>
-             <th>
-                 @Html.DisplayNameFor(model => model.Part_No)
-             </th>
-             <th>
-                 @Html.DisplayNameFor(model => model.Description)
-             </th>
-             <th>
-                 @Html.DisplayNameFor(model => model.Quantity)
-             </th>
-         </tr>
-     </table>
-
-<div>
-    <div class="col-md-offset-8 col-md-10" style="margin-top:2%;">
-        <input type="submit"  value="Submit" class="btn btn-default" />
-        <input type="reset" value="Cancel" class="btn btn-default" />
+    <table class="table" id="tbl" style="border:none;margin-top:2%;">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Part_No)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+        </tr>
+    </table>
+    
+    <table>
+        <tr>
+            <td id="arrPrint"></td>
+        </tr>
+    </table>
+    <div>
+        <div class="col-md-offset-8 col-md-10" style="margin-top:2%;">
+            <input type="submit" value="Submit" class="btn btn-default" />
+            <input type="reset" value="Cancel" class="btn btn-default" />
+        </div>
     </div>
-</div>
-
+}
 <script>
     function addField(argument) {
         var myTable = document.getElementById("tbl");
         var currentIndex = myTable.rows.length;
         var currentRow = myTable.insertRow(-1);
+        const arr = new Array();
 
-        var linksBox = document.createElement("td");
-        linksBox.setAttribute("name", "Part_No1" + currentIndex);
+        var Part_No_Box = document.createElement("td");
+        Part_No_Box.innerHTML=@Html.DisplayFor(m=>m.Part_No1);
+        var Descp_Box = document.createElement("td");
+        Descp_Box.setAttribute("id", "a" + currentIndex);
 
-        var keywordsBox = document.createElement("td");
-        keywordsBox.setAttribute("name", "Description1" + currentIndex);
-
-        var violationsBox = document.createElement("td");
-        violationsBox.setAttribute("name", "Quantity1" + currentIndex);
+        var Quan_Box = document.createElement("td");
+        Quan_Box.setAttribute("id", "a" + currentIndex);
 
         var currentCell = currentRow.insertCell(-1);
-        currentCell.appendChild(linksBox);
+        currentCell.appendChild(Part_No_Box);
         currentCell.innerHTML = document.getElementById("part_no").value;
+        arr.push(document.getElementById("part_no").value);
         currentCell.style.border = "1px solid black";
+        currentCell.setAttribute("id", "a" + currentIndex);
 
         currentCell = currentRow.insertCell(-1);
-        currentCell.appendChild(keywordsBox);
+        currentCell.appendChild(Descp_Box);
         currentCell.innerHTML = document.getElementById("description").value;
+        arr.push(document.getElementById("description").value);
         currentCell.style.border = "1px solid black";
+        currentCell.setAttribute("id", "a" + currentIndex);
 
         currentCell = currentRow.insertCell(-1);
-        currentCell.appendChild(violationsBox);
+        currentCell.appendChild(Quan_Box);
         currentCell.innerHTML = document.getElementById("quantity").value;
+        arr.push(document.getElementById("quantity").value);
         currentCell.style.border = "1px solid black";
-    }
+        currentCell.setAttribute("id", "a" + currentIndex);
 
+        document.getElementById("arrPrint").innerHTML = arr;
+        return (arr)
+        var array = new Array(arr);
+        console.count(arr)
+    }
 </script>
+
