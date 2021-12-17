@@ -33,7 +33,7 @@
         <tr></tr>
     </table>
 }
-@using (Html.BeginForm("Product_details", "BOM", FormMethod.Post))
+@using (Html.BeginForm("Main", "BOM", FormMethod.Post))
 {
     <table class="table" style="border-top:none;">
         <tr style="width: 250px;">
@@ -50,7 +50,7 @@
                 @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control", @id = "quantity" } })
             </td>
             <td>
-                <button class="btn btn-default" id="add_btn" type="submit" onclick="addField(this);" style="margin-top:25%;">Add</button>
+                <button class="btn btn-default" id="add_btn" type="submit"  style="margin-top:25%;">Add</button>
             </td>
         </tr>
     </table>
@@ -66,12 +66,20 @@
                 @Html.DisplayNameFor(model => model.Quantity)
             </th>
         </tr>
+        @{
+            foreach (var item in ViewBag.item)
+            {
+                <tr>
+                    <td>@item.Part_No1</td>
+                    <td>@item.Description1</td>
+                    <td>@item.Quantity1</td>
+                </tr>
+            }
+        }
     </table>
     
     <table>
-        <tr>
-            <td id="arrPrint"></td>
-        </tr>
+        
     </table>
     <div>
         <div class="col-md-offset-8 col-md-10" style="margin-top:2%;">
@@ -88,12 +96,8 @@
         const arr = new Array();
 
         var Part_No_Box = document.createElement("td");
-        Part_No_Box.innerHTML=@Html.DisplayFor(m=>m.Part_No1);
         var Descp_Box = document.createElement("td");
-        Descp_Box.setAttribute("id", "a" + currentIndex);
-
         var Quan_Box = document.createElement("td");
-        Quan_Box.setAttribute("id", "a" + currentIndex);
 
         var currentCell = currentRow.insertCell(-1);
         currentCell.appendChild(Part_No_Box);
