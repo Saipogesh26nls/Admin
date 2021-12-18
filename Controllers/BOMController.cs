@@ -45,6 +45,35 @@ namespace Admin.Controllers
             _list.Add(new BOMFields { Part_No1 = tbl_part_no, Description1 = tbl_Descp, Quantity1 = tbl_Quan, SP_Description = SP_Descp });
             return (_list);
         }
+        public string Order()
+        {
+            AddOrderDetails(_list);
+            return ("Hello");
+        }
+        [HttpPost]
+        public string AddOrderDetails(List<BOMFields> orderDetail)
+        {
+            //Converting List to XML using LINQ to XML    
+            // the xml doc will get stored into OrderDetails object of XDocument    
+            XDocument OrderDetails = new XDocument(new XDeclaration("1.0", "UTF - 8", "yes"),
+            new XElement("OrderDetail",
+            from OrderDet in orderDetail
+            select new XElement("OrderDetails",
+            new XElement("MP_Description", OrderDet.SP_Description),
+            new XElement("Part_No", OrderDet.Part_No1),
+            new XElement("Description", OrderDet.Description1),
+            new XElement("Quantity", OrderDet.Quantity1))));
 
+            DB_Con_Str OCon = new DB_Con_Str();
+            string ConString = OCon.DB_Data();
+            SqlConnection Con = new SqlConnection(ConString);
+            Con.Open();
+
+            SqlCommand sql_cmnd = new SqlCommand("[dbo].[BOM_Prod]", Con);
+            sql_cmnd.CommandType = CommandType.StoredProcedure;
+            sql_cmnd.Parameters.AddWithValue("@xml", OrderDetails);
+            sql_cmnd.ExecuteNonQuery();
+            return ("Hi");
+        }
     }
 }

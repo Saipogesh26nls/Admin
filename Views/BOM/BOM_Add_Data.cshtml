@@ -48,7 +48,7 @@
         <tr style="width: 250px;">
             <td>
                 @Html.LabelFor(model => model.Part_No)
-                @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "form-control"} })
+                @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "form-control" } })
             </td>
             <td>
                 @Html.LabelFor(model => model.Description)
@@ -59,7 +59,7 @@
                 @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
             </td>
             <td>
-                <button class="btn btn-default" id="add_btn" type="submit"  style="margin-top:25%;">Add</button>
+                <button class="btn btn-default" id="add_btn" type="submit" style="margin-top:25%;">Add</button>
             </td>
         </tr>
     </table>
@@ -94,10 +94,12 @@
         }
     </table>
 }
+@using (Html.BeginForm("Order", "BOM", FormMethod.Post))
+{
     <div>
         <div class="col-md-offset-8 col-md-10" style="margin-top:2%;">
             <input type="submit" value="Submit" class="btn btn-default" />
             <input type="reset" value="Cancel" class="btn btn-default" />
         </div>
     </div>
-
+}
