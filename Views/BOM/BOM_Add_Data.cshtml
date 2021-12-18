@@ -4,7 +4,7 @@
     ViewBag.Title = "BOM_Add_Data";
 }
 <h2>Bill of Materials</h2>
-@using (Html.BeginForm("P_Description", "BOM", FormMethod.Post))
+@using (Html.BeginForm("Main", "BOM", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     <table style="border-top:none;">
@@ -27,27 +27,36 @@
         </tr>
         <tr>
             <td>
-                @Html.DisplayFor(model => model.SP_Description)
+                @{
+                    foreach (var item in ViewBag.item)
+                    {
+                        if (item.Part_No1 == null)
+                        {
+                            @item.SP_Description;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
             </td>
         </tr>
-        <tr></tr>
     </table>
-}
-@using (Html.BeginForm("Main", "BOM", FormMethod.Post))
-{
+
     <table class="table" style="border-top:none;">
         <tr style="width: 250px;">
             <td>
                 @Html.LabelFor(model => model.Part_No)
-                @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "form-control", @id = "part_no" } })
+                @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "form-control"} })
             </td>
             <td>
                 @Html.LabelFor(model => model.Description)
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @id = "description" } })
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
             </td>
             <td>
                 @Html.LabelFor(model => model.Quantity)
-                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control", @id = "quantity" } })
+                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
             </td>
             <td>
                 <button class="btn btn-default" id="add_btn" type="submit"  style="margin-top:25%;">Add</button>
@@ -69,61 +78,26 @@
         @{
             foreach (var item in ViewBag.item)
             {
-                <tr>
-                    <td>@item.Part_No1</td>
-                    <td>@item.Description1</td>
-                    <td>@item.Quantity1</td>
-                </tr>
+                if (item.Part_No1 == null)
+                {
+                    continue;
+                }
+                else
+                {
+                    <tr>
+                        <td>@item.Part_No1</td>
+                        <td>@item.Description1</td>
+                        <td>@item.Quantity1</td>
+                    </tr>
+                }
             }
         }
     </table>
-    
-    <table>
-        
-    </table>
+}
     <div>
         <div class="col-md-offset-8 col-md-10" style="margin-top:2%;">
             <input type="submit" value="Submit" class="btn btn-default" />
             <input type="reset" value="Cancel" class="btn btn-default" />
         </div>
     </div>
-}
-<script>
-    function addField(argument) {
-        var myTable = document.getElementById("tbl");
-        var currentIndex = myTable.rows.length;
-        var currentRow = myTable.insertRow(-1);
-        const arr = new Array();
-
-        var Part_No_Box = document.createElement("td");
-        var Descp_Box = document.createElement("td");
-        var Quan_Box = document.createElement("td");
-
-        var currentCell = currentRow.insertCell(-1);
-        currentCell.appendChild(Part_No_Box);
-        currentCell.innerHTML = document.getElementById("part_no").value;
-        arr.push(document.getElementById("part_no").value);
-        currentCell.style.border = "1px solid black";
-        currentCell.setAttribute("id", "a" + currentIndex);
-
-        currentCell = currentRow.insertCell(-1);
-        currentCell.appendChild(Descp_Box);
-        currentCell.innerHTML = document.getElementById("description").value;
-        arr.push(document.getElementById("description").value);
-        currentCell.style.border = "1px solid black";
-        currentCell.setAttribute("id", "a" + currentIndex);
-
-        currentCell = currentRow.insertCell(-1);
-        currentCell.appendChild(Quan_Box);
-        currentCell.innerHTML = document.getElementById("quantity").value;
-        arr.push(document.getElementById("quantity").value);
-        currentCell.style.border = "1px solid black";
-        currentCell.setAttribute("id", "a" + currentIndex);
-
-        document.getElementById("arrPrint").innerHTML = arr;
-        return (arr)
-        var array = new Array(arr);
-        console.count(arr)
-    }
-</script>
 

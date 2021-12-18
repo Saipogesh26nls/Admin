@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Data;
 using System.Data.SqlClient;
 using Admin.Models;
+using System.Xml.Linq;
 
 namespace Admin.Controllers
 {
@@ -14,7 +15,7 @@ namespace Admin.Controllers
         // GET: BOM
         public ActionResult BOM_Add_Data()
         {
-            if(_list == null)
+            if(_list.Count == 0)
             {
                 List<BOMFields> itemQm = new List<BOMFields>();
                 itemQm.Add(new BOMFields { Part_No1 = "0", Description1 = "0", Quantity1 = "0" });
@@ -29,43 +30,21 @@ namespace Admin.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult P_Description(BOMFields newuser)
-        {
-            BOM_Insert dblogin = new BOM_Insert();
-            var values = dblogin.P_Description(newuser.SP_Part_No);
-
-            if (values.Count == 0)
-            {
-                ViewBag.ErrorMessage = "Part-No Not Found !!!";
-                return View("BOM_Add_Data");
-            }
-            else
-            {
-                ViewBag.ItemQ = values.Single();
-                return View("BOM_Add_Data");
-            }
-        }
-        [HttpPost]
-        public ActionResult Product_details(BOMFields new_data)
-        {
-            BOM_Insert dblogin = new BOM_Insert();
-            var Part_Nos = dblogin.Table(new_data.Part_No, new_data.Description, new_data.Quantity);
-            ViewBag.ItemA = Part_Nos.Single();
-            return View("BOM_Add_Data", ViewBag.ItemA);
-        }
-        [HttpPost]
         public ActionResult Main(BOMFields new_data)
         {
-            Record(new_data.Part_No, new_data.Description, new_data.Quantity);
+            BOM_Insert dblogin = new BOM_Insert();
+            string values = dblogin.P_Description(new_data.SP_Part_No);
+            Record(new_data.Part_No, new_data.Description, new_data.Quantity, values );
             BOM_Add_Data();
             return View("BOM_Add_Data");
         }
+
         static List<BOMFields> _list = new List<BOMFields>();
-        public static List<BOMFields> Record(string tbl_part_no, string tbl_Descp, string tbl_Quan)
+        public static List<BOMFields> Record(string tbl_part_no, string tbl_Descp, string tbl_Quan, string SP_Descp)
         {
-            _list.Add(new BOMFields { Part_No1 = tbl_part_no, Description1 = tbl_Descp, Quantity1 = tbl_Quan });
+            _list.Add(new BOMFields { Part_No1 = tbl_part_no, Description1 = tbl_Descp, Quantity1 = tbl_Quan, SP_Description = SP_Descp });
             return (_list);
         }
+
     }
 }

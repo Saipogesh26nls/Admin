@@ -11,7 +11,7 @@ namespace Admin.Models
 {
     public class BOM_Insert
     {
-        public List<BOMFields> P_Description(string cSP_Part_No)
+        public string P_Description(string cSP_Part_No)
         {
             List<BOMFields> ItemQm = new List<BOMFields>();
             DB_Con_Str OCon = new DB_Con_Str();
@@ -29,14 +29,9 @@ namespace Admin.Models
                 }
                 );
             }
+            string item = string.Join("",ItemQm.Select(m => m.SP_Description));
             Con.Close();
-            return ItemQm;
-        }
-        public List<BOMFields> Table(string cPart_No, string cDescription, string cQuantity)
-        {
-            List<BOMFields> ItemQm = new List<BOMFields>();
-            ItemQm.Add(new BOMFields { Part_No1 = cPart_No, Description1 = cDescription, Quantity1 = cQuantity });
-            return (ItemQm);
+            return item;
         }
     } 
 }
