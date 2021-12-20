@@ -96,10 +96,13 @@
 }
 @using (Html.BeginForm("Order", "BOM", FormMethod.Post))
 {
+<div>
     <div>
-        <div class="col-md-offset-8 col-md-10" style="margin-top:2%;">
-            <input type="submit" value="Submit" class="btn btn-default" />
-            <input type="reset" value="Cancel" class="btn btn-default" />
-        </div>
+        @Html.DisplayFor(m => m.Reg_Success)
     </div>
+    <div class="col-md-offset-8 col-md-10" style="margin-top:2%;">
+        <input type="submit" value="Submit" class="btn btn-default" />
+        <input type="reset" value="Cancel" class="btn btn-default" />
+    </div>
+</div>
 }

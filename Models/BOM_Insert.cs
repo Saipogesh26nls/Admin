@@ -29,9 +29,17 @@ namespace Admin.Models
                 }
                 );
             }
-            string item = string.Join("",ItemQm.Select(m => m.SP_Description));
-            Con.Close();
-            return item;
+            if (ItemQm.Count()!=0)
+            {
+                string item = string.Join("", ItemQm.Select(m => m.SP_Description));
+                Con.Close();
+                return item;
+            }
+            else
+            {
+                return null;
+            }
+            
         }
     } 
 }

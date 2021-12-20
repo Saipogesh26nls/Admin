@@ -1,12 +1,9 @@
-﻿using System;
+﻿using Admin.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 using System.Data;
 using System.Data.SqlClient;
-using Admin.Models;
-using System.Xml.Linq;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace Admin.Controllers
 {
@@ -34,9 +31,18 @@ namespace Admin.Controllers
         {
             BOM_Insert dblogin = new BOM_Insert();
             string values = dblogin.P_Description(new_data.SP_Part_No);
-            Record(new_data.Part_No, new_data.Description, new_data.Quantity, values );
-            BOM_Add_Data();
-            return View("BOM_Add_Data");
+            if(values == null)
+            {
+                ViewBag.ErrorMessage = "Part_No is not Found";
+                return View("BOM_Add_Data"); 
+            }
+            else
+            {
+                Record(new_data.Part_No, new_data.Description, new_data.Quantity, values);
+                BOM_Add_Data();
+                return View("BOM_Add_Data");
+            }
+            
         }
 
         static List<BOMFields> _list = new List<BOMFields>();
@@ -45,35 +51,38 @@ namespace Admin.Controllers
             _list.Add(new BOMFields { Part_No1 = tbl_part_no, Description1 = tbl_Descp, Quantity1 = tbl_Quan, SP_Description = SP_Descp });
             return (_list);
         }
-        public string Order()
+        public ActionResult Order(BOMFields orderDetail)
         {
             AddOrderDetails(_list);
-            return ("Hello");
+            orderDetail.Reg_Success = "Registered Successfully !!!!";
+            ModelState.Clear();
+            return View("BOM_Add_Data", orderDetail);
         }
         [HttpPost]
-        public string AddOrderDetails(List<BOMFields> orderDetail)
+        public void AddOrderDetails(List<BOMFields> orderDetail)
         {
-            //Converting List to XML using LINQ to XML    
-            // the xml doc will get stored into OrderDetails object of XDocument    
-            XDocument OrderDetails = new XDocument(new XDeclaration("1.0", "UTF - 8", "yes"),
-            new XElement("OrderDetail",
-            from OrderDet in orderDetail
-            select new XElement("OrderDetails",
-            new XElement("MP_Description", OrderDet.SP_Description),
-            new XElement("Part_No", OrderDet.Part_No1),
-            new XElement("Description", OrderDet.Description1),
-            new XElement("Quantity", OrderDet.Quantity1))));
-
-            DB_Con_Str OCon = new DB_Con_Str();
-            string ConString = OCon.DB_Data();
-            SqlConnection Con = new SqlConnection(ConString);
-            Con.Open();
-
-            SqlCommand sql_cmnd = new SqlCommand("[dbo].[BOM_Prod]", Con);
-            sql_cmnd.CommandType = CommandType.StoredProcedure;
-            sql_cmnd.Parameters.AddWithValue("@xml", OrderDetails);
-            sql_cmnd.ExecuteNonQuery();
-            return ("Hi");
+            int i = 1;
+            while (i<=orderDetail.Count())
+            {
+                if(i== orderDetail.Count())
+                {
+                    break;
+                }
+                DB_Con_Str OCon = new DB_Con_Str();
+                string ConString = OCon.DB_Data();
+                SqlConnection Con = new SqlConnection(ConString);
+                SqlCommand sql_cmnd = new SqlCommand("[dbo].[BOM_Prod]", Con);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = orderDetail[i].Part_No1.ToUpper();
+                sql_cmnd.Parameters.AddWithValue("@descp", SqlDbType.NVarChar).Value = orderDetail[i].Description1.ToUpper();
+                sql_cmnd.Parameters.AddWithValue("@mp_descp", SqlDbType.NVarChar).Value = orderDetail[i].SP_Description.ToUpper();
+                sql_cmnd.Parameters.AddWithValue("@quantity", SqlDbType.NVarChar).Value = orderDetail[i].Quantity1.ToUpper();
+                Con.Open();
+                sql_cmnd.ExecuteNonQuery();
+                Con.Close();
+                i++;
+            }
+            
         }
     }
 }
