@@ -19,13 +19,13 @@ namespace Admin.Models
 
              SqlCommand sql_cmnd = new SqlCommand("[dbo].[addProduct]", Con);
              sql_cmnd.CommandType = CommandType.StoredProcedure;
-             sql_cmnd.Parameters.AddWithValue("@Pname", SqlDbType.NVarChar).Value = cP_Disp_Name;
-             sql_cmnd.Parameters.AddWithValue("@PDispname", SqlDbType.NVarChar).Value = cP_Disp_Name;
+             sql_cmnd.Parameters.AddWithValue("@Pname", SqlDbType.NVarChar).Value = cP_Disp_Name.ToUpper();
+             sql_cmnd.Parameters.AddWithValue("@PDispname", SqlDbType.NVarChar).Value = cP_Disp_Name.ToUpper();
              sql_cmnd.Parameters.AddWithValue("@Pmfr", SqlDbType.Int).Value = cP_Manufacturer;
-             sql_cmnd.Parameters.AddWithValue("@PRegion", SqlDbType.NVarChar).Value = cP_Region;
-             sql_cmnd.Parameters.AddWithValue("@PPartNo", SqlDbType.NVarChar).Value = cP_Part_No;
+             sql_cmnd.Parameters.AddWithValue("@PRegion", SqlDbType.NVarChar).Value = cP_Region.ToUpper();
+             sql_cmnd.Parameters.AddWithValue("@PPartNo", SqlDbType.NVarChar).Value = cP_Part_No.ToUpper();
              sql_cmnd.Parameters.AddWithValue("@PGroup", SqlDbType.NVarChar).Value = cP_Name;
-             sql_cmnd.Parameters.AddWithValue("@PDescription", SqlDbType.NVarChar).Value = cP_Description;
+             sql_cmnd.Parameters.AddWithValue("@PDescription", SqlDbType.NVarChar).Value = cP_Description.ToUpper();
              sql_cmnd.Parameters.AddWithValue("@Pcost", SqlDbType.Money).Value = cP_Cost;
              sql_cmnd.Parameters.AddWithValue("@pMRp", SqlDbType.Money).Value = cP_MRP;
              sql_cmnd.Parameters.AddWithValue("@psp", SqlDbType.Money).Value = cP_SP;

@@ -15,7 +15,7 @@ namespace Admin.Controllers
             if(_list.Count == 0)
             {
                 List<BOMFields> itemQm = new List<BOMFields>();
-                itemQm.Add(new BOMFields { Part_No1 = "0", Description1 = "0", Quantity1 = "0" });
+                itemQm.Add(new BOMFields { Part_No1 = "", Description1 = "", Quantity1 = "" });
                 ViewBag.item = itemQm;
                 return View();
             }
@@ -25,7 +25,12 @@ namespace Admin.Controllers
                 return View();
             }
         }
-
+        public ActionResult BOM_Clear_View()
+        {
+            _list.Clear();
+            BOM_Add_Data();
+            return View("BOM_Add_Data");
+        }
         [HttpPost]
         public ActionResult Main(BOMFields new_data)
         {
@@ -51,38 +56,15 @@ namespace Admin.Controllers
             _list.Add(new BOMFields { Part_No1 = tbl_part_no, Description1 = tbl_Descp, Quantity1 = tbl_Quan, SP_Description = SP_Descp });
             return (_list);
         }
-        public ActionResult Order(BOMFields orderDetail)
-        {
-            AddOrderDetails(_list);
-            orderDetail.Reg_Success = "Registered Successfully !!!!";
-            ModelState.Clear();
-            return View("BOM_Add_Data", orderDetail);
-        }
         [HttpPost]
-        public void AddOrderDetails(List<BOMFields> orderDetail)
+        public ActionResult Order()
         {
-            int i = 1;
-            while (i<=orderDetail.Count())
-            {
-                if(i== orderDetail.Count())
-                {
-                    break;
-                }
-                DB_Con_Str OCon = new DB_Con_Str();
-                string ConString = OCon.DB_Data();
-                SqlConnection Con = new SqlConnection(ConString);
-                SqlCommand sql_cmnd = new SqlCommand("[dbo].[BOM_Prod]", Con);
-                sql_cmnd.CommandType = CommandType.StoredProcedure;
-                sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = orderDetail[i].Part_No1.ToUpper();
-                sql_cmnd.Parameters.AddWithValue("@descp", SqlDbType.NVarChar).Value = orderDetail[i].Description1.ToUpper();
-                sql_cmnd.Parameters.AddWithValue("@mp_descp", SqlDbType.NVarChar).Value = orderDetail[i].SP_Description.ToUpper();
-                sql_cmnd.Parameters.AddWithValue("@quantity", SqlDbType.NVarChar).Value = orderDetail[i].Quantity1.ToUpper();
-                Con.Open();
-                sql_cmnd.ExecuteNonQuery();
-                Con.Close();
-                i++;
-            }
-            
+            BOM_Insert BOM_SP = new BOM_Insert(); 
+            BOM_SP.AddOrderDetails(_list);
+            ViewBag.BOM = "Submitted Successfully !!!!";
+            _list.Clear();
+            BOM_Add_Data();
+            return View("BOM_Add_Data");
         }
     }
 }
