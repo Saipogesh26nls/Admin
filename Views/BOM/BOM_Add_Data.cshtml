@@ -3,105 +3,121 @@
 @{
     ViewBag.Title = "BOM_Add_Data";
 }
-<h2>Bill of Materials</h2>
-@using (Html.BeginForm("Main", "BOM", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-    <table style="border-top:none;">
-        <tr>
-            <td>
-                @Html.LabelFor(model => model.SP_Part_No)
-                @Html.EditorFor(model => model.SP_Part_No, new { htmlAttributes = new { @class = "form-control" } })
-            </td>
-            <td>
-                <button class="btn btn-default" type="submit" style="margin-top:40%;margin-left:20%;">Insert</button>
-            </td>
-        </tr>
-        <tr>
-            <td><p class="text-danger">@ViewBag.ErrorMessage</p></td>
-        </tr>
-        <tr>
-            <td>
-                @Html.LabelFor(model => model.SP_Description)
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @{
-                    foreach (var item in ViewBag.item)
-                    {
-                        if (item.Part_No1 == null)
+<body style="background-color: #f5f5f7;">
+    <h2>Bill of Materials</h2>
+    @using (Html.BeginForm("Main", "BOM", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <table style="border-top:none;">
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.SP_Part_No)
+                    @Html.EditorFor(model => model.SP_Part_No, new { htmlAttributes = new { @class = "form-control uppercase" } })
+                </td>
+                <td>
+                    <button class="btn btn-default" type="submit" style="margin-top:40%;margin-left:20%;">Insert</button>
+                </td>
+            </tr>
+            <tr>
+                <td><p class="text-danger">@ViewBag.ErrorMessage</p></td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.SP_Description)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @{
+                        foreach (var item in ViewBag.item)
                         {
-                            @item.SP_Description;
-                        }
-                        else
-                        {
-                            break;
+                            if (item.Part_No1 == null)
+                            {
+                                @item.SP_Description;
+                            }
+                            else
+                            {
+                                break;
+                            }
                         }
                     }
-                }
-            </td>
-        </tr>
-    </table>
+                </td>
+            </tr>
+        </table>
 
-    <table class="table" style="border-top:none;">
-        <tr style="width: 250px;">
-            <td>
-                @Html.LabelFor(model => model.Part_No)
-                @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "form-control" } })
-            </td>
-            <td>
-                @Html.LabelFor(model => model.Description)
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-            </td>
-            <td>
-                @Html.LabelFor(model => model.Quantity)
-                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
-            </td>
-            <td>
-                <button class="btn btn-default" id="add_btn" type="submit" style="margin-top:25%;">Add</button>
-            </td>
-        </tr>
-    </table>
-    <table class="table" id="tbl" style="border:none;margin-top:2%;">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Part_No)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantity)
-            </th>
-        </tr>
-        @{
-            foreach (var item in ViewBag.item)
-            {
-                if (item.Part_No1 == null)
-                {
-                    continue;
-                }
-                else
-                {
+        <table class="table" style="border-top:none;width:50%;">
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Part_No)
+                    @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "form-control uppercase", @style = "width:200px;", @id = "part_no" } })
+                </td>
+                <td>
+                    <br />
+                    <p></p>
+                    <p id="value"></p>
+                    @*@Html.LabelFor(model => model.Description, new { htmlAttributes = new { @onclick = "hello()" } })
+                    @ViewBag.Descp
+                    @Html.DisplayFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control uppercase", @style = "width:200px;" } })*@
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.Quantity)
+                    @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control uppercase", @style = "width:200px;" } })
+                </td>
+                <td>
+                    <br />
+                    <button class="btn btn-default" id="add_btn" type="submit" style="margin-top:9%;">Add</button>
+                </td>
+            </tr>
+        </table>
+        <table class="table table-hover" id="tbl" style="border:none;margin-top:2%;">
+            <thead>
                 <tr>
-                    <td>@item.Part_No1</td>
-                    <td>@item.Description1</td>
-                    <td>@item.Quantity1</td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Part_No)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Quantity)
+                    </th>
                 </tr>
+            </thead>
+            @{
+                foreach (var item in ViewBag.item)
+                {
+                    if (item.Part_No1 == null)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>@item.Part_No1</td>
+                            <td>@item.Description1</td>
+                            <td>@item.Quantity1</td>
+                        </tr>
+                    }
                 }
             }
-        }
-    </table>
-}
-@using (Html.BeginForm("Order", "BOM", FormMethod.Post))
-{
-    <div class="text-danger" style="text-align:center;">
-        @ViewBag.BOM
-    </div>
-    <div>
-        <div class="col-md-offset-8 col-md-10" style="margin-top:2%;">
-            <input type="submit" value="Submit" class="btn btn-default" />
+        </table>
+    }
+    @using (Html.BeginForm("Order", "BOM", FormMethod.Post))
+    {
+        <div class="text-danger" style="text-align:center;">
+            @ViewBag.BOM
         </div>
-    </div>
+        <div>
+            <div class="col-md-offset-8 col-md-10" style="margin-top:2%;">
+                <input type="submit" value="Submit" class="btn btn-default" />
+            </div>
+        </div>
+    }
+</body>
+
+<script>
+    window.onclick = function hello() {
+        var value = document.getElementById("part_no").value;
+        document.getElementById("value").innerHTML = value;
 }
+</script>

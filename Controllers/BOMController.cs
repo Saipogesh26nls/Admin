@@ -10,40 +10,52 @@ namespace Admin.Controllers
     public class BOMController : Controller
     {
         // GET: BOM
+        static int i = 2;
         public ActionResult BOM_Add_Data()
         {
-            if(_list.Count == 0)
+            if (_list.Count == 0)
             {
                 List<BOMFields> itemQm = new List<BOMFields>();
-                itemQm.Add(new BOMFields { Part_No1 = "", Description1 = "", Quantity1 = "" });
+                itemQm.Add(new BOMFields { Part_No1 = "", Description1 = "", Quantity1 = ""  });
                 ViewBag.item = itemQm;
+                ViewBag.Descp = "";
+                return View();
+            }
+            else if (_list.Count >= 3)
+            {
+                ViewBag.item = _list;
+                ViewBag.Descp = string.Empty;
+                ViewBag.Descp = _list[i].Description1;
+                i++;
+                return View();
+            }
+            else if (_list.Count ==2)
+            {
+                ViewBag.item = _list;
+                ViewBag.Descp = _list[1].Description1;
                 return View();
             }
             else
             {
                 ViewBag.item = _list;
+                ViewBag.Descp = "";
                 return View();
             }
-        }
-        public ActionResult BOM_Clear_View()
-        {
-            _list.Clear();
-            BOM_Add_Data();
-            return View("BOM_Add_Data");
         }
         [HttpPost]
         public ActionResult Main(BOMFields new_data)
         {
             BOM_Insert dblogin = new BOM_Insert();
             string values = dblogin.P_Description(new_data.SP_Part_No);
-            if(values == null)
+            string Descp = dblogin.SP_Description(new_data.Part_No);
+            if (values == null)
             {
                 ViewBag.ErrorMessage = "Part_No is not Found";
                 return View("BOM_Add_Data"); 
             }
             else
             {
-                Record(new_data.Part_No, new_data.Description, new_data.Quantity, values);
+                Record(new_data.Part_No, Descp, new_data.Quantity, values);
                 BOM_Add_Data();
                 return View("BOM_Add_Data");
             }
@@ -65,6 +77,11 @@ namespace Admin.Controllers
             _list.Clear();
             BOM_Add_Data();
             return View("BOM_Add_Data");
+        }
+
+        public string hello (string name)
+        {
+            return name;
         }
     }
 }

@@ -41,6 +41,36 @@ namespace Admin.Models
             }
             
         }
+        public string SP_Description(string cPart_No)
+        {
+            List<BOMFields> ItemQm = new List<BOMFields>();
+            DB_Con_Str OCon = new DB_Con_Str();
+            string ConString = OCon.DB_Data();
+            SqlConnection Con = new SqlConnection(ConString);
+            Con.Open();
+            string cmd1 = "select P_Description from Product_Master where P_Part_No = '" + cPart_No + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlDataReader dr = SqlCmd1.ExecuteReader();
+            while (dr.Read())
+            {
+                ItemQm.Add(new BOMFields
+                {
+                    Description = dr["P_Description"].ToString()
+                }
+                );
+            }
+            if (ItemQm.Count() != 0)
+            {
+                string item = string.Join("", ItemQm.Select(m => m.Description));
+                Con.Close();
+                return item;
+            }
+            else
+            {
+                return null;
+            }
+
+        }
         public void AddOrderDetails(List<BOMFields> orderDetail)
         {
             DB_Con_Str OCon = new DB_Con_Str();
@@ -68,9 +98,6 @@ namespace Admin.Models
                 {
                     break;
                 }
-                /*DB_Con_Str OCon = new DB_Con_Str();
-                string ConString = OCon.DB_Data();
-                SqlConnection Con = new SqlConnection(ConString);*/
                 SqlCommand sql_cmnd = new SqlCommand("[dbo].[BOM_Prod]", Con1);
                 sql_cmnd.CommandType = CommandType.StoredProcedure;
                 sql_cmnd.Parameters.AddWithValue("@bom_no", SqlDbType.Int).Value = BOM_No;
