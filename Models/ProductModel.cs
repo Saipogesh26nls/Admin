@@ -107,7 +107,7 @@ namespace Admin.Models
         public string Description1 { get; set; }
         [DisplayName("Quantity")]
         public string Quantity1 { get; set; }
-        public string Reg_Success { get; set; }
+        public string Part_to_Descp { get; set; }
     }
 
 }

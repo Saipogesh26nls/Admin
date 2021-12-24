@@ -52,16 +52,14 @@
                     @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "form-control uppercase", @style = "width:200px;", @id = "part_no" } })
                 </td>
                 <td>
-                    <br />
-                    <p></p>
+                    <br/>
                     <p id="value"></p>
                     @*@Html.LabelFor(model => model.Description, new { htmlAttributes = new { @onclick = "hello()" } })
-                    @ViewBag.Descp
                     @Html.DisplayFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control uppercase", @style = "width:200px;" } })*@
                 </td>
                 <td>
                     @Html.LabelFor(model => model.Quantity)
-                    @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control uppercase", @style = "width:200px;" } })
+                    @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control uppercase", @style = "width:200px;", @id = "quantity" } })
                 </td>
                 <td>
                     <br />
@@ -69,7 +67,7 @@
                 </td>
             </tr>
         </table>
-        <table class="table table-hover" id="tbl" style="border:none;margin-top:2%;">
+        <table class="table table-bordered" id="tbl" style="margin-top:2%;width:80%;">
             <thead>
                 <tr>
                     <th>
@@ -116,8 +114,25 @@
 </body>
 
 <script>
-    window.onclick = function hello() {
-        var value = document.getElementById("part_no").value;
-        document.getElementById("value").innerHTML = value;
-}
+    document.addEventListener('keydown', function (event) {
+        if (event.keyCode === 9) {
+
+            var model = new Object();
+            model.Part_to_Descp = document.getElementById("part_no").value;
+
+            jQuery.ajax({
+            type: "POST",
+            url: "@Url.Action("Partno_to_Descp")",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ name: model }),
+                success: function (data) {
+                    document.getElementById("value").innerHTML = data;
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+            });
+        }
+    });
 </script>

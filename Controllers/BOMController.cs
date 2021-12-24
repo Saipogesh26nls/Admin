@@ -13,32 +13,27 @@ namespace Admin.Controllers
         static int i = 2;
         public ActionResult BOM_Add_Data()
         {
-            if (_list.Count == 0)
+            if (Table_Data_List.Count == 0)
             {
                 List<BOMFields> itemQm = new List<BOMFields>();
-                itemQm.Add(new BOMFields { Part_No1 = "", Description1 = "", Quantity1 = ""  });
+                itemQm.Add(new BOMFields { SP_Description = "" });
                 ViewBag.item = itemQm;
-                ViewBag.Descp = "";
                 return View();
             }
-            else if (_list.Count >= 3)
+            else if (Table_Data_List.Count >= 3)
             {
-                ViewBag.item = _list;
-                ViewBag.Descp = string.Empty;
-                ViewBag.Descp = _list[i].Description1;
+                ViewBag.item = Table_Data_List;
                 i++;
                 return View();
             }
-            else if (_list.Count ==2)
+            else if (Table_Data_List.Count ==2)
             {
-                ViewBag.item = _list;
-                ViewBag.Descp = _list[1].Description1;
+                ViewBag.item = Table_Data_List;
                 return View();
             }
             else
             {
-                ViewBag.item = _list;
-                ViewBag.Descp = "";
+                ViewBag.item = Table_Data_List;
                 return View();
             }
         }
@@ -62,26 +57,28 @@ namespace Admin.Controllers
             
         }
 
-        static List<BOMFields> _list = new List<BOMFields>();
+        static List<BOMFields> Table_Data_List = new List<BOMFields>();
         public static List<BOMFields> Record(string tbl_part_no, string tbl_Descp, string tbl_Quan, string SP_Descp)
         {
-            _list.Add(new BOMFields { Part_No1 = tbl_part_no, Description1 = tbl_Descp, Quantity1 = tbl_Quan, SP_Description = SP_Descp });
-            return (_list);
+            Table_Data_List.Add(new BOMFields { Part_No1 = tbl_part_no, Description1 = tbl_Descp, Quantity1 = tbl_Quan, SP_Description = SP_Descp });
+            return (Table_Data_List);
         }
         [HttpPost]
         public ActionResult Order()
         {
             BOM_Insert BOM_SP = new BOM_Insert(); 
-            BOM_SP.AddOrderDetails(_list);
+            BOM_SP.AddOrderDetails(Table_Data_List);
             ViewBag.BOM = "Submitted Successfully !!!!";
-            _list.Clear();
+            Table_Data_List.Clear();
             BOM_Add_Data();
             return View("BOM_Add_Data");
         }
 
-        public string hello (string name)
+        public ActionResult Partno_to_Descp (BOMFields name)
         {
-            return name;
+            BOM_Insert dblogin = new BOM_Insert();
+            string Descp = dblogin.SP_Description(name.Part_to_Descp);
+            return Json(Descp, JsonRequestBehavior.AllowGet);
         }
     }
 }
