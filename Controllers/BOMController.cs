@@ -64,14 +64,23 @@ namespace Admin.Controllers
             return (Table_Data_List);
         }
         [HttpPost]
-        public ActionResult Order()
+        public ActionResult Order(BOMFields name)
         {
-            BOM_Insert BOM_SP = new BOM_Insert(); 
-            BOM_SP.AddOrderDetails(Table_Data_List);
-            ViewBag.BOM = "Submitted Successfully !!!!";
-            Table_Data_List.Clear();
-            BOM_Add_Data();
-            return View("BOM_Add_Data");
+            if (name.Part_No1 == null)
+            {
+                ViewBag.BOM = "Fields are empty ???";
+                BOM_Add_Data();
+                return View("BOM_Add_Data");
+            }
+            else
+            {
+                BOM_Insert BOM_SP = new BOM_Insert();
+                BOM_SP.AddOrderDetails(Table_Data_List);
+                ViewBag.BOM = "Submitted Successfully !!!!";
+                Table_Data_List.Clear();
+                BOM_Add_Data();
+                return View("BOM_Add_Data");
+            }
         }
 
         public ActionResult Partno_to_Descp (BOMFields name)

@@ -34,19 +34,17 @@ namespace Admin.Controllers
         [HttpGet]
         public ActionResult ProductEntry()
         {
-            DB_Con_Str OCon = new DB_Con_Str();
-            string ConString = OCon.DB_Data();
-            SqlConnection _con = new SqlConnection(ConString);
+            SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             _con.Open();
-            SqlDataAdapter _da = new SqlDataAdapter("Select * From Product_Master where P_Level>0", ConString);
+            SqlDataAdapter _da = new SqlDataAdapter("Select * From Product_Master where P_Level>0", _con);
             DataTable _dt = new DataTable();
             _da.Fill(_dt);
             ViewBag.ProductList = ToSelectList(_dt,"P_Name","P_Name");
-            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Manufacturer_Details", ConString);
+            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Manufacturer_Details", _con);
             DataTable _dt1 = new DataTable();
             _da1.Fill(_dt1);
             ViewBag.MfdList = ToSelectList(_dt1, "M_Id", "M_Name");
-            SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Manufacturer_Details", ConString);
+            SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Manufacturer_Details", _con);
             DataTable _dt2 = new DataTable();
             _da2.Fill(_dt2);
             ViewBag.RegList = ToSelectList(_dt2, "M_Region", "M_Region");

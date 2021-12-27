@@ -7,8 +7,12 @@
     .uppercase {
         text-transform: uppercase;
     }
+    body {
+        opacity: 0;
+        transition: opacity 0.5s;
+    }
 </style>
-<body style="background-color: #f5f5f7;">
+<body style="background-color: #f5f5f7;" onload="document.body.style.opacity='1'">
     <h2>Enter Product Details</h2>
 
     @using (Html.BeginForm("ProductEntry", "Home", FormMethod.Post))

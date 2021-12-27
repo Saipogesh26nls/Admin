@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Data;
 using System.Data.SqlClient;
 using Admin.Models;
+using System.Configuration;
 
 namespace Admin.Models
 {
@@ -14,9 +15,7 @@ namespace Admin.Models
         public string P_Description(string cSP_Part_No)
         {
             List<BOMFields> ItemQm = new List<BOMFields>();
-            DB_Con_Str OCon = new DB_Con_Str();
-            string ConString = OCon.DB_Data();
-            SqlConnection Con = new SqlConnection(ConString);
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
             string cmd1="select P_Description from Product_Master where P_Part_No = '" + cSP_Part_No+ "'";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
@@ -44,9 +43,7 @@ namespace Admin.Models
         public string SP_Description(string cPart_No)
         {
             List<BOMFields> ItemQm = new List<BOMFields>();
-            DB_Con_Str OCon = new DB_Con_Str();
-            string ConString = OCon.DB_Data();
-            SqlConnection Con = new SqlConnection(ConString);
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
             string cmd1 = "select P_Description from Product_Master where P_Part_No = '" + cPart_No + "'";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
@@ -73,9 +70,7 @@ namespace Admin.Models
         }
         public void AddOrderDetails(List<BOMFields> orderDetail)
         {
-            DB_Con_Str OCon = new DB_Con_Str();
-            string ConString = OCon.DB_Data();
-            SqlConnection Con = new SqlConnection(ConString);
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
             string cmd1 = "Update Number_master Set BOM_No = BOM_No + 1 ";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
@@ -87,9 +82,7 @@ namespace Admin.Models
             int BOM_No = dr.GetInt32(0);
             Con.Close();
 
-            DB_Con_Str OCon1 = new DB_Con_Str();
-            string ConString1 = OCon1.DB_Data();
-            SqlConnection Con1 = new SqlConnection(ConString1);
+            SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con1.Open();
             int i = 1;
             while (i <= orderDetail.Count())
