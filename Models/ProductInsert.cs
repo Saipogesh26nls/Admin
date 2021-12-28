@@ -18,20 +18,23 @@ namespace Admin.Models
 
              SqlCommand sql_cmnd = new SqlCommand("[dbo].[addProduct]", Con);
              sql_cmnd.CommandType = CommandType.StoredProcedure;
-             sql_cmnd.Parameters.AddWithValue("@Pname", SqlDbType.NVarChar).Value = cP_Disp_Name.ToUpper();
-             sql_cmnd.Parameters.AddWithValue("@PDispname", SqlDbType.NVarChar).Value = cP_Disp_Name.ToUpper();
+             sql_cmnd.Parameters.AddWithValue("@Pname", SqlDbType.NVarChar).Value = cP_Disp_Name;
+             sql_cmnd.Parameters.AddWithValue("@PDispname", SqlDbType.NVarChar).Value = cP_Disp_Name;
              sql_cmnd.Parameters.AddWithValue("@Pmfr", SqlDbType.Int).Value = cP_Manufacturer;
-             sql_cmnd.Parameters.AddWithValue("@PRegion", SqlDbType.NVarChar).Value = cP_Region.ToUpper();
-             sql_cmnd.Parameters.AddWithValue("@PPartNo", SqlDbType.NVarChar).Value = cP_Part_No.ToUpper();
+             sql_cmnd.Parameters.AddWithValue("@PRegion", SqlDbType.NVarChar).Value = cP_Region;
+             sql_cmnd.Parameters.AddWithValue("@PPartNo", SqlDbType.NVarChar).Value = cP_Part_No;
              sql_cmnd.Parameters.AddWithValue("@PGroup", SqlDbType.NVarChar).Value = cP_Name;
-             sql_cmnd.Parameters.AddWithValue("@PDescription", SqlDbType.NVarChar).Value = cP_Description.ToUpper();
+             sql_cmnd.Parameters.AddWithValue("@PDescription", SqlDbType.NVarChar).Value = cP_Description;
              sql_cmnd.Parameters.AddWithValue("@Pcost", SqlDbType.Money).Value = cP_Cost;
              sql_cmnd.Parameters.AddWithValue("@pMRp", SqlDbType.Money).Value = cP_MRP;
              sql_cmnd.Parameters.AddWithValue("@psp", SqlDbType.Money).Value = cP_SP;
-             int var;
-             var = sql_cmnd.ExecuteNonQuery();
+             string cmd1 = "update Product_Master set P_Name = UPPER(P_Name), P_Disp_Name = UPPER(P_Disp_Name), P_Region = UPPER(P_Region), P_Part_No = UPPER(P_Part_No), P_Description = UPPER(P_Description)";
+             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
 
-             return var;
+             int var1, var2;
+             var1= sql_cmnd.ExecuteNonQuery();
+             var2 = SqlCmd1.ExecuteNonQuery();
+            return var1;
         }
     }
 }

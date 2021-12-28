@@ -109,5 +109,38 @@ namespace Admin.Models
         public string Quantity1 { get; set; }
         public string Part_to_Descp { get; set; }
     }
+    public class AccountsField
+    {
+        [DisplayName("Account Name")]
+        [Required]
+        public string A_Account_Name { get; set; }
+        [DisplayName("Group")]
+        public string A_Group { get; set; }
+        [DisplayName("Door No")]
+        public string A_Door_No { get; set; }
+        [DisplayName("Street")]
+        public string A_Street { get; set; }
+        [DisplayName("Area")]
+        public string A_Area { get; set; }
+        [DisplayName("City")]
+        public string A_City { get; set; }
+        [DisplayName("State")]
+        public string A_State { get; set; }
+        [DisplayName("Country")]
+        public string A_Country { get; set; }
+        [DisplayName("Pincode")]
+        public string A_Pincode { get; set; }
+        [DisplayName("Contact No")]
+        public string A_Contact_No { get; set; }
+        [DisplayName("Mobile No")]
+        public string A_Mobile_No { get; set; }
+        [DisplayName("Email ID")]
+        public string A_Email_Id { get; set; }
+        [DisplayName("Closing Balance")]
+        public double A_Closing_Bal { get; set; }
+        [DisplayName("Open Balance")]
+        public double A_Open_Bal { get; set; }
+        public string Reg_Success { get; set; } 
+    }
 
 }
