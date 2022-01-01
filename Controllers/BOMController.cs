@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Admin.Controllers
@@ -66,21 +68,12 @@ namespace Admin.Controllers
         [HttpPost]
         public ActionResult Order(BOMFields name)
         {
-            if (name.Part_No1 == null)
-            {
-                ViewBag.BOM = "Fields are empty ???";
-                BOM_Add_Data();
-                return View("BOM_Add_Data");
-            }
-            else
-            {
-                BOM_Insert BOM_SP = new BOM_Insert();
-                BOM_SP.AddOrderDetails(Table_Data_List);
-                ViewBag.BOM = "Submitted Successfully !!!!";
-                Table_Data_List.Clear();
-                BOM_Add_Data();
-                return View("BOM_Add_Data");
-            }
+            BOM_Insert BOM_SP = new BOM_Insert();
+            BOM_SP.AddOrderDetails(Table_Data_List);
+            ViewBag.BOM = "Submitted Successfully !!!!";
+            Table_Data_List.Clear();
+            BOM_Add_Data();
+            return View("BOM_Add_Data");
         }
 
         public ActionResult Partno_to_Descp (BOMFields name)

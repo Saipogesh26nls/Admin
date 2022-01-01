@@ -1,7 +1,6 @@
 ﻿@model Admin.Models.MFRFields
-
 @{
-    ViewBag.Title = "MFREntry";
+    ViewBag.Title = "Enter Manufacturer Details";
 }
 <style>
     .uppercase {
@@ -9,14 +8,12 @@
     }
 </style>
 <body style="background-color: #f5f5f7;">
-    <h2>Enter Manufacturer Details</h2>
 
     @using (Html.BeginForm("MFREntry", "MFR", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
 
         <div class="form-horizontal">
-            <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
                 @Html.LabelFor(model => model.M_Name, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -128,11 +125,4 @@
         </div>
     }
 
-    <div>
-        @Html.ActionLink("Back to Home", "Index")
-    </div>
-
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }
 </body>

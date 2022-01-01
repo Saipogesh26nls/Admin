@@ -30,7 +30,6 @@ namespace Admin.Models
         public double P_SP { get; set; }
         public string Reg_Success { get; set; }
     }
-
     public class MFRFields
     {
         [Required]
@@ -60,7 +59,6 @@ namespace Admin.Models
         public string M_Payment { get; set; }
         public string Regd_Success { get; set; }
     }
-
     public class GroupFields
     {
         [DisplayName("Group")]
@@ -84,7 +82,6 @@ namespace Admin.Models
         public double P_SP { get; set; }
         public string Regt_Success { get; set; }
     }
-
     public class BOMFields
     {
         [DisplayName("SP Part-No")]
@@ -140,7 +137,44 @@ namespace Admin.Models
         public double A_Closing_Bal { get; set; }
         [DisplayName("Open Balance")]
         public double A_Open_Bal { get; set; }
-        public string Reg_Success { get; set; } 
+        public string Reg_Success { get; set; }
     }
+    public class PurchaseField
+    {
+        [DisplayName("Voucher No")]
+        public string Voucher_No { get; set; }
+        [DisplayName("Voucher Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime Voucher_Date { get; set; }
+        [DisplayName("Invoice No")]
+        public string Invoice_No { get; set; }
+        [DisplayName("Invoice Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime Invoice_Date { get; set; }
+        [DisplayName("A code")]
+        public string A_code { get; set; }
+        [DisplayName("P code")]
+        public string P_code { get; set; }
+        [DisplayName("ILedger")]
+        public string I_Ledger { get; set; }
+        [DisplayName("ALedger")]
+        public string A_Ledger { get; set; }
+        [DisplayName("Quantity")]
+        public int P_Qty { get; set; }
+        [DisplayName("Purchase Rate")]
+        public double P_Rate { get; set; }
+        [DisplayName("Purchase Discount")]
+        public double P_Discount { get; set; }
+        [DisplayName("Purchase Tax1")]
+        public double P_Tax1 { get; set; }
+        [DisplayName("Purchase Tax2")]
+        public double P_Tax2 { get; set; }
+        [DisplayName("Purchase Sub-Total")]
+        public double P_Sub_Total { get; set; }
+        [DisplayName("Purchase Total")]
+        public double P_Total { get; set; }
 
+    }
 }
