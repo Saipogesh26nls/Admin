@@ -176,6 +176,7 @@ namespace Admin.Models
         public double P_Sub_Total { get; set; }
         [DisplayName("Purchase Total")]
         public double P_Total { get; set; }
+        public int Total_Qty { get; set; }
 
     }
 }

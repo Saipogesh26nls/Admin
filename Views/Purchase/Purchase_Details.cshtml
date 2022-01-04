@@ -21,138 +21,148 @@
     .table > tbody > tr > .thick-line {
         border-top: 2px solid;
     }
+
     .uppercase {
         text-transform: uppercase;
     }
 </style>
-<div class="container">
-    <br />
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="invoice-title">
-                <h3>Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style= "margin-left:2%;width:50%;" } })</h3><h3 class="pull-right">Date:@Html.EditorFor(model => model.Invoice_Date, new { htmlAttributes = new { style = "margin-left:2%;width:70%;font-size:16px;" } })</h3>
-            </div>
-            <hr />
-            <div class="row">
-                <div class="col-sm-3">
-                    <address>
-                        <strong>Billed To:</strong><br>
-                        John Smith<br>
-                        1234 Main<br>
-                        Apt. 4B<br>
-                        Springfield, ST 54321
-                    </address>
+@using (Html.BeginForm("Purchase_GetData", "Purchase", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+        <br />
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="invoice-title">
+                    <h3>Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:50%;" } })</h3><h3 class="pull-right">Date:@Html.EditorFor(model => model.Invoice_Date, new { htmlAttributes = new { style = "margin-left:2%;width:70%;font-size:16px;" } })</h3>
                 </div>
-                <div class="col-sm-3">
-                    <address>
-                        <strong>Shipped To:</strong><br>
-                        Jane Smith<br>
-                        1234 Main<br>
-                        Apt. 4B<br>
-                        Springfield, ST 54321
-                    </address>
-                </div>
-                <div class="col-sm-3">
-                    <address>
-                        <strong>Payment Method:</strong><br>
-                        Visa ending **** 4242<br>
-                        jsmith@email.com
-                    </address>
-                </div>
-                <div>
-                    @Html.LabelFor(model => model.I_Ledger)
-                    @Html.DropDownListFor(model => model.I_Ledger, ViewBag.ILedger as SelectList, new { @class = "form-control uppercase" })
-                    <br />
-                    @Html.LabelFor(model => model.A_Ledger)
-                    @Html.DropDownListFor(model => model.A_Ledger, ViewBag.ALedger as SelectList, new { @class = "form-control uppercase" })
-                    <br />
+                <hr />
+                <div class="row">
+                    <div class="col-sm-3">
+                        <address>
+                            <strong>Billed To:</strong><br>
+                            John Smith<br>
+                            1234 Main<br>
+                            Apt. 4B<br>
+                            Springfield, ST 54321
+                        </address>
+                    </div>
+                    <div class="col-sm-3">
+                        <address>
+                            <strong>Shipped To:</strong><br>
+                            Jane Smith<br>
+                            1234 Main<br>
+                            Apt. 4B<br>
+                            Springfield, ST 54321
+                        </address>
+                    </div>
+                    <div class="col-sm-3">
+                        <address>
+                            <strong>Payment Method:</strong><br>
+                            Visa ending **** 4242<br>
+                            jsmith@email.com
+                        </address>
+                    </div>
+                    <div>
+                        @Html.LabelFor(model => model.I_Ledger)
+                        @Html.DropDownListFor(model => model.I_Ledger, ViewBag.ILedger as SelectList, new { @class = "form-control uppercase" })
+                        <br />
+                        @Html.LabelFor(model => model.A_Ledger)
+                        @Html.DropDownListFor(model => model.A_Ledger, ViewBag.ALedger as SelectList, new { @class = "form-control uppercase" })
+                        <br />
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><strong>Order summary</strong></h3>
-                </div>
-                <div class="panel-body">
-                    <div class="table-responsive">
-                        <table class="table table-condensed">
-                            <tr>
-                                <td style="border-top:none;">@Html.LabelFor(model => model.Part_No)@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:70%;" } })</td>
-                                <td style="border-top:none;">@Html.LabelFor(model => model.A_Name)@Html.EditorFor(model => model.A_Name, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:70%;" } })</td>
-                                <td class="text-center" style="border-top:none;">@Html.LabelFor(model => model.P_Qty)@Html.EditorFor(model => model.P_Qty, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:40%;" } })</td>
-                                <td style="border-top:none;">@Html.LabelFor(model => model.P_Rate)@Html.EditorFor(model => model.P_Rate, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:40%;" } })</td>
-                                <td style="border-top:none;"><input type="button" value="Insert"></td>
-                            </tr>
-                        </table>
-                        <table class="table table-condensed">
-                            <thead style="background-color: darkgray;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><strong>Order summary</strong></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-condensed">
                                 <tr>
-                                    <td><strong>Product</strong></td>
-                                    <td class="text-center"><strong>Account</strong></td>
-                                    <td class="text-center"><strong>Quantity</strong></td>
-                                    <td class="text-center"><strong>Purchase Rate</strong></td>
-                                    <td class="text-right"><strong>Total</strong></td>
+                                    <td style="border-top:none;">@Html.LabelFor(model => model.Part_No)@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:70%;" } })</td>
+                                    <td style="border-top:none;">@Html.LabelFor(model => model.A_Name)@Html.EditorFor(model => model.A_Name, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:60%;" } })</td>
+                                    <td class="text-center" style="border-top:none;">@Html.LabelFor(model => model.P_Qty)@Html.EditorFor(model => model.P_Qty, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:40%;" } })</td>
+                                    <td style="border-top:none;">@Html.LabelFor(model => model.P_Rate)@Html.EditorFor(model => model.P_Rate, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:40%;" } })</td>
+                                    <td style="border-top:none;"><input type="submit" value="Insert"></td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <!-- foreach ($order->lineItems as $line) or some such thing here -->
-                                <tr>
-                                    <td>BS-200</td>
-                                    <td class="text-center">$10.99</td>
-                                    <td class="text-center">1</td>
-                                    <td class="text-center">1</td>
-                                    <td class="text-right">$10.99</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="text-left"><strong>Total Qty:</strong></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td class="thick-line"></td>
-                                    <td class="thick-line"></td>
-                                    <td class="thick-line"></td>
-                                    <td class="thick-line text-right"><strong>Subtotal</strong></td>
-                                    <td class="thick-line text-right">$670.99</td>
-                                </tr>
-                                <tr>
-                                    <td class="no-line"></td>
-                                    <td class="no-line"></td>
-                                    <td class="no-line"></td>
-                                    <td class="no-line text-right"><strong>Discount</strong></td>
-                                    <td class="no-line text-right">$15</td>
-                                </tr>
-                                <tr>
-                                    <td class="no-line"></td>
-                                    <td class="no-line"></td>
-                                    <td class="no-line"></td>
-                                    <td class="no-line text-right"><strong>Tax 1</strong></td>
-                                    <td class="no-line text-right">$15</td>
-                                </tr>
-                                <tr>
-                                    <td class="no-line"></td>
-                                    <td class="no-line"></td>
-                                    <td class="no-line"></td>
-                                    <td class="no-line text-right"><strong>Tax2</strong></td>
-                                    <td class="no-line text-right">$15</td>
-                                </tr>
-                                <tr>
-                                    <td class="no-line"></td>
-                                    <td class="no-line"></td>
-                                    <td class="no-line"></td>
-                                    <td class="no-line text-right"><strong>Total</strong></td>
-                                    <td class="no-line text-right">$685.99</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                            </table>
+                            <table class="table table-condensed">
+                                <thead style="background-color: darkgray;">
+                                    <tr>
+                                        <td><strong>Part No</strong></td>
+                                        <td class="text-center"><strong>Account</strong></td>
+                                        <td class="text-center"><strong>Quantity</strong></td>
+                                        <td class="text-center"><strong>Purchase Rate</strong></td>
+                                        <td class="text-right"><strong>Total</strong></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- foreach ($order->lineItems as $line) or some such thing here -->
+                                    @{
+                                        foreach (var item in ViewBag.item)
+                                        {
+                                            <tr>
+                                                <td>@item.Part_No</td>
+                                                <td class="text-center">@item.A_Name</td>
+                                                <td class="text-center">@item.P_Qty</td>
+                                                <td class="text-center">@item.P_Rate</td>
+                                                <td class="text-right">@item.P_Total</td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-left"><strong>Total Qty:</strong></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="thick-line"></td>
+                                        <td class="thick-line"></td>
+                                        <td class="thick-line"></td>
+                                        <td class="thick-line text-right"><strong>Subtotal</strong></td>
+                                        <td class="thick-line text-right">$670.99</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="no-line"></td>
+                                        <td class="no-line"></td>
+                                        <td class="no-line"></td>
+                                        <td class="no-line text-right"><strong>Discount</strong></td>
+                                        <td class="no-line text-right">$15</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="no-line"></td>
+                                        <td class="no-line"></td>
+                                        <td class="no-line"></td>
+                                        <td class="no-line text-right"><strong>Tax 1</strong></td>
+                                        <td class="no-line text-right">$15</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="no-line"></td>
+                                        <td class="no-line"></td>
+                                        <td class="no-line"></td>
+                                        <td class="no-line text-right"><strong>Tax2</strong></td>
+                                        <td class="no-line text-right">$15</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="no-line"></td>
+                                        <td class="no-line"></td>
+                                        <td class="no-line"></td>
+                                        <td class="no-line text-right"><strong>Total</strong></td>
+                                        <td class="no-line text-right">$685.99</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+                                        }
