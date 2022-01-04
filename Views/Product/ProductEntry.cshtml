@@ -6,20 +6,19 @@
     }
 </style>
 <body style="background-color: #f5f5f7;">
-    <h2>Enter Product Details</h2>
 
     @using (Html.BeginForm("ProductEntry", "Product", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
 
         <div class="form-horizontal">
-            <hr />
+            <br />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
             <div class="form-group">
                 @Html.LabelFor(model => model.P_Disp_Name, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.P_Disp_Name, new { htmlAttributes = new { @class = "form-control uppercase" } })
+                    @Html.EditorFor(model => model.P_Disp_Name, new { htmlAttributes = new { @class = "form-control uppercase", required = "required" } })
                     @Html.ValidationMessageFor(model => model.P_Disp_Name, "", new { @class = "text-danger" })
                 </div>
             </div>

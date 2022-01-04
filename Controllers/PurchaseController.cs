@@ -24,14 +24,21 @@ namespace Admin.Controllers
             ViewBag.ALedger = new SelectList(ALedger, "Value", "Text");
             return View();
         }
+        public ActionResult Purchase_GetData()
+        {
+            return View();
+        }
         [HttpPost]
         public ActionResult Purchase_Insert(PurchaseField newdata)
         {
             PurchaseInsert purchase = new PurchaseInsert();
             string Invoice_Date = newdata.Invoice_Date.ToString("dd/MM/yyyy");
             string Voucher_Date = newdata.Voucher_Date.ToString("dd/MM/yyyy");
-            var Data = purchase.Add_Data(newdata.Voucher_No, Voucher_Date, newdata.Invoice_No, Invoice_Date, newdata.A_code, newdata.P_code, newdata.I_Ledger, newdata.A_Ledger, newdata.P_Qty, newdata.P_Rate, newdata.P_Discount, newdata.P_Tax1, newdata.P_Tax2, newdata.P_Sub_Total, newdata.P_Total);
-            return View();
+            var Data = purchase.Add_Data(newdata.Voucher_No, Voucher_Date, newdata.Invoice_No, Invoice_Date, newdata.A_Name, newdata.Part_No, newdata.I_Ledger, newdata.A_Ledger, newdata.P_Qty, newdata.P_Rate, newdata.P_Discount, newdata.P_Tax1, newdata.P_Tax2, newdata.P_Sub_Total, newdata.P_Total);
+            ViewBag.Purchase = "Submitted Successfully !!!!";
+            ModelState.Clear();
+            Purchase_Details();
+            return View("Purchase_Details",newdata);
         }
     }
 }

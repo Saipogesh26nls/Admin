@@ -11,6 +11,7 @@
     @using (Html.BeginForm("Main", "BOM", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
+        <br />
         <table style="border-top:none;">
             <tr>
                 <td>
@@ -74,8 +75,8 @@
                 </td>
             </tr>
         </table>
-        
-        <table class="table table-bordered" id="tbl" >
+
+        <table class="table table-bordered" id="tbl">
             <thead>
                 <tr>
                     <th>

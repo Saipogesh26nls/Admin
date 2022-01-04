@@ -141,6 +141,7 @@ namespace Admin.Models
     }
     public class PurchaseField
     {
+        [Required]
         [DisplayName("Voucher No")]
         public string Voucher_No { get; set; }
         [DisplayName("Voucher Date")]
@@ -153,10 +154,10 @@ namespace Admin.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Invoice_Date { get; set; }
-        [DisplayName("A code")]
-        public string A_code { get; set; }
-        [DisplayName("P code")]
-        public string P_code { get; set; }
+        [DisplayName("Account Name")]
+        public string A_Name { get; set; }
+        [DisplayName("Part No")]
+        public string Part_No { get; set; }
         [DisplayName("ILedger")]
         public string I_Ledger { get; set; }
         [DisplayName("ALedger")]

@@ -1,138 +1,158 @@
 ﻿@model Admin.Models.PurchaseField
 
 @{
-    ViewBag.Title = "Enter Purchase Details";
 }
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <style>
+    .invoice-title h2, .invoice-title h3 {
+        display: inline-block;
+    }
+
+    .table > tbody > tr > .no-line {
+        border-top: none;
+    }
+
+    .table > thead > tr > .no-line {
+        border-bottom: none;
+    }
+
+    .table > tbody > tr > .thick-line {
+        border-top: 2px solid;
+    }
     .uppercase {
         text-transform: uppercase;
     }
 </style>
-
-<body style="background-color: #f5f5f7;">
-    @using (Html.BeginForm("Purchase_Insert","Purchase",FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="form-horizontal">
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                @Html.LabelFor(model => model.Voucher_No, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Voucher_No, "", new { @class = "text-danger" })
+<div class="container">
+    <br />
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="invoice-title">
+                <h3>Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style= "margin-left:2%;width:50%;" } })</h3><h3 class="pull-right">Date:@Html.EditorFor(model => model.Invoice_Date, new { htmlAttributes = new { style = "margin-left:2%;width:70%;font-size:16px;" } })</h3>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-3">
+                    <address>
+                        <strong>Billed To:</strong><br>
+                        John Smith<br>
+                        1234 Main<br>
+                        Apt. 4B<br>
+                        Springfield, ST 54321
+                    </address>
                 </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Voucher_Date, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Voucher_Date, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Voucher_Date, "", new { @class = "text-danger" })
+                <div class="col-sm-3">
+                    <address>
+                        <strong>Shipped To:</strong><br>
+                        Jane Smith<br>
+                        1234 Main<br>
+                        Apt. 4B<br>
+                        Springfield, ST 54321
+                    </address>
                 </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Invoice_No, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Invoice_No, "", new { @class = "text-danger" })
+                <div class="col-sm-3">
+                    <address>
+                        <strong>Payment Method:</strong><br>
+                        Visa ending **** 4242<br>
+                        jsmith@email.com
+                    </address>
                 </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Invoice_Date, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Invoice_Date, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Invoice_Date, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.A_code, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.A_code, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.A_code, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.P_code, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.P_code, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.P_code, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group" style="margin-top:2%;">
-                @Html.LabelFor(model => model.I_Ledger, htmlAttributes: new { @class = "control-label col-md-1" })
-                @Html.DropDownListFor(model => model.I_Ledger, ViewBag.ILedger as SelectList, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.LabelFor(model => model.A_Ledger, htmlAttributes: new { @class = "control-label col-md-1", @style = "margin-left:0%;" })
-                @Html.DropDownListFor(model => model.A_Ledger, ViewBag.ALedger as SelectList, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.P_Qty, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.P_Qty, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.P_Qty, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.P_Rate, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.P_Rate, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.P_Rate, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.P_Discount, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.P_Discount, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.P_Discount, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.P_Tax1, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.P_Tax1, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.P_Tax1, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.P_Tax2, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.P_Tax2, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.P_Tax2, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.P_Sub_Total, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.P_Sub_Total, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.P_Sub_Total, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.P_Total, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.P_Total, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.P_Total, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" />
+                <div>
+                    @Html.LabelFor(model => model.I_Ledger)
+                    @Html.DropDownListFor(model => model.I_Ledger, ViewBag.ILedger as SelectList, new { @class = "form-control uppercase" })
+                    <br />
+                    @Html.LabelFor(model => model.A_Ledger)
+                    @Html.DropDownListFor(model => model.A_Ledger, ViewBag.ALedger as SelectList, new { @class = "form-control uppercase" })
+                    <br />
                 </div>
             </div>
         </div>
-    }
-
-</body>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><strong>Order summary</strong></h3>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-condensed">
+                            <tr>
+                                <td style="border-top:none;">@Html.LabelFor(model => model.Part_No)@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:70%;" } })</td>
+                                <td style="border-top:none;">@Html.LabelFor(model => model.A_Name)@Html.EditorFor(model => model.A_Name, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:70%;" } })</td>
+                                <td class="text-center" style="border-top:none;">@Html.LabelFor(model => model.P_Qty)@Html.EditorFor(model => model.P_Qty, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:40%;" } })</td>
+                                <td style="border-top:none;">@Html.LabelFor(model => model.P_Rate)@Html.EditorFor(model => model.P_Rate, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:40%;" } })</td>
+                                <td style="border-top:none;"><input type="button" value="Insert"></td>
+                            </tr>
+                        </table>
+                        <table class="table table-condensed">
+                            <thead style="background-color: darkgray;">
+                                <tr>
+                                    <td><strong>Product</strong></td>
+                                    <td class="text-center"><strong>Account</strong></td>
+                                    <td class="text-center"><strong>Quantity</strong></td>
+                                    <td class="text-center"><strong>Purchase Rate</strong></td>
+                                    <td class="text-right"><strong>Total</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- foreach ($order->lineItems as $line) or some such thing here -->
+                                <tr>
+                                    <td>BS-200</td>
+                                    <td class="text-center">$10.99</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-right">$10.99</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-left"><strong>Total Qty:</strong></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class="thick-line"></td>
+                                    <td class="thick-line"></td>
+                                    <td class="thick-line"></td>
+                                    <td class="thick-line text-right"><strong>Subtotal</strong></td>
+                                    <td class="thick-line text-right">$670.99</td>
+                                </tr>
+                                <tr>
+                                    <td class="no-line"></td>
+                                    <td class="no-line"></td>
+                                    <td class="no-line"></td>
+                                    <td class="no-line text-right"><strong>Discount</strong></td>
+                                    <td class="no-line text-right">$15</td>
+                                </tr>
+                                <tr>
+                                    <td class="no-line"></td>
+                                    <td class="no-line"></td>
+                                    <td class="no-line"></td>
+                                    <td class="no-line text-right"><strong>Tax 1</strong></td>
+                                    <td class="no-line text-right">$15</td>
+                                </tr>
+                                <tr>
+                                    <td class="no-line"></td>
+                                    <td class="no-line"></td>
+                                    <td class="no-line"></td>
+                                    <td class="no-line text-right"><strong>Tax2</strong></td>
+                                    <td class="no-line text-right">$15</td>
+                                </tr>
+                                <tr>
+                                    <td class="no-line"></td>
+                                    <td class="no-line"></td>
+                                    <td class="no-line"></td>
+                                    <td class="no-line text-right"><strong>Total</strong></td>
+                                    <td class="no-line text-right">$685.99</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
