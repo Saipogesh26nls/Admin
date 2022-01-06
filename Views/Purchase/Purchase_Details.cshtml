@@ -3,9 +3,9 @@
 @{
 }
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<link href="~/Content/Purchase.css" rel="stylesheet">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link href="~/Content/Purchase.css" rel="stylesheet">
 
 <div class="container">
     <br />
@@ -65,17 +65,17 @@
                         <div class="table-responsive">
                             <table class="table table-condensed" id="ToHide">
                                 <tr>
-                                    <td style="border-top:none;">@Html.LabelFor(model => model.Part_No)@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:70%;" } })</td>
+                                    <td style="border-top:none;">@Html.LabelFor(model => model.Part_No)@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:6%;width:70%;" } })</td>
                                     <td style="border-top:none;" class="col-sm-3">@Html.LabelFor(model => model.A_Name)@Html.EditorFor(model => model.A_Name, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:50%;" } })</td>
-                                    <td class="text-center col-sm-3" style="border-top:none;">@Html.LabelFor(model => model.P_Qty)@Html.EditorFor(model => model.P_Qty, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:40%;" } })</td>
+                                    <td class="col-sm-3" style="border-top:none;">@Html.LabelFor(model => model.P_Qty)@Html.EditorFor(model => model.P_Qty, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:50%;" } })</td>
                                     <td style="border-top:none;" class="col-sm-3">@Html.LabelFor(model => model.P_Rate)@Html.EditorFor(model => model.P_Rate, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:40%;" } })</td>
                                     
                                 </tr>
                                 <!--For Manual Entry of Discount, Tax1, Tax2-->
                                 <tr>
                                     <td style="border-top:none;">@Html.LabelFor(model => model.I_Discount)@Html.EditorFor(model => model.I_Discount, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:70%;" } })</td>
-                                    <td style="border-top:none;" class="col-sm-3">@Html.LabelFor(model => model.I_Tax1)@Html.EditorFor(model => model.I_Tax1, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:50%;" } })</td>
-                                    <td class="text-center col-sm-3" style="border-top:none;">@Html.LabelFor(model => model.I_Tax2)@Html.EditorFor(model => model.I_Tax2, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:40%;" } })</td>
+                                    <td style="border-top:none;" class="col-sm-3">@Html.LabelFor(model => model.I_Tax1)@Html.EditorFor(model => model.I_Tax1, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:26.5%;width:50%;" } })</td>
+                                    <td class="col-sm-3" style="border-top:none;">@Html.LabelFor(model => model.I_Tax2)@Html.EditorFor(model => model.I_Tax2, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:10.5%;width:50%;" } })</td>
                                     <td style="border-top:none;"><input type="submit" value="Insert"></td>
                                 </tr>
                             </table>
@@ -90,7 +90,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- foreach ($order->lineItems as $line) or some such thing here -->
                                     @{
                                         foreach (var item in ViewBag.item)
                                         {

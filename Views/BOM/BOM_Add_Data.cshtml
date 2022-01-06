@@ -2,6 +2,9 @@
 @{
     ViewBag.Title = "Bill of Materials";
 }
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <style>
     .uppercase {
         text-transform: uppercase;
@@ -75,39 +78,47 @@
                 </td>
             </tr>
         </table>
-
-        <table class="table table-bordered" id="tbl">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Part_No)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Description)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Quantity)
-                    </th>
-                </tr>
-            </thead>
-            @{
-                foreach (var item in ViewBag.item)
-                {
-                    if (item.Part_No1 == null)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        <tr>
-                            <td>@item.Part_No1</td>
-                            <td>@item.Description1</td>
-                            <td>@item.Quantity1</td>
-                        </tr>
-                    }
-                }
-            }
-        </table>
+        <div class="panel panel-default">
+            @*<div class="panel-heading">
+                    <h3 class="panel-title"><strong>Order summary</strong></h3>
+                </div>*@
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-condensed" id="tbl">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Part_No)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Quantity)
+                                </th>
+                            </tr>
+                        </thead>
+                        @{
+                            foreach (var item in ViewBag.item)
+                            {
+                                if (item.Part_No1 == null)
+                                {
+                                    continue;
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>@item.Part_No1</td>
+                                        <td>@item.Description1</td>
+                                        <td>@item.Quantity1</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
     }
     @using (Html.BeginForm("Order", "BOM", FormMethod.Post))
     {
