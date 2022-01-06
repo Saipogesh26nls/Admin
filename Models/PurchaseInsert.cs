@@ -11,7 +11,34 @@ namespace Admin.Models
 {
     public class PurchaseInsert
     {
-        public int Add_Data(string Voucher_No, string Voucher_Date, string Invoice_No, string Invoice_Date, string A_Name, string Part_No, string I_Ledger, string A_Ledger, int P_Qty, double P_Rate, double P_Discount, double P_Tax1, double P_Tax2, double P_Sub_Total, double P_Total)
+        public void Add_Data (List<PurchaseField> data)
+        {
+            /*SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+
+            SqlCommand sql_cmnd = new SqlCommand("[dbo].[addPurchase]", Con);
+            sql_cmnd.CommandType = CommandType.StoredProcedure;
+            sql_cmnd.Parameters.AddWithValue("@invoice_no", SqlDbType.NVarChar).Value = data[0].Invoice_No;
+            sql_cmnd.Parameters.AddWithValue("@invoice_date", data[0].Invoice_Date);
+            sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = data[0].Part_No;
+            sql_cmnd.Parameters.AddWithValue("@acc_name", SqlDbType.NVarChar).Value = data[0].A_Name;
+            sql_cmnd.Parameters.AddWithValue("@p_qty", SqlDbType.Int).Value = data[0].P_Qty;
+            sql_cmnd.Parameters.AddWithValue("@iledger", SqlDbType.NVarChar).Value = data[0].I_Ledger;
+            sql_cmnd.Parameters.AddWithValue("@aledger", SqlDbType.NVarChar).Value = data[0].A_Ledger;
+            sql_cmnd.Parameters.AddWithValue("@i_rate", SqlDbType.Money).Value = ;
+            sql_cmnd.Parameters.AddWithValue("@i_discount", SqlDbType.Decimal).Value = ;
+            sql_cmnd.Parameters.AddWithValue("@i_tax1", SqlDbType.Money).Value = ;
+            sql_cmnd.Parameters.AddWithValue("@i_tax2", SqlDbType.Money).Value = ;
+            sql_cmnd.Parameters.AddWithValue("@i_subtotal", SqlDbType.Money).Value = ;
+            sql_cmnd.Parameters.AddWithValue("@i_total", SqlDbType.Money).Value = ;
+            sql_cmnd.Parameters.AddWithValue("@final_qty", SqlDbType.Int).Value = ;
+            sql_cmnd.Parameters.AddWithValue("@final_discount", SqlDbType.Decimal).Value = ;
+            sql_cmnd.Parameters.AddWithValue("@final_tax1", SqlDbType.Money).Value = ;
+            sql_cmnd.Parameters.AddWithValue("@final_tax2", SqlDbType.Money).Value = ;
+            sql_cmnd.Parameters.AddWithValue("@final_subtotal", SqlDbType.Money).Value = ;
+            sql_cmnd.Parameters.AddWithValue("@final_total", SqlDbType.Money).Value = ;*/
+        }
+        /*public int Add_Data(string Voucher_No, string Voucher_Date, string Invoice_No, string Invoice_Date, string A_Name, string Part_No, string I_Ledger, string A_Ledger, int P_Qty, double P_Rate, double P_Discount, double P_Tax1, double P_Tax2, double P_Sub_Total, double P_Total)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
@@ -37,6 +64,6 @@ namespace Admin.Models
             int var1;
             var1 = sql_cmnd.ExecuteNonQuery();
             return var1;
-        }
+        }*/
     }
 }

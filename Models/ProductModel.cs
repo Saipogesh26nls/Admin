@@ -141,13 +141,6 @@ namespace Admin.Models
     }
     public class PurchaseField
     {
-        [Required]
-        [DisplayName("Voucher No")]
-        public string Voucher_No { get; set; }
-        [DisplayName("Voucher Date")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime Voucher_Date { get; set; }
         [DisplayName("Invoice No")]
         public string Invoice_No { get; set; }
         [DisplayName("Invoice Date")]
@@ -175,8 +168,21 @@ namespace Admin.Models
         [DisplayName("Purchase Sub-Total")]
         public double P_Sub_Total { get; set; }
         [DisplayName("Purchase Total")]
-        public double P_Total { get; set; }
+        public double I_Total { get; set; }
         public int Total_Qty { get; set; }
-
+        public double Total { get; set; }
+        public string Inv_Date { get; set; }
+        public double I_Sub_Total { get; set; }
+        [DisplayName("Discount")]
+        public double I_Discount { get; set; }
+        [DisplayName("Tax 1")]
+        public double I_Tax1 { get; set; }
+        [DisplayName("Tax 2")]
+        public double I_Tax2 { get; set; }
+    }
+    public class Quantity
+    {
+        public int Qty { get; set; }
+        public double Sub_Total { get; set; }
     }
 }
