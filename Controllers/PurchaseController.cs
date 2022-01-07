@@ -24,6 +24,12 @@ namespace Admin.Controllers
                 ALedger.Add(new SelectListItem { Text = "Receipt", Value = "Receipt" });
                 ALedger.Add(new SelectListItem { Text = "Payable", Value = "Payable" });
                 ViewBag.ALedger = new SelectList(ALedger, "Value", "Text");
+                List<SelectListItem> GoodsIssue = new List<SelectListItem>();
+                GoodsIssue.Add(new SelectListItem { Text = "Adjustment", Value = "Adjustment" });
+                GoodsIssue.Add(new SelectListItem { Text = "Scrap", Value = "Scrap" });
+                GoodsIssue.Add(new SelectListItem { Text = "Damage", Value = "Damage" });
+                GoodsIssue.Add(new SelectListItem { Text = "Goods Return", Value = "Goods Return" });
+                ViewBag.GoodsIssue = new SelectList(GoodsIssue, "Value", "Text");
                 ViewBag.item = Table_Data_List;
                 /*Table_Data_List.Add(new PurchaseField { Total_Qty = 0 });
                 ViewBag.item = Table_Data_List;
@@ -42,6 +48,12 @@ namespace Admin.Controllers
                 ALedger.Add(new SelectListItem { Text = "Receipt", Value = "Receipt" });
                 ALedger.Add(new SelectListItem { Text = "Payable", Value = "Payable" });
                 ViewBag.ALedger = new SelectList(ALedger, "Value", "Text");
+                List<SelectListItem> GoodsIssue = new List<SelectListItem>();
+                GoodsIssue.Add(new SelectListItem { Text = "Adjustment", Value = "Adjustment" });
+                GoodsIssue.Add(new SelectListItem { Text = "Scrap", Value = "Scrap" });
+                GoodsIssue.Add(new SelectListItem { Text = "Damage", Value = "Damage" });
+                GoodsIssue.Add(new SelectListItem { Text = "Goods Return", Value = "Goods Return" });
+                ViewBag.GoodsIssue = new SelectList(GoodsIssue, "Value", "Text");
                 ViewBag.item = Table_Data_List;
                 ViewBag.i = i;
                 return View();
@@ -96,12 +108,12 @@ namespace Admin.Controllers
         [HttpPost]
         public ActionResult Purchase_Insert(PurchaseField newdata)
         {
-            PurchaseInsert purchase = new PurchaseInsert();
-            purchase.Add_Data(Table_Data_List);
-            ViewBag.Purchase = "Submitted Successfully !!!!";
-            Table_Data_List.Clear();
-            Purchase_Details();
-            return View("Purchase_Details",newdata);
+                PurchaseInsert purchase = new PurchaseInsert();
+                purchase.Add_Data(Table_Data_List);
+                ViewBag.Purchase = "Submitted Successfully !!!!";
+                Table_Data_List.Clear();
+                Purchase_Details();
+                return View("Purchase_Details", newdata);
         }
     }
 }

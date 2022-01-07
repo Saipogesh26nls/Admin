@@ -1,92 +1,89 @@
 ﻿@model Admin.Models.PurchaseField
+@{ 
 
-@{
 }
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<link href="~/Content/Purchase.css" rel="stylesheet">
-
-<div class="container">
-    <br />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="~/Content/Purchase.css"/>
+<div class="container-fluid">
     @using (Html.BeginForm("Purchase_GetData", "Purchase", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="invoice-title">
-                    <h3>Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:50%;" } })</h3><h3 class="pull-right">Date:@Html.EditorFor(model => model.Invoice_Date, new { htmlAttributes = new { style = "margin-left:2%;width:70%;font-size:16px;" } })</h3>
-                </div>
-                <hr />
-                <div class="row">
-                    <div class="col-sm-3">
-                        <address>
-                            <strong>Billed To:</strong><br>
-                            John Smith<br>
-                            1234 Main<br>
-                            Apt. 4B<br>
-                            Springfield, ST 54321
-                        </address>
+        <br />
+        <div id="ui-view" data-select2-id="ui-view">
+            <div>
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:1%;width:20%;font-size:18px;" } })    Date:@Html.EditorFor(model => model.Invoice_Date, new { htmlAttributes = new { style = "margin-left:1%;width:20%;font-size:16px;" } })</h4>
+                        <a id="ToHide"class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-abc="true">
+                            <i class="fa fa-print"></i> Print
+                        </a>
                     </div>
-                    <div class="col-sm-3">
-                        <address>
-                            <strong>Shipped To:</strong><br>
-                            Jane Smith<br>
-                            1234 Main<br>
-                            Apt. 4B<br>
-                            Springfield, ST 54321
-                        </address>
-                    </div>
-                    <div class="col-sm-3">
-                        <address>
-                            <strong>Payment Method:</strong><br>
-                            Visa ending **** 4242<br>
-                            jsmith@email.com
-                        </address>
-                    </div>
-                    <div>
-                        @Html.LabelFor(model => model.I_Ledger)
-                        @Html.DropDownListFor(model => model.I_Ledger, ViewBag.ILedger as SelectList, new { @class = "form-control uppercase" })
-                        <br />
-                        @Html.LabelFor(model => model.A_Ledger)
-                        @Html.DropDownListFor(model => model.A_Ledger, ViewBag.ALedger as SelectList, new { @class = "form-control uppercase" })
-                        <br />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><strong>Order summary</strong></h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="table-responsive">
-                            <table class="table table-condensed" id="ToHide">
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-sm-3">
+                                <h6 class="mb-3">From:</h6>
+                                <div>
+                                    <strong>BBBootstrap.com</strong>
+                                </div>
+                                <div>42, Awesome Enclave</div>
+                                <div>New York City, New york, 10394</div>
+                                <div>Email: admin@bbbootstrap.com</div>
+                                <div>Phone: +48 123 456 789</div>
+                            </div>
+                            <div class="col-sm-3">
+                                <h6 class="mb-3">To:</h6>
+                                <div>
+                                    <strong>BBBootstrap.com</strong>
+                                </div>
+                                <div>42, Awesome Enclave</div>
+                                <div>New York City, New york, 10394</div>
+                                <div>Email: admin@bbbootstrap.com</div>
+                                <div>Phone: +48 123 456 789</div>
+                            </div>
+                            <div class="col-sm-3">
+                                @Html.LabelFor(model => model.A_Ledger)
+                                @Html.DropDownListFor(model => model.A_Ledger, ViewBag.ALedger as SelectList, new { @class = "form-control uppercase", style = "width:70%;" })
+                                <br />
+                                @Html.LabelFor(model => model.I_Ledger)
+                                @Html.DropDownListFor(model => model.I_Ledger, ViewBag.ILedger as SelectList, new { @class = "form-control uppercase", style = "width:70%;"})
+                                <br />
+                            </div>
+                            <div id="b">
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                @Html.LabelFor(m => m.GoodsIssue)
+                                @Html.DropDownListFor(m => m.GoodsIssue, ViewBag.GoodsIssue as SelectList, new { @class = "form-control uppercase", style = "width:80%;"})
+                            </div>
+                        </div>
+                        <div class="table-responsive-sm">
+                            <table class="table table-striped" id="ToHide">
                                 <tr>
-                                    <td style="border-top:none;">@Html.LabelFor(model => model.Part_No)@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:6%;width:70%;" } })</td>
+                                    <td style="border-top:none;">@Html.LabelFor(model => model.Part_No)@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:6%;width:60%;" } })</td>
                                     <td style="border-top:none;" class="col-sm-3">@Html.LabelFor(model => model.A_Name)@Html.EditorFor(model => model.A_Name, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:50%;" } })</td>
                                     <td class="col-sm-3" style="border-top:none;">@Html.LabelFor(model => model.P_Qty)@Html.EditorFor(model => model.P_Qty, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:50%;" } })</td>
                                     <td style="border-top:none;" class="col-sm-3">@Html.LabelFor(model => model.P_Rate)@Html.EditorFor(model => model.P_Rate, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:40%;" } })</td>
-                                    
+
                                 </tr>
                                 <!--For Manual Entry of Discount, Tax1, Tax2-->
                                 <tr>
-                                    <td style="border-top:none;">@Html.LabelFor(model => model.I_Discount)@Html.EditorFor(model => model.I_Discount, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:70%;" } })</td>
-                                    <td style="border-top:none;" class="col-sm-3">@Html.LabelFor(model => model.I_Tax1)@Html.EditorFor(model => model.I_Tax1, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:26.5%;width:50%;" } })</td>
-                                    <td class="col-sm-3" style="border-top:none;">@Html.LabelFor(model => model.I_Tax2)@Html.EditorFor(model => model.I_Tax2, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:10.5%;width:50%;" } })</td>
+                                    <td style="border-top:none;">@Html.LabelFor(model => model.I_Discount)@Html.EditorFor(model => model.I_Discount, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2.5%;width:60%;" } })</td>
+                                    <td style="border-top:none;" class="col-sm-3">@Html.LabelFor(model => model.I_Tax1)@Html.EditorFor(model => model.I_Tax1, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:32%;width:50%;" } })</td>
+                                    <td class="col-sm-3" style="border-top:none;">@Html.LabelFor(model => model.I_Tax2)@Html.EditorFor(model => model.I_Tax2, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:13%;width:50%;" } })</td>
                                     <td style="border-top:none;"><input type="submit" value="Insert"></td>
                                 </tr>
                             </table>
-                            <table class="table table-condensed">
-                                <thead style="background-color: darkgray;">
+                            <table class="table table-striped">
+                                <thead>
                                     <tr>
-                                        <td><strong>Part No</strong></td>
-                                        <td class="text-center"><strong>Account</strong></td>
-                                        <td class="text-center"><strong>Quantity</strong></td>
-                                        <td class="text-center"><strong>Rate Per Unit</strong></td>
-                                        <td class="text-right"><strong>Taxable Total</strong></td>
+                                        <th><strong>Part No</strong></th>
+                                        <th class="text-center"><strong>Account</strong></th>
+                                        <th class="text-center"><strong>Quantity</strong></th>
+                                        <th class="text-left"><strong>Rate Per Unit</strong></th>
+                                        <th class="text-right"><strong>Taxable Total</strong></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -120,89 +117,96 @@
                                         <td></td>
                                         <td></td>
                                     </tr>
-                                    <tr>
-                                        <td class="thick-line"></td>
-                                        <td class="thick-line"></td>
-                                        <td class="thick-line"></td>
-                                        <td class="thick-line text-right"><strong>Subtotal</strong></td>
-                                        <td class="thick-line text-right">
-                                            @{
-                                                if (ViewBag.item.Count != 0)
-                                                {
-                                                    int i = ViewBag.i;
-                                                    @ViewBag.item[i].P_Sub_Total
-                                                }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <!--paragraph field-->
+                            <div class="col-lg-4 col-sm-5"></div>
+                            <div class="col-lg-4 col-sm-5 ml-auto">
+                                <table class="table table-clear">
+                                    <tbody>
+                                        <tr>
+                                            <td class="left">
+                                                <strong>Subtotal</strong>
+                                            </td>
+                                            <td class="right">
+                                                @{
+                                                    if (ViewBag.item.Count != 0)
+                                                    {
+                                                        int i = ViewBag.i;
+                                                        @ViewBag.item[i].P_Sub_Total
+                                                    }
                                             }
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="no-line"></td>
-                                        <td class="no-line"></td>
-                                        <td class="no-line"></td>
-                                        <td class="no-line text-right"><strong>Discount (10%)</strong></td>
-                                        <td class="no-line text-right">
+                                        <td class="left">
+                                            <strong>Discount (10%)</strong>
+                                        </td>
+                                        <td class="right">
                                             @{
                                                 if (ViewBag.item.Count != 0)
                                                 {
                                                     int i = ViewBag.i;
                                                     @ViewBag.item[i].P_Discount
                                                 }
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="left">
+                                        <strong>Tax 1(2.5%)</strong>
+                                    </td>
+                                    <td class="right">
+                                        @{
+                                            if (ViewBag.item.Count != 0)
+                                            {
+                                                int i = ViewBag.i;
+                                                @ViewBag.item[i].P_Tax1
                                             }
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="no-line"></td>
-                                        <td class="no-line"></td>
-                                        <td class="no-line"></td>
-                                        <td class="no-line text-right"><strong>Tax 1 (2.5%)</strong></td>
-                                        <td class="no-line text-right">
-                                            @{
-                                                if (ViewBag.item.Count != 0)
-                                                {
-                                                    int i = ViewBag.i;
-                                                    @ViewBag.item[i].P_Tax1
-                                                }
-                                            }
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="no-line"></td>
-                                        <td class="no-line"></td>
-                                        <td class="no-line"></td>
-                                        <td class="no-line text-right"><strong>Tax 2 (2.5%)</strong></td>
-                                        <td class="no-line text-right">
-                                            @{
-                                                if (ViewBag.item.Count != 0)
-                                                {
-                                                    int i = ViewBag.i;
-                                                    @ViewBag.item[i].P_Tax2
-                                                }
-                                            }
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="no-line"></td>
-                                        <td class="no-line"></td>
-                                        <td class="no-line"></td>
-                                        <td class="no-line text-right"><strong>Total</strong></td>
-                                        <td class="no-line text-right">
-                                            @{
-                                                if (ViewBag.item.Count != 0)
-                                                {
-                                                    int i = ViewBag.i;
-                                                    @ViewBag.item[i].Total
-                                                }
-                                            }
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="left">
+                                    <strong>Tax 2(2.5%)</strong>
+                                </td>
+                                <td class="right">
+                                    @{
+                                        if (ViewBag.item.Count != 0)
+                                        {
+                                            int i = ViewBag.i;
+                                            @ViewBag.item[i].P_Tax2
+                                        }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="left">
+                                <strong>Total</strong>
+                            </td>
+                            <td class="right">
+                                <strong>
+                                    @{
+                                        if (ViewBag.item.Count != 0)
+                                        {
+                                            int i = ViewBag.i;
+                                            @ViewBag.item[i].Total
+                                        }
+                                }
+                            </strong>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-    }
+    </div>
+</div>
+</div>
+</div>
+</div>
+}
     @using (Html.BeginForm("Purchase_Insert", "Purchase", FormMethod.Post))
     {
         <div class="text-danger" style="text-align:center;">
@@ -216,3 +220,16 @@
         <br />
     }
 </div>
+<script>
+    function getOption() {
+        selectElement = document.querySelector('a');
+        output = selectElement.value;
+        if (output == "Goods Issue") {
+            document.getElementById("b").style.display = "block";
+        }
+        else {
+            document.getElementById("b").style.display = "none";
+        }
+       
+    }
+</script>
