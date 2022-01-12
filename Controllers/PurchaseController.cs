@@ -24,12 +24,12 @@ namespace Admin.Controllers
                 ALedger.Add(new SelectListItem { Text = "Receipt", Value = "Receipt" });
                 ALedger.Add(new SelectListItem { Text = "Payable", Value = "Payable" });
                 ViewBag.ALedger = new SelectList(ALedger, "Value", "Text");
-                List<SelectListItem> GoodsIssue = new List<SelectListItem>();
-                GoodsIssue.Add(new SelectListItem { Text = "Adjustment", Value = "Adjustment" });
-                GoodsIssue.Add(new SelectListItem { Text = "Scrap", Value = "Scrap" });
-                GoodsIssue.Add(new SelectListItem { Text = "Damage", Value = "Damage" });
-                GoodsIssue.Add(new SelectListItem { Text = "Goods Return", Value = "Goods Return" });
-                ViewBag.GoodsIssue = new SelectList(GoodsIssue, "Value", "Text");
+                List<SelectListItem> Reason_Tag = new List<SelectListItem>();
+                Reason_Tag.Add(new SelectListItem { Text = "Adjustment", Value = "Adjustment" });
+                Reason_Tag.Add(new SelectListItem { Text = "Scrap", Value = "Scrap" });
+                Reason_Tag.Add(new SelectListItem { Text = "Damage", Value = "Damage" });
+                Reason_Tag.Add(new SelectListItem { Text = "Goods Return", Value = "Goods Return" });
+                ViewBag.Reason_Tag = new SelectList(Reason_Tag, "Value", "Text");
                 ViewBag.item = Table_Data_List;
                 /*Table_Data_List.Add(new PurchaseField { Total_Qty = 0 });
                 ViewBag.item = Table_Data_List;
@@ -48,12 +48,12 @@ namespace Admin.Controllers
                 ALedger.Add(new SelectListItem { Text = "Receipt", Value = "Receipt" });
                 ALedger.Add(new SelectListItem { Text = "Payable", Value = "Payable" });
                 ViewBag.ALedger = new SelectList(ALedger, "Value", "Text");
-                List<SelectListItem> GoodsIssue = new List<SelectListItem>();
-                GoodsIssue.Add(new SelectListItem { Text = "Adjustment", Value = "Adjustment" });
-                GoodsIssue.Add(new SelectListItem { Text = "Scrap", Value = "Scrap" });
-                GoodsIssue.Add(new SelectListItem { Text = "Damage", Value = "Damage" });
-                GoodsIssue.Add(new SelectListItem { Text = "Goods Return", Value = "Goods Return" });
-                ViewBag.GoodsIssue = new SelectList(GoodsIssue, "Value", "Text");
+                List<SelectListItem> Reason_Tag = new List<SelectListItem>();
+                Reason_Tag.Add(new SelectListItem { Text = "Adjustment", Value = "Adjustment" });
+                Reason_Tag.Add(new SelectListItem { Text = "Scrap", Value = "Scrap" });
+                Reason_Tag.Add(new SelectListItem { Text = "Damage", Value = "Damage" });
+                Reason_Tag.Add(new SelectListItem { Text = "Goods Return", Value = "Goods Return" });
+                ViewBag.Reason_Tag = new SelectList(Reason_Tag, "Value", "Text");
                 ViewBag.item = Table_Data_List;
                 ViewBag.i = i;
                 return View();
@@ -69,7 +69,7 @@ namespace Admin.Controllers
             else
             {
                 Qty_List.Add(new Quantity { Qty = newdata.P_Qty, Sub_Total = newdata.P_Rate*newdata.P_Qty });
-                Record(newdata.Invoice_No, newdata.Invoice_Date, newdata.I_Ledger, newdata.A_Ledger, newdata.Part_No, newdata.A_Name, newdata.P_Qty, newdata.P_Rate, newdata.Invoice_Date.ToString("dd/MM/yyyy"), newdata.I_Discount, newdata.I_Tax1, newdata.I_Tax2);
+                Record(newdata.Invoice_No, newdata.Invoice_Date, newdata.I_Ledger, newdata.A_Ledger, newdata.Part_No, newdata.A_Name, newdata.P_Qty, newdata.P_Rate, newdata.Invoice_Date.ToString("dd/MM/yyyy"), newdata.I_Discount, newdata.I_Tax1, newdata.I_Tax2, newdata.Reason_Tag);
                 Purchase_Details();
                 i++;
                 return View("Purchase_Details");
@@ -79,7 +79,7 @@ namespace Admin.Controllers
         static List<Quantity> Qty_List = new List<Quantity>();
 
         static List<PurchaseField> Table_Data_List = new List<PurchaseField>();
-        public static List<PurchaseField> Record(string Inv_No, DateTime Inv_Date, string ILedger, string ALedger, string Part_no, string Acc_name, int P_Qty, double P_Rate, string I_Date, double I_Discount, double I_Tax1, double I_Tax2)
+        public static List<PurchaseField> Record(string Inv_No, DateTime Inv_Date, string ILedger, string ALedger, string Part_no, string Acc_name, int P_Qty, double P_Rate, string I_Date, double I_Discount, double I_Tax1, double I_Tax2, string Reason_Tag)
         {
             //For Individual Table Data Calculation with Edit Field
             double I_Sub_Total = P_Qty * P_Rate;
@@ -102,7 +102,7 @@ namespace Admin.Controllers
             double tax1 = (total_S * 2.5) / 100;
             double tax2 = (total_S * 2.5) / 100;
             double Total = (total_S - discount) + tax1 + tax2;
-            Table_Data_List.Add(new PurchaseField { Invoice_No = Inv_No.ToUpper(), Invoice_Date = Inv_Date, I_Ledger = ILedger, A_Ledger = ALedger, Part_No = Part_no.ToUpper(), A_Name = Acc_name.ToUpper(), P_Qty = P_Qty, P_Rate = P_Rate, P_Sub_Total = total_S, P_Discount = discount, P_Tax1 = tax1, P_Tax2 = tax2, Total_Qty = total_Q, Total = Total, Inv_Date = I_Date, I_Sub_Total = I_Sub_Total, I_Discount = I_discount, I_Tax1 = I_tax1, I_Tax2 = I_tax2, I_Total = I_Total });
+            Table_Data_List.Add(new PurchaseField { Invoice_No = Inv_No.ToUpper(), Invoice_Date = Inv_Date, I_Ledger = ILedger, A_Ledger = ALedger, Part_No = Part_no.ToUpper(), A_Name = Acc_name.ToUpper(), P_Qty = P_Qty, P_Rate = P_Rate, P_Sub_Total = total_S, P_Discount = discount, P_Tax1 = tax1, P_Tax2 = tax2, Total_Qty = total_Q, Total = Total, Inv_Date = I_Date, I_Sub_Total = I_Sub_Total, I_Discount = I_discount, I_Tax1 = I_tax1, I_Tax2 = I_tax2, I_Total = I_Total, Reason_Tag = Reason_Tag });
             return (Table_Data_List);
         }
         [HttpPost]

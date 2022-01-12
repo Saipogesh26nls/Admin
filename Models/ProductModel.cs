@@ -179,7 +179,7 @@ namespace Admin.Models
         public double I_Tax1 { get; set; }
         [DisplayName("Tax 2")]
         public double I_Tax2 { get; set; }
-        public string GoodsIssue { get; set; }
+        public string Reason_Tag { get; set; }
     }
     public class Quantity
     {

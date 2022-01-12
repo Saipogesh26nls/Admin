@@ -47,7 +47,7 @@
                                 @Html.DropDownListFor(model => model.A_Ledger, ViewBag.ALedger as SelectList, new { @class = "form-control uppercase", style = "width:70%;" })
                                 <br />
                                 @Html.LabelFor(model => model.I_Ledger)
-                                @Html.DropDownListFor(model => model.I_Ledger, ViewBag.ILedger as SelectList, new { @class = "form-control uppercase", style = "width:70%;"})
+                                @Html.DropDownListFor(model => model.I_Ledger, ViewBag.ILedger as SelectList, new { @class = "form-control uppercase", style = "width:70%;", id="a"})
                                 <br />
                             </div>
                             <div id="b">
@@ -55,8 +55,8 @@
                                 <br />
                                 <br />
                                 <br />
-                                @Html.LabelFor(m => m.GoodsIssue)
-                                @Html.DropDownListFor(m => m.GoodsIssue, ViewBag.GoodsIssue as SelectList, new { @class = "form-control uppercase", style = "width:80%;"})
+                                @*@Html.LabelFor(m => m.Reason_Tag)
+                                @Html.DropDownListFor(m => m.Reason_Tag, ViewBag.Reason_Tag as SelectList, new { @class = "form-control uppercase", style = "width:80%;"})*@
                             </div>
                         </div>
                         <div class="table-responsive-sm">
@@ -65,7 +65,7 @@
                                     <td style="border-top:none;">@Html.LabelFor(model => model.Part_No)@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:6%;width:60%;" } })</td>
                                     <td style="border-top:none;" class="col-sm-3">@Html.LabelFor(model => model.A_Name)@Html.EditorFor(model => model.A_Name, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:50%;" } })</td>
                                     <td class="col-sm-3" style="border-top:none;">@Html.LabelFor(model => model.P_Qty)@Html.EditorFor(model => model.P_Qty, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:50%;" } })</td>
-                                    <td style="border-top:none;" class="col-sm-3">@Html.LabelFor(model => model.P_Rate)@Html.EditorFor(model => model.P_Rate, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:40%;" } })</td>
+                                    <td style="border-top:none;" class="col-sm-3">@Html.LabelFor(model => model.P_Rate)@Html.EditorFor(model => model.P_Rate, new { htmlAttributes = new { @class = "uppercase", style = "margin-left:2%;width:40%;"} })</td>
 
                                 </tr>
                                 <!--For Manual Entry of Discount, Tax1, Tax2-->
@@ -82,7 +82,7 @@
                                         <th><strong>Part No</strong></th>
                                         <th class="text-center"><strong>Account</strong></th>
                                         <th class="text-center"><strong>Quantity</strong></th>
-                                        <th class="text-left"><strong>Rate Per Unit</strong></th>
+                                        <th class="text-center"><strong>Rate Per Unit</strong></th>
                                         <th class="text-right"><strong>Taxable Total</strong></th>
                                     </tr>
                                 </thead>
@@ -179,7 +179,7 @@
                                             int i = ViewBag.i;
                                             @ViewBag.item[i].P_Tax2
                                         }
-                                }
+                                    }
                             </td>
                         </tr>
                         <tr>
@@ -194,15 +194,15 @@
                                             int i = ViewBag.i;
                                             @ViewBag.item[i].Total
                                         }
-                                }
-                            </strong>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                                    }
+                                </strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 </div>
 </div>
 </div>
@@ -221,15 +221,6 @@
     }
 </div>
 <script>
-    function getOption() {
-        selectElement = document.querySelector('a');
-        output = selectElement.value;
-        if (output == "Goods Issue") {
-            document.getElementById("b").style.display = "block";
-        }
-        else {
-            document.getElementById("b").style.display = "none";
-        }
-       
-    }
+    var dropdown = $("#a option:selected").text();
+    document.getElementById("b").innerHTML = dropdown;
 </script>

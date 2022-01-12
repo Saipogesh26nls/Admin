@@ -56,6 +56,7 @@ namespace Admin.Models
                 sql_cmnd.Parameters.AddWithValue("@final_tax2", SqlDbType.Money).Value = data[i].P_Tax2;
                 sql_cmnd.Parameters.AddWithValue("@final_subtotal", SqlDbType.Money).Value = data[i].P_Sub_Total;
                 sql_cmnd.Parameters.AddWithValue("@final_total", SqlDbType.Money).Value = data[i].Total;
+                sql_cmnd.Parameters.AddWithValue("@goodsissue", SqlDbType.Money).Value = data[i].GoodsIssue;
                 if (j == data.Count()-1)
                 {
                     sql_cmnd.Parameters.AddWithValue("@value", SqlDbType.Int).Value = key;
