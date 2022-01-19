@@ -50,13 +50,13 @@
                                 @Html.DropDownListFor(model => model.I_Ledger, ViewBag.ILedger as SelectList, new { @class = "form-control uppercase", style = "width:70%;", id="a"})
                                 <br />
                             </div>
-                            <div id="b">
+                            <div >
                                 <br />
                                 <br />
                                 <br />
                                 <br />
-                                @*@Html.LabelFor(m => m.Reason_Tag)
-                                @Html.DropDownListFor(m => m.Reason_Tag, ViewBag.Reason_Tag as SelectList, new { @class = "form-control uppercase", style = "width:80%;"})*@
+                                @Html.LabelFor(model => model.Reason_Tag)
+                                @Html.DropDownListFor(model => model.Reason_Tag, ViewBag.Reason_Tag as SelectList, new { @class = "form-control uppercase", style = "width:80%;", id = "b" })
                             </div>
                         </div>
                         <div class="table-responsive-sm">
@@ -214,13 +214,19 @@
         </div>
         <div>
             <div class="col-md-6" id="ToHide">
-                <input type="submit" value="Submit" class="btn btn-default" />
+                <input type="submit" value="Submit" class="btn btn-default" style="background-color:darkgrey;" />
             </div>
         </div>
         <br />
     }
 </div>
 <script>
-    var dropdown = $("#a option:selected").text();
-    document.getElementById("b").innerHTML = dropdown;
+    $("#a").change(function () {
+        if ($(this).val() == 3) {
+            $("#b").show();
+        }
+        else {
+            $("#b").hide();
+        }
+    });
 </script>

@@ -16,7 +16,7 @@ namespace Admin.Controllers
             {
                 List<SelectListItem> ILedger = new List<SelectListItem>();
                 ILedger.Add(new SelectListItem { Text = "Goods-Receipt", Value = "Goods-Receipt" });
-                ILedger.Add(new SelectListItem { Text = "Goods-Issue", Value = "Goods-Issue" });
+                ILedger.Add(new SelectListItem { Text = "Goods-Issue", Value = "3" });
                 ViewBag.ILedger = new SelectList(ILedger, "Value", "Text");
                 List<SelectListItem> ALedger = new List<SelectListItem>();
                 ALedger.Add(new SelectListItem { Text = "Sales", Value = "Sales" });
@@ -40,7 +40,7 @@ namespace Admin.Controllers
             {
                 List<SelectListItem> ILedger = new List<SelectListItem>();
                 ILedger.Add(new SelectListItem { Text = "Goods-Receipt", Value = "Goods-Receipt" });
-                ILedger.Add(new SelectListItem { Text = "Goods-Issue", Value = "Goods-Issue" });
+                ILedger.Add(new SelectListItem { Text = "Goods-Issue", Value = "3" });
                 ViewBag.ILedger = new SelectList(ILedger, "Value", "Text");
                 List<SelectListItem> ALedger = new List<SelectListItem>();
                 ALedger.Add(new SelectListItem { Text = "Sales", Value = "Sales" });
