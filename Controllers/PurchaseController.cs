@@ -16,7 +16,7 @@ namespace Admin.Controllers
             {
                 List<SelectListItem> ILedger = new List<SelectListItem>();
                 ILedger.Add(new SelectListItem { Text = "Goods-Receipt", Value = "Goods-Receipt" });
-                ILedger.Add(new SelectListItem { Text = "Goods-Issue", Value = "3" });
+                ILedger.Add(new SelectListItem { Text = "Goods-Issue", Value = "Goods-Issue" });
                 ViewBag.ILedger = new SelectList(ILedger, "Value", "Text");
                 List<SelectListItem> ALedger = new List<SelectListItem>();
                 ALedger.Add(new SelectListItem { Text = "Sales", Value = "Sales" });
@@ -25,6 +25,7 @@ namespace Admin.Controllers
                 ALedger.Add(new SelectListItem { Text = "Payable", Value = "Payable" });
                 ViewBag.ALedger = new SelectList(ALedger, "Value", "Text");
                 List<SelectListItem> Reason_Tag = new List<SelectListItem>();
+                Reason_Tag.Add(new SelectListItem { Text = "-Select-", Value = null });
                 Reason_Tag.Add(new SelectListItem { Text = "Adjustment", Value = "Adjustment" });
                 Reason_Tag.Add(new SelectListItem { Text = "Scrap", Value = "Scrap" });
                 Reason_Tag.Add(new SelectListItem { Text = "Damage", Value = "Damage" });
@@ -40,7 +41,7 @@ namespace Admin.Controllers
             {
                 List<SelectListItem> ILedger = new List<SelectListItem>();
                 ILedger.Add(new SelectListItem { Text = "Goods-Receipt", Value = "Goods-Receipt" });
-                ILedger.Add(new SelectListItem { Text = "Goods-Issue", Value = "3" });
+                ILedger.Add(new SelectListItem { Text = "Goods-Issue", Value = "Goods-Issue" });
                 ViewBag.ILedger = new SelectList(ILedger, "Value", "Text");
                 List<SelectListItem> ALedger = new List<SelectListItem>();
                 ALedger.Add(new SelectListItem { Text = "Sales", Value = "Sales" });
@@ -49,6 +50,7 @@ namespace Admin.Controllers
                 ALedger.Add(new SelectListItem { Text = "Payable", Value = "Payable" });
                 ViewBag.ALedger = new SelectList(ALedger, "Value", "Text");
                 List<SelectListItem> Reason_Tag = new List<SelectListItem>();
+                Reason_Tag.Add(new SelectListItem { Text = "-Select-", Value = null });
                 Reason_Tag.Add(new SelectListItem { Text = "Adjustment", Value = "Adjustment" });
                 Reason_Tag.Add(new SelectListItem { Text = "Scrap", Value = "Scrap" });
                 Reason_Tag.Add(new SelectListItem { Text = "Damage", Value = "Damage" });

@@ -50,13 +50,13 @@
                                 @Html.DropDownListFor(model => model.I_Ledger, ViewBag.ILedger as SelectList, new { @class = "form-control uppercase", style = "width:70%;", id="a"})
                                 <br />
                             </div>
-                            <div >
+                            <div id = "b">
                                 <br />
                                 <br />
                                 <br />
                                 <br />
                                 @Html.LabelFor(model => model.Reason_Tag)
-                                @Html.DropDownListFor(model => model.Reason_Tag, ViewBag.Reason_Tag as SelectList, new { @class = "form-control uppercase", style = "width:80%;", id = "b" })
+                                @Html.DropDownListFor(model => model.Reason_Tag, ViewBag.Reason_Tag as SelectList, new { @class = "form-control uppercase", style = "width:80%;" })
                             </div>
                         </div>
                         <div class="table-responsive-sm">
@@ -222,7 +222,7 @@
 </div>
 <script>
     $("#a").change(function () {
-        if ($(this).val() == 3) {
+        if ($(this).val() == "Goods-Issue") {
             $("#b").show();
         }
         else {
