@@ -15,17 +15,17 @@ namespace Admin.Controllers
         [HttpGet]
         public ActionResult GroupEntry()
         {
-            /*SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             _con.Open();
             SqlDataAdapter _da = new SqlDataAdapter("Select * From Product_Master where P_Level=1", _con);
             DataTable _dt = new DataTable();
             _da.Fill(_dt);
-            ViewBag.GroupList = ToSelectList(_dt, "P_Name", "P_Name");*/
+            ViewBag.GroupList = ToSelectList(_dt, "P_Name", "P_Name");
 
             return View();
         }
 
-        /*[NonAction]
+        [NonAction]
         public SelectList ToSelectList(DataTable table, string valueField, string textField)
         {
             List<SelectListItem> list = new List<SelectListItem>();
@@ -38,7 +38,7 @@ namespace Admin.Controllers
                 });
             }
             return new SelectList(list, "Value", "Text");
-        }*/
+        }
 
         [HttpPost]
         public ActionResult GroupEntry(GroupFields newuser)

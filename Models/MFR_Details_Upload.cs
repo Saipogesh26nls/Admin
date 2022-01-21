@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Data;
 
 namespace Admin.Models
 {
@@ -14,23 +15,22 @@ namespace Admin.Models
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd1 = "Update Number_master Set M_Id = M_Id + 1 ";
-            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
-            SqlCmd1.ExecuteNonQuery();
-            string cmd2 = "Select M_Id from Number_master ";
-            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
-            SqlDataReader dr = SqlCmd2.ExecuteReader();
-            dr.Read();
-            int M_Id = dr.GetInt32(0);
-            Con.Close();
-            Con.Open();
-            string cmd3 = "insert into Manufacturer_Details (M_Id,M_Name, M_Country, M_Region, M_Address, M_Support_No, M_Contact_No, M_Sales_No, M_Website, M_Support_Email, M_Contact_Email, M_Sales_Email, M_Payment) VALUES('" + M_Id + "','" + cM_Name + "','" + cM_Country + "','" + cM_Region + "','" + cM_Address + "','" + cM_Support_No + "','" + cM_Contact_No + "','" + cM_Sales_No + "','" + cM_Website + "','" + cM_Support_Email + "','" + cM_Contact_Email + "','" + cM_Sales_Email + "','" + cM_Payment + "')";
-            string cmd4 = "update Manufacturer_Details set M_Name = UPPER(M_Name), M_Country = UPPER(M_Country), M_Region = UPPER(M_Region), M_Address = UPPER(M_Address), M_Payment = UPPER(M_Payment)";
-            SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
-            SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con);
-            int var1, var2;
-            var1 = SqlCmd3.ExecuteNonQuery();
-            var2 = SqlCmd4.ExecuteNonQuery();
+            SqlCommand sql_cmnd = new SqlCommand("[dbo].[addMfr]", Con);
+            sql_cmnd.CommandType = CommandType.StoredProcedure;
+            sql_cmnd.Parameters.AddWithValue("@m_name", SqlDbType.NVarChar).Value = cM_Name;
+            sql_cmnd.Parameters.AddWithValue("@m_country", SqlDbType.NVarChar).Value = cM_Country;
+            sql_cmnd.Parameters.AddWithValue("@m_region", SqlDbType.NVarChar).Value = cM_Region;
+            sql_cmnd.Parameters.AddWithValue("@m_address", SqlDbType.NVarChar).Value = cM_Address;
+            sql_cmnd.Parameters.AddWithValue("@m_support_no", SqlDbType.NVarChar).Value = cM_Support_No;
+            sql_cmnd.Parameters.AddWithValue("@m_contact_no", SqlDbType.NVarChar).Value = cM_Contact_No;
+            sql_cmnd.Parameters.AddWithValue("@m_sales_no", SqlDbType.NVarChar).Value = cM_Sales_No;
+            sql_cmnd.Parameters.AddWithValue("@m_website", SqlDbType.NVarChar).Value = cM_Website;
+            sql_cmnd.Parameters.AddWithValue("@m_support_email", SqlDbType.NVarChar).Value = cM_Support_Email;
+            sql_cmnd.Parameters.AddWithValue("@m_contact_email", SqlDbType.NVarChar).Value = cM_Contact_Email;
+            sql_cmnd.Parameters.AddWithValue("@m_sales_email", SqlDbType.NVarChar).Value = cM_Sales_Email;
+            sql_cmnd.Parameters.AddWithValue("@m_payment", SqlDbType.NVarChar).Value = cM_Payment;
+
+            int var1 = sql_cmnd.ExecuteNonQuery();
             Con.Close();
             return var1;
         }

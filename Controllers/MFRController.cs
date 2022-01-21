@@ -26,6 +26,7 @@ namespace Admin.Controllers
             userid = dblogin.MFRUpload(newuser.M_Name, newuser.M_Country, newuser.M_Region, newuser.M_Address, newuser.M_Support_No, newuser.M_Contact_No, newuser.M_Sales_No, newuser.M_Website, newuser.M_Support_Email, newuser.M_Contact_Email, newuser.M_Sales_Email, newuser.M_Payment);
             Session["M_Name"] = userid;
             newuser.Regd_Success = "Registered Successfully !!!!";
+            ModelState.Clear();
             MFREntry();
             return View("MFREntry",newuser);
         }

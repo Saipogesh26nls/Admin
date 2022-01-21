@@ -17,7 +17,7 @@ namespace Admin.Models
 
             SqlCommand sql_cmnd = new SqlCommand("[dbo].[GroupBy]", Con);
             sql_cmnd.CommandType = CommandType.StoredProcedure;
-            sql_cmnd.Parameters.AddWithValue("@Pname", SqlDbType.NVarChar).Value = cP_Disp_Name.ToUpper();
+            sql_cmnd.Parameters.AddWithValue("@Pname", SqlDbType.NVarChar).Value = cP_Name.ToUpper();
             sql_cmnd.Parameters.AddWithValue("@PDispname", SqlDbType.NVarChar).Value = cP_Disp_Name.ToUpper();
             int var;
             var = sql_cmnd.ExecuteNonQuery();
