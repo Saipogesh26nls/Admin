@@ -95,9 +95,8 @@ namespace Admin.Models
                 sql_cmnd.CommandType = CommandType.StoredProcedure;
                 sql_cmnd.Parameters.AddWithValue("@bom_no", SqlDbType.Int).Value = BOM_No;
                 sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = orderDetail[i].Part_No1.ToUpper();
-                sql_cmnd.Parameters.AddWithValue("@descp", SqlDbType.NVarChar).Value = orderDetail[i].Description1.ToUpper();
-                sql_cmnd.Parameters.AddWithValue("@mp_descp", SqlDbType.NVarChar).Value = orderDetail[i].SP_Description.ToUpper();
-                sql_cmnd.Parameters.AddWithValue("@quantity", SqlDbType.NVarChar).Value = orderDetail[i].Quantity1.ToUpper();
+                sql_cmnd.Parameters.AddWithValue("@mp_partno", SqlDbType.NVarChar).Value = orderDetail[i].SP_Part_No.ToUpper();
+                sql_cmnd.Parameters.AddWithValue("@quantity", SqlDbType.NVarChar).Value = orderDetail[i].Quantity1;
                 sql_cmnd.ExecuteNonQuery();
                 i++;
             }

@@ -52,7 +52,7 @@ namespace Admin.Controllers
             }
             else
             {
-                Record(new_data.Part_No, Descp, new_data.Quantity, values);
+                Record(new_data.Part_No, Descp, new_data.Quantity, values, new_data.SP_Part_No);
                 BOM_Add_Data();
                 return View("BOM_Add_Data");
             }
@@ -60,9 +60,9 @@ namespace Admin.Controllers
         }
 
         static List<BOMFields> Table_Data_List = new List<BOMFields>();
-        public static List<BOMFields> Record(string tbl_part_no, string tbl_Descp, string tbl_Quan, string SP_Descp)
+        public static List<BOMFields> Record(string tbl_part_no, string tbl_Descp, string tbl_Quan, string SP_Descp, string SP_Part_No)
         {
-            Table_Data_List.Add(new BOMFields { Part_No1 = tbl_part_no, Description1 = tbl_Descp, Quantity1 = tbl_Quan, SP_Description = SP_Descp });
+            Table_Data_List.Add(new BOMFields { Part_No1 = tbl_part_no, Description1 = tbl_Descp, Quantity1 = tbl_Quan, SP_Description = SP_Descp, SP_Part_No = SP_Part_No });
             return (Table_Data_List);
         }
         [HttpPost]

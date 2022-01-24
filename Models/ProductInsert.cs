@@ -21,7 +21,6 @@ namespace Admin.Models
              sql_cmnd.Parameters.AddWithValue("@Pname", SqlDbType.NVarChar).Value = cP_Disp_Name;
              sql_cmnd.Parameters.AddWithValue("@PDispname", SqlDbType.NVarChar).Value = cP_Disp_Name;
              sql_cmnd.Parameters.AddWithValue("@Pmfr", SqlDbType.Int).Value = cP_Manufacturer;
-             sql_cmnd.Parameters.AddWithValue("@PRegion", SqlDbType.NVarChar).Value = cP_Region;
              sql_cmnd.Parameters.AddWithValue("@PPartNo", SqlDbType.NVarChar).Value = cP_Part_No;
              sql_cmnd.Parameters.AddWithValue("@PGroup", SqlDbType.NVarChar).Value = cP_Name;
              sql_cmnd.Parameters.AddWithValue("@PDescription", SqlDbType.NVarChar).Value = cP_Description;

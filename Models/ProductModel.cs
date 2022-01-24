@@ -187,4 +187,17 @@ namespace Admin.Models
         public int Qty { get; set; }
         public double Sub_Total { get; set; }
     }
+    public class PriceFields
+    {
+        [DisplayName("Part No")]
+        public string Part_No { get; set; }
+        [DisplayName("Cost Price")]
+        public double P_Cost { get; set; }
+        [DisplayName("Price (USD)")]
+        public double P_Price_USD { get; set; }
+        [DisplayName("MRP")]
+        public double P_MRP { get; set; }
+        [DisplayName("Selling Price")]
+        public double P_SP { get; set; }
+    }
 }

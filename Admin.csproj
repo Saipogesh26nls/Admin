@@ -125,6 +125,7 @@
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\BOMController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
+    <Compile Include="Controllers\PriceController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\MFRController.cs" />
     <Compile Include="Controllers\PurchaseController.cs" />
@@ -2246,6 +2247,7 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Purchase\Purchase_Details.cshtml" />
+    <Content Include="Views\Price\Price_Update.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
