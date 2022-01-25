@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Xml.Linq;
 using System;
 using System.Web;
 using System.Web.Mvc;
@@ -81,6 +82,17 @@ namespace Admin.Controllers
             BOM_Insert dblogin = new BOM_Insert();
             string Descp = dblogin.SP_Description(name.Part_to_Descp);
             return Json(Descp, JsonRequestBehavior.AllowGet);
+        }
+        public void List_to_XML()
+        {
+            var xEle = new XElement("BOM",
+                            from list in Table_Data_List
+                            select new XElement("BOM",
+                                         new XAttribute("Part_No1", list.Part_No1),
+                                           new XElement("SP_Part_No", list.SP_Part_No),
+                                           new XElement("Quantity", list.Quantity1)
+                                       ));
+            xEle.Save("D:\\employees.xml");
         }
     }
 }

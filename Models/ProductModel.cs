@@ -191,6 +191,7 @@ namespace Admin.Models
     {
         [DisplayName("Part No")]
         public string Part_No { get; set; }
+        public string P_Description { get; set; }
         [DisplayName("Cost Price")]
         public double P_Cost { get; set; }
         [DisplayName("Price (USD)")]
@@ -199,5 +200,6 @@ namespace Admin.Models
         public double P_MRP { get; set; }
         [DisplayName("Selling Price")]
         public double P_SP { get; set; }
+        public string Reg_success { get; set; }
     }
 }

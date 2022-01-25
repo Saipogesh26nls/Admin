@@ -15,14 +15,14 @@ namespace Admin.Controllers
             if (Table_Data_List.Count == 0)
             {
                 List<SelectListItem> ILedger = new List<SelectListItem>();
-                ILedger.Add(new SelectListItem { Text = "Goods-Receipt", Value = "Goods-Receipt" });
-                ILedger.Add(new SelectListItem { Text = "Goods-Issue", Value = "Goods-Issue" });
+                ILedger.Add(new SelectListItem { Text = "Goods-Receipt", Value = "1" });
+                ILedger.Add(new SelectListItem { Text = "Goods-Issue", Value = "2" });
                 ViewBag.ILedger = new SelectList(ILedger, "Value", "Text");
                 List<SelectListItem> ALedger = new List<SelectListItem>();
-                ALedger.Add(new SelectListItem { Text = "Sales", Value = "Sales" });
-                ALedger.Add(new SelectListItem { Text = "Purchase", Value = "Purchase" });
-                ALedger.Add(new SelectListItem { Text = "Receipt", Value = "Receipt" });
-                ALedger.Add(new SelectListItem { Text = "Payable", Value = "Payable" });
+                ALedger.Add(new SelectListItem { Text = "Sales", Value = "1" });
+                ALedger.Add(new SelectListItem { Text = "Purchase", Value = "2" });
+                ALedger.Add(new SelectListItem { Text = "Receipt", Value = "3" });
+                ALedger.Add(new SelectListItem { Text = "Payable", Value = "4" });
                 ViewBag.ALedger = new SelectList(ALedger, "Value", "Text");
                 List<SelectListItem> Reason_Tag = new List<SelectListItem>();
                 Reason_Tag.Add(new SelectListItem { Text = "-Select-", Value = null });

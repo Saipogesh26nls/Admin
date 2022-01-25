@@ -136,6 +136,7 @@
     <Compile Include="Models\BOM_Insert.cs" />
     <Compile Include="Models\GroupInsert.cs" />
     <Compile Include="Models\MFR_Details_Upload.cs" />
+    <Compile Include="Models\Price_Updation.cs" />
     <Compile Include="Models\ProductInsert.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\PurchaseInsert.cs" />
@@ -2251,6 +2252,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Default\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
