@@ -98,5 +98,66 @@ namespace Admin.Models
             var1 = sql_cmnd.ExecuteNonQuery();
             return var1;
         }*/
+        public List<string> Address(string A_code)
+        {
+            List<PurchaseField> ItemQm = new List<PurchaseField>();
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "select * from Address_Details where A_code = '" + A_code + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlDataReader dr = SqlCmd1.ExecuteReader();
+            while (dr.Read())
+            {
+                ItemQm.Add(new PurchaseField
+                {
+                    A_Door_No = dr["Door_No"].ToString(),
+                    A_Street = dr["Street"].ToString(),
+                    A_Area = dr["Area"].ToString(),
+                    A_City = dr["City"].ToString(),
+                    A_State = dr["State"].ToString(),
+                    A_Country = dr["Country"].ToString(),
+                    A_Pincode = dr["Pincode"].ToString(),
+                    A_Contact_No = dr["Contact_No"].ToString(),
+                    A_Mobile_No = dr["Mobile_No"].ToString(),
+                    A_Email_Id = dr["Email_Id"].ToString()
+                }
+                );
+            }
+            Con.Close();
+            SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con1.Open();
+            string cmd2 = "select * from Account_Master where A_code = '" + A_code + "'";
+            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con1);
+            SqlDataReader dr1 = SqlCmd2.ExecuteReader();
+            while (dr1.Read())
+            {
+                ItemQm.Add(new PurchaseField
+                {
+                    A_A_Name = dr1["A_Name"].ToString()
+                }
+                );
+            }
+            if (ItemQm.Count() != 0)
+            {
+                string mfr_name = $"{ItemQm[1].A_A_Name}";
+                string Addr = $"{ItemQm[0].A_Door_No} {ItemQm[0].A_Street} {ItemQm[0].A_Area} {ItemQm[0].A_City} {ItemQm[0].A_State} {ItemQm[0].A_Country} {ItemQm[0].A_Pincode}.";
+                string Contact_no = $"Contact No : {ItemQm[0].A_Contact_No}";
+                string Mobile_no = $"Mobile No : {ItemQm[0].A_Mobile_No}";
+                string Email_id = $"Email.Id : {ItemQm[0].A_Email_Id}";
+                List<string> list = new List<string>();
+                list.Add(mfr_name);
+                list.Add(Addr);
+                list.Add(Contact_no);
+                list.Add(Mobile_no);
+                list.Add(Email_id);
+                Con1.Close();
+                return list;
+            }
+            else
+            {
+                return null;
+            }
+
+        }
     }
 }

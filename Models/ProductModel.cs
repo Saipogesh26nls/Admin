@@ -147,8 +147,9 @@ namespace Admin.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Invoice_Date { get; set; }
-        [DisplayName("Account Name")]
+        [DisplayName("Manufacturer")]
         public string A_Name { get; set; }
+        public string Address { get; set; }
         [DisplayName("Part No")]
         public string Part_No { get; set; }
         [DisplayName("ILedger")]
@@ -181,6 +182,17 @@ namespace Admin.Models
         public double I_Tax2 { get; set; }
         [DisplayName("Reason")]
         public string Reason_Tag { get; set; }
+        public string A_A_Name { get; set; }
+        public string A_Door_No { get; set; }
+        public string A_Street { get; set; }
+        public string A_Area { get; set; }
+        public string A_City { get; set; }
+        public string A_State { get; set; }
+        public string A_Country { get; set; }
+        public string A_Pincode { get; set; }
+        public string A_Contact_No { get; set; }
+        public string A_Mobile_No { get; set; }
+        public string A_Email_Id { get; set; }
     }
     public class Quantity
     {
