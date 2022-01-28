@@ -54,6 +54,7 @@ namespace Admin.Controllers
                 return View();
             }
         }
+
         [NonAction]
         public SelectList ToSelectList(DataTable table, string valueField, string textField)
         {
@@ -68,7 +69,6 @@ namespace Admin.Controllers
             }
             return new SelectList(list, "Value", "Text");
         }
-        static List<string> MFR_Addr = new List<string>();
         public ActionResult Purchase_GetData(PurchaseField newdata)
         {
             if (newdata.Part_No == null)
@@ -85,7 +85,7 @@ namespace Admin.Controllers
                 double total = (sub_total - discount) + tax1 + tax2;
                 Qty_List.Add(new Quantity { Qty = newdata.P_Qty, Sub_Total = total});
                 Record(newdata.Invoice_No, newdata.Invoice_Date, newdata.I_Ledger, newdata.A_Ledger, newdata.Part_No, newdata.A_Name, newdata.P_Qty, newdata.P_Rate, newdata.Invoice_Date.ToString("dd/MM/yyyy"), newdata.I_Discount, newdata.I_Tax1, newdata.I_Tax2, newdata.Reason_Tag);
-                Purchase_Details();
+                Purchase_Details(); //need to change
                 i++;
                 return View("Purchase_Details");
             }
@@ -94,7 +94,7 @@ namespace Admin.Controllers
         static List<Quantity> Qty_List = new List<Quantity>();
 
         static List<PurchaseField> Table_Data_List = new List<PurchaseField>();
-        public static List<PurchaseField> Record(string Inv_No, DateTime Inv_Date, string ILedger, string ALedger, string Part_no, string Acc_name, int P_Qty, double P_Rate, string I_Date, double I_Discount, double I_Tax1, double I_Tax2, string Reason_Tag)
+        public List<PurchaseField> Record(string Inv_No, DateTime Inv_Date, string ILedger, string ALedger, string Part_no, string Acc_name, int P_Qty, double P_Rate, string I_Date, double I_Discount, double I_Tax1, double I_Tax2, string Reason_Tag)
         {
             //For Individual Table Data Calculation with Edit Field
             double I_Sub_Total = P_Qty * P_Rate;
@@ -121,6 +121,27 @@ namespace Admin.Controllers
             Table_Data_List.Add(new PurchaseField { Invoice_No = Inv_No.ToUpper(), Invoice_Date = Inv_Date, I_Ledger = ILedger, A_Ledger = ALedger, Part_No = Part_no.ToUpper(), A_Name = Acc_name.ToUpper(), P_Qty = P_Qty, P_Rate = P_Rate, P_Sub_Total = total_S, P_Discount = discount, P_Tax1 = tax1, P_Tax2 = tax2, Total_Qty = total_Q, Total = Total, Inv_Date = I_Date, I_Sub_Total = I_Sub_Total, I_Discount = I_discount, I_Tax1 = I_tax1, I_Tax2 = I_tax2, I_Total = I_Total, Reason_Tag = Reason_Tag });
             return (Table_Data_List);
         }
+
+        public ActionResult Edit()
+        {
+            return View();
+        }
+        public ActionResult Delete(string Part_No)
+        {
+            Table_Data_List.RemoveAll(p => p.Part_No == Part_No);
+            if(Table_Data_List.Count == 0)
+            {
+                i = i - 1;
+                Purchase_Details();
+                return View("Purchase_Details");
+            }
+            else
+            {
+                i = i - 2;
+                Purchase_Details();
+                return View("Purchase_Details");
+            }
+        }
         [HttpPost]
         public ActionResult Purchase_Insert(PurchaseField newdata)
         {
@@ -128,21 +149,21 @@ namespace Admin.Controllers
                 purchase.Add_Data(Table_Data_List);
                 ViewBag.Purchase = "Submitted Successfully !!!!";
                 Table_Data_List.Clear();
-                Purchase_Details();
+                Purchase_Details(); //need to change
                 return View("Purchase_Details", newdata);
         }
 
-        public ActionResult Mfr_to_Addr(PurchaseField newdata)
+        public ActionResult Mfr_to_Addr(PurchaseField name)
         {
+            List<string> MFR_Addr = new List<string>();
             PurchaseInsert purchaseInsert = new PurchaseInsert();
-            var Mfr_Address = purchaseInsert.Address(newdata.Address);
+            var Mfr_Address = purchaseInsert.Address(name.Address);
             MFR_Addr.Add(Mfr_Address[0]);
             MFR_Addr.Add(Mfr_Address[1]);
             MFR_Addr.Add(Mfr_Address[2]);
             MFR_Addr.Add(Mfr_Address[3]);
             MFR_Addr.Add(Mfr_Address[4]);
-            var json = JsonConvert.SerializeObject(MFR_Addr);
-            return Json(json, JsonRequestBehavior.AllowGet);
+            return Json(MFR_Addr, JsonRequestBehavior.AllowGet);
         }
     }
 }
