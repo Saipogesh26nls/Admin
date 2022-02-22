@@ -146,7 +146,7 @@ namespace Admin.Models
         [DisplayName("Invoice Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime Invoice_Date { get; set; }
+        public DateTime Invoice_Date { get; set; } = DateTime.Now;
         [DisplayName("Manufacturer")]
         public string A_Name { get; set; }
         public string Address { get; set; }
@@ -193,6 +193,7 @@ namespace Admin.Models
         public string A_Contact_No { get; set; }
         public string A_Mobile_No { get; set; }
         public string A_Email_Id { get; set; }
+        public string A_Code { get; set; }
     }
     public class Quantity
     {

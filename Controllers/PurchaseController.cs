@@ -14,7 +14,6 @@ namespace Admin.Controllers
 {
     public class PurchaseController : Controller
     {
-        // GET: Purchase
         public ActionResult Purchase_Details()
         {
             SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
@@ -25,16 +24,17 @@ namespace Admin.Controllers
                 DataTable _dt1 = new DataTable();
                 _da1.Fill(_dt1);
                 ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
-                List<SelectListItem> ILedger = new List<SelectListItem>();
+                /*List<SelectListItem> ILedger = new List<SelectListItem>();
                 ILedger.Add(new SelectListItem { Text = "Goods-Receipt", Value = "1" });
                 ViewBag.ILedger = new SelectList(ILedger, "Value", "Text");
                 List<SelectListItem> ALedger = new List<SelectListItem>();
                 ALedger.Add(new SelectListItem { Text = "Purchase", Value = "2" });
                 ViewBag.ALedger = new SelectList(ALedger, "Value", "Text");
-                ViewBag.item = Table_Data_List;
-                /*Table_Data_List.Add(new PurchaseField { Total_Qty = 0 });
+                Table_Data_List.Add(new PurchaseField { Total_Qty = 0 });
                 ViewBag.item = Table_Data_List;
                 ViewBag.i = 0;*/
+                ViewBag.item = Table_Data_List;
+                
                 return View();
             }
             else
@@ -43,12 +43,12 @@ namespace Admin.Controllers
                 DataTable _dt1 = new DataTable();
                 _da1.Fill(_dt1);
                 ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
-                List<SelectListItem> ILedger = new List<SelectListItem>();
+                /*List<SelectListItem> ILedger = new List<SelectListItem>();
                 ILedger.Add(new SelectListItem { Text = "Goods-Receipt", Value = "1" });
                 ViewBag.ILedger = new SelectList(ILedger, "Value", "Text");
                 List<SelectListItem> ALedger = new List<SelectListItem>();
                 ALedger.Add(new SelectListItem { Text = "Purchase", Value = "2" });
-                ViewBag.ALedger = new SelectList(ALedger, "Value", "Text");
+                ViewBag.ALedger = new SelectList(ALedger, "Value", "Text");*/
                 ViewBag.item = Table_Data_List;
                 ViewBag.i = i;
                 return View();
@@ -78,13 +78,15 @@ namespace Admin.Controllers
             }
             else
             {
+                string I_Ledger = "1"; //Goods-Receipt
+                string A_Ledger = "2"; //Purchase
                 double sub_total = newdata.P_Rate * newdata.P_Qty;
                 double discount = (sub_total * newdata.I_Discount) / 100;
                 double tax1 = (sub_total * newdata.I_Tax1) / 100;
                 double tax2 = (sub_total * newdata.I_Tax2) / 100;
                 double total = (sub_total - discount) + tax1 + tax2;
                 Qty_List.Add(new Quantity { Qty = newdata.P_Qty, Sub_Total = total});
-                Record(newdata.Invoice_No, newdata.Invoice_Date, newdata.I_Ledger, newdata.A_Ledger, newdata.Part_No, newdata.A_Name, newdata.P_Qty, newdata.P_Rate, newdata.Invoice_Date.ToString("dd/MM/yyyy"), newdata.I_Discount, newdata.I_Tax1, newdata.I_Tax2, newdata.Reason_Tag);
+                Record(newdata.Invoice_No, newdata.Invoice_Date, I_Ledger, A_Ledger, newdata.Part_No, newdata.A_Name, newdata.P_Qty, newdata.P_Rate, newdata.Invoice_Date.ToString(), newdata.I_Discount, newdata.I_Tax1, newdata.I_Tax2, newdata.Reason_Tag);
                 Purchase_Details(); //need to change
                 i++;
                 return View("Purchase_Details");

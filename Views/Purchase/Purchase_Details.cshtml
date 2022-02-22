@@ -17,7 +17,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h4>Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:1%;width:20%;font-size:18px;"} })    Date:@Html.EditorFor(model => model.Invoice_Date, new { htmlAttributes = new { style = "margin-left:1%;width:20%;font-size:16px;" } })</h4>
-                            <a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-abc="true">
+                            <a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true">
                                 <i class="fa fa-print"></i> Print
                             </a>
                             <br />
