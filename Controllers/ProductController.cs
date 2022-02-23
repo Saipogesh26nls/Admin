@@ -50,12 +50,32 @@ namespace Admin.Controllers
         [HttpPost]
         public ActionResult ProductEntry(ProductModel newuser)
         {
-            ProductInsert dblogin = new ProductInsert();
-            int userid = dblogin.AddData(newuser.P_Name, newuser.P_Disp_Name, newuser.P_Manufacturer, newuser.P_Region, newuser.P_Part_No, newuser.P_Description, newuser.P_Cost, newuser.P_MRP, newuser.P_SP);
-            Session["P_Id"] = userid;
-            newuser.Reg_Success = "Registered Successfully !!!!";
-            ProductEntry();
-            return View("ProductEntry", newuser);
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "select P_Part_No from Product_Master where P_Part_No = '" + newuser.P_Part_No + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlDataReader dr = SqlCmd1.ExecuteReader();
+            string ItemQm = string.Empty;
+            while (dr.Read())
+            {
+                ItemQm = dr["P_Part_No"].ToString();
+            }
+            if(ItemQm != newuser.P_Part_No)
+            {
+                ProductInsert dblogin = new ProductInsert();
+                int userid = dblogin.AddData(newuser.P_Name, newuser.P_Disp_Name, newuser.P_Manufacturer, newuser.P_Region, newuser.P_Part_No, newuser.P_Description, newuser.P_Cost, newuser.P_MRP, newuser.P_SP);
+                Session["P_Id"] = userid;
+                newuser.Reg_Success = "Registered Successfully !!!!";
+                ProductEntry();
+                return View("ProductEntry", newuser);
+            }
+            else
+            {
+                newuser.P_Part_No = "Part No is already exists !!!";
+                ProductEntry();
+                return View("ProductEntry", newuser);
+            }
+            
         }
     }
 }

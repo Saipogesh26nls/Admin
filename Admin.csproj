@@ -125,6 +125,7 @@
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\BOMController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
+    <Compile Include="Controllers\NewPurchaseController.cs" />
     <Compile Include="Controllers\PriceController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\MFRController.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Models\BOM_Insert.cs" />
     <Compile Include="Models\GroupInsert.cs" />
     <Compile Include="Models\MFR_Details_Upload.cs" />
+    <Compile Include="Models\NewPurchase_Insert.cs" />
     <Compile Include="Models\Price_Updation.cs" />
     <Compile Include="Models\ProductInsert.cs" />
     <Compile Include="Models\ProductModel.cs" />
@@ -2249,6 +2251,7 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Purchase\Purchase_Details.cshtml" />
     <Content Include="Views\Price\Price_Update.cshtml" />
+    <Content Include="Views\NewPurchase\New_Purchase.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

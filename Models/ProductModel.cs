@@ -215,4 +215,48 @@ namespace Admin.Models
         public double P_SP { get; set; }
         public string Reg_success { get; set; }
     }
+    public class New_Purchase
+    {
+
+        [DisplayName("Invoice No")]
+        public string Invoice_No { get; set; }
+        [DisplayName("Invoice Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime Invoice_Date { get; set; } = DateTime.Now;
+        [DisplayName("Part No")]
+        public string Part_No { get; set; }
+        [DisplayName("ILedger")]
+        public string I_Ledger { get; set; }
+        [DisplayName("ALedger")]
+        public string A_Ledger { get; set; }
+        [DisplayName("Quantity")]
+        public int P_Qty { get; set; }
+        [DisplayName("Purchase Rate")]
+        public double P_Rate { get; set; }
+        [DisplayName("Discount")]
+        public double P_Discount { get; set; }
+        [DisplayName("Tax1")]
+        public double P_Tax1 { get; set; }
+        [DisplayName("Tax2")]
+        public double P_Tax2 { get; set; }
+        public int Total_Qty { get; set; }
+        public double Total { get; set; }
+        public int Quantity { get; set; }
+        public double Rate_Per_Unit { get; set; }
+        public double Taxable_Total { get; set; }
+    }
+    public class PurchaseTable
+    {
+        public string Part_No { get;set; }
+        public int Quantity { get; set; }
+        public double Price_Per_Unit { get; set; }
+        public double Sub_Total { get; set; }
+        public double Discount { get; set; }
+        public double Tax1 { get; set; }
+        public double Tax2 { get; set; }
+        public double Total { get; set; }
+        public string Invoice_No { get; set; }
+        public string Invoice_Date { get; set; }
+    }
 }
