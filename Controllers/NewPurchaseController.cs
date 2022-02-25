@@ -20,20 +20,17 @@ namespace Admin.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Table_Data (string Purchase = "")
+        public ActionResult Table_Data (List<PurchaseTable> Purchase)
         {
-            var json = JsonConvert.DeserializeObject(Purchase);
-            var serilaizeJson = JsonConvert.SerializeObject(json, Formatting.None,
-            new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            });
-            var result = JsonConvert.DeserializeObject<List<PurchaseTable>>(serilaizeJson);
-            return View("New_Purchase"); 
+            int Quantity = Purchase[Purchase.Count - 1].final_Qty;
+            double Total = Purchase[Purchase.Count - 1].final_Total;
+            NewPurchase_Insert purchase = new NewPurchase_Insert();
+            purchase.Add_Data(Purchase, Quantity, Total);
+            return Json(Purchase); 
         }
         public ActionResult Partno_to_Descp(BOMFields name)
         {
-            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            /*SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
             string cmd1 = "Update Number_master Set Voucher_No = Voucher_No + 1 ";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
@@ -47,7 +44,7 @@ namespace Admin.Controllers
             string dateWithFormat = date.ToString("dd - MM - yyyy");
             ViewBag.Voucher_No = Voucher_No;
             ViewBag.DateWithFormat = dateWithFormat;
-            Con.Close();
+            Con.Close();*/
             NewPurchase_Insert dblogin = new NewPurchase_Insert();
             string Descp = dblogin.SP_Description(name.Part_to_Descp);
             return Json(Descp, JsonRequestBehavior.AllowGet);

@@ -46,9 +46,18 @@
                                         <th style="padding-right:30px">EditDelete</th>
                                         <th style="display:none;">Invoice_No</th>
                                         <th style="display: none;">Invoice_Date</th>
+                                        <th style="display:none;">ILedger</th>
+                                        <th style="display: none;">ALedger</th>
+                                        <th style="display: none;">final_Qty</th>
+                                        <th style="display: none;">final_Total</th>
                                     </tr>
                                 </tbody>
                             </table>
+                            <div>
+                                @Html.LabelFor(model => model.Quantity) = <h6 id="Qty"></h6>
+                                @Html.LabelFor(model => model.Total) = <h6 id="total"></h6>
+                            </div>
+                            <p id="del"></p>
                         </div>
                     </div>
                 </div>
@@ -60,13 +69,18 @@
     </div>
 </body>
 <script>
+    var qty = 0;
+    var total = 0;
     $('#Insert').click(function () {
         var d1 = $('#Part_No').val();
-        var d2 = $('#Quantity').val();
+        var d2 = parseInt(document.getElementById("Quantity").value);
         var d3 = $('#Purchase_Rate').val();
         var d4 = $('#Discount').val();
         var d5 = $('#Tax_1').val();
         var d6 = $('#Tax_2').val();
+        var ILedger = 1;
+        var ALedger = 2;
+        qty = qty + d2;
         var subtotal = d2 * d3;
         if (d4 == "") {
             var discount = 0;
@@ -87,16 +101,21 @@
             var tax2 = (subtotal * d6) / 100;
         }
         var Total = (subtotal - discount) + tax1 + tax2;
+        total = total + Total;
         var Invoice_No = $('#Invoice_No').val();
         var Invoice_Date = $('#Invoice_Date').val();
-
+        document.getElementById("Qty").innerHTML = qty;
+        document.getElementById("total").innerHTML = total;
+        var final_Qty = document.getElementById("Qty").innerHTML;
+        var final_Total = document.getElementById("total").innerHTML;
         if (d1 == "" || d2 == "" || d3 == "") {
             return;
         }
         else {
-            var newrow = '<tr id="data"><td>' + d1 + '</td><td>' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal + '</td><td>' + discount + '</td><td>' + tax1 + '</td><td>' + tax2 + '</td><td>' + Total + '</td><td><button onclick="editRow();" style="align-content:center;"><i class="fas fa-edit"></i></button><button  onClick="del_row(this)"><i class="fa fa-trash"></i></button></td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td></tr>';
+            var newrow = '<tr id="data"><td>' + d1 + '</td><td>' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal + '</td><td>' + discount + '</td><td>' + tax1 + '</td><td>' + tax2 + '</td><td>' + Total + '</td><td><button onclick="editRow();" style="align-content:center;"><i class="fas fa-edit"></i></button><button  onClick="del_row(this)"><i class="fa fa-trash"></i></button></td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;">' + ILedger + '</td><td style="display:none;">' + ALedger + '</td><td style="display:none;">' + final_Qty + '</td><td style="display:none;">' + final_Total + '</td></tr>';
             $('#selected_units tr:last').after(newrow);
         }
+        
     });
 </script>
 <script>
@@ -112,44 +131,63 @@
             var myRows = [];
             var headersText = [];
             var $headers = $("th");
-
-            // Loop through grabbing everything
             var $rows = $("tbody #data").each(function (index) {
                 $cells = $(this).find("td");
                 myRows[index] = {};
 
                 $cells.each(function (cellIndex) {
-                    // Set the header text
                     if (headersText[cellIndex] === undefined) {
                         headersText[cellIndex] = $($headers[cellIndex]).text();
                     }
-                    // Update the row object with the header/cell combo
                     myRows[index][headersText[cellIndex]] = $(this).text();
                 });
             });
 
-            // Let's put this in the object like you want and convert to JSON (Note: jQuery will also do this for you on the Ajax request)
             var myObj = {
                 "myrows": myRows
             };
-            $(document).ready(function () {
+            $.ajax({
+                url: '/NewPurchase/Table_Data',
+                data: JSON.stringify(myRows),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+                    //  alert(result.ItemList[0].Str);
+                }
+            });
+            @*$(document).ready(function () {
                 $.ajax(
                     {
                         type: 'POST',
                         dataType: 'JSON',
-                        url: '/NewPurchase/Table_Data',
+                        url: "/NewPurchase/Table_Data",
+                        contentType: "application/json; charset=utf-8",
                         data: { Purchase: JSON.stringify(myRows, undefined, 2) },
                         success:
                             function (response) {
-                                // Generate HTML table.  
-                                convertJsonToHtmlTable(JSON.parse(response), $("#TableId"));
+                                // Generate HTML table.
+                                alert("Success: " + response);
                             },
                         error:
                             function (response) {
                                 alert("Error: " + response);
                             }
                     });
-            });
+            });*@
+            @*jQuery.ajax({
+            type: "POST",
+            url: "@Url.Action("Table_Data", "NewPurchase")",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+                data: { Purchase: JSON.stringify(myRows, undefined, 2) },
+                success: function (data) {
+                    alert(data);
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+            });*@
             document.getElementById("json_op").innerHTML = JSON.stringify(myRows, undefined, 2);
         }
     });
@@ -157,7 +195,13 @@
 <script>
     function del_row(node) {
         r = node.parentNode.parentNode;
+        var qty = r.parentNode.children.innerHTML;
+       @* document.getElementById("del").innerHTML = qty;*@
         r.parentNode.removeChild(r);
+        var tot = document.getElementById("total").innerHTML;
+        tot = tot - 1;
+        document.getElementById("total").innerHTML = tot;
+
     }
 </script>
 <script>

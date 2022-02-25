@@ -258,5 +258,9 @@ namespace Admin.Models
         public double Total { get; set; }
         public string Invoice_No { get; set; }
         public string Invoice_Date { get; set; }
+        public int ILedger { get; set; }
+        public int ALedger { get; set; }
+        public int final_Qty { get; set; }
+        public double final_Total { get; set; }
     }
 }
