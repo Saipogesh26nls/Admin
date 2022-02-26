@@ -224,6 +224,12 @@ namespace Admin.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Invoice_Date { get; set; } = DateTime.Now;
+        [DisplayName("Voucher No")]
+        public string Voucher_No { get; set; }
+        [DisplayName("Voucher Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime Voucher_Date { get; set; } = DateTime.Now;
         [DisplayName("Part No")]
         public string Part_No { get; set; }
         [DisplayName("ILedger")]
@@ -241,14 +247,31 @@ namespace Admin.Models
         [DisplayName("Tax2")]
         public double P_Tax2 { get; set; }
         public int Total_Qty { get; set; }
+        [DisplayName("Sub Total")]
         public double Total { get; set; }
+        [DisplayName("Total Quantity")]
         public int Quantity { get; set; }
         public double Rate_Per_Unit { get; set; }
+        [DisplayName("Sub Total")]
         public double Taxable_Total { get; set; }
+        [DisplayName("Discount")]
+        public double Final_Discount { get; set; }
+        [DisplayName("Tax1")]
+        public double Final_Tax1 { get; set; }
+        [DisplayName("Tax2")]
+        public double Final_Tax2 { get; set; }
+        [DisplayName("Total")]
+        public double Final_Total { get; set; }
+        public string P_code { get; set; }
+        public string P_Name { get; set; }
+        public string P_Manufacturer { get; set; }
+        public string P_Part_No { get; set; }
+        public string P_Description { get; set; }
+        public string P_Description_DD { get; set; }
     }
     public class PurchaseTable
     {
-        public string Part_No { get;set; }
+        public string Part_No { get; set; }
         public int Quantity { get; set; }
         public double Price_Per_Unit { get; set; }
         public double Sub_Total { get; set; }
@@ -261,6 +284,7 @@ namespace Admin.Models
         public int ILedger { get; set; }
         public int ALedger { get; set; }
         public int final_Qty { get; set; }
-        public double final_Total { get; set; }
+        public double final_Sub_Total { get; set; }
+        public double final_total { get; set; }
     }
 }

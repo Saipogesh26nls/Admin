@@ -2,9 +2,9 @@
 @{
     ViewBag.Title = "Bill of Materials";
 }
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <style>
     .uppercase {
         text-transform: uppercase;
@@ -23,7 +23,7 @@
                     @Html.EditorFor(model => model.SP_Part_No, new { htmlAttributes = new { @class = "form-control uppercase", required = "required" } })
                 </td>
                 <td>
-                    <button class="btn btn-default" type="submit" style="margin-top:40%;margin-left:20%;">Insert</button>
+                    <button class="button" type="submit" style="margin-top:40%;margin-left:20%;">Insert</button>
                 </td>
             </tr>
             <tr>
@@ -62,7 +62,7 @@
                 </td>
                 <td>
                     <br />
-                    <button class="btn btn-default" id="add_btn" type="submit" style="margin-top: 12%; margin-left: 20%;">Add</button>
+                    <button class="button" id="add_btn" type="submit" style="margin-top: 12%; margin-left: 20%;">Add</button>
                 </td>
             </tr>
             <tr>
@@ -74,7 +74,7 @@
         <div style="width:50%">
             <p id="value"></p>
         </div>
-        
+
         <div class="panel panel-default">
             @*<div class="panel-heading">
                     <h3 class="panel-title"><strong>Order summary</strong></h3>
@@ -124,7 +124,7 @@
         </div>
         <div>
             <div class="col-md-offset-8 col-md-10" style="margin-top:2%;">
-                <input type="submit" value="Submit" class="btn btn-default" />
+                <input type="submit" value="Submit" class="button" />
             </div>
         </div>
     }

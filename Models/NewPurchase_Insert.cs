@@ -39,7 +39,28 @@ namespace Admin.Models
             }
 
         }
-        public void Add_Data(List<PurchaseTable> data, int Qty, double total)
+        public List<New_Purchase> Product_Master()
+        {
+            List<New_Purchase> ItemQm = new List<New_Purchase>();
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "select P_Part_No,P_Description from Product_Master where P_Level<0 ORDER BY P_code Asc;";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlDataReader dr = SqlCmd1.ExecuteReader();
+            while (dr.Read())
+            {
+                ItemQm.Add(new New_Purchase
+                {
+                    P_Part_No = dr["P_Part_No"].ToString(),
+                    P_Description = dr["P_Description"].ToString()
+                }
+                );
+            }
+            Con.Close();
+            return ItemQm;
+
+        }
+        public void Add_Data(List<PurchaseTable> data, int Qty, double total, double final_total)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
@@ -79,6 +100,7 @@ namespace Admin.Models
                 sql_cmnd.Parameters.AddWithValue("@i_total", SqlDbType.Money).Value = data[i].Total;
                 sql_cmnd.Parameters.AddWithValue("@Total", SqlDbType.Money).Value = total;
                 sql_cmnd.Parameters.AddWithValue("@Total_Qty", SqlDbType.Money).Value = Qty;
+                sql_cmnd.Parameters.AddWithValue("@Final_Total", SqlDbType.Money).Value = final_total;
                 sql_cmnd.Parameters.AddWithValue("@acc_name", SqlDbType.NVarChar).Value = null;
                 sql_cmnd.Parameters.AddWithValue("@goodsissue", SqlDbType.NVarChar).Value = null;
 
