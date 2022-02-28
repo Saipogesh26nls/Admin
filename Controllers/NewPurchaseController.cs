@@ -17,7 +17,10 @@ namespace Admin.Controllers
         // GET: NewPurchase
         public ActionResult New_Purchase(New_Purchase Purchase)
         {
-            Purchase.Invoice_Date = DateTime.UtcNow;
+            New_Purchase new_Purchase = new New_Purchase();
+            new_Purchase.Voucher_Date = DateTime.Today;
+            new_Purchase.Invoice_Date = DateTime.Today;
+          
             SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             _con.Open();
             SqlDataAdapter _da = new SqlDataAdapter("Select P_Description From Product_Master where P_Level<0", _con);
@@ -28,7 +31,7 @@ namespace Admin.Controllers
             NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
             var PM_Data = newPurchase_Insert.Product_Master();
             ViewBag.PM = PM_Data;
-            return View();
+            return View(new_Purchase);
         }
 
         [NonAction]
@@ -60,6 +63,51 @@ namespace Admin.Controllers
             NewPurchase_Insert dblogin = new NewPurchase_Insert();
             string Descp = dblogin.SP_Description(name.Part_to_Descp);
             return Json(Descp, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult PurchaseList ()
+        {
+            NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
+            var PM_Data = newPurchase_Insert.Purchase_List();
+            ViewBag.PL = PM_Data;
+            return View(PM_Data);
+        }
+
+        public ActionResult Edit_Purchase_View(int v_no, int inv_no)
+        {
+            NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
+            var PM_Data = newPurchase_Insert.EditPurchase(v_no);
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            for(int i=0; i<PM_Data.Count; i++)
+            {
+                string cmd1 = "select P_Part_No from Product_Master where P_code = '" + PM_Data[i].Part_No + "'";
+                SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                SqlDataReader dr = SqlCmd1.ExecuteReader();
+                while (dr.Read())
+                {
+                    string Part_No = dr["P_Part_No"].ToString();
+                    PM_Data[i].Part_No = Part_No;
+                }
+                dr.Close();
+            }
+            ViewBag.inv = inv_no;
+            ViewBag.PL = PM_Data;
+            return View(PM_Data);
+        }
+        public ActionResult Edit_Purchase_Row(string part_no, double qty, double price, double subtotal, double discount, double tax1, double tax2, double total)
+        {
+            EditPurchaseValue Data = new EditPurchaseValue();
+            Data.Part_No = part_no;
+            Data.Quantity = qty;
+            Data.Price_Per_Unit = price;
+            Data.Sub_Total = subtotal;
+            Data.Discount = (subtotal/(discount*10));
+            Data.Tax1 = (subtotal/(tax1*10));
+            Data.Tax2 = (subtotal/(tax2*10));
+            Data.Total = total;
+
+            return View(Data);
         }
     }
 }

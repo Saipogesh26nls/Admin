@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Admin.Models.PurchaseList>
+
+@{
+    ViewBag.Title = "PurchaseList";
+    var List = ViewBag.PL;
+}
+@*
+<h2>PurchaseList</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Voucher_No)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Voucher_Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Invoice_No)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Invoice_Date)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Voucher_No)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Voucher_Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Invoice_No)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Invoice_Date)
+        </td>
+        <td>
+            @Html.ActionLink("Select", "Edit_Purchase_View", new {v_no=item.Voucher_No,inv_no = item.Invoice_No  })
+        </td>
+    </tr>
+}
+
+</table>

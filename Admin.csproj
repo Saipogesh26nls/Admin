@@ -2252,6 +2252,9 @@
     <Content Include="Views\Purchase\Purchase_Details.cshtml" />
     <Content Include="Views\Price\Price_Update.cshtml" />
     <Content Include="Views\NewPurchase\New_Purchase.cshtml" />
+    <Content Include="Views\NewPurchase\PurchaseList.cshtml" />
+    <Content Include="Views\NewPurchase\Edit_Purchase_View.cshtml" />
+    <Content Include="Views\NewPurchase\Edit_Purchase_Row.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

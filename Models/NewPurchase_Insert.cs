@@ -118,5 +118,55 @@ namespace Admin.Models
             }
             Con1.Close();
         }
+        public List<PurchaseList> Purchase_List()
+        {
+            List<PurchaseList> ItemQm = new List<PurchaseList>();
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "select Invoice_No,Invoice_Date,Voucher_No,Voucher_Date from Purchase ORDER BY Voucher_No Asc;";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlDataReader dr = SqlCmd1.ExecuteReader();
+            while (dr.Read())
+            {
+                ItemQm.Add(new PurchaseList
+                {
+                    Invoice_No = dr["Invoice_No"].ToString(),
+                    Invoice_Date = dr["Invoice_Date"].ToString(),
+                    Voucher_No = dr["Voucher_No"].ToString(),
+                    Voucher_Date = dr["Voucher_Date"].ToString()
+                }
+                );
+            }
+            Con.Close();
+            return ItemQm;
+
+        }
+        public List<EditPurchase> EditPurchase(int id)
+        {
+            List<EditPurchase> ItemQm = new List<EditPurchase>();
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "select P_code, Purchase_Qty, Purchase_Rate, Purchase_Discount, Purchase_Tax_1, Purchase_Tax_2, Purchase_SubTotal, Purchase_Total from Purchase where Voucher_No = '" + id + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlDataReader dr = SqlCmd1.ExecuteReader();
+            while (dr.Read())
+            {
+                ItemQm.Add(new EditPurchase
+                {
+                    Part_No = dr["P_code"].ToString(),
+                    Quantity = dr["Purchase_Qty"].ToString(),
+                    Price_Per_Unit = dr["Purchase_Rate"].ToString(),
+                    Discount = dr["Purchase_Discount"].ToString(),
+                    Tax1 = dr["Purchase_Tax_1"].ToString(),
+                    Tax2 = dr["Purchase_Tax_2"].ToString(),
+                    Sub_Total = dr["Purchase_SubTotal"].ToString(),
+                    Total = dr["Purchase_Total"].ToString()
+                }
+                );
+            }
+            Con.Close();
+            return ItemQm;
+
+        }
     }
 }

@@ -1,0 +1,121 @@
+﻿@model Admin.Models.EditPurchaseValue
+
+@{
+}
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+    @using (Html.BeginForm("Edit_Purchase_Row", "NewPurchase", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Part_No, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Part_No, new { htmlAttributes = new { @class = "form-control", @style = "width:50%;" } })
+                    @Html.ValidationMessageFor(model => model.Part_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control", @style = "width:50%;", @id = "Qty" } })
+                    @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Price_Per_Unit, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Price_Per_Unit, new { htmlAttributes = new { @class = "form-control", @style = "width:50%;", @id = "Price" } })
+                    @Html.ValidationMessageFor(model => model.Price_Per_Unit, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Sub_Total, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Sub_Total, new { htmlAttributes = new { @class = "form-control", @style = "width:50%;", @id = "Subtotal" } })
+                    @Html.ValidationMessageFor(model => model.Sub_Total, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control", @style = "width:50%;", @id = "Discount" } })
+                    @Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Tax1, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Tax1, new { htmlAttributes = new { @class = "form-control", @style = "width:50%;" }, @id = "Tax1" })
+                    @Html.ValidationMessageFor(model => model.Tax1, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Tax2, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Tax2, new { htmlAttributes = new { @class = "form-control", @style = "width:50%;", @id = "Tax2" } })
+                    @Html.ValidationMessageFor(model => model.Tax2, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Total, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Total, new { htmlAttributes = new { @class = "form-control", @style = "width:50%;", @id = "Total" } })
+                    @Html.ValidationMessageFor(model => model.Total, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+</body>
+</html>
+<script language="JavaScript" type="text/javascript">
+document.addEventListener('keydown', function (event) {
+        if (event.keyCode === 9) {
+
+            var Quantity = document.querySelector('input[name="Quantity"]');
+            var Price_Per_Unit = document.querySelector('input[name="Price_Per_Unit"]');
+            var Sub_Total = document.querySelector('input[name="Sub_Total"]');
+            var Discount = document.querySelector('input[name="Discount"]');
+            var Tax1 = document.querySelector('input[name="Tax1"]');
+            var Tax2 = document.querySelector('input[name="Tax2"]');
+            var Total = document.querySelector('input[name="Total"]');
+
+            var a = parseFloat(Quantity.value) * parseFloat(Price_Per_Unit.value);
+            var b = (a * parseFloat(Discount.value)) / 100;
+            var c = (a * parseFloat(Tax1.value)) / 100;
+            var d = (a * parseFloat(Tax2.value)) / 100;
+            var e = (a - b) + c + d;
+
+            var Final_Subtotal = a.toString();
+            var Final_Discount = b.toString();
+            var Final_Tax1 = c.toString();
+            var Final_Tax2 = d.toString();
+            var Final_Total = e.toString();
+
+            Sub_Total.value = Final_Subtotal;
+            Discount.value = Final_Discount;
+            Tax1.value = Final_Tax1;
+            Tax2.value = Final_Tax2;
+            Total.value = Final_Total;
+            }
+});
+</script>

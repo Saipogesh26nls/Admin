@@ -229,7 +229,7 @@ namespace Admin.Models
         [DisplayName("Voucher Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime Voucher_Date { get; set; } = DateTime.Now;
+        public DateTime Voucher_Date { get; set; } 
         [DisplayName("Part No")]
         public string Part_No { get; set; }
         [DisplayName("ILedger")]
@@ -268,6 +268,7 @@ namespace Admin.Models
         public string P_Part_No { get; set; }
         public string P_Description { get; set; }
         public string P_Description_DD { get; set; }
+
     }
     public class PurchaseTable
     {
@@ -280,11 +281,46 @@ namespace Admin.Models
         public double Tax2 { get; set; }
         public double Total { get; set; }
         public string Invoice_No { get; set; }
-        public string Invoice_Date { get; set; }
+        public DateTime Invoice_Date { get; set; }
         public int ILedger { get; set; }
         public int ALedger { get; set; }
         public int final_Qty { get; set; }
         public double final_Sub_Total { get; set; }
         public double final_total { get; set; }
+    }
+    public class PurchaseList
+    {
+        [DisplayName("Invoice No")]
+        public string Invoice_No { get; set;}
+        [DisplayName("Invoice Date")]
+        public string Invoice_Date { get; set; }
+        [DisplayName("Voucher No")]
+        public string Voucher_No { get; set; }
+        [DisplayName("Voucher Date")]
+        public string Voucher_Date { get; set; }
+    }
+    public class EditPurchase
+    {
+        public string Invoice_No { get; set;}
+        public string Part_No { get; set; }
+        public string Quantity { get; set; }
+        public string Price_Per_Unit { get; set; }
+        public string Sub_Total { get; set; }
+        public string Discount { get; set; }
+        public string Tax1 { get; set; }
+        public string Tax2 { get; set; }
+        public string Total { get; set; }
+    }
+    public class EditPurchaseValue
+    {
+        public string Invoice_No { get; set; }
+        public string Part_No { get; set; }
+        public double Quantity { get; set; }
+        public double Price_Per_Unit { get; set; }
+        public double Sub_Total { get; set; }
+        public double Discount { get; set; }
+        public double Tax1 { get; set; }
+        public double Tax2 { get; set; }
+        public double Total { get; set; }
     }
 }
