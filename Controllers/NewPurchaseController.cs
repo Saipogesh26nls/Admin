@@ -20,13 +20,17 @@ namespace Admin.Controllers
             New_Purchase new_Purchase = new New_Purchase();
             new_Purchase.Voucher_Date = DateTime.Today;
             new_Purchase.Invoice_Date = DateTime.Today;
-          
+
             SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             _con.Open();
             SqlDataAdapter _da = new SqlDataAdapter("Select P_Description From Product_Master where P_Level<0", _con);
             DataTable _dt = new DataTable();
             _da.Fill(_dt);
             ViewBag.ProductList = ToSelectList(_dt, "P_Description", "P_Description");
+            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<0", _con);
+            DataTable _dt1 = new DataTable();
+            _da1.Fill(_dt1);
+            ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
             _con.Close();
             NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
             var PM_Data = newPurchase_Insert.Product_Master();
@@ -49,14 +53,14 @@ namespace Admin.Controllers
             return new SelectList(list, "Value", "Text");
         }
         [HttpPost]
-        public ActionResult Table_Data (List<PurchaseTable> Purchase)
+        public ActionResult Table_Data(List<PurchaseTable> Purchase)
         {
             int Quantity = Purchase[Purchase.Count - 1].final_Qty;
             double Total = Purchase[Purchase.Count - 1].final_Sub_Total;
             double Final_Total = Purchase[0].final_total;
             NewPurchase_Insert purchase = new NewPurchase_Insert();
             purchase.Add_Data(Purchase, Quantity, Total, Final_Total);
-            return Json(Purchase); 
+            return Json(Purchase);
         }
         public ActionResult Partno_to_Descp(BOMFields name)
         {
@@ -65,49 +69,100 @@ namespace Admin.Controllers
             return Json(Descp, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult PurchaseList ()
+        public ActionResult PurchaseList()
         {
             NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
             var PM_Data = newPurchase_Insert.Purchase_List();
-            ViewBag.PL = PM_Data;
-            return View(PM_Data);
-        }
-
-        public ActionResult Edit_Purchase_View(int v_no, int inv_no)
-        {
-            NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
-            var PM_Data = newPurchase_Insert.EditPurchase(v_no);
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            for(int i=0; i<PM_Data.Count; i++)
+            for (int i = 0; i < PM_Data.Count; i++)
             {
-                string cmd1 = "select P_Part_No from Product_Master where P_code = '" + PM_Data[i].Part_No + "'";
+                string cmd1 = "select A_Name from Account_Master where A_code = '" + PM_Data[i].A_code + "'";
                 SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
                 SqlDataReader dr = SqlCmd1.ExecuteReader();
                 while (dr.Read())
                 {
-                    string Part_No = dr["P_Part_No"].ToString();
-                    PM_Data[i].Part_No = Part_No;
+                    string Mfr = dr["A_Name"].ToString();
+                    PM_Data[i].A_code = Mfr;
                 }
                 dr.Close();
             }
-            ViewBag.inv = inv_no;
             ViewBag.PL = PM_Data;
             return View(PM_Data);
         }
-        public ActionResult Edit_Purchase_Row(string part_no, double qty, double price, double subtotal, double discount, double tax1, double tax2, double total)
+        static int V_no = 0;
+        public ActionResult Edit_Purchase_View(int v_no, DateTime v_date, int inv_no, DateTime inv_date, string a_code)
         {
-            EditPurchaseValue Data = new EditPurchaseValue();
-            Data.Part_No = part_no;
-            Data.Quantity = qty;
-            Data.Price_Per_Unit = price;
-            Data.Sub_Total = subtotal;
-            Data.Discount = (subtotal/(discount*10));
-            Data.Tax1 = (subtotal/(tax1*10));
-            Data.Tax2 = (subtotal/(tax2*10));
-            Data.Total = total;
+            New_Purchase newPurchase_Insert = new New_Purchase();
+            DataSet PM_Data = newPurchase_Insert.EditPurchase(v_no);
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<0", Con);
+            DataTable _dt1 = new DataTable();
+            _da1.Fill(_dt1);
+            ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
+            string cmd1 = "select A_code from Account_Master where A_Name = '" + a_code + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlDataReader dr = SqlCmd1.ExecuteReader();
+            while (dr.Read())
+                {
+                    string Mfr = dr["A_code"].ToString();
+                    newPurchase_Insert.Supplier = Mfr;
+                ViewBag.Mfr = Mfr;
+            }
+            dr.Close();
+            string cmd2 = "select Amount from A_Ledger where Voucher_No = '" + v_no + "'";
+            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+            SqlDataReader dr1 = SqlCmd2.ExecuteReader();
+            while (dr1.Read())
+            {
+                string amt = dr1["Amount"].ToString();
+                ViewBag.Final_Total = double.Parse(amt);
+            }
+            dr1.Close();
+            newPurchase_Insert.Voucher_No = v_no.ToString();
+            newPurchase_Insert.Voucher_Date = v_date;
+            newPurchase_Insert.Invoice_No = inv_no.ToString();
+            newPurchase_Insert.Invoice_Date = inv_date;
+            
+            ViewBag.PL = PM_Data.Tables[0];
+            V_no = v_no;
+            return View(newPurchase_Insert);
+        }
+        [HttpPost]
+        public ActionResult Edited_Table_Data(List<PurchaseTable> Purchase)
+        {
+            int Quantity = Purchase[Purchase.Count - 1].final_Qty;
+            double Total = Purchase[Purchase.Count - 1].final_Sub_Total;
+            double Final_Total = Purchase[0].final_total;
+            NewPurchase_Insert purchase = new NewPurchase_Insert();
+            purchase.Add_Data(Purchase, Quantity, Total, Final_Total);
+            return Json(Purchase);
+        }
+        [HttpGet]
+        public ActionResult Edit_Purchase_View(string P_code, Admin.Models.New_Purchase data)
+        {
+            DataSet ds = data.GetAccount(P_code, V_no);
+            data.Part_No = ds.Tables[0].Rows[0]["P_code"].ToString();
+            data.Quantity = float.Parse(ds.Tables[0].Rows[0]["Purchase_Qty"].ToString());
+            data.Price_Per_Unit = float.Parse(ds.Tables[0].Rows[0]["Purchase_Rate"].ToString());
+            data.Sub_Total = float.Parse(ds.Tables[0].Rows[0]["Purchase_SubTotal"].ToString());
+            data.Discount = float.Parse(ds.Tables[0].Rows[0]["Purchase_Discount"].ToString());
+            data.Tax1 = float.Parse(ds.Tables[0].Rows[0]["Purchase_Tax_1"].ToString());
+            data.Tax2 = float.Parse(ds.Tables[0].Rows[0]["Purchase_Tax_2"].ToString());
+            data.Total = float.Parse(ds.Tables[0].Rows[0]["Purchase_Total"].ToString());
 
-            return View(Data);
+            return View(data);
+        }
+        [HttpPost]
+        public ActionResult Edit_Purchase_Row(Admin.Models.EditPurchaseValue data, string P_code)
+        {
+            /*int _records = data.DataUpdate(P_code, data.Quantity, data.Price_Per_Unit, data.Sub_Total, data.Discount, data.Tax1, data.Tax2, data.Total);
+            if (_records > 0)
+            {
+                return RedirectToAction("Edit_Purchase_View", "NewPurchase");
+            }*/
+            return RedirectToAction("Edit_Purchase_View", "NewPurchase");
         }
     }
 }

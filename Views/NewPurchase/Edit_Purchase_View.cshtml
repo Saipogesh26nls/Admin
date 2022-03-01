@@ -1,76 +1,356 @@
-﻿@model IEnumerable<Admin.Models.EditPurchase>
-
+﻿@model Admin.Models.New_Purchase
 @{
-    ViewBag.Title = "Edit_Purchase_View";
+    var models = ViewBag.PM;
 }
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-@*<h2>Edit_Purchase_View</h2>
+    <link rel="stylesheet" href="~/Content/Purchase.css" />
+</head>
+<body onload="field_entry();">
+    <div class="container-fluid">
+        <br />
+        <div id="ui-view" data-select2-id="ui-view">
+            <div>
+                <div class="card">
+                    <div class="card-header">
+                            <h5>
+                                Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:20%;margin-left:0.25%;" })
+                            </h5>
+                            <h5>Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:20%;font-size:18px;", id = "Invoice_No"} })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:20%;margin-left:1%;" })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></h5>
+                            <h5>Supplier:@Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })</h5>  
+                    </div>
+                        
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <input id="Part_No" type="text" style="border: 1px solid gray;margin-right: 0.5%;" placeholder="Part No"><i class="fa fa-search" id="myBtn" style="margin-right:5%"></i><p id="value" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
+                            <div>
+                                <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 10%;" placeholder="Quantity">
+                                <input id="Purchase_Rate" type="text" style="border: 1px solid gray;" placeholder="Purchase Rate">
+                            </div>
+                            <div></div>
+                            <div>
+                                <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%;" placeholder="Discount">
+                                <input id="Tax_1" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%;" placeholder="Tax 1">
+                                <input id="Tax_2" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%;" placeholder="Tax 2">
+                                <button href="#" class="button" id="Insert">Insert</button>
+                            </div>
+                            <table id="selected_units" style="margin-top:10px;">
+                                <tbody>
+                                    <tr>
+                                        <th style="padding-right:50px">Part_No</th>
+                                        <th style="padding-right:50px">Quantity</th>
+                                        <th style="padding-right:50px">Price_Per_Unit</th>
+                                        <th style="padding-right:50px">Sub_Total</th>
+                                        <th style="padding-right:50px">Discount</th>
+                                        <th style="padding-right:50px">Tax1</th>
+                                        <th style="padding-right:50px">Tax2</th>
+                                        <th style="padding-right:50px">Total</th>
+                                        <th style="padding-right: 50px; display: none;">E/D</th>
+                                        <th style="display:none;">Invoice_No</th>
+                                        <th style="display: none;">Invoice_Date</th>
+                                        <th style="display: none;">Voucher_No</th>
+                                        <th style="display: none;">Voucher_Date</th>
+                                        <th style="display: none;">supplier</th>
+                                        <th style="display:none;">ILedger</th>
+                                        <th style="display: none;">ALedger</th>
+                                        <th style="display: none;">final_Qty</th>
+                                        <th style="display: none;">final_Sub_Total</th>
+                                        <th style="display: none;">final_total</th>
+                                        <th style="display: none;">supplier</th>
+                                    </tr>
+                                    @foreach (System.Data.DataRow dr in ViewBag.PL.Rows)
+                                    {
+                                <tr id="data">
+                                    <td>@dr["P_code"].ToString()</td>
+                                    <td>@dr["Purchase_Qty"].ToString()</td>
+                                    <td>@dr["Purchase_Rate"].ToString()</td>
+                                    <td>
+                                        @dr["Purchase_SubTotal"].ToString()
+                                    </td>
+                                    <td>
+                                        @dr["Purchase_Discount"].ToString()
+                                    </td>
+                                    <td>
+                                        @dr["Purchase_Tax_1"].ToString()
+                                    </td>
+                                    <td>
+                                        @dr["Purchase_Tax_2"].ToString()
+                                    </td>
+                                    <td>
+                                        @dr["Purchase_Total"].ToString()
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Edit", "Edit_Purchase_Row", new { P_code = dr["P_code"].ToString() }) |
+                                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                    </td>
+                                    <td style="display:none;">
+                                        @dr["Invoice_No"].ToString()
+                                    </td>
+                                    <td style="display:none;">
+                                        @dr["Invoice_Date"].ToString()
+                                    </td>
+                                    <td style="display:none;">
+                                        @dr["Voucher_No"].ToString()
+                                    </td>
+                                    <td style="display:none;">
+                                        @dr["Voucher_Date"].ToString()
+                                    </td>
+                                    <td style="display:none;">
+                                        @ViewBag.Mfr
+                                    </td>
+                                </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div>
+                                @Html.LabelFor(model => model.Quantity, new { htmlAttributes = new { id = "Qty_Label" } }) : <h6 id="Qty_display"></h6>
+                            </div>
+                            <div class="float-right">
+                                <div>
+                                    @Html.LabelFor(model => model.Total, new { htmlAttributes = new { id = "total_Label" } }) : <h6 id="total_display"></h6>
+                                </div>
+                                <div>
+                                    @Html.LabelFor(model => model.Final_Discount) : @Html.EditorFor(model => model.Final_Discount, new { htmlAttributes = new { @id = "Final_Discount" } })
+                                </div>
+                                <div>
+                                    @Html.LabelFor(model => model.Final_Tax1) : @Html.EditorFor(model => model.Final_Tax1, new { htmlAttributes = new { @style = "margin-left:11%;", @id = "Final_Tax1" } })
+                                </div>
+                                <div>
+                                    @Html.LabelFor(model => model.Final_Tax2) : @Html.EditorFor(model => model.Final_Tax2, new { htmlAttributes = new { @style = "margin-left:11%;", @id = "Final_Tax2" } })
+                                </div>
+                                <div>
+                                    @Html.LabelFor(model => model.Final_Total, new { htmlAttributes = new { id = "final_total_Label" } }) : <h6 id="Final_Total" style="margin-left:11%;"></h6>
+                                </div>
+                            </div>
+                            <p id="del"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p id="Enter_Inv_No"></p>
+        <button class="button" id="Submit" style="width:10%;margin-left:2%;">Submit</button>
+        <pre id="json_op"></pre>
+    </div>
+</body>
+</html>
+<script>
+    var qty = 0;
+    var total = 0;
+    var final_total = 0;
+    var i = 1;
+    $('#Insert').click(function () {
+        var d1 = $('#Part_No').val();
+        var d2 = parseInt(document.getElementById("Quantity").value);
+        var d3 = $('#Purchase_Rate').val();
+        var d4 = $('#Discount').val();
+        var d5 = $('#Tax_1').val();
+        var d6 = $('#Tax_2').val();
+        var mfr = $('#Supplier').val();
+        var ILedger = 1;
+        var ALedger = 2;
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>*@
-<br />
-<h5>Invoice No : @ViewBag.inv</h5>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Part_No)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Quantity)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price_Per_Unit)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Sub_Total)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Discount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Tax1)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Tax2)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Total)
-        </th>
-        <th></th>
-    </tr>
+        var subtotal = d2 * d3;
+        if (d4 == "") {
+            var discount = 0;
+        }
+        else {
+            var discount = (subtotal * d4) / 100;
+        }
+        if (d5 == "") {
+            var tax1 = 0;
+        }
+        else {
+            var tax1 = (subtotal * d5) / 100;
+        }
+        if (d6 == "") {
+            var tax2 = 0;
+        }
+        else {
+            var tax2 = (subtotal * d6) / 100;
+        }
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Part_No)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Quantity)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price_Per_Unit)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Sub_Total)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Discount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Tax1)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Tax2)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Total)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit_Purchase_Row", new {part_no=item.Part_No, qty = item.Quantity, price = item.Price_Per_Unit, subtotal = item.Sub_Total, discount = item.Discount, tax1 = item.Tax1, tax2 = item.Tax2, total = item.Total }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
-    </tr>
-}
+        var Invoice_No = $('#Invoice_No').val();
+        var Invoice_Date = $('#Invoice_Date').val();
+        if (d1 == "" || d2 == "" || d3 == "") {
+            document.getElementById("Qty_display").innerHTML = 0;
+            document.getElementById("total_display").innerHTML = 0;
+        }
+        else {
+            qty = qty + d2;
+            var Total = (subtotal - discount) + tax1 + tax2;
+            total = total + Total;
+            document.getElementById("Qty_display").innerHTML = qty;
+            document.getElementById("total_display").innerHTML = total;
+        }
+        var final_Qty = document.getElementById("Qty_display").innerHTML;
+        var final_Total = document.getElementById("total_display").innerHTML;
+        if (d1 == "" || d2 == "" || d3 == "" || Invoice_No == "" || Invoice_Date == "") {
+            return;
+        }
+        else {
+            var newrow = '<tr id="data"><td>' + d1 + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal + '</td><td>' + discount + '</td><td>' + tax1 + '</td><td>' + tax2 + '</td><td id="total' + i + '">' + Total + '</td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;">' + ILedger + '</td><td style="display:none;">' + ALedger + '</td><td style="display:none;">' + final_Qty + '</td><td style="display:none;">' + final_Total + '</td><td id="Final_Total_last" style="display:none;"></td><td style="display:none;">' + mfr + '</td></tr>';
+            $('#selected_units tr:last').after(newrow);
+            i++;
+        }
+        formClear();
+        final_calculation();
+    });
 
-</table>
+    function formClear() {
+        $("#Part_No").val("");
+        $("#Quantity").val("");
+        $("#Purchase_Rate").val("");
+        $("#Discount").val("");
+        $("#Tax_1").val("");
+        $("#Tax_2").val("");
+    }
+
+    function final_calculation() {
+        var sub_total = document.getElementById("total_display").innerHTML;
+        var final_discount = $("#Final_Discount").val();
+        var final_tax1 = $("#Final_Tax1").val();
+        var final_tax2 = $("#Final_Tax2").val();
+
+        if (final_discount == "") {
+            var discount_val = 0;
+        }
+        else {
+            var discount_val = (sub_total * final_discount) / 100;
+        }
+        if (final_tax1 == "") {
+            var tax1_val = 0;
+        }
+        else {
+            var tax1_val = (sub_total * final_tax1) / 100;
+        }
+        if (final_tax2 == "") {
+            var tax2_val = 0;
+        }
+        else {
+            var tax2_val = (sub_total * final_tax2) / 100;
+        }
+        var Total = (sub_total - discount_val) + tax1_val + tax2_val;
+        document.getElementById("Final_Total").innerHTML = Total;
+    }
+    $('#Submit').click(function (e) {
+
+        var Inv_No = $('#Invoice_No').val();
+        if (Inv_No == "") {
+            document.getElementById("Enter_Inv_No").innerHTML = "Enter the Invoice No !!!";
+            return;
+        }
+        else {
+            @*var ttl = document.getElementById("Final_Total").innerHTML;
+            document.getElementById("Final_Total_last").innerHTML = ttl;*@
+            $('#Enter_Inv_No').hide();
+            var myRows = [];
+            var headersText = [];
+            var $headers = $("th");
+            var $rows = $("tbody #data").each(function (index) {
+                $cells = $(this).find("td");
+                myRows[index] = {};
+
+                $cells.each(function (cellIndex) {
+                    if (headersText[cellIndex] === undefined) {
+                        headersText[cellIndex] = $($headers[cellIndex]).text();
+                    }
+                    myRows[index][headersText[cellIndex]] = $(this).text();
+                });
+            });
+
+            var myObj = {
+                "myrows": myRows
+            };
+            $.ajax({
+                url: '/NewPurchase/Edited_Table_Data',
+                data: JSON.stringify(myRows),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+                    //  alert(result.ItemList[0].Str);
+                }
+            });
+            document.getElementById("json_op").innerHTML = JSON.stringify(myRows, undefined, 2);
+        }
+    });
+
+    @*function del_row(node) {
+        r = node.parentNode.parentNode;
+        r.parentNode.removeChild(r);
+    }*@
+
+    document.addEventListener('keydown', function (event) {
+        if (event.keyCode === 9) {
+
+            var model = new Object();
+            model.Part_to_Descp = document.getElementById("Part_No").value;
+
+            jQuery.ajax({
+            type: "POST",
+            url: "@Url.Action("Partno_to_Descp")",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ name: model }),
+                success: function (data) {
+                    if (data == null) {
+                        document.getElementById("value").innerHTML = "Please Enter Valid Part No !!!";
+                    }
+                    else {
+                        document.getElementById("value").innerHTML = data;
+                    }
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+            });
+        }
+    });
+
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("myBtn");
+    var span = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    function field_entry() {
+        var Voucher_No = document.querySelector('input[name="Voucher_No"]');
+        var Voucher_Date = document.querySelector('input[name="Voucher_Date"]');
+        var Invoice_No = document.querySelector('input[name="Invoice_No"]');
+        var Invoice_Date = document.querySelector('input[name="Invoice_Date"]');
+
+        var Ttl = document.getElementById("Final_Total").innerHTML;
+        var value = @ViewBag.Final_Total
+            if (Ttl == "") {
+                document.getElementById("Final_Total").innerHTML = value;
+        }
+        
+        @*var a = @ViewBag.v_no;
+        var b = @ViewBag.v_date;
+        var c = @ViewBag.inv_no;
+        var d = @ViewBag.inv_date;
+
+        Voucher_No.value = a;
+        Voucher_Date.value = b;
+        Invoice_No.value = c;
+        Invoice_Date.value = d;*@
+    }
+</script>

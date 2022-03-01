@@ -22,6 +22,7 @@
                             Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:20%;margin-left:0.25%;" })
                         </h5>
                         <h5>Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:20%;font-size:18px;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:20%;margin-left:1%;" })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></h5>
+                        <h5>Supplier:@Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })</h5>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -43,7 +44,7 @@
                             <!-- Modal content -->
                             <!--<div class="modal-content">
                                 <span class="close">&times;</span>
-                                @Html.DropDownListFor(model => model.P_Description_DD, ViewBag.ProductList as SelectList, new { htmlAttributes = new { style = "margin-left:1%;width:20%; " } })
+                                @Html.DropDownListFor(model => model.P_Description_DD, ViewBag.ProductList as SelectList, new { htmlAttributes = new { style = "margin-left:1%;width:20%; ", id="MFR" } })
                                 <table>
                                     <thead>
                                         <tr>
@@ -84,6 +85,7 @@
                                         <th style="display: none;">final_Qty</th>
                                         <th style="display: none;">final_Sub_Total</th>
                                         <th style="display: none;">final_total</th>
+                                        <th style="display: none;">supplier</th>
                                     </tr>
                                 </tbody>
                             </table>
@@ -131,6 +133,7 @@
         var d4 = $('#Discount').val();
         var d5 = $('#Tax_1').val();
         var d6 = $('#Tax_2').val();
+        var mfr = $('#Supplier').val();
         var ILedger = 1;
         var ALedger = 2;
 
@@ -173,7 +176,7 @@
             return;
         }
         else {
-            var newrow = '<tr id="data"><td>' + d1 + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal + '</td><td>' + discount + '</td><td>' + tax1 + '</td><td>' + tax2 + '</td><td id="total' + i + '">' + Total + '</td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;">' + ILedger + '</td><td style="display:none;">' + ALedger + '</td><td style="display:none;">' + final_Qty + '</td><td style="display:none;">' + final_Total + '</td><td id="Final_Total_last" style="display:none;"></td></tr>';
+            var newrow = '<tr id="data"><td>' + d1 + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal + '</td><td>' + discount + '</td><td>' + tax1 + '</td><td>' + tax2 + '</td><td id="total' + i + '">' + Total + '</td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;">' + ILedger + '</td><td style="display:none;">' + ALedger + '</td><td style="display:none;">' + final_Qty + '</td><td style="display:none;">' + final_Total + '</td><td id="Final_Total_last" style="display:none;"></td><td style="display:none;">' + mfr + '</td></tr>';
             $('#selected_units tr:last').after(newrow);
             i++;
         }

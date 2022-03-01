@@ -4,6 +4,9 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
 
 namespace Admin.Models
 {
@@ -268,6 +271,32 @@ namespace Admin.Models
         public string P_Part_No { get; set; }
         public string P_Description { get; set; }
         public string P_Description_DD { get; set; }
+        public string Supplier { get; set; }
+        public DataSet EditPurchase(int id)
+        {
+            List<EditPurchase> ItemQm = new List<EditPurchase>();
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "select Voucher_No, Voucher_Date, Invoice_No, Invoice_Date, P_code, Purchase_Qty, Purchase_Rate, Purchase_Discount, Purchase_Tax_1, Purchase_Tax_2, Purchase_SubTotal, Purchase_Total from Purchase where Voucher_No = '" + id + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            DataSet ds = new DataSet();
+            SqlDataAdapter da = new SqlDataAdapter(SqlCmd1);
+            da.Fill(ds);
+            return ds;
+        }
+        public DataSet GetAccount(string p_code, int v_no)
+        {
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd2 = "select P_code, Purchase_Qty, Purchase_Rate, Purchase_Discount, Purchase_Tax_1, Purchase_Tax_2, Purchase_SubTotal, Purchase_Total FROM Purchase where P_code='" + p_code + "' and Voucher_No='" + v_no + "' ";
+            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+            DataSet ds = new DataSet();
+
+            SqlDataAdapter da = new SqlDataAdapter(SqlCmd2);
+            da.Fill(ds);
+
+            return ds;
+        }
 
     }
     public class PurchaseTable
@@ -282,11 +311,14 @@ namespace Admin.Models
         public double Total { get; set; }
         public string Invoice_No { get; set; }
         public DateTime Invoice_Date { get; set; }
+        public string Voucher_No { get; set; }
+        public DateTime Voucher_Date { get; set; }
         public int ILedger { get; set; }
         public int ALedger { get; set; }
         public int final_Qty { get; set; }
         public double final_Sub_Total { get; set; }
         public double final_total { get; set; }
+        public string supplier { get; set; }
     }
     public class PurchaseList
     {
@@ -298,6 +330,10 @@ namespace Admin.Models
         public string Voucher_No { get; set; }
         [DisplayName("Voucher Date")]
         public string Voucher_Date { get; set; }
+        [DisplayName("Supplier")]
+        public string A_code { get; set; }
+        [DisplayName("Total")]
+        public double Purchase_Total { get; set; }
     }
     public class EditPurchase
     {
@@ -313,7 +349,6 @@ namespace Admin.Models
     }
     public class EditPurchaseValue
     {
-        public string Invoice_No { get; set; }
         public string Part_No { get; set; }
         public double Quantity { get; set; }
         public double Price_Per_Unit { get; set; }
@@ -322,5 +357,16 @@ namespace Admin.Models
         public double Tax1 { get; set; }
         public double Tax2 { get; set; }
         public double Total { get; set; }
+        
+        /*public int DataUpdate(string p_code, double quantity, double price_per_unit, double subtotal, double discount, double tax1, double tax2, double total)
+        {
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+
+            string cmd2 = "update LOGIN_RMC set user_Name='" + _UserName + "',Password ='" + _password + "',Display_Name='" + _Displayname + "', Roll='" + _Roll + "' where user_id='" + Convert.ToInt32(_Userid) + "' ";
+            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+
+            return SqlCmd2.ExecuteNonQuery();
+        }*/
     }
 }
