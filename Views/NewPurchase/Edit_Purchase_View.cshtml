@@ -11,7 +11,7 @@
 
     <link rel="stylesheet" href="~/Content/Purchase.css" />
 </head>
-<body onload="field_entry();">
+<body onload="total_cal();">
     <div class="container-fluid">
         <br />
         <div id="ui-view" data-select2-id="ui-view">
@@ -21,36 +21,41 @@
                             <h5>
                                 Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:20%;margin-left:0.25%;" })
                             </h5>
-                            <h5>Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:20%;font-size:18px;", id = "Invoice_No"} })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:20%;margin-left:1%;" })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></h5>
+                            <h5>Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:20%;font-size:18px;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:20%;margin-left:1%;" })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></h5>
                             <h5>Supplier:@Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })</h5>  
                     </div>
                         
                     <div class="card-body">
                         <div class="table-responsive">
-                            <input id="Part_No" type="text" style="border: 1px solid gray;margin-right: 0.5%;" placeholder="Part No"><i class="fa fa-search" id="myBtn" style="margin-right:5%"></i><p id="value" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
-                            <div>
-                                <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 10%;" placeholder="Quantity">
-                                <input id="Purchase_Rate" type="text" style="border: 1px solid gray;" placeholder="Purchase Rate">
-                            </div>
+                            @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:20%; margin-top: 10px; margin-right: 10%;", @placeholder = "Part No" } })@*<i class="fa fa-search" id="myBtn" style="margin-right:5%"></i>*@<p id="value" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
+                        <div>
+                            @Html.EditorFor(model => model.P_Qty, new { htmlAttributes = new { @style = "width:20%; margin-right: 10%;", @placeholder = "Quantity" } })
+                            @Html.EditorFor(model => model.P_Rate, new { htmlAttributes = new { @style = "width:20%; margin-right: 10%;", @placeholder = "Price Per Unit" } })
+                        </div>
                             <div></div>
                             <div>
-                                <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%;" placeholder="Discount">
-                                <input id="Tax_1" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%;" placeholder="Tax 1">
-                                <input id="Tax_2" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%;" placeholder="Tax 2">
-                                <button href="#" class="button" id="Insert">Insert</button>
+                                @Html.EditorFor(model => model.P_Discount, new { htmlAttributes = new { @style = "width:20%; margin-top: 10px; margin-right: 10%;", @placeholder = "Discount" } })
+                                @Html.EditorFor(model => model.P_Tax1, new { htmlAttributes = new { @style = "width:20%; margin-top: 10px; margin-right: 10%;", @placeholder = "Tax1" } })
+                                @Html.EditorFor(model => model.P_Tax2, new { htmlAttributes = new { @style = "width:20%; margin-top: 10px; margin-right: 2%;", @placeholder = "Tax2" } })
+                                <button href="#" class="button" id="Insert" style=" margin-top: 10px;">Insert</button><button style="display: none; margin-top: 10px;" id="Add" onclick="ToAdd()">Add</button>
                             </div>
                             <table id="selected_units" style="margin-top:10px;">
-                                <tbody>
+                                <thead>
                                     <tr>
-                                        <th style="padding-right:50px">Part_No</th>
-                                        <th style="padding-right:50px">Quantity</th>
-                                        <th style="padding-right:50px">Price_Per_Unit</th>
-                                        <th style="padding-right:50px">Sub_Total</th>
-                                        <th style="padding-right:50px">Discount</th>
-                                        <th style="padding-right:50px">Tax1</th>
-                                        <th style="padding-right:50px">Tax2</th>
-                                        <th style="padding-right:50px">Total</th>
-                                        <th style="padding-right: 50px; display: none;">E/D</th>
+                                        <th style="padding-right:20px">Pcode</th>
+                                        <th style="padding-right:50px">Part No</th>
+                                        <th style="padding-right:150px">Description</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>SubTotal</th>
+                                        <th>Discount(%)</th>
+                                        <th>Discount</th>
+                                        <th>Tax1(%)</th>
+                                        <th>Tax1</th>
+                                        <th>Tax2(%)</th>
+                                        <th>Tax2</th>
+                                        <th>Total</th>
+                                        <th style="padding-right: 30px">E/D</th>
                                         <th style="display:none;">Invoice_No</th>
                                         <th style="display: none;">Invoice_Date</th>
                                         <th style="display: none;">Voucher_No</th>
@@ -63,47 +68,63 @@
                                         <th style="display: none;">final_total</th>
                                         <th style="display: none;">supplier</th>
                                     </tr>
+                                </thead>
+                                <tbody>
+                                    @{ int i = 0; }
                                     @foreach (System.Data.DataRow dr in ViewBag.PL.Rows)
                                     {
-                                <tr id="data">
-                                    <td>@dr["P_code"].ToString()</td>
-                                    <td>@dr["Purchase_Qty"].ToString()</td>
-                                    <td>@dr["Purchase_Rate"].ToString()</td>
-                                    <td>
-                                        @dr["Purchase_SubTotal"].ToString()
-                                    </td>
-                                    <td>
-                                        @dr["Purchase_Discount"].ToString()
-                                    </td>
-                                    <td>
-                                        @dr["Purchase_Tax_1"].ToString()
-                                    </td>
-                                    <td>
-                                        @dr["Purchase_Tax_2"].ToString()
-                                    </td>
-                                    <td>
-                                        @dr["Purchase_Total"].ToString()
-                                    </td>
-                                    <td>
-                                        @Html.ActionLink("Edit", "Edit_Purchase_Row", new { P_code = dr["P_code"].ToString() }) |
-                                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                                    </td>
-                                    <td style="display:none;">
-                                        @dr["Invoice_No"].ToString()
-                                    </td>
-                                    <td style="display:none;">
-                                        @dr["Invoice_Date"].ToString()
-                                    </td>
-                                    <td style="display:none;">
-                                        @dr["Voucher_No"].ToString()
-                                    </td>
-                                    <td style="display:none;">
-                                        @dr["Voucher_Date"].ToString()
-                                    </td>
-                                    <td style="display:none;">
-                                        @ViewBag.Mfr
-                                    </td>
-                                </tr>
+
+                                    <tr id="@i">
+                                        <td class="row-data">@dr["P_code"].ToString()</td>
+                                        <td class="row-data">@dr["P_Part_No"].ToString()</td>
+                                        <td class="row-data">@dr["P_Description"].ToString()</td>
+                                        <td class="row-data">@dr["Purchase_Qty"].ToString()</td>
+                                        <td class="row-data">@dr["Purchase_Rate"].ToString()</td>
+                                        <td class="row-data">
+                                            @dr["Purchase_SubTotal"].ToString()
+                                        </td>
+                                        <td class="row-data">
+                                            @dr["Discount(%)"].ToString()
+                                        </td>
+                                        <td class="row-data">
+                                            @dr["Purchase_Discount"].ToString()
+                                        </td>
+                                        <td class="row-data">
+                                            @dr["Tax1(%)"].ToString()
+                                        </td>
+                                        <td class="row-data">
+                                            @dr["Purchase_Tax_1"].ToString()
+                                        </td>
+                                        <td class="row-data">
+                                            @dr["Tax2(%)"].ToString()
+                                        </td>
+                                        <td class="row-data">
+                                            @dr["Purchase_Tax_2"].ToString()
+                                        </td>
+                                        <td class="row-data">
+                                            @dr["Purchase_Total"].ToString()
+                                        </td>
+                                        <td class="row-data">
+                                            <i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i>@*@Html.ActionLink("Edit", "Edit_Purchase_Row", new { P_code = dr["P_code"].ToString() })*@
+                                            @*@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                                        </td>
+                                        <td style="display:none;">
+                                            @dr["Invoice_No"].ToString()
+                                        </td>
+                                        <td style="display:none;">
+                                            @dr["Invoice_Date"].ToString()
+                                        </td>
+                                        <td style="display:none;">
+                                            @dr["Voucher_No"].ToString()
+                                        </td>
+                                        <td style="display:none;">
+                                            @dr["Voucher_Date"].ToString()
+                                        </td>
+                                        <td style="display:none;">
+                                            @ViewBag.Mfr
+                                        </td>
+                                    </tr>
+                                        i++;
                                     }
                                 </tbody>
                             </table>
@@ -144,13 +165,15 @@
     var total = 0;
     var final_total = 0;
     var i = 1;
+    var row_id = 0;
+    var total_inc = 0;
     $('#Insert').click(function () {
         var d1 = $('#Part_No').val();
-        var d2 = parseInt(document.getElementById("Quantity").value);
-        var d3 = $('#Purchase_Rate').val();
-        var d4 = $('#Discount').val();
-        var d5 = $('#Tax_1').val();
-        var d6 = $('#Tax_2').val();
+        var d2 = parseInt(document.getElementById("P_Qty").value);
+        var d3 = $('#P_Rate').val();
+        var d4 = $('#P_Discount').val();
+        var d5 = $('#P_Tax1').val();
+        var d6 = $('#P_Tax2').val();
         var mfr = $('#Supplier').val();
         var ILedger = 1;
         var ALedger = 2;
@@ -204,11 +227,11 @@
 
     function formClear() {
         $("#Part_No").val("");
-        $("#Quantity").val("");
-        $("#Purchase_Rate").val("");
-        $("#Discount").val("");
-        $("#Tax_1").val("");
-        $("#Tax_2").val("");
+        $("#P_Qty").val("");
+        $("#P_Rate").val("");
+        $("#P_Discount").val("");
+        $("#P_Tax1").val("");
+        $("#P_Tax2").val("");
     }
 
     function final_calculation() {
@@ -252,7 +275,7 @@
             var myRows = [];
             var headersText = [];
             var $headers = $("th");
-            var $rows = $("tbody #data").each(function (index) {
+            var $rows = $("tbody tr").each(function (index) {
                 $cells = $(this).find("td");
                 myRows[index] = {};
 
@@ -281,10 +304,89 @@
         }
     });
 
-    @*function del_row(node) {
+    function del_row(node) {
         r = node.parentNode.parentNode;
         r.parentNode.removeChild(r);
-    }*@
+        $("#Part_No").val("");
+        $("#P_Qty").val("");
+        $("#P_Rate").val("");
+        $("#P_Discount").val("");
+        $("#P_Tax1").val("");
+        $("#P_Tax2").val("");
+        var table = document.getElementById("selected_units");
+        var tbodyRowCount = table.tBodies[0].rows.length;
+        var total_from_db = @ViewBag.Final_Total;
+        var discount_from_db = @ViewBag.Final_Discount;
+        var tax1_from_db = @ViewBag.Final_Tax1;
+        var tax2_from_db = @ViewBag.Final_Tax2;
+        var T_qty = 0;
+        var T_subtotal = 0;
+        for (i = 0; i < tbodyRowCount; i++) {
+            var data_qty = document.getElementById("selected_units").tBodies[0].rows[i].cells[3].innerHTML;
+            var data_total = document.getElementById("selected_units").tBodies[0].rows[i].cells[12].innerHTML;
+            var p_qty = data_qty;
+            var p_total = data_total;
+            T_qty = T_qty + parseFloat(p_qty);
+            T_subtotal = T_subtotal + parseFloat(p_total);
+
+            @*var p_subtotal = document.getElementById("selected_units").tBodies[0].rows[i].cells[5].innerHTML;;
+            var p_discount = document.getElementById("selected_units").tBodies[0].rows[i].cells[7].innerHTML;;
+            var p_tax1 = document.getElementById("selected_units").tBodies[0].rows[i].cells[9].innerHTML;;
+            var p_tax2 = document.getElementById("selected_units").tBodies[0].rows[i].cells[11].innerHTML;;
+
+            var discount = (p_discount / p_subtotal) * 100;
+            var tax1 = (p_tax1 / p_subtotal) * 100;
+            var tax2 = (p_tax2 / p_subtotal) * 100;
+
+            var discount_l = Math.round(discount, 1);
+            var tax1_l = Math.round(tax1, 1);
+            var tax2_l = Math.round(tax2, 1);
+
+            data[6].innerHTML = discount_l;
+            data[8].innerHTML = tax1_l;
+            data[10].innerHTML = tax2_l;*@
+        }
+
+        document.getElementById("total_display").innerHTML = T_subtotal;
+        document.getElementById("Qty_display").innerHTML = T_qty;
+
+        var final_discount = $("#Final_Discount").val();
+        var final_tax1 = $("#Final_Tax1").val();
+        var final_tax2 = $("#Final_Tax2").val();
+
+        if (total_inc == 0) {
+            document.getElementById("Final_Total").innerHTML = total_from_db;
+            document.getElementById("Final_Discount").value = discount_from_db;
+            document.getElementById("Final_Tax1").value = tax1_from_db;
+            document.getElementById("Final_Tax2").value = tax2_from_db;
+            total_inc++;
+        }
+        else {
+            if (final_discount == "") {
+                var discount_val = 0;
+            }
+            else {
+                var discount_val = (T_subtotal * final_discount) / 100;
+            }
+            if (final_tax1 == "") {
+                var tax1_val = 0;
+            }
+            else {
+                var tax1_val = (T_subtotal * final_tax1) / 100;
+            }
+            if (final_tax2 == "") {
+                var tax2_val = 0;
+            }
+            else {
+                var tax2_val = (T_subtotal * final_tax2) / 100;
+            }
+            var Total = (T_subtotal - discount_val) + tax1_val + tax2_val;
+            document.getElementById("Final_Total").innerHTML = Total;
+            document.getElementById("Final_Discount").value = discount_val;
+            document.getElementById("Final_Tax1").value = tax1_val;
+            document.getElementById("Final_Tax2").value = tax2_val;
+        }
+    }
 
     document.addEventListener('keydown', function (event) {
         if (event.keyCode === 9) {
@@ -313,7 +415,7 @@
         }
     });
 
-    var modal = document.getElementById("myModal");
+    @*var modal = document.getElementById("myModal");
     var btn = document.getElementById("myBtn");
     var span = document.getElementsByClassName("close")[0];
 
@@ -329,7 +431,7 @@
         if (event.target == modal) {
             modal.style.display = "none";
         }
-    }
+    }*@
 
     function field_entry() {
         var Voucher_No = document.querySelector('input[name="Voucher_No"]');
@@ -342,7 +444,7 @@
             if (Ttl == "") {
                 document.getElementById("Final_Total").innerHTML = value;
         }
-        
+
         @*var a = @ViewBag.v_no;
         var b = @ViewBag.v_date;
         var c = @ViewBag.inv_no;
@@ -352,5 +454,154 @@
         Voucher_Date.value = b;
         Invoice_No.value = c;
         Invoice_Date.value = d;*@
+    }
+
+    function Toshow() {
+        var rowId =
+            event.target.parentNode.parentNode.id;
+        row_id = rowId;
+        var data =
+            document.getElementById(rowId).querySelectorAll(".row-data");
+
+        var part_no = data[0].innerHTML;
+        var p_qty = data[3].innerHTML;
+        var p_rate = data[4].innerHTML;
+        var p_subtotal = data[5].innerHTML;
+        var p_discount = data[7].innerHTML;
+        var p_tax1 = data[9].innerHTML;
+        var p_tax2 = data[11].innerHTML;
+
+        var discount = (p_discount / p_subtotal) * 100;
+        var tax1 = (p_tax1 / p_subtotal) * 100;
+        var tax2 = (p_tax2 / p_subtotal) * 100;
+
+        var discount_l = Math.round(discount,1);
+        var tax1_l = Math.round(tax1,1);
+        var tax2_l = Math.round(tax2,1);
+
+        document.getElementById("Part_No").value = part_no;
+        document.getElementById("P_Qty").value = p_qty;
+        document.getElementById("P_Rate").value = p_rate;
+        document.getElementById("P_Discount").value = discount;
+        document.getElementById("P_Tax1").value = tax1;
+        document.getElementById("P_Tax2").value = tax2;
+
+        document.getElementById("Insert").style.display = "none";
+        document.getElementById("Add").style.display = "block";
+    }
+
+    function ToAdd() {
+        document.getElementById("Insert").style.display = "block";
+        document.getElementById("Add").style.display = "none";
+
+        var rowId = row_id;
+        var data =
+            document.getElementById(rowId).querySelectorAll(".row-data");
+
+        var part_no = document.getElementById("Part_No").value;
+        var p_qty = document.getElementById("P_Qty").value;
+        var p_rate = document.getElementById("P_Rate").value;
+        var p_discount = document.getElementById("P_Discount").value;
+        var p_tax1 = document.getElementById("P_Tax1").value;
+        var p_tax2 = document.getElementById("P_Tax2").value;
+
+        var subtotal = p_qty * p_rate;
+        var discount_l = (subtotal * p_discount) / 100;
+        var tax1_l = (subtotal * p_tax1) / 100;
+        var tax2_l = (subtotal * p_tax2) / 100;
+        var total = (subtotal - discount_l) + tax1_l + tax2_l;
+
+        data[0].innerHTML = part_no;
+        data[3].innerHTML = p_qty;
+        data[4].innerHTML = p_rate;
+        data[5].innerHTML = subtotal;
+        data[7].innerHTML = discount_l;
+        data[9].innerHTML = tax1_l;
+        data[11].innerHTML = tax2_l;
+        data[12].innerHTML = total;
+
+        total_cal();
+    }
+    function total_cal() {
+        $("#Part_No").val("");
+        $("#P_Qty").val("");
+        $("#P_Rate").val("");
+        $("#P_Discount").val("");
+        $("#P_Tax1").val("");
+        $("#P_Tax2").val("");
+        var table = document.getElementById("selected_units");
+        var tbodyRowCount = table.tBodies[0].rows.length;
+        var total_from_db = @ViewBag.Final_Total;
+        var discount_from_db = @ViewBag.Final_Discount;
+        var tax1_from_db = @ViewBag.Final_Tax1;
+        var tax2_from_db = @ViewBag.Final_Tax2;
+        var T_qty = 0;
+        var T_subtotal = 0;
+        for (i = 0; i < tbodyRowCount; i++) {
+            var rowId = i;
+            var data = document.getElementById(rowId).querySelectorAll(".row-data");
+            var p_qty = data[3].innerHTML;
+            var p_total = data[12].innerHTML;
+            T_qty = T_qty + parseFloat(p_qty);
+            T_subtotal = T_subtotal + parseFloat(p_total);
+
+            var p_subtotal = data[5].innerHTML;
+            var p_discount = data[7].innerHTML;
+            var p_tax1 = data[9].innerHTML;
+            var p_tax2 = data[11].innerHTML;
+
+            var discount = (p_discount / p_subtotal) * 100;
+            var tax1 = (p_tax1 / p_subtotal) * 100;
+            var tax2 = (p_tax2 / p_subtotal) * 100;
+
+            var discount_l = Math.round(discount, 1);
+            var tax1_l = Math.round(tax1, 1);
+            var tax2_l = Math.round(tax2, 1);
+
+            data[6].innerHTML = discount_l;
+            data[8].innerHTML = tax1_l;
+            data[10].innerHTML = tax2_l;
+        }
+
+        document.getElementById("total_display").innerHTML = T_subtotal;
+        document.getElementById("Qty_display").innerHTML = T_qty;
+
+        var final_discount = $("#Final_Discount").val();
+        var final_tax1 = $("#Final_Tax1").val();
+        var final_tax2 = $("#Final_Tax2").val();
+
+        if (total_inc == 0) {
+            document.getElementById("Final_Total").innerHTML = total_from_db;
+            document.getElementById("Final_Discount").value = discount_from_db;
+            document.getElementById("Final_Tax1").value = tax1_from_db;
+            document.getElementById("Final_Tax2").value = tax2_from_db;
+            total_inc++;
+        }
+        else {
+            if (final_discount == "") {
+                var discount_val = 0;
+            }
+            else {
+                var discount_val = (T_subtotal * final_discount) / 100;
+            }
+            if (final_tax1 == "") {
+                var tax1_val = 0;
+            }
+            else {
+                var tax1_val = (T_subtotal * final_tax1) / 100;
+            }
+            if (final_tax2 == "") {
+                var tax2_val = 0;
+            }
+            else {
+                var tax2_val = (T_subtotal * final_tax2) / 100;
+            }
+            var Total = (T_subtotal - discount_val) + tax1_val + tax2_val;
+            document.getElementById("Final_Total").innerHTML = Total;
+            document.getElementById("Final_Discount").value = discount_val;
+            document.getElementById("Final_Tax1").value = tax1_val;
+            document.getElementById("Final_Tax2").value = tax2_val;
+        }
+
     }
 </script>

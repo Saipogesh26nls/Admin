@@ -111,15 +111,37 @@ namespace Admin.Controllers
                 ViewBag.Mfr = Mfr;
             }
             dr.Close();
-            string cmd2 = "select Amount from A_Ledger where Voucher_No = '" + v_no + "'";
+            string cmd2 = "select Final_Discount, Final_Tax1, Final_Tax2, Amount from A_Ledger where Voucher_No = '" + v_no + "'";
             SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
             SqlDataReader dr1 = SqlCmd2.ExecuteReader();
             while (dr1.Read())
             {
-                string amt = dr1["Amount"].ToString();
-                ViewBag.Final_Total = double.Parse(amt);
+                string a1 = dr1["Amount"].ToString();
+                string a2 = dr1["Final_Discount"].ToString();
+                string a3 = dr1["Final_Tax1"].ToString();
+                string a4 = dr1["Final_Tax2"].ToString();
+                ViewBag.Final_Total = double.Parse(a1);
+                ViewBag.Final_Discount = double.Parse(a2);
+                ViewBag.Final_Tax1 = double.Parse(a3);
+                ViewBag.Final_Tax2 = double.Parse(a4);
             }
             dr1.Close();
+            PM_Data.Tables[0].Columns.Add("P_Part_No");
+            PM_Data.Tables[0].Columns.Add("P_Description");
+            PM_Data.Tables[0].Columns.Add("Discount(%)");
+            PM_Data.Tables[0].Columns.Add("Tax1(%)");
+            PM_Data.Tables[0].Columns.Add("Tax2(%)");
+            List<string> table_data = new List<string>();
+            for (int i = 0; i < PM_Data.Tables[0].Rows.Count; i++)
+            {
+                string Text = PM_Data.Tables[0].Rows[i]["P_code"].ToString();
+                NewPurchase_Insert dblogin = new NewPurchase_Insert();
+                var Descp = dblogin.Pcode_to_PartNo(Text);
+                table_data.Add(Descp[0].P_Part_No);
+                table_data.Add(Descp[0].P_Description);
+                PM_Data.Tables[0].Rows[i]["P_Part_No"] = Descp[0].P_Part_No;
+                PM_Data.Tables[0].Rows[i]["P_Description"] = Descp[0].P_Description;
+            }
             newPurchase_Insert.Voucher_No = v_no.ToString();
             newPurchase_Insert.Voucher_Date = v_date;
             newPurchase_Insert.Invoice_No = inv_no.ToString();
@@ -139,7 +161,7 @@ namespace Admin.Controllers
             purchase.Add_Data(Purchase, Quantity, Total, Final_Total);
             return Json(Purchase);
         }
-        [HttpGet]
+        /*[HttpGet]
         public ActionResult Edit_Purchase_View(string P_code, Admin.Models.New_Purchase data)
         {
             DataSet ds = data.GetAccount(P_code, V_no);
@@ -153,9 +175,9 @@ namespace Admin.Controllers
             data.Total = float.Parse(ds.Tables[0].Rows[0]["Purchase_Total"].ToString());
 
             return View(data);
-        }
-        [HttpPost]
-        public ActionResult Edit_Purchase_Row(Admin.Models.EditPurchaseValue data, string P_code)
+        }*/
+        [HttpGet]
+        public ActionResult Edit_Purchase_Row(Admin.Models.New_Purchase data, string P_code)
         {
             /*int _records = data.DataUpdate(P_code, data.Quantity, data.Price_Per_Unit, data.Sub_Total, data.Discount, data.Tax1, data.Tax2, data.Total);
             if (_records > 0)
@@ -163,6 +185,13 @@ namespace Admin.Controllers
                 return RedirectToAction("Edit_Purchase_View", "NewPurchase");
             }*/
             return RedirectToAction("Edit_Purchase_View", "NewPurchase");
+        }
+
+        public ActionResult pcode_to_partno (New_Purchase name)
+        {
+            NewPurchase_Insert dblogin = new NewPurchase_Insert();
+            var Descp = dblogin.Pcode_to_PartNo(name.P_code);
+            return Json(Descp, JsonRequestBehavior.AllowGet);
         }
     }
 }
