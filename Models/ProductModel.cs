@@ -108,6 +108,7 @@ namespace Admin.Models
         [DisplayName("Quantity")]
         public string Quantity1 { get; set; }
         public string Part_to_Descp { get; set; }
+        public string P_code { get; set; }
     }
     public class AccountsField
     {
@@ -245,8 +246,12 @@ namespace Admin.Models
         public double P_Rate { get; set; }
         [DisplayName("Discount")]
         public double P_Discount { get; set; }
+        [DisplayName("Discount(%)")]
+        public double Discount_per { get; set; }
         [DisplayName("Tax1")]
         public double P_Tax1 { get; set; }
+        [DisplayName("Tax1(%)")]
+        public double Tax1_per { get; set; }
         [DisplayName("Tax2")]
         public double P_Tax2 { get; set; }
         public int Total_Qty { get; set; }
@@ -257,12 +262,17 @@ namespace Admin.Models
         public double Rate_Per_Unit { get; set; }
         [DisplayName("Sub Total")]
         public double Taxable_Total { get; set; }
+        public double Final_Discount_per { get; set; }
         [DisplayName("Discount")]
         public double Final_Discount { get; set; }
+        public double Final_Tax1_per { get; set; }
         [DisplayName("Tax1")]
         public double Final_Tax1 { get; set; }
+        public double Final_Tax2_per { get; set; }
         [DisplayName("Tax2")]
         public double Final_Tax2 { get; set; }
+        [DisplayName("Tax2(%)")]
+        public double Tax2_per { get; set; }
         [DisplayName("Total")]
         public double Final_Total { get; set; }
         public string P_code { get; set; }
@@ -301,24 +311,35 @@ namespace Admin.Models
     }
     public class PurchaseTable
     {
+        public string Pcode { get; set; }
         public string Part_No { get; set; }
+        public string Description { get; set; }
         public int Quantity { get; set; }
-        public double Price_Per_Unit { get; set; }
-        public double Sub_Total { get; set; }
+        public double Price { get; set; }
+        public double SubTotal { get; set; }
+        [DisplayName("Discount(%)")]
+        public double Discount_per { get; set; }
         public double Discount { get; set; }
+        [DisplayName("Tax1(%)")]
+        public double Tax1_per { get; set; }
         public double Tax1 { get; set; }
+        [DisplayName("Tax2(%)")]
+        public double Tax2_per { get; set; }
         public double Tax2 { get; set; }
         public double Total { get; set; }
         public string Invoice_No { get; set; }
         public DateTime Invoice_Date { get; set; }
         public string Voucher_No { get; set; }
         public DateTime Voucher_Date { get; set; }
+        public string supplier { get; set; }
         public int ILedger { get; set; }
         public int ALedger { get; set; }
         public int final_Qty { get; set; }
         public double final_Sub_Total { get; set; }
+        public double final_Discount { get; set; }
+        public double final_Tax1 { get; set; }
+        public double final_Tax2 { get; set; }
         public double final_total { get; set; }
-        public string supplier { get; set; }
     }
     public class PurchaseList
     {

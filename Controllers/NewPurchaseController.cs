@@ -53,7 +53,7 @@ namespace Admin.Controllers
             return new SelectList(list, "Value", "Text");
         }
         [HttpPost]
-        public ActionResult Table_Data(List<PurchaseTable> Purchase)
+        public ActionResult Table_Data(List<PurchaseTable> Purchase)  // For Add Data
         {
             int Quantity = Purchase[Purchase.Count - 1].final_Qty;
             double Total = Purchase[Purchase.Count - 1].final_Sub_Total;
@@ -65,7 +65,7 @@ namespace Admin.Controllers
         public ActionResult Partno_to_Descp(BOMFields name)
         {
             NewPurchase_Insert dblogin = new NewPurchase_Insert();
-            string Descp = dblogin.SP_Description(name.Part_to_Descp);
+            var Descp = dblogin.SP_Description(name.Part_to_Descp);
             return Json(Descp, JsonRequestBehavior.AllowGet);
         }
 
@@ -149,48 +149,37 @@ namespace Admin.Controllers
             
             ViewBag.PL = PM_Data.Tables[0];
             V_no = v_no;
+            ViewBag.ILedger = 1;
+            ViewBag.ALedger = 2;
             return View(newPurchase_Insert);
         }
         [HttpPost]
-        public ActionResult Edited_Table_Data(List<PurchaseTable> Purchase)
+        public ActionResult Edited_Table_Data(List<PurchaseTable> Purchase)  // For Edit and Delete
         {
-            int Quantity = Purchase[Purchase.Count - 1].final_Qty;
-            double Total = Purchase[Purchase.Count - 1].final_Sub_Total;
+            for(int i = 0;i< Purchase.Count; i++)
+            {
+                string a = Purchase[i].Invoice_No.Replace("\n","").Replace(" ","");
+                string b = Purchase[i].Voucher_No.Replace("\n", "").Replace(" ", "");
+                string c = Purchase[i].supplier.Replace("\n", "").Replace(" ", "");
+                Purchase[i].Invoice_No = a;
+                Purchase[i].Voucher_No = b;
+                Purchase[i].supplier = c;
+            }
+            int Final_Quantity = Purchase[0].final_Qty;
+            double Final_SubTotal = Purchase[0].final_Sub_Total;
+            double Final_Discount = Purchase[0].final_Discount;
+            double Final_Tax1 = Purchase[0].final_Tax1;
+            double Final_Tax2 = Purchase[0].final_Tax2;
             double Final_Total = Purchase[0].final_total;
             NewPurchase_Insert purchase = new NewPurchase_Insert();
-            purchase.Add_Data(Purchase, Quantity, Total, Final_Total);
+            purchase.Edit_and_Delete(Purchase, Final_Quantity, Final_SubTotal, Final_Discount, Final_Tax1, Final_Tax2, Final_Total);
             return Json(Purchase);
         }
-        /*[HttpGet]
-        public ActionResult Edit_Purchase_View(string P_code, Admin.Models.New_Purchase data)
-        {
-            DataSet ds = data.GetAccount(P_code, V_no);
-            data.Part_No = ds.Tables[0].Rows[0]["P_code"].ToString();
-            data.Quantity = float.Parse(ds.Tables[0].Rows[0]["Purchase_Qty"].ToString());
-            data.Price_Per_Unit = float.Parse(ds.Tables[0].Rows[0]["Purchase_Rate"].ToString());
-            data.Sub_Total = float.Parse(ds.Tables[0].Rows[0]["Purchase_SubTotal"].ToString());
-            data.Discount = float.Parse(ds.Tables[0].Rows[0]["Purchase_Discount"].ToString());
-            data.Tax1 = float.Parse(ds.Tables[0].Rows[0]["Purchase_Tax_1"].ToString());
-            data.Tax2 = float.Parse(ds.Tables[0].Rows[0]["Purchase_Tax_2"].ToString());
-            data.Total = float.Parse(ds.Tables[0].Rows[0]["Purchase_Total"].ToString());
 
-            return View(data);
-        }*/
-        [HttpGet]
-        public ActionResult Edit_Purchase_Row(Admin.Models.New_Purchase data, string P_code)
-        {
-            /*int _records = data.DataUpdate(P_code, data.Quantity, data.Price_Per_Unit, data.Sub_Total, data.Discount, data.Tax1, data.Tax2, data.Total);
-            if (_records > 0)
-            {
-                return RedirectToAction("Edit_Purchase_View", "NewPurchase");
-            }*/
-            return RedirectToAction("Edit_Purchase_View", "NewPurchase");
-        }
-
-        public ActionResult pcode_to_partno (New_Purchase name)
+        public ActionResult closing_Bal (List<New_Purchase> name)
         {
             NewPurchase_Insert dblogin = new NewPurchase_Insert();
-            var Descp = dblogin.Pcode_to_PartNo(name.P_code);
+            var Descp = dblogin.Pcode_to_PartNo(name);
             return Json(Descp, JsonRequestBehavior.AllowGet);
         }
     }
