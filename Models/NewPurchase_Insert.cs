@@ -128,7 +128,7 @@ namespace Admin.Models
             List<PurchaseList> ItemQm = new List<PurchaseList>();
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd1 = "select Invoice_No,Invoice_Date,Voucher_No,Voucher_Date,A_code,Purchase_Total from Purchase where A_code IS NOT NULL ORDER BY Voucher_No Asc;";
+            string cmd1 = "select Invoice_No,Invoice_Date,Voucher_No,Voucher_Date,A_code from Purchase where A_code IS NOT NULL ORDER BY Voucher_No Asc;";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
             SqlDataReader dr = SqlCmd1.ExecuteReader();
             while (dr.Read())
@@ -139,8 +139,7 @@ namespace Admin.Models
                     Invoice_Date = dr["Invoice_Date"].ToString(),
                     Voucher_No = dr["Voucher_No"].ToString(),
                     Voucher_Date = dr["Voucher_Date"].ToString(),
-                    A_code = dr["A_code"].ToString(),
-                    Purchase_Total = float.Parse(dr["Purchase_Total"].ToString())
+                    A_code = dr["A_code"].ToString()
                 }
                 );
             }
@@ -148,12 +147,12 @@ namespace Admin.Models
             return ItemQm;
 
         }
-        public List<New_Purchase> Pcode_to_PartNo(List<New_Purchase> data)
+        public List<New_Purchase> Pcode_to_PartNo(string data)
         {
             List<New_Purchase> ItemQm = new List<New_Purchase>();
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd1 = "select P_Part_No,P_Description from Product_Master where P_code = '" + data[0].P_code + "'";
+            string cmd1 = "select P_Part_No,P_Description from Product_Master where P_code = '" + data + "'";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
             SqlDataReader dr = SqlCmd1.ExecuteReader();
             while (dr.Read())

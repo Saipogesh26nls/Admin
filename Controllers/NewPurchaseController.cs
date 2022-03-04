@@ -60,13 +60,25 @@ namespace Admin.Controllers
             double Final_Total = Purchase[0].final_total;
             NewPurchase_Insert purchase = new NewPurchase_Insert();
             purchase.Add_Data(Purchase, Quantity, Total, Final_Total);
+            ViewBag.Purchase = "Submitted Successfully!!!";
             return Json(Purchase);
         }
         public ActionResult Partno_to_Descp(BOMFields name)
-        {
+            {
             NewPurchase_Insert dblogin = new NewPurchase_Insert();
             var Descp = dblogin.SP_Description(name.Part_to_Descp);
-            return Json(Descp, JsonRequestBehavior.AllowGet);
+            if (Descp == null)
+            {
+                List<string> list = new List<string>();
+                list.Add("Please Enter Valid Part No !!!");
+                list.Add("");
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(Descp, JsonRequestBehavior.AllowGet);
+            }
+            
         }
 
         public ActionResult PurchaseList()
@@ -83,7 +95,19 @@ namespace Admin.Controllers
                 while (dr.Read())
                 {
                     string Mfr = dr["A_Name"].ToString();
-                    PM_Data[i].A_code = Mfr;
+                    PM_Data[i].A_Name = Mfr;
+                }
+                dr.Close();
+            }
+            for (int i = 0; i < PM_Data.Count; i++)
+            {
+                string cmd1 = "select Amount from A_Ledger where A_code = '" + PM_Data[i].A_code + "'";
+                SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                SqlDataReader dr = SqlCmd1.ExecuteReader();
+                while (dr.Read())
+                {
+                    string Total_Amt = dr["Amount"].ToString();
+                    PM_Data[i].Purchase_Total = double.Parse(Total_Amt);
                 }
                 dr.Close();
             }
@@ -174,13 +198,6 @@ namespace Admin.Controllers
             NewPurchase_Insert purchase = new NewPurchase_Insert();
             purchase.Edit_and_Delete(Purchase, Final_Quantity, Final_SubTotal, Final_Discount, Final_Tax1, Final_Tax2, Final_Total);
             return Json(Purchase);
-        }
-
-        public ActionResult closing_Bal (List<New_Purchase> name)
-        {
-            NewPurchase_Insert dblogin = new NewPurchase_Insert();
-            var Descp = dblogin.Pcode_to_PartNo(name);
-            return Json(Descp, JsonRequestBehavior.AllowGet);
         }
     }
 }

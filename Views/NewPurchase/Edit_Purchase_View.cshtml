@@ -21,7 +21,7 @@
                         <p class="text-sm">
                             Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:20%;margin-left:0.25%;" })
                         </p>
-                        <p class="text-sm"> Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:20%;font-size:18px;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:20%;margin-left:1%;" })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p>
+                        <p class="text-sm"> Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:20%;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:20%;margin-left:1%;" })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p>
                         <p class="text-sm"> Supplier:@Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })</p>
                     </div>
 
@@ -37,7 +37,7 @@
                                 @Html.EditorFor(model => model.P_Discount, new { htmlAttributes = new { @style = "width:20%; margin-top: 10px; margin-right: 10%;", @placeholder = "Discount" } })
                                 @Html.EditorFor(model => model.P_Tax1, new { htmlAttributes = new { @style = "width:20%; margin-top: 10px; margin-right: 10%;", @placeholder = "Tax1" } })
                                 @Html.EditorFor(model => model.P_Tax2, new { htmlAttributes = new { @style = "width:20%; margin-top: 10px; margin-right: 2%;", @placeholder = "Tax2" } })
-                                <button href="#" class="button" id="Insert" style=" margin-top: 10px;">Insert</button><button style="display: none; margin-top: 10px;" id="Add" onclick="ToAdd()">Add</button>
+                                <button href="#" class="btn btn-sm btn-secondary" id="Insert">Insert</button><button class="btn btn-sm btn-secondary" style="display: none; margin-top: 10px;" id="Add" onclick="ToAdd()">Add</button>
                             </div>
                             <table id="selected_units" class="text-sm font-weight-normal" style="margin-top:10px;">
                                 <thead>
@@ -180,7 +180,7 @@
         <p id="code" style="display:none;"></p>
         <p id="test"></p>
         <p id="Enter_Inv_No"></p>
-        <button class="button" id="Submit" style="width:10%;margin-left:2%;">Submit</button>
+        <button class="btn btn-sm btn-secondary" id="Submit" style="width:10%;margin-left:2%;">Submit</button>
         <pre id="json_op"></pre>
     </div>
 </body>
@@ -193,6 +193,7 @@
     var row_id = 0;
     var total_inc = 0;
     var code = "";
+    var str = "Please Enter Valid Part No !!!";
     var last_row = document.getElementById("selected_units").rows.length;
     $('#Insert').click(function () {
         var d1 = $('#Part_No').val();
@@ -293,6 +294,7 @@
         var Total = (sub_total - discount_val) + tax1_val + tax2_val;
         document.getElementById("Final_Total").innerHTML = Total.toFixed(2);
     }
+
     $('#Submit').click(function (e) {
 
         var Inv_No = $('#Invoice_No').val();
@@ -430,7 +432,7 @@
             document.getElementById("Final_Tax2").value = tax2_val.toFixed(2);
         }
     }
-
+   
     document.addEventListener('keydown', function (event) {
         if (event.keyCode === 9) {
 
@@ -444,12 +446,14 @@
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ name: model }),
                 success: function (data) {
-                    if (data == null) {
-                        document.getElementById("value").innerHTML = "Please Enter Valid Part No !!!";
+                    document.getElementById("value").innerHTML = data[0];
+                    code = data[1];
+                    const button = document.getElementById("Insert");
+                    if (data[1] == "") {
+                        button.disabled = true;
                     }
                     else {
-                        document.getElementById("value").innerHTML = data[0];
-                        code = data[1];
+                        button.disabled = false;
                     }
             },
             failure: function (errMsg) {
@@ -458,24 +462,6 @@
             });
         }
     });
-
-    @*var modal = document.getElementById("myModal");
-    var btn = document.getElementById("myBtn");
-    var span = document.getElementsByClassName("close")[0];
-
-    btn.onclick = function () {
-        modal.style.display = "block";
-    }
-
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
-
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }*@
 
     function field_entry() {
         var Voucher_No = document.querySelector('input[name="Voucher_No"]');
@@ -566,6 +552,7 @@
 
         total_cal();
     }
+
     function total_cal() {
         $("#Part_No").val("");
         $("#P_Qty").val("");
@@ -645,9 +632,5 @@
             document.getElementById("Final_Tax2").value = tax2_val.toFixed(2);
         }
 
-    }
-
-    function close_bal() {
-        
     }
 </script>

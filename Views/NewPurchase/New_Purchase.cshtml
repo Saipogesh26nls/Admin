@@ -18,15 +18,17 @@
             <div>
                 <div class="card">
                     <div class="card-header">
-                        <h5>
+                        <p class="text-sm">
                             Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:20%;margin-left:0.25%;" })
-                        </h5>
-                        <h5>Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:20%;font-size:18px;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:20%;margin-left:1%;" })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></h5>
-                        <h5>Supplier:@Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })</h5>
+                        </p>
+                        <p class="text-sm">
+                            Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:20%;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:20%;margin-left:1%;" })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>
+                        </p>
+                        <p class="text-sm">Supplier:@Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })</p>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <input id="Part_No" type="text" style="border: 1px solid gray;margin-right: 0.5%;" placeholder="Part No"><i class="fa fa-search" id="myBtn" style="margin-right:5%"></i><p id="value" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
+                            <input id="Part_No" type="text" style="border: 1px solid gray;margin-right: 0.5%;" placeholder="Part No">@*<i class="fa fa-search" id="myBtn" style="margin-right:5%"></i>*@<p id="value" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
                             <div>
                                 <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 10%;" placeholder="Quantity">
                                 <input id="Purchase_Rate" type="text" style="border: 1px solid gray;" placeholder="Purchase Rate">
@@ -36,44 +38,15 @@
                                 <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%;" placeholder="Discount">
                                 <input id="Tax_1" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%;" placeholder="Tax 1">
                                 <input id="Tax_2" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%;" placeholder="Tax 2">
-                                <button href="#" class="button" id="Insert">Insert</button>
+                                <button class="btn btn-sm btn-secondary" id="Insert">Insert</button>
                             </div>
-
-                            <!-- The Modal -->
-                            <!--<div id="myModal" class="modal">-->
-                            <!-- Modal content -->
-                            <!--<div class="modal-content">
-                                <span class="close">&times;</span>
-                                @Html.DropDownListFor(model => model.P_Description_DD, ViewBag.ProductList as SelectList, new { htmlAttributes = new { style = "margin-left:1%;width:20%; ", id="MFR" } })
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th style="text-align:center">Description</th>
-                                            <th style="text-align:center">Part No</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{
-                                            foreach (var doc in models)
-                                            {
-                                                <tr>
-                                                    <td>@doc.P_Description</td>
-                                                    <td>@doc.P_Part_No</td>
-                                                </tr>
-                                            }
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>-->
-                            <table id="selected_units" style="margin-top:10px;">
+                            <table id="selected_units" class="text-sm font-weight-normal" style="margin-top:10px;">
                                 <tbody>
                                     <tr>
                                         <th style="padding-right:50px">Part_No</th>
                                         <th style="padding-right:50px">Quantity</th>
-                                        <th style="padding-right:50px">Price_Per_Unit</th>
-                                        <th style="padding-right:50px">Sub_Total</th>
+                                        <th style="padding-right:50px">Price</th>
+                                        <th style="padding-right:50px">SubTotal</th>
                                         <th style="padding-right:50px">Discount</th>
                                         <th style="padding-right:50px">Tax1</th>
                                         <th style="padding-right:50px">Tax2</th>
@@ -116,7 +89,11 @@
             </div>
         </div>
         <p id="Enter_Inv_No"></p>
-        @Html.ActionLink("Edit", "PurchaseList")<button class="button" id="Submit" style="width:10%;margin-left:2%;">Submit</button>
+        @if (@ViewBag.Purchase != null)
+        {
+            <p>@ViewBag.Purchase</p>
+        }
+        <button class="btn btn-sm btn-secondary" style="width:8%;" id="Edit">@Html.ActionLink("Edit", "PurchaseList", new { htmlAttributes = new { @style = "color:white;" } })</button><button class="btn btn-sm btn-secondary" id="Submit" style="width:8%;margin-left:2%;">Submit</button>
         <pre id="json_op"></pre>
     </div>
 </body>
@@ -280,11 +257,13 @@
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ name: model }),
                 success: function (data) {
-                    if (data == null) {
-                        document.getElementById("value").innerHTML = "Please Enter Valid Part No !!!";
+                    document.getElementById("value").innerHTML = data[0];
+                    const button = document.getElementById("Insert");
+                    if (data[1] == "") {
+                        button.disabled = true;
                     }
                     else {
-                        document.getElementById("value").innerHTML = data;
+                        button.disabled = false;
                     }
             },
             failure: function (errMsg) {
@@ -294,21 +273,4 @@
         }
     });
 
-    var modal = document.getElementById("myModal");
-    var btn = document.getElementById("myBtn");
-    var span = document.getElementsByClassName("close")[0];
-
-    btn.onclick = function () {
-        modal.style.display = "block";
-    }
-
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
-
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
 </script>

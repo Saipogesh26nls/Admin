@@ -7,6 +7,9 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using Admin.Models;
+using System.IO;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Admin.Controllers
 {
@@ -77,5 +80,28 @@ namespace Admin.Controllers
             }
             
         }
+        /*[HttpPost]
+        public ActionResult bar(ProductModel barcode)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (Bitmap bitMap = new Bitmap(barcode.P_Part_No.Length * 40, 80))
+                {
+                    using (Graphics graphics = Graphics.FromImage(bitMap))
+                    {
+                        Font oFont = new Font("IDAutomationHC39M", 16);
+                        PointF point = new PointF(2f, 2f);
+                        *//*SolidBrush whiteBrush = new SolidBrush(Color.White);
+                        graphics.FillRectangle(whiteBrush, 0, 0, bitMap.Width, bitMap.Height);*//*
+                        SolidBrush blackBrush = new SolidBrush(Color.Black);
+                        *//*graphics.DrawString("*" + barcode + "*", oFont, blackBrush, point);*//*
+                    }
+                    bitMap.Save(memoryStream, ImageFormat.Jpeg);
+                    ViewBag.BarcodeImage = "data:image/png;base64," + Convert.ToBase64String(memoryStream.ToArray());
+                }
+            }
+            ProductEntry();
+            return View("ProductEntry",barcode);
+        }*/
     }
 }

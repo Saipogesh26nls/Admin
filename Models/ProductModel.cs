@@ -351,14 +351,15 @@ namespace Admin.Models
         public string Voucher_No { get; set; }
         [DisplayName("Voucher Date")]
         public string Voucher_Date { get; set; }
-        [DisplayName("Supplier")]
         public string A_code { get; set; }
+        [DisplayName("Supplier")]
+        public string A_Name { get; set; }
         [DisplayName("Total")]
         public double Purchase_Total { get; set; }
     }
     public class EditPurchase
     {
-        public string Invoice_No { get; set;}
+        public string Invoice_No { get; set; }
         public string Part_No { get; set; }
         public string Quantity { get; set; }
         public string Price_Per_Unit { get; set; }
@@ -378,16 +379,6 @@ namespace Admin.Models
         public double Tax1 { get; set; }
         public double Tax2 { get; set; }
         public double Total { get; set; }
-        
-        /*public int DataUpdate(string p_code, double quantity, double price_per_unit, double subtotal, double discount, double tax1, double tax2, double total)
-        {
-            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
-            Con.Open();
 
-            string cmd2 = "update LOGIN_RMC set user_Name='" + _UserName + "',Password ='" + _password + "',Display_Name='" + _Displayname + "', Roll='" + _Roll + "' where user_id='" + Convert.ToInt32(_Userid) + "' ";
-            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
-
-            return SqlCmd2.ExecuteNonQuery();
-        }*/
     }
 }
