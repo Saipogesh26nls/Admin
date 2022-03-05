@@ -14,7 +14,7 @@ namespace Admin.Controllers
     {
         // GET: BOM
         static int i = 2;
-        public ActionResult BOM_Add_Data()
+        public ActionResult BOM_Add_Data() // BOM Add Data View
         {
             if (Table_Data_List.Count == 0)
             {
@@ -41,7 +41,7 @@ namespace Admin.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Main(BOMFields new_data)
+        public ActionResult Main(BOMFields new_data) // Send values to Record
         {
             BOM_Insert dblogin = new BOM_Insert();
             string values = dblogin.P_Description(new_data.SP_Part_No);
@@ -61,13 +61,13 @@ namespace Admin.Controllers
         }
 
         static List<BOMFields> Table_Data_List = new List<BOMFields>();
-        public static List<BOMFields> Record(string tbl_part_no, string tbl_Descp, string tbl_Quan, string SP_Descp, string SP_Part_No)
+        public static List<BOMFields> Record(string tbl_part_no, string tbl_Descp, string tbl_Quan, string SP_Descp, string SP_Part_No) // Add data to a static list
         {
             Table_Data_List.Add(new BOMFields { Part_No1 = tbl_part_no, Description1 = tbl_Descp, Quantity1 = tbl_Quan, SP_Description = SP_Descp, SP_Part_No = SP_Part_No });
             return (Table_Data_List);
         }
         [HttpPost]
-        public ActionResult Order(BOMFields name)
+        public ActionResult Order(BOMFields name) // Add List to DB
         {
             BOM_Insert BOM_SP = new BOM_Insert();
             BOM_SP.AddOrderDetails(Table_Data_List);
@@ -77,7 +77,7 @@ namespace Admin.Controllers
             return View("BOM_Add_Data");
         }
 
-        public ActionResult Partno_to_Descp (BOMFields name)
+        public ActionResult Partno_to_Descp (BOMFields name) // conversion of part_no to description
         {
             BOM_Insert dblogin = new BOM_Insert();
             string Descp = dblogin.SP_Description(name.Part_to_Descp);

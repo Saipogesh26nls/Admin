@@ -13,7 +13,7 @@ namespace Admin.Controllers
     public class GroupController : Controller
     {
         [HttpGet]
-        public ActionResult GroupEntry()
+        public ActionResult GroupEntry() // Group Entry View
         {
             SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             _con.Open();
@@ -26,7 +26,7 @@ namespace Admin.Controllers
         }
 
         [NonAction]
-        public SelectList ToSelectList(DataTable table, string valueField, string textField)
+        public SelectList ToSelectList(DataTable table, string valueField, string textField) // For making Dropdown list
         {
             List<SelectListItem> list = new List<SelectListItem>();
             foreach (DataRow row in table.Rows)
@@ -41,7 +41,7 @@ namespace Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult GroupEntry(GroupFields newuser)
+        public ActionResult GroupEntry(GroupFields newuser) // Adding Data to DB
         {
             GroupInsert dblogin = new GroupInsert();
             int userid;

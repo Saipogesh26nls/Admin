@@ -1,7 +1,7 @@
-﻿@model Admin.Models.New_Purchase
-    @{ 
-        var models = ViewBag.PM;
-    }
+﻿@model Admin.Models.GoodsRI
+@{
+  
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,83 +18,48 @@
             <div>
                 <div class="card">
                     <div class="card-header">
+                        <p class="text-sm">Index Type : @Html.DropDownListFor(model => model.Index_Type, ViewBag.Index as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })</p>
                         <p class="text-sm">
-                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:20%;margin-left:0.25%;" })
+                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:0.25%;" })
+                            Reference No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:15%;", id = "Invoice_No" } })    Reference Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:1%;" })
                         </p>
                         <p class="text-sm">
-                            Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:20%;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:20%;margin-left:1%;" })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>
+                            Issue/Reason:@Html.DropDownListFor(model => model.Index_Type, ViewBag.GI as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })    Issue/Reason for Process :  @Html.DropDownListFor(model => model.Index_Type, ViewBag.Process as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
+                            Project:@Html.DropDownListFor(model => model.Index_Type, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })    Requested By :  @Html.DropDownListFor(model => model.Index_Type, ViewBag.Employee as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
                         </p>
-                        <p class="text-sm">Supplier:@Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })</p>
+                        <p class="text-sm">
+                            Note : @Html.TextAreaFor(model => model.Note, new { @style = "color:black; width:50%; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })
+                        </p>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body table-responsive">
                         <div class="table-responsive">
-                            <input id="Part_No" type="text" style="border: 1px solid gray;margin-right: 0.5%;" class="uppercase" placeholder="Part No">@*<i class="fa fa-search" id="myBtn" style="margin-right:5%"></i>*@<p id="value" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
-                            <div>
-                                <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 10%;" placeholder="Quantity">
-                                <input id="Purchase_Rate" type="text" style="border: 1px solid gray;" placeholder="Purchase Rate">
-                            </div>
-                            <div></div>
-                            <div>
-                                <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%;" placeholder="Discount">
-                                <input id="Tax_1" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%;" placeholder="Tax 1">
-                                <input id="Tax_2" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%;" placeholder="Tax 2">
-                                <button class="btn btn-sm btn-secondary" id="Insert">Insert</button>
-                            </div>
+                            <p class="text-sm">Part No : @Html.DropDownListFor(model => model.Part_No, ViewBag.PartNo as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-right:10%;" } }) Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 5%;" placeholder="Quantity"><button class="btn btn-sm btn-secondary" id="Insert">Insert</button>@*<i class="fa fa-search" id="myBtn" style="margin-right:5%"></i>*@</p><p id="value" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
+                            <button class="btn btn-sm btn-secondary float-right" id="Submit" style="width:8%;margin-left:2%;margin-top:30px;">Submit</button>
+                            <a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 30px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>
                             <table id="selected_units" class="text-sm font-weight-normal" style="margin-top:10px;">
                                 <tbody>
                                     <tr>
                                         <th style="padding-right:50px">Part_No</th>
+                                        <th style="padding-right:50px">Decription</th>
                                         <th style="padding-right:50px">Quantity</th>
-                                        <th style="padding-right:50px">Price</th>
-                                        <th style="padding-right:50px">SubTotal</th>
-                                        <th style="padding-right:50px">Discount</th>
-                                        <th style="padding-right:50px">Tax1</th>
-                                        <th style="padding-right:50px">Tax2</th>
-                                        <th style="padding-right:50px">Total</th>
-                                        <th style="display:none;">Invoice_No</th>
-                                        <th style="display: none;">Invoice_Date</th>
-                                        <th style="display:none;">ILedger</th>
-                                        <th style="display: none;">ALedger</th>
-                                        <th style="display: none;">final_Qty</th>
-                                        <th style="display: none;">final_Sub_Total</th>
-                                        <th style="display: none;">final_total</th>
-                                        <th style="display: none;">supplier</th>
+                                        <th style="display:none;">Voucher_No</th>
+                                        <th style="display: none;">Voucher_Date</th>
+                                        <th style="display:none;">Index_type</th>
+                                        <th style="display: none;">Ref_No</th>
+                                        <th style="display: none;">Ref_Date</th>
+                                        <th style="display: none;">GI_tag</th>
+                                        <th style="display: none;">Process_Tag</th>
+                                        <th style="display: none;">Project</th>
+                                        <th style="display: none;">Employee</th>
+                                        <th style="display: none;">Note</th>
                                     </tr>
                                 </tbody>
                             </table>
-                            <div>
-                                @Html.LabelFor(model => model.Quantity, new { htmlAttributes = new { id = "Qty_Label" } }) : <h6 id="Qty_display"></h6>
-                            </div>
-                            <div class="float-right">
-                                <div>
-                                    @Html.LabelFor(model => model.Total, new { htmlAttributes = new { id = "total_Label" } }) : <h6 id="total_display"></h6>
-                                </div>
-                                <div>
-                                    @Html.LabelFor(model => model.Final_Discount) : @Html.EditorFor(model => model.Final_Discount, new { htmlAttributes = new { @id = "Final_Discount" } })
-                                </div>
-                                <div>
-                                    @Html.LabelFor(model => model.Final_Tax1) : @Html.EditorFor(model => model.Final_Tax1, new { htmlAttributes = new { @style = "margin-left:11%;", @id = "Final_Tax1" } })
-                                </div>
-                                <div>
-                                    @Html.LabelFor(model => model.Final_Tax2) : @Html.EditorFor(model => model.Final_Tax2, new { htmlAttributes = new { @style = "margin-left:11%;", @id = "Final_Tax2" } })
-                                </div>
-                                <div>
-                                    @Html.LabelFor(model => model.Final_Total, new { htmlAttributes = new { id = "final_total_Label" } }) : <h6 id="Final_Total" style="margin-left:11%;"></h6>
-                                </div>
-                            </div>
-                            <p id="del"></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <p id="Enter_Inv_No"></p>
-        @if (@ViewBag.Purchase != null)
-        {
-            <p>@ViewBag.Purchase</p>
-        }
-        <button class="btn btn-sm btn-secondary" style="width:8%;" id="Edit">@Html.ActionLink("Edit", "PurchaseList", new { htmlAttributes = new { @style = "color:white;" } })</button><button class="btn btn-sm btn-secondary" id="Submit" style="width:8%;margin-left:2%;">Submit</button>
-        <pre id="json_op"></pre>
     </div>
 </body>
 </html>
@@ -170,32 +135,6 @@
         $("#Tax_2").val("");
     }
 
-    function final_calculation() {
-        var sub_total = document.getElementById("total_display").innerHTML;
-        var final_discount = $("#Final_Discount").val();
-        var final_tax1 = $("#Final_Tax1").val();
-        var final_tax2 = $("#Final_Tax2").val();
-        if (final_discount == "") {
-            var discount_val = 0;
-        }
-        else {
-            var discount_val = (sub_total * final_discount) / 100;
-        }
-        if (final_tax1 == "") {
-            var tax1_val = 0;
-        }
-        else {
-            var tax1_val = (sub_total * final_tax1) / 100;
-        }
-        if (final_tax2 == "") {
-            var tax2_val = 0;
-        }
-        else {
-            var tax2_val = (sub_total * final_tax2) / 100;
-        }
-        var Total = (sub_total - discount_val) + tax1_val + tax2_val;
-        document.getElementById("Final_Total").innerHTML = Total;
-    }
     $('#Submit').click(function (e) {
 
         var Inv_No = $('#Invoice_No').val();
@@ -238,11 +177,6 @@
             document.getElementById("Enter_Inv_No").innerHTML = "Submitted Successfully !!!";
         }
     });
-
-    @*function del_row(node) {
-        r = node.parentNode.parentNode;
-        r.parentNode.removeChild(r);
-    }*@
 
     document.addEventListener('keydown', function (event) {
         if (event.keyCode === 9) {

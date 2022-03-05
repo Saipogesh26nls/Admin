@@ -340,6 +340,7 @@ namespace Admin.Models
         public double final_Tax1 { get; set; }
         public double final_Tax2 { get; set; }
         public double final_total { get; set; }
+        public string Ref_No { get; set; }
     }
     public class PurchaseList
     {
@@ -356,6 +357,7 @@ namespace Admin.Models
         public string A_Name { get; set; }
         [DisplayName("Total")]
         public double Purchase_Total { get; set; }
+        public List<string> Ref_No { get; set ; }
     }
     public class EditPurchase
     {
@@ -380,5 +382,33 @@ namespace Admin.Models
         public double Tax2 { get; set; }
         public double Total { get; set; }
 
+    }
+    public class GoodsRI
+    {
+        public string Index_Type { get; set; }
+        public int Voucher_No { get; set; }
+        public DateTime Voucher_Date { get; set; }
+        public string Ref_No { get; set; }
+        public DateTime Ref_Date { get; set; }
+        public string GI_Tag { get; set; }
+        public string Process_Tag { get; set; }
+        public string Project { get; set; }
+        public string Employee { get; set; }
+        public string Note { get; set; }
+        public string Part_No { get; set;}
+        public string Description { get; set; }
+        public int Quantity { get; set; }
+        public DataSet ILedger_items(int id)
+        {
+            List<EditPurchase> ItemQm = new List<EditPurchase>();
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "select Voucher_No, Voucher_Date, Invoice_No, Invoice_Date, P_code, Purchase_Qty, Purchase_Rate, Purchase_Discount, Purchase_Tax_1, Purchase_Tax_2, Purchase_SubTotal, Purchase_Total from Purchase where Voucher_No = '" + id + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            DataSet ds = new DataSet();
+            SqlDataAdapter da = new SqlDataAdapter(SqlCmd1);
+            da.Fill(ds);
+            return ds;
+        }
     }
 }

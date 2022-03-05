@@ -16,7 +16,7 @@ namespace Admin.Controllers
     public class ProductController : Controller
     {
         [HttpGet]
-        public ActionResult ProductEntry()
+        public ActionResult ProductEntry() // Product entry View
         {
             SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             _con.Open();
@@ -36,7 +36,7 @@ namespace Admin.Controllers
         }
 
         [NonAction]
-        public SelectList ToSelectList(DataTable table, string valueField, string textField)
+        public SelectList ToSelectList(DataTable table, string valueField, string textField) //  For making Dropdown list
         {
             List<SelectListItem> list = new List<SelectListItem>();
             foreach (DataRow row in table.Rows)
@@ -51,7 +51,7 @@ namespace Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult ProductEntry(ProductModel newuser)
+        public ActionResult ProductEntry(ProductModel newuser) // Adding Data to DB
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();

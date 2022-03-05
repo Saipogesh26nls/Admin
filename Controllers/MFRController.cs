@@ -12,13 +12,13 @@ namespace Admin.Controllers
 {
     public class MFRController : Controller
     {
-        public ActionResult MFREntry()
+        public ActionResult MFREntry() // Manufacturer Entry View
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult MFREntry(MFRFields newuser)
+        public ActionResult MFREntry(MFRFields newuser) // Adding data to DB
         {
             MFR_Details_Upload dblogin = new MFR_Details_Upload();
             int userid;

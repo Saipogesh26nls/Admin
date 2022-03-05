@@ -12,11 +12,11 @@ namespace Admin.Controllers
     public class PriceController : Controller
     {
         // GET: Price
-        public ActionResult Price_Update()
+        public ActionResult Price_Update() // Price Update View
         {
             return View();
         }
-        public ActionResult Price_Insert(PriceFields newdata)
+        public ActionResult Price_Insert(PriceFields newdata) // Adding Data to DB
         {
             Price_Updation price_Updation = new Price_Updation();
             int data = price_Updation.AddPrice(newdata.Part_No, newdata.P_Cost, newdata.P_Price_USD, newdata.P_MRP, newdata.P_SP);
@@ -24,7 +24,7 @@ namespace Admin.Controllers
             Price_Update();
             return View("Price_Update",newdata);
         }
-        public ActionResult Partno_to_Descp(PriceFields name)
+        public ActionResult Partno_to_Descp(PriceFields name) // conversion of part_no to description
         {
             Price_Updation dblogin = new Price_Updation();
             string Descp = dblogin.Product_Description(name.Part_No);

@@ -13,7 +13,7 @@ namespace Admin.Controllers
     public class AccountsController : Controller
     {
         // GET: Accounts
-        public ActionResult Accounts_Detail()
+        public ActionResult Accounts_Detail() // Accounts Detail View
         {
             SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             _con.Open();
@@ -24,7 +24,7 @@ namespace Admin.Controllers
             return View();
         }
         [NonAction]
-        public SelectList ToSelectList(DataTable table, string textField, string valueField)
+        public SelectList ToSelectList(DataTable table, string textField, string valueField) //  For making Dropdown list
         {
             List<SelectListItem> list = new List<SelectListItem>();
             foreach (DataRow row in table.Rows)
@@ -38,7 +38,7 @@ namespace Admin.Controllers
             return new SelectList(list, "Value", "Text");
         }
         [HttpPost]
-        public ActionResult Upload_Data(AccountsField newuser)
+        public ActionResult Upload_Data(AccountsField newuser) // For Adding data to DB
         {
             AccountInsert dblogin = new AccountInsert();
             int userid;
