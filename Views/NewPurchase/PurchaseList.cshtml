@@ -53,7 +53,7 @@
         @Html.DisplayFor(modelItem => item.Purchase_Total)
     </td>
     <td>
-        @Html.ActionLink("Edit", "Edit_Purchase_View", new { v_no = item.Voucher_No, v_date = item.Voucher_Date, inv_no = item.Invoice_No, inv_date = item.Invoice_Date, a_code = item.A_code }) | @Html.ActionLink("Goods Issue","Goods_Receipt_Issue", new { v_no = item.Voucher_No, v_date = item.Voucher_Date })
+        @Html.ActionLink("Edit", "Edit_Purchase_View", new { v_no = item.Voucher_No, v_date = item.Voucher_Date, inv_no = item.Invoice_No, inv_date = item.Invoice_Date, a_code = item.A_code })
     </td>
 </tr>
 }

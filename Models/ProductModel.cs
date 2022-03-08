@@ -386,7 +386,7 @@ namespace Admin.Models
     public class GoodsRI
     {
         public string Index_Type { get; set; }
-        public int Voucher_No { get; set; }
+        public string Voucher_No { get; set; }
         public DateTime Voucher_Date { get; set; }
         public string Ref_No { get; set; }
         public DateTime Ref_Date { get; set; }

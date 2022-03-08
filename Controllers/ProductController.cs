@@ -24,10 +24,10 @@ namespace Admin.Controllers
             DataTable _dt = new DataTable();
             _da.Fill(_dt);
             ViewBag.ProductList = ToSelectList(_dt,"P_code","P_Name");
-            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Manufacturer_Details", _con);
+            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", _con);
             DataTable _dt1 = new DataTable();
             _da1.Fill(_dt1);
-            ViewBag.MfdList = ToSelectList(_dt1, "M_Id", "M_Name");
+            ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
             /*SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Manufacturer_Details", _con);
             DataTable _dt2 = new DataTable();
             _da2.Fill(_dt2);

@@ -128,14 +128,12 @@
     <Compile Include="Controllers\NewPurchaseController.cs" />
     <Compile Include="Controllers\PriceController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
-    <Compile Include="Controllers\MFRController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountInsert.cs" />
     <Compile Include="Models\BOM_Insert.cs" />
     <Compile Include="Models\GroupInsert.cs" />
-    <Compile Include="Models\MFR_Details_Upload.cs" />
     <Compile Include="Models\NewPurchase_Insert.cs" />
     <Compile Include="Models\Price_Updation.cs" />
     <Compile Include="Models\ProductInsert.cs" />
@@ -2233,7 +2231,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Product\ProductEntry.cshtml" />
-    <Content Include="Views\MFR\MFREntry.cshtml" />
     <Content Include="Views\Group\GroupEntry.cshtml" />
     <Content Include="Views\BOM\BOM_Add_Data.cshtml" />
     <Content Include="Views\Accounts\Accounts_Detail.cshtml" />

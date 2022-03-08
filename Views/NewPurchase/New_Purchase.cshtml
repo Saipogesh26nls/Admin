@@ -19,26 +19,28 @@
                 <div class="card">
                     <div class="card-header">
                         <p class="text-sm">
-                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:20%;margin-left:0.25%;" })
+                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:0.25%;" })
+                            Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:15%;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:1%;" })
                         </p>
-                        <p class="text-sm">
-                            Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:20%;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:20%;margin-left:1%;" })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>
-                        </p>
-                        <p class="text-sm">Supplier:@Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })</p>
+                        <p class="text-sm"> Supplier:@Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p></p>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <input id="Part_No" type="text" style="border: 1px solid gray;margin-right: 0.5%;" class="uppercase" placeholder="Part No">@*<i class="fa fa-search" id="myBtn" style="margin-right:5%"></i>*@<p id="value" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
+                            <p class="text-sm">
+                                Part No : <input id="Part_No" type="text" style="border: 1px solid gray;margin-left:0.5%;margin-right: 8.5%;width:15%;" class="uppercase" placeholder="Part No">@*<i class="fa fa-search" id="myBtn" style="margin-right:5%"></i>*@@Html.DisplayFor(model => model.Part_No)
+                                Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 6%; width: 15%;" placeholder="Quantity">
+                                Price Per Unit : <input id="Purchase_Rate" type="text" style="border: 1px solid gray; width: 15%;" placeholder="Purchase Rate">
+                            </p>
                             <div>
-                                <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 10%;" placeholder="Quantity">
-                                <input id="Purchase_Rate" type="text" style="border: 1px solid gray;" placeholder="Purchase Rate">
+                                <p id="value" style="width:50%" class="text-sm"></p>
                             </div>
-                            <div></div>
                             <div>
-                                <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%;" placeholder="Discount">
-                                <input id="Tax_1" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%;" placeholder="Tax 1">
-                                <input id="Tax_2" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%;" placeholder="Tax 2">
-                                <button class="btn btn-sm btn-secondary" id="Insert">Insert</button>
+                                <p class="text-sm">
+                                    Discount : <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%; width: 15%;" placeholder="Discount">
+                                    Tax1 : <input id="Tax_1" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%; width: 15%;" placeholder="Tax 1">
+                                    Tax2 : <input id="Tax_2" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%; width: 15%;" placeholder="Tax 2">
+                                    <button class="btn btn-sm btn-secondary" id="Insert">Insert</button>
+                                </p>
                             </div>
                             <table id="selected_units" class="text-sm font-weight-normal" style="margin-top:10px;">
                                 <tbody>
@@ -89,11 +91,8 @@
             </div>
         </div>
         <p id="Enter_Inv_No"></p>
-        @if (@ViewBag.Purchase != null)
-        {
-            <p>@ViewBag.Purchase</p>
-        }
-        <button class="btn btn-sm btn-secondary" style="width:8%;" id="Edit">@Html.ActionLink("Edit", "PurchaseList", new { htmlAttributes = new { @style = "color:white;" } })</button><button class="btn btn-sm btn-secondary" id="Submit" style="width:8%;margin-left:2%;">Submit</button>
+        <p id="vno" style="background-color:yellow;width:20%"></p>
+        <button class="btn btn-sm btn-secondary" style="width:8%;" id="Edit">@Html.ActionLink("Edit", "PurchaseList")</button><button class="btn btn-sm btn-secondary" id="Submit" style="width:8%;margin-left:2%;">Submit</button>
         <pre id="json_op"></pre>
     </div>
 </body>
@@ -205,7 +204,8 @@
         }
         else {
             document.getElementById("Final_Total_last").innerHTML = document.getElementById("Final_Total").innerHTML;
-            $('#Enter_Inv_No').hide();
+            var submit1 = "";
+            document.getElementById("Enter_Inv_No").innerHTML = submit1;
             var myRows = [];
             var headersText = [];
             var $headers = $("th");
@@ -232,21 +232,20 @@
                 dataType: 'json',
                 success: function (result) {
                     //  alert(result.ItemList[0].Str);
+                    var data = result;
+                    document.getElementById("vno").innerHTML = "Your Voucher.No is " + data + "";
+                    var submit = "Submitted Successfully !!!";
+                    document.getElementById("Enter_Inv_No").innerHTML = submit;
                 }
             });
             @*document.getElementById("json_op").innerHTML = JSON.stringify(myRows, undefined, 2);*@
-            document.getElementById("Enter_Inv_No").innerHTML = "Submitted Successfully !!!";
+            
         }
     });
 
-    @*function del_row(node) {
-        r = node.parentNode.parentNode;
-        r.parentNode.removeChild(r);
-    }*@
-
     document.addEventListener('keydown', function (event) {
         if (event.keyCode === 9) {
-
+            var Inv_No = $('#Invoice_No').val();
             var model = new Object();
             model.Part_to_Descp = document.getElementById("Part_No").value;
 
@@ -257,14 +256,24 @@
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ name: model }),
                 success: function (data) {
-                    document.getElementById("value").innerHTML = data[0];
                     const button = document.getElementById("Insert");
-                    if (data[1] == "") {
-                        button.disabled = true;
+                    if(Inv_No == "") {
+                        var qty_err = '<p style="color:red;">Enter Invoice No !!!<p/>';
+                        document.getElementById("Enter_Inv_No").innerHTML = qty_err;
+                        return;
                     }
+                    else if (data[1] == "") {
+                        button.disabled = true;
+                        var inv = "";
+                        document.getElementById("Enter_Inv_No").innerHTML = inv;
+                    }
+                    
                     else {
                         button.disabled = false;
+                        var inv = "";
+                        document.getElementById("Enter_Inv_No").innerHTML = inv;
                     }
+                    document.getElementById("value").innerHTML = data[0];
             },
             failure: function (errMsg) {
                 alert(errMsg);
