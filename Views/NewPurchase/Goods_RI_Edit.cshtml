@@ -1,6 +1,6 @@
 ﻿@model Admin.Models.GoodsRI
 @{
-  
+
 }
 <!DOCTYPE html>
 <html>
@@ -73,11 +73,12 @@
                             <button class="btn btn-sm btn-secondary float-right" id="Submit" style="width:8%;margin-left:2%;margin-top:30px;">Submit</button>
                             <a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 30px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>
                             <table id="selected_units" class="text-sm font-weight-normal scroll" style="margin-top:10px;">
-                                <tbody>
+                                <thead>
                                     <tr>
-                                        <th style="padding-right:100px">Part_No</th>
-                                        <th style="padding-right:100px">Description</th>
-                                        <th style="padding-right:100px">Quantity</th>
+                                        <th style="padding-right:90px">Part_No</th>
+                                        <th style="padding-right:450px">Description</th>
+                                        <th>Quantity</th>
+                                        <th style="padding-right: 35px">E/D</th>
                                         <th style="display:none;">Voucher_No</th>
                                         <th style="display: none;">Voucher_Date</th>
                                         <th style="display:none;">Index_type</th>
@@ -89,6 +90,29 @@
                                         <th style="display: none;">Employee</th>
                                         <th style="display: none;">Note</th>
                                     </tr>
+                                </thead>
+                                <tbody>
+                                    @{ int i = 0; }
+                                    @foreach (System.Data.DataRow dr in ViewBag.Goods.Rows)
+                                    {
+                                    <tr id="@i">
+                                        <td class="row-data">@dr["P_Part_No"].ToString()</td>
+                                        <td class="row-data" style="width:550px;">@dr["P_Description"].ToString()</td>
+                                        <td class="row-data text-sm-left" style="width:50px;">@dr["Purchase_Qty"].ToString()</td>
+                                        <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i> </td>
+                                        <td style="display:none;">@Html.DisplayFor(model => model.Voucher_No)</td>
+                                        <td style="display:none;">@Html.DisplayFor(model => model.Voucher_Date)</td>
+                                        <td style="display:none;">@Html.DisplayFor(model => model.Index_Type)</td>
+                                        <td style="display:none;">@Html.DisplayFor(model => model.Ref_No)</td>
+                                        <td style="display:none;">@Html.DisplayFor(model => model.Ref_Date)</td>
+                                        <td style="display:none;">@Html.DisplayFor(model => model.GI_Tag)</td>
+                                        <td style="display:none;">@Html.DisplayFor(model => model.Process_Tag)</td>
+                                        <td style="display:none;">@Html.DisplayFor(model => model.Project)</td>
+                                        <td style="display:none;">@Html.DisplayFor(model => model.Employee)</td>
+                                        <td style="display:none;">@Html.DisplayFor(model => model.Note)</td>
+                                    </tr>
+                                        i++;
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -96,7 +120,6 @@
                 </div>
                 <p id="voucher" style="background-color:yellow;width:20%"></p>
                 <p id="Enter_Inv_No"></p>
-                <button class="btn btn-sm btn-secondary" style="width:8%;" id="Edit">@Html.ActionLink("Edit", "Goods_Receipt_Issue_List")</button>
             </div>
         </div>
     </div>
@@ -148,14 +171,14 @@
                         document.getElementById("value").innerHTML = qty_err;
                         return;
                     }
-                    var newrow = '<tr id="data"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td>' + qty + '</td><td style="display:none;">' + v_no + '</td><td style="display:none;">' + v_date + '</td><td style="display:none;">' + index_type + '</td><td style="display:none;">' + ref_no + '</td><td style="display:none;">' + ref_date + '</td><td style="display:none;">' + GI + '</td><td style="display:none;">' + process + '</td><td style="display:none;">' + project + '</td><td style="display:none;">' + emp + '</td><td style="display:none;">' + note + '</td></tr>';
+                    var newrow = '<tr id="data"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td>' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row(this);"></i></td ><td style="display:none;">' + v_no + '</td><td style="display:none;">' + v_date + '</td><td style="display:none;">' + index_type + '</td><td style="display:none;">' + ref_no + '</td><td style="display:none;">' + ref_date + '</td><td style="display:none;">' + GI + '</td><td style="display:none;">' + process + '</td><td style="display:none;">' + project + '</td><td style="display:none;">' + emp + '</td><td style="display:none;">' + note + '</td></tr>';
                     $('#selected_units tr:last').after(newrow);
             },
             failure: function (errMsg) {
                 alert(errMsg);
             }
             });
-            
+
         formClear();
     });
 
@@ -174,7 +197,7 @@
             document.getElementById("Enter_Inv_No").innerHTML = "Enter Reference No !!!";
             return;
         }
-        else if (part == 1) {
+        else if (part == 0) {
             document.getElementById("Enter_Inv_No").innerHTML = "Table is Empty !!!";
             return;
         }
@@ -183,7 +206,7 @@
             var myRows = [];
             var headersText = [];
             var $headers = $("th");
-            var $rows = $("tbody #data").each(function (index) {
+            var $rows = $("tbody tr").each(function (index) {
                 $cells = $(this).find("td");
                 myRows[index] = {};
 
@@ -199,7 +222,7 @@
                 "myrows": myRows
             };
             $.ajax({
-                url: '/NewPurchase/Add_Goods',
+                url: '/NewPurchase/Edited_Goods_RI',
                 data: JSON.stringify(myRows),
                 type: 'POST',
                 contentType: 'application/json;',
@@ -249,5 +272,24 @@
             });
         }
     });
-
+    function del_row(node) {
+        a = node.parentNode.parentNode;
+        r = node.parentNode.parentNode.cells[0].innerHTML;
+        var model = new Object();
+        model.Part_No = r;
+        model.Index_Type = $('#Index_Type').val();
+        model.Voucher_No = $('#Voucher_No').val();
+        model.Ref_No = $('#Ref_No').val();
+        $.ajax({
+            url: '/NewPurchase/Goods_ED',
+            data: JSON.stringify({ name: model }),
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (result) {
+            }
+        });
+        
+        a.parentNode.removeChild(a);
+    }
 </script>

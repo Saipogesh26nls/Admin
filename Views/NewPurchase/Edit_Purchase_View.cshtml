@@ -91,12 +91,12 @@
                                             <th>Quantity</th>
                                             <th>Price</th>
                                             <th>SubTotal</th>
-                                            <th>Dis %</th>
-                                            <th>Dis Rs</th>
-                                            <th>Tax %</th>
-                                            <th>Tax Rs</th>
-                                            <th>Tax %</th>
-                                            <th>Tax Rs</th>
+                                            <th>Dis_per</th>
+                                            <th>Dis_Rs</th>
+                                            <th>Tax1_per</th>
+                                            <th>Tax1_Rs</th>
+                                            <th>Tax2_per</th>
+                                            <th>Tax2_Rs</th>
                                             <th>Total</th>
                                             <th style="padding-right: 30px">E/D</th>
                                             <th style="display:none;">Invoice_No</th>
@@ -123,7 +123,7 @@
                                             <tr id="@i">
                                                 <td class="row-data">@dr["P_code"].ToString()</td>
                                                 <td class="row-data">@dr["P_Part_No"].ToString()</td>
-                                                <td class="row-data text-sm-left" style="width:450px;">@dr["P_Description"].ToString()</td>
+                                                <td class="row-data text-sm-left" style="width:550px;">@dr["P_Description"].ToString()</td>
                                                 <td class="row-data">@dr["Purchase_Qty"].ToString()</td>
                                                 <td class="row-data">@dr["Purchase_Rate"].ToString()</td>
                                                 <td class="row-data">
@@ -389,7 +389,7 @@
                     //  alert(result.ItemList[0].Str);
                 }
             });
-            document.getElementById("json_op").innerHTML = JSON.stringify(myRows, undefined, 2);
+            @*document.getElementById("json_op").innerHTML = JSON.stringify(myRows, undefined, 2);*@
             var str = "Submitted Successfully !!!";
             document.getElementById("Enter_Inv_No").innerHTML = str;
         }
@@ -539,7 +539,7 @@
         var data =
             document.getElementById(rowId).querySelectorAll(".row-data");
 
-        var part_no = data[0].innerHTML;
+        var part_no = data[1].innerHTML;
         var p_qty = data[3].innerHTML;
         var p_rate = data[4].innerHTML;
         var p_subtotal = data[5].innerHTML;
@@ -587,7 +587,7 @@
         var tax2_l = (subtotal * p_tax2) / 100;
         var total = (subtotal - discount_l) + tax1_l + tax2_l;
 
-        data[0].innerHTML = part_no;
+        data[1].innerHTML = part_no;
         data[3].innerHTML = p_qty;
         data[4].innerHTML = p_rate;
         data[5].innerHTML = subtotal;

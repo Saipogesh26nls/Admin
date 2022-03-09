@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Admin.Models;
 using System.Configuration;
+using Newtonsoft.Json;
 
 namespace Admin.Models
 {
@@ -84,7 +85,7 @@ namespace Admin.Models
             Con1.Open();
             //Condition value to execute A_Ledger
             int key = 1;
-
+            int ARefNo = 3;
             int j = 0;
             int i = 0;
             while (i < data.Count())
@@ -100,9 +101,9 @@ namespace Admin.Models
                 sql_cmnd.Parameters.AddWithValue("@aledger", SqlDbType.NVarChar).Value = data[i].ALedger;
                 sql_cmnd.Parameters.AddWithValue("@i_rate", SqlDbType.Money).Value = data[i].Price;
                 sql_cmnd.Parameters.AddWithValue("@i_subtotal", SqlDbType.Money).Value = data[i].SubTotal;
-                sql_cmnd.Parameters.AddWithValue("@i_discount", SqlDbType.Decimal).Value = data[i].Discount;
-                sql_cmnd.Parameters.AddWithValue("@i_tax1", SqlDbType.Money).Value = data[i].Tax1;
-                sql_cmnd.Parameters.AddWithValue("@i_tax2", SqlDbType.Money).Value = data[i].Tax2;
+                sql_cmnd.Parameters.AddWithValue("@i_discount", SqlDbType.Decimal).Value = data[i].Dis_Rs;
+                sql_cmnd.Parameters.AddWithValue("@i_tax1", SqlDbType.Money).Value = data[i].Tax1_Rs;
+                sql_cmnd.Parameters.AddWithValue("@i_tax2", SqlDbType.Money).Value = data[i].Tax2_Rs;
                 sql_cmnd.Parameters.AddWithValue("@i_total", SqlDbType.Money).Value = data[i].Total;
                 sql_cmnd.Parameters.AddWithValue("@Total", SqlDbType.Money).Value = total;
                 sql_cmnd.Parameters.AddWithValue("@Total_Qty", SqlDbType.Money).Value = Qty;
@@ -112,6 +113,7 @@ namespace Admin.Models
                 sql_cmnd.Parameters.AddWithValue("@Final_Tax2", SqlDbType.Money).Value = final_tax2;
                 sql_cmnd.Parameters.AddWithValue("@acc_name", SqlDbType.NVarChar).Value = data[i].supplier;
                 sql_cmnd.Parameters.AddWithValue("@goodsissue", SqlDbType.NVarChar).Value = null;
+                sql_cmnd.Parameters.AddWithValue("@ARefNo", SqlDbType.NVarChar).Value = ARefNo;
 
                 if (j == data.Count() - 1)
                 {
@@ -171,8 +173,7 @@ namespace Admin.Models
             }
             return ItemQm;
         }
-
-        public void Edit_and_Delete(List<PurchaseTable> data, int final_Qty, double final_subtotal, double final_discount, double final_tax1, double final_tax2, double final_total, int ref_no)
+        public void Edit_and_Delete(List<PurchaseTable> data, int final_Qty, double final_subtotal, double final_discount, double final_tax1, double final_tax2, double final_total)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
@@ -191,7 +192,7 @@ namespace Admin.Models
             Con1.Open();
             //Condition value to execute A_Ledger
             int key = 1;
-
+            int ARefNo = 3;
             int j = 0;
             int i = 0;
             while (i < data.Count())
@@ -204,9 +205,9 @@ namespace Admin.Models
                 sql_cmnd.Parameters.AddWithValue("@i_qty", SqlDbType.Int).Value = data[i].Quantity;
                 sql_cmnd.Parameters.AddWithValue("@i_rate", SqlDbType.Money).Value = data[i].Price;
                 sql_cmnd.Parameters.AddWithValue("@i_subtotal", SqlDbType.Money).Value = data[i].SubTotal;
-                sql_cmnd.Parameters.AddWithValue("@i_discount", SqlDbType.Decimal).Value = data[i].Discount;
-                sql_cmnd.Parameters.AddWithValue("@i_tax1", SqlDbType.Money).Value = data[i].Tax1;
-                sql_cmnd.Parameters.AddWithValue("@i_tax2", SqlDbType.Money).Value = data[i].Tax2;
+                sql_cmnd.Parameters.AddWithValue("@i_discount", SqlDbType.Decimal).Value = data[i].Dis_Rs;
+                sql_cmnd.Parameters.AddWithValue("@i_tax1", SqlDbType.Money).Value = data[i].Tax1_Rs;
+                sql_cmnd.Parameters.AddWithValue("@i_tax2", SqlDbType.Money).Value = data[i].Tax2_Rs;
                 sql_cmnd.Parameters.AddWithValue("@i_total", SqlDbType.Money).Value = data[i].Total;
                 sql_cmnd.Parameters.AddWithValue("@invoice_no", SqlDbType.NVarChar).Value = data[i].Invoice_No;
                 sql_cmnd.Parameters.AddWithValue("@invoice_date", data[i].Invoice_Date);
@@ -222,6 +223,7 @@ namespace Admin.Models
                 sql_cmnd.Parameters.AddWithValue("@Final_Total", SqlDbType.Money).Value = final_total;
                 sql_cmnd.Parameters.AddWithValue("@acc_name", SqlDbType.NVarChar).Value = data[i].supplier;
                 sql_cmnd.Parameters.AddWithValue("@goodsissue", SqlDbType.NVarChar).Value = null;
+                sql_cmnd.Parameters.AddWithValue("@ARefNo", SqlDbType.NVarChar).Value = ARefNo;
 
                 if (j == data.Count() - 1)
                 {
@@ -237,7 +239,6 @@ namespace Admin.Models
             }
             Con1.Close();
         }
-
         public string P_Description(string cPart_No)
         {
             List<GoodsRI> ItemQm = new List<GoodsRI>();
@@ -342,6 +343,117 @@ namespace Admin.Models
                 );
             }
             return ItemQm;
+        }
+
+        public int json_test(List<GoodsRI> data)
+        {
+            SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con1.Open();
+            int GR_V_No = 0;
+            string vtype = data[0].Index_Type;
+            if (data[0].Index_Type == "1")
+            {
+                string cmd1 = "Update Number_Master set GReceipt_Voucher_No = GReceipt_Voucher_No + 1";
+                string cmd2 = "select GReceipt_Voucher_No from Number_Master";
+                SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con1);
+                SqlCmd1.ExecuteNonQuery();
+                SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con1);
+                SqlDataReader dr = SqlCmd2.ExecuteReader();
+                dr.Read();
+                GR_V_No = dr.GetInt32(0);
+                dr.Close();
+            }
+            else
+            {
+                string cmd1 = "Update Number_Master set GIssue_Voucher_No = GIssue_Voucher_No + 1";
+                string cmd2 = "select GIssue_Voucher_No from Number_Master";
+                SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con1);
+                SqlCmd1.ExecuteNonQuery();
+                SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con1);
+                SqlDataReader dr = SqlCmd2.ExecuteReader();
+                dr.Read();
+                GR_V_No = dr.GetInt32(0);
+                dr.Close();
+            }
+            for (int i = 0; i < data.Count(); i++)
+            {
+                string cmd3 = "select P_code from Product_Master where P_Part_No = '" + data[i].Part_No + "'";
+                SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con1);
+                SqlDataReader dr2 = SqlCmd3.ExecuteReader();
+                while (dr2.Read())
+                {
+                    data[i].Part_No = dr2["P_code"].ToString();
+                }
+                data[i].v_no = GR_V_No;
+                dr2.Close();
+            }
+            var json = JsonConvert.SerializeObject(data);
+            SqlCommand sql_cmnd = new SqlCommand("[dbo].[json_test]", Con1);
+            sql_cmnd.CommandType = CommandType.StoredProcedure;
+            sql_cmnd.Parameters.AddWithValue("@json", json);
+            sql_cmnd.Parameters.AddWithValue("@vtype", vtype);
+            sql_cmnd.ExecuteReader();
+            Con1.Close();
+            return GR_V_No;
+        }
+        public List<GoodsList> Goods_List()
+        {
+            List<GoodsList> ItemQm = new List<GoodsList>();
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "select * from I_Ledger where AccountRefNumber IS NULL ORDER BY Voucher_Type Asc;";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlDataReader dr = SqlCmd1.ExecuteReader();
+            while (dr.Read())
+            {
+                ItemQm.Add(new GoodsList
+                {
+                    Voucher_Type = dr["Voucher_Type"].ToString(),
+                    G_Voucher_No = dr["Goods_Voucher_No"].ToString(),
+                    G_Voucher_Date = dr["Goods_Voucher_Date"].ToString(),
+                    Ref_No = dr["Ref_No"].ToString(),
+                    Ref_Date = dr["Ref_Date"].ToString(),
+                    GI_Tag = dr["GI_Tag"].ToString(),
+                    Process = dr["Process_Tag"].ToString(),
+                    Project = dr["Project_Tag"].ToString(),
+                    Employee = dr["Employee_Tag"].ToString(),
+                    Note = dr["Note"].ToString()
+                }
+                ) ;
+            }
+            Con.Close();
+            return ItemQm;
+
+        }
+        public void Update_Close_Bal(string Part_No, string vtype)
+        {
+            SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con1.Open();
+            List<GoodsList> ItemQm = new List<GoodsList>();
+            string cmd2 = "Select P_code from Product_Master where P_Part_No = '" + Part_No + "'";
+            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con1);
+            SqlDataReader dr = SqlCmd2.ExecuteReader();
+            while (dr.Read())
+            {
+                ItemQm.Add(new GoodsList
+                {
+                    P_code = dr["P_code"].ToString()
+                }
+                );
+            }
+            string pcode = string.Join("", ItemQm.Select(m => m.P_code));
+            if (vtype == "1")
+            {
+                string cmd1 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance - P_Open_Balance where P_code = '" + pcode + "'";
+                SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con1);
+                SqlCmd1.ExecuteNonQuery();
+            }
+            else
+            {
+                string cmd1 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance + P_Open_Balance where P_code = '" + pcode + "'";
+                SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con1);
+                SqlCmd1.ExecuteNonQuery();
+            }
         }
     }
 }

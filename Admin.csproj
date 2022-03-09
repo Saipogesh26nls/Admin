@@ -2249,6 +2249,8 @@
     <Content Include="Views\NewPurchase\PurchaseList.cshtml" />
     <Content Include="Views\NewPurchase\Edit_Purchase_View.cshtml" />
     <Content Include="Views\NewPurchase\Goods_Receipt_Issue.cshtml" />
+    <Content Include="Views\NewPurchase\Goods_Receipt_Issue_List.cshtml" />
+    <Content Include="Views\NewPurchase\Goods_RI_Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

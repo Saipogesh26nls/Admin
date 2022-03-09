@@ -244,15 +244,15 @@ namespace Admin.Models
         public int P_Qty { get; set; }
         [DisplayName("Purchase Rate")]
         public double P_Rate { get; set; }
-        [DisplayName("Discount")]
+        [DisplayName("Dis Rs")]
         public double P_Discount { get; set; }
-        [DisplayName("Discount(%)")]
+        [DisplayName("Dis %")]
         public double Discount_per { get; set; }
-        [DisplayName("Tax1")]
+        [DisplayName("Tax Rs")]
         public double P_Tax1 { get; set; }
-        [DisplayName("Tax1(%)")]
+        [DisplayName("Tax %")]
         public double Tax1_per { get; set; }
-        [DisplayName("Tax2")]
+        [DisplayName("Tax Rs")]
         public double P_Tax2 { get; set; }
         public int Total_Qty { get; set; }
         [DisplayName("Sub Total")]
@@ -271,7 +271,7 @@ namespace Admin.Models
         public double Final_Tax2_per { get; set; }
         [DisplayName("Tax2")]
         public double Final_Tax2 { get; set; }
-        [DisplayName("Tax2(%)")]
+        [DisplayName("Tax %")]
         public double Tax2_per { get; set; }
         [DisplayName("Total")]
         public double Final_Total { get; set; }
@@ -284,7 +284,6 @@ namespace Admin.Models
         public string Supplier { get; set; }
         public DataSet EditPurchase(int id)
         {
-            List<EditPurchase> ItemQm = new List<EditPurchase>();
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
             string cmd1 = "select Voucher_No, Voucher_Date, Invoice_No, Invoice_Date, P_code, Purchase_Qty, Purchase_Rate, Purchase_Discount, Purchase_Tax_1, Purchase_Tax_2, Purchase_SubTotal, Purchase_Total from Purchase where Voucher_No = '" + id + "'";
@@ -318,14 +317,14 @@ namespace Admin.Models
         public double Price { get; set; }
         public double SubTotal { get; set; }
         [DisplayName("Discount(%)")]
-        public double Discount_per { get; set; }
-        public double Discount { get; set; }
+        public double Dis_per { get; set; }
+        public double Dis_Rs { get; set; }
         [DisplayName("Tax1(%)")]
         public double Tax1_per { get; set; }
-        public double Tax1 { get; set; }
+        public double Tax1_Rs { get; set; }
         [DisplayName("Tax2(%)")]
         public double Tax2_per { get; set; }
-        public double Tax2 { get; set; }
+        public double Tax2_Rs { get; set; }
         public double Total { get; set; }
         public string Invoice_No { get; set; }
         public DateTime Invoice_Date { get; set; }
@@ -398,17 +397,32 @@ namespace Admin.Models
         public string Part_No { get; set;}
         public string Description { get; set; }
         public int Quantity { get; set; }
-        public DataSet ILedger_items(int id)
+        public int v_no { get; set; }
+        public DataSet EditGoods(int vtype, int g_vno)
         {
-            List<EditPurchase> ItemQm = new List<EditPurchase>();
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd1 = "select Voucher_No, Voucher_Date, Invoice_No, Invoice_Date, P_code, Purchase_Qty, Purchase_Rate, Purchase_Discount, Purchase_Tax_1, Purchase_Tax_2, Purchase_SubTotal, Purchase_Total from Purchase where Voucher_No = '" + id + "'";
+            string cmd1 = "select P_code,Purchase_Qty from I_Ledger where Voucher_Type = '" + vtype + "' and Goods_Voucher_No = '" + g_vno + "'";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
             DataSet ds = new DataSet();
             SqlDataAdapter da = new SqlDataAdapter(SqlCmd1);
             da.Fill(ds);
+            Con.Close();
             return ds;
         }
+    }
+    public class GoodsList
+    {
+        public string Voucher_Type { get; set; }
+        public string G_Voucher_No { get;set;}
+        public string G_Voucher_Date { get; set; }
+        public string Ref_No { get; set; }
+        public string Ref_Date { get; set; }
+        public string GI_Tag { get; set; }
+        public string Process { get; set; }
+        public string Project { get; set; }
+        public string Employee { get; set; }
+        public string Note { get; set; }
+        public string P_code { get; set; }
     }
 }

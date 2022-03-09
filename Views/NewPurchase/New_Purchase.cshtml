@@ -198,8 +198,9 @@
     $('#Submit').click(function (e) {
 
         var Inv_No = $('#Invoice_No').val();
-        if (Inv_No == "") {
-            document.getElementById("Enter_Inv_No").innerHTML = "Enter the Invoice No !!!";
+        var part = document.getElementById("selected_units").tBodies[0].rows.length;
+        if (Inv_No == "" || part==1) {
+            document.getElementById("Enter_Inv_No").innerHTML = "Enter Invoice No (or) Table is Empty !!!";
             return;
         }
         else {
