@@ -34,7 +34,12 @@ namespace Admin.Controllers
             _con.Close();
             NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
             var PM_Data = newPurchase_Insert.Product_Master();
-            ViewBag.PM = PM_Data;
+            List<SelectListItem> model = new List<SelectListItem>();
+            for (int i=0;i<PM_Data.Count;i++)
+            {
+                model.Add(new SelectListItem { Text = PM_Data[i].P_Part_No + " | " + PM_Data[i].P_Description, Value = PM_Data[i].P_Part_No });
+            }
+            ViewBag.Dropdown_partno = new SelectList(model,"Value","Text");
             return View(new_Purchase);
         }
         [NonAction]
@@ -263,7 +268,7 @@ namespace Admin.Controllers
             int Descp = dblogin.Goods_add(data);
             var json = JsonConvert.SerializeObject(data);*/
             Goods_RI goods_RI = new Goods_RI();
-            int vno = goods_RI.json_test(data);
+            int vno = goods_RI.json_test_add(data);
             return Json(vno);
         }
         public ActionResult P_to_DQ(GoodsRI name) // conversion of part_no to description, qty
@@ -272,14 +277,14 @@ namespace Admin.Controllers
             var Descp = dblogin.Descp_Qty(name.Part_No);
             return Json(Descp, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult Goods_Receipt_Issue_List ()
+        public ActionResult Goods_Receipt_Issue_List () // Goods RI List View
         {
             Goods_RI newPurchase_Insert = new Goods_RI();
             var PM_Data = newPurchase_Insert.Goods_List();
             ViewBag.PL = PM_Data;
             return View(PM_Data);
         }
-        public ActionResult Goods_RI_Edit(int v_type, int gv_no, DateTime gv_date, string ref_no, DateTime ref_date, int GI, int process, int project, int employee, string note)
+        public ActionResult Goods_RI_Edit(int v_type, int gv_no, DateTime gv_date, string ref_no, DateTime ref_date, int GI, int process, int project, int employee, string note) // Goods RI Edit View
         {
             SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             _con.Open();
@@ -333,11 +338,13 @@ namespace Admin.Controllers
             return View(goodsRI);
         }
         [HttpPost]
-        public ActionResult Edited_Goods_RI(List<GoodsRI> data)
+        public ActionResult Edited_Goods_RI(List<GoodsRI> data) // Adding Edited Goods RI to DB
         {
+            Goods_RI goods_RI = new Goods_RI();
+            goods_RI.Update_GoodsRI_json(data);
             return Json(data);
         }
-        public ActionResult Goods_ED(GoodsRI name)
+        public ActionResult Goods_ED(GoodsRI name) // For Delete
         {
             Goods_RI dblogin = new Goods_RI();
             dblogin.Update_Close_Bal(name.Part_No, name.Index_Type);

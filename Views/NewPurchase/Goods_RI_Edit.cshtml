@@ -68,7 +68,7 @@
                     </div>
                     <div class="card-body table-responsive">
                         <div class="table-responsive">
-                            <p class="text-sm">Part No : @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-right:10%;" } }) Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 5%;" placeholder="Quantity"><button class="btn btn-sm btn-secondary" id="Insert">Insert</button>@*<i class="fa fa-search" id="myBtn" style="margin-right:5%"></i>*@</p><p id="value" class="text-sm" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
+                            <p class="text-sm">Part No : @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-right:10%;" } }) Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 5%;" placeholder="Quantity"><button class="btn btn-sm btn-secondary" id="Insert">Insert</button><button class="btn btn-sm btn-secondary" style="display: none; margin-top: 10px;" id="Add" onclick="ToAdd()">Add</button>@*<i class="fa fa-search" id="myBtn" style="margin-right:5%"></i>*@</p><p id="value" class="text-sm" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
 
                             <button class="btn btn-sm btn-secondary float-right" id="Submit" style="width:8%;margin-left:2%;margin-top:30px;">Submit</button>
                             <a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 30px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>
@@ -100,16 +100,16 @@
                                         <td class="row-data" style="width:550px;">@dr["P_Description"].ToString()</td>
                                         <td class="row-data text-sm-left" style="width:50px;">@dr["Purchase_Qty"].ToString()</td>
                                         <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i> </td>
-                                        <td style="display:none;">@Html.DisplayFor(model => model.Voucher_No)</td>
-                                        <td style="display:none;">@Html.DisplayFor(model => model.Voucher_Date)</td>
-                                        <td style="display:none;">@Html.DisplayFor(model => model.Index_Type)</td>
-                                        <td style="display:none;">@Html.DisplayFor(model => model.Ref_No)</td>
-                                        <td style="display:none;">@Html.DisplayFor(model => model.Ref_Date)</td>
-                                        <td style="display:none;">@Html.DisplayFor(model => model.GI_Tag)</td>
-                                        <td style="display:none;">@Html.DisplayFor(model => model.Process_Tag)</td>
-                                        <td style="display:none;">@Html.DisplayFor(model => model.Project)</td>
-                                        <td style="display:none;">@Html.DisplayFor(model => model.Employee)</td>
-                                        <td style="display:none;">@Html.DisplayFor(model => model.Note)</td>
+                                        <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Voucher_No)</td>
+                                        <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Voucher_Date)</td>
+                                        <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Index_Type)</td>
+                                        <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Ref_No)</td>
+                                        <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Ref_Date)</td>
+                                        <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.GI_Tag)</td>
+                                        <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Process_Tag)</td>
+                                        <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Project)</td>
+                                        <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Employee)</td>
+                                        <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Note)</td>
                                     </tr>
                                         i++;
                                     }
@@ -126,6 +126,8 @@
 </body>
 </html>
 <script>
+    var last_row = document.getElementById("selected_units").rows.length;
+    var row_id = 0;
     $('#Insert').click(function () {
         var d1 = $('#Part_No').val();
         var d2 = document.getElementById("Quantity").value;
@@ -171,7 +173,8 @@
                         document.getElementById("value").innerHTML = qty_err;
                         return;
                     }
-                    var newrow = '<tr id="data"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td>' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row(this);"></i></td ><td style="display:none;">' + v_no + '</td><td style="display:none;">' + v_date + '</td><td style="display:none;">' + index_type + '</td><td style="display:none;">' + ref_no + '</td><td style="display:none;">' + ref_date + '</td><td style="display:none;">' + GI + '</td><td style="display:none;">' + process + '</td><td style="display:none;">' + project + '</td><td style="display:none;">' + emp + '</td><td style="display:none;">' + note + '</td></tr>';
+                    var l_row = last_row - 1;
+                    var newrow = '<tr id="' + l_row + '"><td class="row-data">' + d1 + '</td><td class="row-data">' + data[0].Description + '</td><td>' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row(this);"></i></td ><td class="row-data" style="display:none;">' + v_no + '</td><td class="row-data" style="display:none;">' + v_date + '</td><td class="row-data" style="display:none;">' + index_type + '</td><td class="row-data" style="display:none;">' + ref_no + '</td><td class="row-data" style="display:none;">' + ref_date + '</td><td class="row-data" style="display:none;">' + GI + '</td><td class="row-data" style="display:none;">' + process + '</td><td class="row-data" style="display:none;">' + project + '</td><td class="row-data" style="display:none;">' + emp + '</td><td class="row-data" style="display:none;">' + note + '</td></tr>';
                     $('#selected_units tr:last').after(newrow);
             },
             failure: function (errMsg) {
@@ -228,10 +231,7 @@
                 contentType: 'application/json;',
                 dataType: 'json',
                 success: function (result) {
-                    var data = result;
-                    document.getElementById("Voucher_No").innerHTML = data;
                     document.getElementById("Enter_Inv_No").innerHTML = "Submitted Successfully !!!";
-                    document.getElementById("voucher").innerHTML = "Your Voucher.No is " + data + "";
                 }
             });
             @*document.getElementById("json_op").innerHTML = JSON.stringify(myRows, undefined, 2);*@
@@ -272,6 +272,7 @@
             });
         }
     });
+
     function del_row(node) {
         a = node.parentNode.parentNode;
         r = node.parentNode.parentNode.cells[0].innerHTML;
@@ -289,7 +290,76 @@
             success: function (result) {
             }
         });
-        
         a.parentNode.removeChild(a);
+    }
+
+    function Toshow() {
+        var rowId = event.target.parentNode.parentNode.id;
+        row_id = rowId;
+        var data = document.getElementById(rowId).querySelectorAll(".row-data");
+
+        var part_no = data[0].innerHTML;
+        var p_qty = data[2].innerHTML;
+
+        document.getElementById("Part_No").value = part_no;
+        document.getElementById("Quantity").value = p_qty;
+
+        document.getElementById("Insert").style.display = "none";
+        document.getElementById("Add").style.display = "block";
+    }
+
+    function ToAdd() {
+        var d1 = $('#Part_No').val();
+        var d2 = document.getElementById("Quantity").value;
+        var index_type = $('#Index_Type').val();
+        var qty = parseInt(d2);
+
+        document.getElementById("Insert").style.display = "block";
+        document.getElementById("Add").style.display = "none";
+
+        var part_no = document.getElementById("Part_No").value;
+        var p_qty = document.getElementById("Quantity").value;
+
+        var model = new Object();
+            model.Part_No = document.getElementById("Part_No").value;
+
+            jQuery.ajax({
+            type: "POST",
+            url: "@Url.Action("P_to_DQ")",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ name: model }),
+                success: function (data1) {
+                    if (index_type == "2" && qty > data1[0].Quantity) {
+                        var qty_err = '<p style="color:red;">Out of Stock !!! Available Quantity is <b>' + data1[0].Quantity + '</b><p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (d1 == "" && d2 == "") {
+                        var qty_err = '<p style="color:red;">Enter Part No and Quantity !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (d2 == "") {
+                        var qty_err = '<p style="color:red;">Enter Quantity !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (d1 == "") {
+                        var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    var rowId = row_id;
+                    var data = document.getElementById(rowId).querySelectorAll(".row-data");
+                    data[0].innerHTML = part_no;
+                    data[1].innerHTML = data1[0].Description;
+                    data[2].innerHTML = p_qty;
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+            });
+        formClear();
     }
 </script>

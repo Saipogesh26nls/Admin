@@ -1,150 +1,208 @@
 ﻿@model Admin.Models.BOMFields
 @{
-    ViewBag.Title = "Bill of Materials";
+
 }
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<style>
-    .uppercase {
-        text-transform: uppercase;
-    }
-</style>
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<body style="background-color: #f5f5f7;">
-    @using (Html.BeginForm("Main", "BOM", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-        <br />
-        <table style="border-top:none;">
-            <tr>
-                <td>
-                    @Html.LabelFor(model => model.SP_Part_No)
-                    @Html.EditorFor(model => model.SP_Part_No, new { htmlAttributes = new { @class = "form-control uppercase", required = "required" } })
-                </td>
-                <td>
-                    <button class="button" type="submit" style="margin-top:40%;margin-left:20%;">Insert</button>
-                </td>
-            </tr>
-            <tr>
-                <td><p class="text-danger">@ViewBag.ErrorMessage</p></td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.LabelFor(model => model.SP_Description)
-                </td>
-            </tr>
-        </table>
-        <div style="width:50%">
-            @{
-                foreach (var item in ViewBag.item)
-                {
-                    if (item.Part_No1 == null)
-                    {
-                        @item.SP_Description;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
+    <link rel="stylesheet" href="~/Content/Purchase.css" />
+    <style>
+        table.scroll {
+            border-spacing: 0;
+            border: 2px solid black;
+            width: auto;
+        }
+
+            table.scroll tbody,
+            table.scroll thead {
+                display: block;
             }
-        </div>
-        <table style="border-top:none;">
-            <tr>
-                <td>
-                    @Html.LabelFor(model => model.Part_No)
-                    @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "form-control uppercase", @id = "part_no" } })
-                </td>
-                <td style="padding-left: 1%;">
-                    @Html.LabelFor(model => model.Quantity)
-                    @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control uppercase", @id = "quantity" } })
-                </td>
-                <td>
-                    <br />
-                    <button class="button" id="add_btn" type="submit" style="margin-top: 12%; margin-left: 20%;">Add</button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.LabelFor(model => model.Description)
-                </td>
-            </tr>
-        </table>
-        <div style="width:50%">
-            <p id="value"></p>
-        </div>
 
-        <div class="panel panel-default">
-            @*<div class="panel-heading">
-                    <h3 class="panel-title"><strong>Order summary</strong></h3>
-                </div>*@
-            <div class="panel-body">
-                <div class="table-responsive">
-                    <table class="table table-condensed" id="tbl">
-                        <thead>
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Part_No)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Description)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Quantity)
-                                </th>
-                            </tr>
-                        </thead>
-                        @{
-                            foreach (var item in ViewBag.item)
-                            {
-                                if (item.Part_No1 == null)
-                                {
-                                    continue;
-                                }
-                                else
-                                {
+        thead tr th {
+            height: 20px;
+            line-height: 20px;
+        }
+
+        table.scroll tbody {
+            height: 200px;
+            overflow-y: auto;
+            overflow-x: auto;
+        }
+
+        tbody {
+            border-top: 2px solid black;
+        }
+
+            tbody td, thead th {
+                border-right: 1px solid black;
+            }
+
+                tbody td:last-child, thead th:last-child {
+                    border-right: none;
+                }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <br />
+        <div id="ui-view" data-select2-id="ui-view">
+            <div>
+                <div class="card">
+                    <div class="card-header">
+                        <p class="text-sm">SP Part No : @Html.EditorFor(model => model.SP_Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:3%" } }) <button class="btn btn-sm btn-secondary" id="insert" onclick="SP_part_no();">Insert</button></p> <p id="value" class="text-sm" style="width:50%"></p>     
+                    </div>
+                    <div class="card-body table-responsive">
+                        <div class="table-responsive">
+                            <p class="text-sm">
+                                Part_No:@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:3%" } }) Quantity : @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:15%;margin-right:3%;" } }) <button class="btn btn-sm btn-secondary" id="add">Add</button>
+                            </p>
+                            <p id="value1" class="text-sm" style="width:50%"></p>
+                            <button class="btn btn-sm btn-secondary float-right" id="Submit" style="width:8%;margin-left:2%;margin-top:30px;">Submit</button>
+                            <a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 30px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>
+                            <table id="selected_units" class="text-sm font-weight-normal scroll" style="margin-top:10px;">
+                                <tbody>
                                     <tr>
-                                        <td>@item.Part_No1</td>
-                                        <td style="width:70%">@item.Description1</td>
-                                        <td>@item.Quantity1</td>
+                                        <th style="padding-right:100px">Part_No</th>
+                                        <th style="padding-right:100px">Description</th>
+                                        <th style="padding-right:100px">Quantity</th>
+                                        <th style="display:none;">SP_Part_No</th>
                                     </tr>
-                                }
-                            }
-                        }
-                    </table>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+                <p id="voucher" style="background-color:yellow;width:20%"></p>
+                <p id="Enter_Inv_No"></p>
             </div>
         </div>
-    }
-    @using (Html.BeginForm("Order", "BOM", FormMethod.Post))
-    {
-        <div class="text-danger" style="text-align:center;">
-            @ViewBag.BOM
-        </div>
-        <div>
-            <div class="col-md-offset-8 col-md-10" style="margin-top:2%;">
-                <input type="submit" value="Submit" class="button" />
-            </div>
-        </div>
-    }
+    </div>
 </body>
-
+</html>
 <script>
-    document.addEventListener('keydown', function (event) {
-        if (event.keyCode === 9) {
+    $('#add').click(function () {
+        var partno = $('#Part_No').val();
+        var d2 = document.getElementById("Quantity").value;
+        var sp_partno = $('#SP_Part_No').val();
+        var qty = parseInt(d2);
 
-            var model = new Object();
-            model.Part_to_Descp = document.getElementById("part_no").value;
+        var model = new Object();
+            model.Part_No = document.getElementById("Part_No").value;
 
             jQuery.ajax({
             type: "POST",
-            url: "@Url.Action("Partno_to_Descp")",
+            url: "@Url.Action("P_to_DQ")",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ name: model }),
                 success: function (data) {
-                    document.getElementById("value").innerHTML = data;
+                    if (partno == "" && d2 == "") {
+                        var qty_err = '<p style="color:red;">Enter Part No and Quantity !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (d2 == "") {
+                        var qty_err = '<p style="color:red;">Enter Quantity !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (partno == "") {
+                        var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    var newrow = '<tr id="data"><td>' + partno + '</td><td>' + data[0].Description + '</td><td>' + qty + '</td><td style="display:none;">' + sp_partno + '</td></tr>';
+                    $('#selected_units tr:last').after(newrow);
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+            });
+
+        formClear();
+    });
+
+    function formClear() {
+        $("#Quantity").val("");
+        $("#Part_No").val("");
+        var qty_err = "";
+        document.getElementById("value").innerHTML = qty_err;
+    }
+
+    $('#Submit').click(function (e) {
+        var part = document.getElementById("selected_units").tBodies[0].rows.length;
+        var Null = "";
+        if (part == 1) {
+            document.getElementById("Enter_Inv_No").innerHTML = "Table is Empty !!!";
+            return;
+        }
+        else {
+            document.getElementById("Enter_Inv_No").innerHTML = Null;
+            var myRows = [];
+            var headersText = [];
+            var $headers = $("th");
+            var $rows = $("tbody #data").each(function (index) {
+                $cells = $(this).find("td");
+                myRows[index] = {};
+
+                $cells.each(function (cellIndex) {
+                    if (headersText[cellIndex] === undefined) {
+                        headersText[cellIndex] = $($headers[cellIndex]).text();
+                    }
+                    myRows[index][headersText[cellIndex]] = $(this).text();
+                });
+            });
+
+            var myObj = {
+                "myrows": myRows
+            };
+            $.ajax({
+                url: '/BOM/Order',
+                data: JSON.stringify(myRows),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+                    var bom = result;
+                    document.getElementById("Enter_Inv_No").innerHTML = "Submitted Successfully !!!";
+                    document.getElementById("voucher").innerHTML = "Your BOM.No is " + bom + "";
+                }
+            });
+            @*document.getElementById("json_op").innerHTML = JSON.stringify(myRows, undefined, 2);*@
+        }
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.keyCode === 9) {
+
+            var model = new Object();
+            model.Part_No = document.getElementById("Part_No").value;
+            var partno_null = document.getElementById("Part_No").value;
+            jQuery.ajax({
+            type: "POST",
+            url: "@Url.Action("P_to_DQ")",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ name: model }),
+                success: function (data) {
+                    if (partno_null == "") {
+                        var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
+                        document.getElementById("value1").innerHTML = qty_err;
+                        return;
+                    }
+                    if (data.length == 0) {
+                        var qty_err = '<p style="color:red;">Enter Valid Part No !!!<p/>';
+                        document.getElementById("value1").innerHTML = qty_err;
+                        return;
+                    }
+                    var descp = data[0].Description;
+                    var qty = data[0].Quantity;
+                    let QTY = "<b>Qty : "+qty+"</b>"
+                    document.getElementById("value1").innerHTML = descp + "," + QTY;
             },
             failure: function (errMsg) {
                 alert(errMsg);
@@ -152,4 +210,35 @@
             });
         }
     });
+
+    function SP_part_no() {
+        {
+            var model = new Object();
+            model.SP_Part_No = document.getElementById("SP_Part_No").value;
+            var partno_null = document.getElementById("SP_Part_No").value;
+            jQuery.ajax({
+            type: "POST",
+            url: "@Url.Action("Partno_to_Descp")",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ name: model }),
+                success: function (data) {
+                    if (partno_null == "") {
+                        var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    if (data == "") {
+                        var qty_err = '<p style="color:red;">Enter Valid Part No !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    document.getElementById("value").innerHTML = data;
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+            });
+        }
+    }
 </script>

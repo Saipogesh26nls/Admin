@@ -133,26 +133,46 @@ namespace Admin.Models
         public List<PurchaseList> Purchase_List()
         {
             List<PurchaseList> ItemQm = new List<PurchaseList>();
+            List<int> vno = new List<int>();
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd1 = "select Invoice_No,Invoice_Date,Voucher_No,Voucher_Date,A_code from Purchase ORDER BY Voucher_No Asc;";
-            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
-            SqlDataReader dr = SqlCmd1.ExecuteReader();
-            while (dr.Read())
+            string cmd2 = "SELECT Voucher_No FROM Purchase GROUP BY Voucher_No HAVING COUNT(*)>0";
+            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+            SqlDataReader dr1 = SqlCmd2.ExecuteReader();
+            while (dr1.Read())
             {
-                ItemQm.Add(new PurchaseList
-                {
-                    Invoice_No = dr["Invoice_No"].ToString(),
-                    Invoice_Date = dr["Invoice_Date"].ToString(),
-                    Voucher_No = dr["Voucher_No"].ToString(),
-                    Voucher_Date = dr["Voucher_Date"].ToString(),
-                    A_code = dr["A_code"].ToString()
-                }
-                );
+                vno.Add(Convert.ToInt32(dr1["Voucher_No"]));
             }
-            Con.Close();
-            return ItemQm;
-
+            dr1.Close();
+            if(vno.Count == 0)
+            {
+                Con.Close();
+                return ItemQm;
+            }
+            else
+            {
+                for (int i = 0; i < vno.Count; i++)
+                {
+                    string cmd1 = "select Top 1 Invoice_No,Invoice_Date,Voucher_No,Voucher_Date,A_code from Purchase where Voucher_No = '" + vno[i] + "' ORDER BY Voucher_No Asc;";
+                    SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                    SqlDataReader dr = SqlCmd1.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        ItemQm.Add(new PurchaseList
+                        {
+                            Invoice_No = dr["Invoice_No"].ToString(),
+                            Invoice_Date = dr["Invoice_Date"].ToString(),
+                            Voucher_No = dr["Voucher_No"].ToString(),
+                            Voucher_Date = dr["Voucher_Date"].ToString(),
+                            A_code = dr["A_code"].ToString()
+                        }
+                        );
+                    }
+                    dr.Close();
+                }
+                Con.Close();
+                return ItemQm;
+            }
         }
         public List<New_Purchase> Pcode_to_PartNo(string data)
         {
@@ -344,8 +364,7 @@ namespace Admin.Models
             }
             return ItemQm;
         }
-
-        public int json_test(List<GoodsRI> data)
+        public int json_test_add(List<GoodsRI> data)
         {
             SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con1.Open();
@@ -399,31 +418,139 @@ namespace Admin.Models
         public List<GoodsList> Goods_List()
         {
             List<GoodsList> ItemQm = new List<GoodsList>();
+            List<int> GR_Vno = new List<int>();
+            List<int> GI_Vno = new List<int>();
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd1 = "select * from I_Ledger where AccountRefNumber IS NULL ORDER BY Voucher_Type Asc;";
-            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
-            SqlDataReader dr = SqlCmd1.ExecuteReader();
-            while (dr.Read())
+            string cmd2 = "SELECT Goods_Voucher_No FROM I_Ledger where Voucher_Type = '1' and AccountRefNumber IS NULL GROUP BY Goods_Voucher_No HAVING COUNT(*)>0";
+            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+            SqlDataReader dr1 = SqlCmd2.ExecuteReader();
+            while (dr1.Read())
             {
-                ItemQm.Add(new GoodsList
-                {
-                    Voucher_Type = dr["Voucher_Type"].ToString(),
-                    G_Voucher_No = dr["Goods_Voucher_No"].ToString(),
-                    G_Voucher_Date = dr["Goods_Voucher_Date"].ToString(),
-                    Ref_No = dr["Ref_No"].ToString(),
-                    Ref_Date = dr["Ref_Date"].ToString(),
-                    GI_Tag = dr["GI_Tag"].ToString(),
-                    Process = dr["Process_Tag"].ToString(),
-                    Project = dr["Project_Tag"].ToString(),
-                    Employee = dr["Employee_Tag"].ToString(),
-                    Note = dr["Note"].ToString()
-                }
-                ) ;
+                GR_Vno.Add(Convert.ToInt32(dr1["Goods_Voucher_No"]));
             }
-            Con.Close();
-            return ItemQm;
-
+            dr1.Close();
+            string cmd3 = "SELECT Goods_Voucher_No FROM I_Ledger where Voucher_Type = '2' and AccountRefNumber IS NULL GROUP BY Goods_Voucher_No HAVING COUNT(*)>0";
+            SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
+            SqlDataReader dr2 = SqlCmd3.ExecuteReader();
+            while (dr2.Read())
+            {
+                GI_Vno.Add(Convert.ToInt32(dr2["Goods_Voucher_No"]));
+            }
+            dr2.Close();
+            int GR_vtype = 1;
+            int GI_vtype = 2;
+            if(GR_Vno.Count == 0)
+            {
+                for (int i = 0; i < GI_Vno.Count; i++)
+                {
+                    string cmd1 = "select Top 1 * from I_Ledger where Voucher_Type = '" + GI_vtype + "' and Goods_Voucher_No = '" + GI_Vno[i] + "' ORDER BY Voucher_Type Asc;";
+                    SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                    SqlDataReader dr = SqlCmd1.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        ItemQm.Add(new GoodsList
+                        {
+                            Voucher_Type = dr["Voucher_Type"].ToString(),
+                            G_Voucher_No = dr["Goods_Voucher_No"].ToString(),
+                            G_Voucher_Date = dr["Goods_Voucher_Date"].ToString(),
+                            Ref_No = dr["Ref_No"].ToString(),
+                            Ref_Date = dr["Ref_Date"].ToString(),
+                            GI_Tag = dr["GI_Tag"].ToString(),
+                            Process = dr["Process_Tag"].ToString(),
+                            Project = dr["Project_Tag"].ToString(),
+                            Employee = dr["Employee_Tag"].ToString(),
+                            Note = dr["Note"].ToString()
+                        }
+                        );
+                    }
+                    dr.Close();
+                }
+                Con.Close();
+                return ItemQm;
+            }
+            else if (GI_Vno.Count == 0)
+            {
+                for (int i = 0; i < GR_Vno.Count; i++)
+                {
+                    string cmd1 = "select Top 1 * from I_Ledger where Voucher_Type = '" + GR_vtype + "' and Goods_Voucher_No = '" + GR_Vno[i] + "' ORDER BY Voucher_Type Asc;";
+                    SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                    SqlDataReader dr = SqlCmd1.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        ItemQm.Add(new GoodsList
+                        {
+                            Voucher_Type = dr["Voucher_Type"].ToString(),
+                            G_Voucher_No = dr["Goods_Voucher_No"].ToString(),
+                            G_Voucher_Date = dr["Goods_Voucher_Date"].ToString(),
+                            Ref_No = dr["Ref_No"].ToString(),
+                            Ref_Date = dr["Ref_Date"].ToString(),
+                            GI_Tag = dr["GI_Tag"].ToString(),
+                            Process = dr["Process_Tag"].ToString(),
+                            Project = dr["Project_Tag"].ToString(),
+                            Employee = dr["Employee_Tag"].ToString(),
+                            Note = dr["Note"].ToString()
+                        }
+                        );
+                    }
+                    dr.Close();
+                }
+                Con.Close();
+                return ItemQm;
+            }
+            else
+            {
+                for (int i = 0; i < GR_Vno.Count; i++)
+                {
+                    string cmd1 = "select Top 1 * from I_Ledger where Voucher_Type = '" + GR_vtype + "' and Goods_Voucher_No = '" + GR_Vno[i] + "' ORDER BY Voucher_Type Asc;";
+                    SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                    SqlDataReader dr = SqlCmd1.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        ItemQm.Add(new GoodsList
+                        {
+                            Voucher_Type = dr["Voucher_Type"].ToString(),
+                            G_Voucher_No = dr["Goods_Voucher_No"].ToString(),
+                            G_Voucher_Date = dr["Goods_Voucher_Date"].ToString(),
+                            Ref_No = dr["Ref_No"].ToString(),
+                            Ref_Date = dr["Ref_Date"].ToString(),
+                            GI_Tag = dr["GI_Tag"].ToString(),
+                            Process = dr["Process_Tag"].ToString(),
+                            Project = dr["Project_Tag"].ToString(),
+                            Employee = dr["Employee_Tag"].ToString(),
+                            Note = dr["Note"].ToString()
+                        }
+                        );
+                    }
+                    dr.Close();
+                }
+                for (int i = 0; i < GI_Vno.Count; i++)
+                {
+                    string cmd1 = "select Top 1 * from I_Ledger where Voucher_Type = '" + GI_vtype + "' and Goods_Voucher_No = '" + GI_Vno[i] + "' ORDER BY Voucher_Type Asc;";
+                    SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                    SqlDataReader dr = SqlCmd1.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        ItemQm.Add(new GoodsList
+                        {
+                            Voucher_Type = dr["Voucher_Type"].ToString(),
+                            G_Voucher_No = dr["Goods_Voucher_No"].ToString(),
+                            G_Voucher_Date = dr["Goods_Voucher_Date"].ToString(),
+                            Ref_No = dr["Ref_No"].ToString(),
+                            Ref_Date = dr["Ref_Date"].ToString(),
+                            GI_Tag = dr["GI_Tag"].ToString(),
+                            Process = dr["Process_Tag"].ToString(),
+                            Project = dr["Project_Tag"].ToString(),
+                            Employee = dr["Employee_Tag"].ToString(),
+                            Note = dr["Note"].ToString()
+                        }
+                        );
+                    }
+                    dr.Close();
+                }
+                Con.Close();
+                return ItemQm;
+            }
         }
         public void Update_Close_Bal(string Part_No, string vtype)
         {
@@ -454,6 +581,36 @@ namespace Admin.Models
                 SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con1);
                 SqlCmd1.ExecuteNonQuery();
             }
+        }
+        public void Update_GoodsRI_json(List<GoodsRI> data)
+        {
+            SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con1.Open();
+            string vtype = data[0].Index_Type;
+            int vno = Convert.ToInt32(data[0].Voucher_No);
+            string cmd1 = "delete from I_Ledger where Voucher_Type ='" + vtype + "' and Goods_Voucher_No = '"+vno+"'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con1);
+            SqlCmd1.ExecuteNonQuery();
+
+            for (int i = 0; i < data.Count(); i++)
+            {
+                string cmd3 = "select P_code from Product_Master where P_Part_No = '" + data[i].Part_No + "'";
+                SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con1);
+                SqlDataReader dr2 = SqlCmd3.ExecuteReader();
+                while (dr2.Read())
+                {
+                    data[i].Part_No = dr2["P_code"].ToString();
+                }
+                data[i].v_no = vno;
+                dr2.Close();
+            }
+            var json = JsonConvert.SerializeObject(data);
+            SqlCommand sql_cmnd = new SqlCommand("[dbo].[json_test]", Con1);
+            sql_cmnd.CommandType = CommandType.StoredProcedure;
+            sql_cmnd.Parameters.AddWithValue("@json", json);
+            sql_cmnd.Parameters.AddWithValue("@vtype", vtype);
+            sql_cmnd.ExecuteReader();
+            Con1.Close();
         }
     }
 }

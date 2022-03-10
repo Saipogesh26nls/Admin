@@ -68,7 +68,7 @@ namespace Admin.Models
             }
 
         }
-        public void AddOrderDetails(List<BOMFields> orderDetail)
+        public int AddOrderDetails(List<BOM_Table> orderDetail)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
@@ -84,7 +84,7 @@ namespace Admin.Models
 
             SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con1.Open();
-            int i = 1;
+            int i = 0;
             while (i <= orderDetail.Count())
             {
                 if (i == orderDetail.Count())
@@ -94,14 +94,33 @@ namespace Admin.Models
                 SqlCommand sql_cmnd = new SqlCommand("[dbo].[BOM_Prod]", Con1);
                 sql_cmnd.CommandType = CommandType.StoredProcedure;
                 sql_cmnd.Parameters.AddWithValue("@bom_no", SqlDbType.Int).Value = BOM_No;
-                sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = orderDetail[i].Part_No1.ToUpper();
+                sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = orderDetail[i].Part_No.ToUpper();
                 sql_cmnd.Parameters.AddWithValue("@mp_partno", SqlDbType.NVarChar).Value = orderDetail[i].SP_Part_No.ToUpper();
-                sql_cmnd.Parameters.AddWithValue("@quantity", SqlDbType.NVarChar).Value = orderDetail[i].Quantity1;
+                sql_cmnd.Parameters.AddWithValue("@quantity", SqlDbType.NVarChar).Value = orderDetail[i].Quantity;
                 sql_cmnd.ExecuteNonQuery();
                 i++;
             }
             Con1.Close();
-
+            return BOM_No;
+        }
+        public List<BOMFields> Descp_Qty(string part_no)
+        {
+            List<BOMFields> ItemQm = new List<BOMFields>();
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "select P_Closing_Balance,P_Description from Product_Master where P_Part_No = '" + part_no + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlDataReader dr = SqlCmd1.ExecuteReader();
+            while (dr.Read())
+            {
+                ItemQm.Add(new BOMFields
+                {
+                    Description = dr["P_Description"].ToString(),
+                    Quantity = dr["P_Closing_Balance"].ToString()
+                }
+                );
+            }
+            return ItemQm;
         }
     } 
 }

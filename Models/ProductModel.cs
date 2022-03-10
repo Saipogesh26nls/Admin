@@ -110,6 +110,13 @@ namespace Admin.Models
         public string Part_to_Descp { get; set; }
         public string P_code { get; set; }
     }
+    public class BOM_Table
+    {
+        public string Part_No { get; set; }
+        public string Description { get; set; }
+        public string Quantity { get; set; }
+        public string SP_Part_No { get; set; }
+    }
     public class AccountsField
     {
         [DisplayName("Account Name")]
