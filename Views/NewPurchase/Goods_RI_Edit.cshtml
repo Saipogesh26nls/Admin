@@ -182,7 +182,7 @@
                     var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
                     var l_row1 = last_row1 - 1;
                     var count = 0;
-                    for (var i = 0; i < l_row1; i++) {
+                    for (var i = 0; i <= l_row1; i++) {
                         var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
                         var e_partno = document.getElementById("Part_No").value;
                         if (e_part_no == e_partno) {
