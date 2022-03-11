@@ -568,6 +568,7 @@ namespace Admin.Models
                 }
                 );
             }
+            dr.Close ();
             string pcode = string.Join("", ItemQm.Select(m => m.P_code));
             if (vtype == "1")
             {
@@ -603,6 +604,18 @@ namespace Admin.Models
                 }
                 data[i].v_no = vno;
                 dr2.Close();
+                if(vtype == "1")
+                {
+                    string cmd2 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance - P_Open_Balance where P_code = '"+data[i].Part_No+"'";
+                    SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con1);
+                    SqlCmd2.ExecuteNonQuery();
+                }
+                else
+                {
+                    string cmd2 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance + P_Open_Balance where P_code = '" + data[i].Part_No + "'";
+                    SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con1);
+                    SqlCmd2.ExecuteNonQuery();
+                }
             }
             var json = JsonConvert.SerializeObject(data);
             SqlCommand sql_cmnd = new SqlCommand("[dbo].[json_test]", Con1);

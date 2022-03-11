@@ -46,7 +46,7 @@
                 }
     </style>
 </head>
-<body>
+<body onload="freeze();">
     <div class="container-fluid">
         <br />
         <div id="ui-view" data-select2-id="ui-view">
@@ -153,18 +153,24 @@
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ name: model }),
                 success: function (data) {
-                    if (index_type == "2" && qty > data[0].Quantity) {
-                        var qty_err = '<p style="color:red;">Out of Stock !!! Available Quantity is <b>' + data[0].Quantity + '</b><p/>';
-                        document.getElementById("value").innerHTML = qty_err;
-                        return;
-                    }
-                    else if (d1 == "" && d2 == "") {
+                    if(d1 == "" && d2 == "") {
                         var qty_err = '<p style="color:red;">Enter Part No and Quantity !!!<p/>';
                         document.getElementById("value").innerHTML = qty_err;
                         return;
                     }
+                    else if (index_type == "2" && qty > data[0].Quantity) {
+                        var qty_err = '<p style="color:red;">Out of Stock !!! Available Quantity is <b>' + data[0].Quantity + '</b><p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    
                     else if (d2 == "") {
                         var qty_err = '<p style="color:red;">Enter Quantity !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (index_type == "2" && d2 == 0 || index_type == "1" && d2 == 0 ) {
+                        var qty_err = '<p style="color:red;">Quantity should not be less than 0 !!!<p/>';
                         document.getElementById("value").innerHTML = qty_err;
                         return;
                     }
@@ -173,16 +179,27 @@
                         document.getElementById("value").innerHTML = qty_err;
                         return;
                     }
+                    var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+                    var l_row1 = last_row1 - 1;
+                    var count = 0;
+                    for (var i = 0; i < l_row1; i++) {
+                        var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
+                        var e_partno = document.getElementById("Part_No").value;
+                        if (e_part_no == e_partno) {
+                            var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
+                            document.getElementById("value").innerHTML = qty_err;
+                            return;
+                        }
+                        count++;
+                    }
                     var l_row = last_row - 1;
-                    var newrow = '<tr id="' + l_row + '"><td class="row-data">' + d1 + '</td><td class="row-data">' + data[0].Description + '</td><td>' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row(this);"></i></td ><td class="row-data" style="display:none;">' + v_no + '</td><td class="row-data" style="display:none;">' + v_date + '</td><td class="row-data" style="display:none;">' + index_type + '</td><td class="row-data" style="display:none;">' + ref_no + '</td><td class="row-data" style="display:none;">' + ref_date + '</td><td class="row-data" style="display:none;">' + GI + '</td><td class="row-data" style="display:none;">' + process + '</td><td class="row-data" style="display:none;">' + project + '</td><td class="row-data" style="display:none;">' + emp + '</td><td class="row-data" style="display:none;">' + note + '</td></tr>';
+                    var newrow = '<tr id="' + l_row + '"><td class="row-data">' + d1 + '</td><td class="row-data">' + data[0].Description + '</td><td>' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td class="row-data" style="display:none;">' + v_no + '</td><td class="row-data" style="display:none;">' + v_date + '</td><td class="row-data" style="display:none;">' + index_type + '</td><td class="row-data" style="display:none;">' + ref_no + '</td><td class="row-data" style="display:none;">' + ref_date + '</td><td class="row-data" style="display:none;">' + GI + '</td><td class="row-data" style="display:none;">' + process + '</td><td class="row-data" style="display:none;">' + project + '</td><td class="row-data" style="display:none;">' + emp + '</td><td class="row-data" style="display:none;">' + note + '</td></tr>';
                     $('#selected_units tr:last').after(newrow);
             },
             failure: function (errMsg) {
                 alert(errMsg);
             }
             });
-
-        formClear();
     });
 
     function formClear() {
@@ -206,6 +223,35 @@
         }
         else {
             document.getElementById("Enter_Inv_No").innerHTML = Null;
+            var v_no = $('#Voucher_No').val();
+            var v_date = $('#Voucher_Date').val();
+            var index_type = $('#Index_Type').val();
+            var ref_no = $('#Ref_No').val();
+            var ref_date = $('#Ref_Date').val();
+            var GI = $('#GI_Tag').val();
+            var process = $('#Process_Tag').val();
+            var project = $('#Project').val();
+            var emp = $('#Employee').val();
+            var note = $('#Note').val();
+
+            var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+            var l_row1 = last_row1 - 1;
+            var count = 0;
+            for (var i = 0; i <= l_row1; i++) {
+                var table = document.getElementById("selected_units").tBodies[0].rows[count];
+                table.cells[4].innerHTML = v_no;
+                table.cells[5].innerHTML = v_date;
+                table.cells[6].innerHTML = index_type;
+                table.cells[7].innerHTML = ref_no;
+                table.cells[8].innerHTML = ref_date;
+                table.cells[9].innerHTML = GI;
+                table.cells[10].innerHTML = process;
+                table.cells[11].innerHTML = project;
+                table.cells[12].innerHTML = emp;
+                table.cells[13].innerHTML = note;
+                count++;
+            }
+
             var myRows = [];
             var headersText = [];
             var $headers = $("th");
@@ -293,6 +339,11 @@
         a.parentNode.removeChild(a);
     }
 
+    function del_row1(node) {
+        a = node.parentNode.parentNode;
+        a.parentNode.removeChild(a);
+    }
+
     function Toshow() {
         var rowId = event.target.parentNode.parentNode.id;
         row_id = rowId;
@@ -335,6 +386,11 @@
                         document.getElementById("value").innerHTML = qty_err;
                         return;
                     }
+                    else if (index_type == "2" && d2 == 0 || index_type == "1" && d2 == 0 ) {
+                        var qty_err = '<p style="color:red;">Quantity should not be less than 0 !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
                     else if (d1 == "" && d2 == "") {
                         var qty_err = '<p style="color:red;">Enter Part No and Quantity !!!<p/>';
                         document.getElementById("value").innerHTML = qty_err;
@@ -350,6 +406,19 @@
                         document.getElementById("value").innerHTML = qty_err;
                         return;
                     }
+                    var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+                    var l_row1 = last_row1 - 1;
+                    var count = 0;
+                    for (var i = 0; i < l_row1; i++) {
+                        var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
+                        var e_partno = document.getElementById("Part_No").value;
+                        if (e_part_no == e_partno) {
+                            var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
+                            document.getElementById("value").innerHTML = qty_err;
+                            return;
+                        }
+                        count++;
+                    }
                     var rowId = row_id;
                     var data = document.getElementById(rowId).querySelectorAll(".row-data");
                     data[0].innerHTML = part_no;
@@ -361,5 +430,10 @@
             }
             });
         formClear();
+    }
+
+    function freeze() {
+        $('#Index_Type').prop('disabled', true);
+        $('#Voucher_No').prop('disabled', true);
     }
 </script>

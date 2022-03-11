@@ -55,7 +55,7 @@
                     <div class="card-header">
                         <p class="text-sm">Index Type : @Html.DropDownListFor(model => model.Index_Type, ViewBag.Index as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })</p>
                         <p class="text-sm">
-                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:0.25%;" })
+                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;", @readonly = "readonly" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:0.25%;", @readonly = "readonly" })
                             Reference No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { required = "required", style = "margin-left:2%;width:15%;" } })    Reference Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:1%;" })
                         </p>
                         <p class="text-sm">
@@ -148,6 +148,19 @@
                         document.getElementById("value").innerHTML = qty_err;
                         return;
                     }
+                    var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+                    var l_row1 = last_row1 - 1;
+                    var count = 1;
+                    for (var i = 0; i < l_row1; i++) {
+                        var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
+                        var e_partno = document.getElementById("Part_No").value;
+                        if (e_part_no == e_partno) {
+                            var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
+                            document.getElementById("value").innerHTML = qty_err;
+                            return;
+                        }
+                        count++;
+                    }
                     var newrow = '<tr id="data"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td>' + qty + '</td><td style="display:none;">' + v_no + '</td><td style="display:none;">' + v_date + '</td><td style="display:none;">' + index_type + '</td><td style="display:none;">' + ref_no + '</td><td style="display:none;">' + ref_date + '</td><td style="display:none;">' + GI + '</td><td style="display:none;">' + process + '</td><td style="display:none;">' + project + '</td><td style="display:none;">' + emp + '</td><td style="display:none;">' + note + '</td></tr>';
                     $('#selected_units tr:last').after(newrow);
             },
@@ -155,8 +168,6 @@
                 alert(errMsg);
             }
             });
-            
-        formClear();
     });
 
     function formClear() {

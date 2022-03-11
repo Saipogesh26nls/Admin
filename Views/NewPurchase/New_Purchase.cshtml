@@ -19,7 +19,7 @@
                 <div class="card">
                     <div class="card-header">
                         <p class="text-sm">
-                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:0.25%;" })
+                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;", @readonly = "readonly" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:0.25%;", @readonly = "readonly" })
                             Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:15%;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:1%;" })
                         </p>
                         <p class="text-sm"> Supplier:@Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p>
@@ -36,8 +36,8 @@
                             </div>
                             <div>
                                 <p class="text-sm">
-                                    Discount : <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%; width: 15%;" placeholder="Discount">
-                                    Tax1 : <input id="Tax_1" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%; width: 15%;" placeholder="Tax 1">
+                                    Discount : <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 8%; width: 15%;" placeholder="Discount">
+                                    Tax1 : <input id="Tax_1" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 8%; width: 15%;" placeholder="Tax 1">
                                     Tax2 : <input id="Tax_2" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%; width: 15%;" placeholder="Tax 2">
                                     <button class="btn btn-sm btn-secondary" id="Insert">Insert</button>
                                 </p>
@@ -123,6 +123,19 @@
         var ILedger = 1;
         var ALedger = 2;
 
+        var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+        var l_row1 = last_row1 - 1;
+        var count = 1;
+        for (var i = 0; i < l_row1; i++) {
+            var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
+            var e_partno = document.getElementById("Part_No").value;
+            if (e_part_no == e_partno) {
+                var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
+                document.getElementById("value").innerHTML = qty_err;
+                return;
+            }
+            count++;
+        }
         var subtotal = d2 * d3;
         if (d4 == "") {
             var discount = 0;
@@ -205,6 +218,7 @@
         var Total = (sub_total - discount_val) + tax1_val + tax2_val;
         document.getElementById("Final_Total").innerHTML = Total;
     }
+
     $('#Submit').click(function (e) {
 
         var Inv_No = $('#Invoice_No').val();

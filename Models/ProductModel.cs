@@ -391,9 +391,12 @@ namespace Admin.Models
     }
     public class GoodsRI
     {
-        public string Index_Type { get; set; }
+        public string Part_No { get; set; }
+        public string Description { get; set; }
+        public int Quantity { get; set; }
         public string Voucher_No { get; set; }
         public DateTime Voucher_Date { get; set; }
+        public string Index_Type { get; set; }
         public string Ref_No { get; set; }
         public DateTime Ref_Date { get; set; }
         public string GI_Tag { get; set; }
@@ -401,9 +404,6 @@ namespace Admin.Models
         public string Project { get; set; }
         public string Employee { get; set; }
         public string Note { get; set; }
-        public string Part_No { get; set;}
-        public string Description { get; set; }
-        public int Quantity { get; set; }
         public int v_no { get; set; }
         public DataSet EditGoods(int vtype, int g_vno)
         {

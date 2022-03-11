@@ -59,7 +59,7 @@
                 <div class="card">
                     <div class="card-header">
                         <p class="text-sm">
-                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:0.25%;" })
+                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:0.25%;", disabled = "true" })
                             Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:15%;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:1%;" })
                         </p>
                         <p class="text-sm"> Supplier:@Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p></p>
@@ -255,6 +255,20 @@
         var ILedger = 1;
         var ALedger = 2;
         var subtotal = d2 * d3;
+
+        var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+        var l_row1 = last_row1 - 1;
+        var count = 0;
+        for (var i = 0; i < l_row1; i++) {
+            var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
+            var e_partno = document.getElementById("Part_No").value;
+            if (e_part_no == e_partno) {
+                var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
+                document.getElementById("value").innerHTML = qty_err;
+                return;
+            }
+            count++;
+        }
         if (d4 == "") {
             var discount = 0;
         }
@@ -361,6 +375,26 @@
             document.getElementById("final_Tax1").innerHTML = f4;
             document.getElementById("final_Tax2").innerHTML = f5;
             document.getElementById("final_Total").innerHTML = f6;
+
+            var v_no = $('#Voucher_No').val();
+            var v_date = $('#Voucher_Date').val();
+            var inv_no = $('#Invoice_No').val();
+            var inv_date = $('#Invoic_Date').val();
+            var supplier = $('#Supplier').val();
+
+            var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+            var l_row1 = last_row1 - 1;
+            var count = 0;
+            for (var i = 0; i <= l_row1; i++) {
+                var table = document.getElementById("selected_units").tBodies[0].rows[count];
+                table.cells[14].innerHTML = inv_no;
+                table.cells[15].innerHTML = inv_date;
+                table.cells[16].innerHTML = v_no;
+                table.cells[17].innerHTML = v_date;
+                table.cells[18].innerHTML = supplier;
+                count++;
+            }
+
             var myRows = [];
             var headersText = [];
             var $headers = $("th");
@@ -581,6 +615,19 @@
         var p_tax1 = document.getElementById("P_Tax1").value;
         var p_tax2 = document.getElementById("P_Tax2").value;
 
+        var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+        var l_row1 = last_row1 - 1;
+        var count = 0;
+        for (var i = 0; i < l_row1; i++) {
+            var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
+            var e_partno = document.getElementById("Part_No").value;
+            if (e_part_no == e_partno) {
+                var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
+                document.getElementById("value").innerHTML = qty_err;
+                return;
+            }
+            count++;
+        }
         var subtotal = p_qty * p_rate;
         var discount_l = (subtotal * p_discount) / 100;
         var tax1_l = (subtotal * p_tax1) / 100;
@@ -600,6 +647,7 @@
     }
 
     function total_cal() {
+        $('#Voucher_No').prop('disabled', true);
         $("#Part_No").val("");
         $("#P_Qty").val("");
         $("#P_Rate").val("");
