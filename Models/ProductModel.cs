@@ -391,6 +391,7 @@ namespace Admin.Models
     }
     public class GoodsRI
     {
+        public string P_code { get; set; }
         public string Part_No { get; set; }
         public string Description { get; set; }
         public int Quantity { get; set; }

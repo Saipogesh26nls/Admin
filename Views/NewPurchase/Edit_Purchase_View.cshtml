@@ -31,7 +31,7 @@
         }
 
         table.scroll tbody {
-            height: 120px;
+            height: 200px;
             overflow-y: auto;
             overflow-x: auto;
         }
@@ -59,10 +59,10 @@
                 <div class="card">
                     <div class="card-header">
                         <p class="text-sm">
-                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:0.25%;", disabled = "true" })
+                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:0.25%;"})
                             Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:15%;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:1%;" })
                         </p>
-                        <p class="text-sm"> Supplier:@Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p></p>
+                        <p class="text-sm"> &nbsp &nbsp Supplier : &nbsp &nbsp @Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p></p>
                     </div>
 
                     <div class="card-body">
@@ -73,7 +73,7 @@
                                 Price Per Unit : @Html.EditorFor(model => model.P_Rate, new { htmlAttributes = new { @style = "width:15%; margin-right: 10%;", @placeholder = "Price Per Unit" } })
                             </p>
 
-                            <div><p id="value" style="width:50%"></p></div>
+                            <div><p id="value" style="width:50%" class="text-sm"></p></div>
                             <div>
                                 <p class="text-sm">
                                     Discount : @Html.EditorFor(model => model.P_Discount, new { htmlAttributes = new { @style = "width:15%; margin-top: 10px; margin-right: 6%;", @placeholder = "Discount" } })
@@ -306,12 +306,29 @@
         var final_Total = document.getElementById("total_display").innerHTML;
         var descp_value = document.getElementById("value").innerHTML;
         var pcode = document.getElementById("code").innerHTML;
-        if (d1 == "" || d2 == "" || d3 == "" || Invoice_No == "" || Invoice_Date == "") {
+        if (d1 == "") {
+            var error = '<p style="color:red;">Enter Part No !!!<p/>';
+            document.getElementById("value").innerHTML = error;
+            return;
+        }
+        else if (d2 == "" || d2 == 0) {
+            var error = '<p style="color:red;">Enter Quantity !!!<p/>';
+            document.getElementById("value").innerHTML = error;
+            return;
+        }
+        else if (d3 == "" || d3 == 0) {
+            var error = '<p style="color:red;">Enter Price per unit !!!<p/>';
+            document.getElementById("value").innerHTML = error;
+            return;
+        }
+        else if (Invoice_No == "") {
+            var error = '<p style="color:red;">Enter Invoice No !!!<p/>';
+            document.getElementById("value").innerHTML = error;
             return;
         }
         else {
             var l_row = last_row - 1;
-            var newrow = '<tr id="' + l_row + '"><td class="row-data">' + code + '</td><td class="row-data">' + d1 + '</td><td class="row-data">' + descp_value + '</td><td class="row-data">' + d2 + '</td><td class="row-data">' + d3 + '</td><td class="row-data">' + subtotal.toFixed(2) + '</td><td class="row-data">' + discount_per + '</td><td class="row-data">' + discount + '</td><td class="row-data">' + tax1_per + '</td><td class="row-data">' + tax1 + '</td><td class="row-data">' + tax2_per + '</td><td class="row-data">' + tax2 + '</td><td class="row-data">' + Total.toFixed(2) + '</td><td class="row-data"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i></td><td style="display:none;" class="row-data">' + Invoice_No + '</td><td style="display:none;" class="row-data">' + Invoice_Date + '</td><td style="display:none;" class="row-data">' + Voucher_No + '</td><td style="display:none;" class="row-data">' + Voucher_Date + '</td><td style="display:none;" class="row-data">' + mfr + '</td><td style="display:none;" class="row-data">' + ILedger + '</td><td style="display:none;" class="row-data">' + ALedger + '</td><td style="display:none;" class="row-data">' + final_Qty + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td style="display:none;" class="row-data" id="final_Discount"></td><td style="display:none;" class="row-data" id="final_Tax1"></td><td style="display:none;" class="row-data" id="final_Tax2"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;" class="row-data">' + @ViewBag.Ref_No + '</td></tr>';
+            var newrow = '<tr id="' + l_row + '"><td class="row-data">' + code + '</td><td class="row-data">' + d1 + '</td><td class="row-data">' + descp_value + '</td><td class="row-data">' + d2 + '</td><td class="row-data">' + d3 + '</td><td class="row-data">' + subtotal.toFixed(2) + '</td><td class="row-data">' + discount_per + '</td><td class="row-data">' + discount + '</td><td class="row-data">' + tax1_per + '</td><td class="row-data">' + tax1 + '</td><td class="row-data">' + tax2_per + '</td><td class="row-data">' + tax2 + '</td><td class="row-data">' + Total.toFixed(2) + '</td><td class="row-data"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row1(this);"></i></td><td style="display:none;" class="row-data">' + Invoice_No + '</td><td style="display:none;" class="row-data">' + Invoice_Date + '</td><td style="display:none;" class="row-data">' + Voucher_No + '</td><td style="display:none;" class="row-data">' + Voucher_Date + '</td><td style="display:none;" class="row-data">' + mfr + '</td><td style="display:none;" class="row-data">' + ILedger + '</td><td style="display:none;" class="row-data">' + ALedger + '</td><td style="display:none;" class="row-data">' + final_Qty + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td style="display:none;" class="row-data" id="final_Discount"></td><td style="display:none;" class="row-data" id="final_Tax1"></td><td style="display:none;" class="row-data" id="final_Tax2"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;" class="row-data">' + @ViewBag.Ref_No + '</td></tr>';
             $('#selected_units tr:last').after(newrow);
         }
         formClear();
@@ -431,7 +448,109 @@
 
     function del_row(node) {
         r = node.parentNode.parentNode;
+        r1 = node.parentNode.parentNode.cells[1].innerHTML;
+
+        var model = new Object();
+        model.Part_No = r1;
+        model.Index_Type = "1";
+        model.Voucher_No = $('#Voucher_No').val();
+        model.Ref_No = $('#Ref_No').val();
+        $.ajax({
+            url: '/NewPurchase/Goods_ED',
+            data: JSON.stringify({ name: model }),
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (result) {
+            }
+        });
+
+        $("#Part_No").val("");
+        $("#P_Qty").val("");
+        $("#P_Rate").val("");
+        $("#P_Discount").val("");
+        $("#P_Tax1").val("");
+        $("#P_Tax2").val("");
+        var table = document.getElementById("selected_units");
+        var tbodyRowCount = table.tBodies[0].rows.length;
+        var total_from_db = @ViewBag.Final_Total;
+        var discount_from_db = @ViewBag.Final_Discount;
+        var tax1_from_db = @ViewBag.Final_Tax1;
+        var tax2_from_db = @ViewBag.Final_Tax2;
+        var T_qty = 0;
+        var T_subtotal = 0;
+        for (i = 0; i < tbodyRowCount; i++) {
+            var data_qty = document.getElementById("selected_units").tBodies[0].rows[i].cells[3].innerHTML;
+            var data_total = document.getElementById("selected_units").tBodies[0].rows[i].cells[12].innerHTML;
+            var p_qty = data_qty;
+            var p_total = data_total;
+            T_qty = T_qty + parseFloat(p_qty);
+            T_subtotal = T_subtotal + parseFloat(p_total);
+
+            @*var p_subtotal = document.getElementById("selected_units").tBodies[0].rows[i].cells[5].innerHTML;;
+            var p_discount = document.getElementById("selected_units").tBodies[0].rows[i].cells[7].innerHTML;;
+            var p_tax1 = document.getElementById("selected_units").tBodies[0].rows[i].cells[9].innerHTML;;
+            var p_tax2 = document.getElementById("selected_units").tBodies[0].rows[i].cells[11].innerHTML;;
+
+            var discount = (p_discount / p_subtotal) * 100;
+            var tax1 = (p_tax1 / p_subtotal) * 100;
+            var tax2 = (p_tax2 / p_subtotal) * 100;
+
+            var discount_l = Math.round(discount, 1);
+            var tax1_l = Math.round(tax1, 1);
+            var tax2_l = Math.round(tax2, 1);
+
+            data[6].innerHTML = discount_l;
+            data[8].innerHTML = tax1_l;
+            data[10].innerHTML = tax2_l;*@
+        }
+
+        document.getElementById("total_display").innerHTML = T_subtotal.toFixed(2);
+        document.getElementById("Qty_display").innerHTML = T_qty.toFixed(2);
+
+        var final_discount = $("#Final_Discount").val();
+        var final_tax1 = $("#Final_Tax1").val();
+        var final_tax2 = $("#Final_Tax2").val();
+
+        if (total_inc == 0) {
+            document.getElementById("Final_Total").innerHTML = total_from_db.toFixed(2);
+            document.getElementById("Final_Discount").value = discount_from_db.toFixed(2);
+            document.getElementById("Final_Tax1").value = tax1_from_db.toFixed(2);
+            document.getElementById("Final_Tax2").value = tax2_from_db.toFixed(2);
+            total_inc++;
+        }
+        else {
+            if (final_discount == "") {
+                var discount_val = 0;
+            }
+            else {
+                var discount_val = (T_subtotal * final_discount) / 100;
+            }
+            if (final_tax1 == "") {
+                var tax1_val = 0;
+            }
+            else {
+                var tax1_val = (T_subtotal * final_tax1) / 100;
+            }
+            if (final_tax2 == "") {
+                var tax2_val = 0;
+            }
+            else {
+                var tax2_val = (T_subtotal * final_tax2) / 100;
+            }
+            var Total = (T_subtotal - discount_val) + tax1_val + tax2_val;
+            document.getElementById("Final_Total").innerHTML = Total.toFixed(2);
+            document.getElementById("Final_Discount").value = discount_val.toFixed(2);
+            document.getElementById("Final_Tax1").value = tax1_val.toFixed(2);
+            document.getElementById("Final_Tax2").value = tax2_val.toFixed(2);
+        }
         r.parentNode.removeChild(r);
+    }
+
+    function del_row1(node) {
+        r = node.parentNode.parentNode;
+        r.parentNode.removeChild(r);
+
         $("#Part_No").val("");
         $("#P_Qty").val("");
         $("#P_Rate").val("");
@@ -512,7 +631,7 @@
             document.getElementById("Final_Tax2").value = tax2_val.toFixed(2);
         }
     }
-   
+
     document.addEventListener('keydown', function (event) {
         if (event.keyCode === 9) {
 

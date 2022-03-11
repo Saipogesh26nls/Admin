@@ -10,6 +10,41 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <link rel="stylesheet" href="~/Content/Purchase.css" />
+    <style>
+        table.scroll {
+            border-spacing: 0;
+            border: 2px solid black;
+            width: auto;
+        }
+
+            table.scroll tbody,
+            table.scroll thead {
+                display: block;
+            }
+
+        thead tr th {
+            height: 20px;
+            line-height: 20px;
+        }
+
+        table.scroll tbody {
+            height: 200px;
+            overflow-y: auto;
+            overflow-x: auto;
+        }
+
+        tbody {
+            border-top: 2px solid black;
+        }
+
+            tbody td, thead th {
+                border-right: 1px solid black;
+            }
+
+                tbody td:last-child, thead th:last-child {
+                    border-right: none;
+                }
+    </style>
 </head>
 <body>
     <div class="container-fluid">
@@ -22,7 +57,7 @@
                             Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;", @readonly = "readonly" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:0.25%;", @readonly = "readonly" })
                             Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:15%;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:1%;" })
                         </p>
-                        <p class="text-sm"> Supplier:@Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p>
+                        <p class="text-sm"> &nbsp &nbsp Supplier : &nbsp &nbsp @Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -36,9 +71,9 @@
                             </div>
                             <div>
                                 <p class="text-sm">
-                                    Discount : <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 8%; width: 15%;" placeholder="Discount">
-                                    Tax1 : <input id="Tax_1" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 8%; width: 15%;" placeholder="Tax 1">
-                                    Tax2 : <input id="Tax_2" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 10%; width: 15%;" placeholder="Tax 2">
+                                    Discount : <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 8.5%; width: 15%;" placeholder="Discount">
+                                    Tax1 : <input id="Tax_1" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 9.5%; width: 15%;" placeholder="Tax 1">
+                                    Tax2 : <input id="Tax_2" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 8%; width: 15%;" placeholder="Tax 2">
                                     <button class="btn btn-sm btn-secondary" id="Insert">Insert</button>
                                 </p>
                             </div>
@@ -52,7 +87,7 @@
                                 </div>
 
                             </div>
-                            <table id="selected_units" class="text-sm font-weight-normal" style="margin-top:10px;">
+                            <table id="selected_units" class="text-sm font-weight-normal scroll" style="margin-top:10px;">
                                 <tbody>
                                     <tr>
                                         <th style="padding-right:50px">Part_No</th>
@@ -102,7 +137,7 @@
         </div>
         <p id="Enter_Inv_No"></p>
         <p id="vno" style="background-color:yellow;width:20%"></p>
-        <button class="btn btn-sm btn-secondary" style="width:8%;" id="Edit">@Html.ActionLink("Edit", "PurchaseList")</button><button class="btn btn-sm btn-secondary" id="Submit" style="width:8%;margin-left:2%;">Submit</button>
+        <a href="@Url.Action("PurchaseList", "NewPurchase")"><button class="btn btn-sm btn-secondary" style="width:8%;" id="Edit">Edit</button></a><button class="btn btn-sm btn-secondary" id="Submit" style="width:8%;margin-left:2%;">Submit</button>
         <pre id="json_op"></pre>
     </div>
 </body>
@@ -112,6 +147,7 @@
     var total = 0;
     var final_total = 0;
     var i = 1;
+    var val = "";
     $('#Insert').click(function () {
         var d1 = $('#Part_No').val();
         var d2 = parseInt(document.getElementById("Quantity").value);
@@ -171,10 +207,28 @@
         }
         var final_Qty = document.getElementById("Qty_display").innerHTML;
         var final_Total = document.getElementById("total_display").innerHTML;
-        if (d1 == "" || d2 == "" || d3 == "" || Invoice_No == "" || Invoice_Date == "") {
+        if (d1 == "") {
+            var error = '<p style="color:red;">Enter Part No !!!<p/>';
+            document.getElementById("value").innerHTML = error;
+            return;
+        }
+        else if (d2 == "" || d2 == 0) {
+            var error = '<p style="color:red;">Enter Quantity !!!<p/>';
+            document.getElementById("value").innerHTML = error;
+            return;
+        }
+        else if (d3 == "" || d3 == 0) {
+            var error = '<p style="color:red;">Enter Price per unit !!!<p/>';
+            document.getElementById("value").innerHTML = error;
+            return;
+        }
+        else if (Invoice_No == "") {
+            var error = '<p style="color:red;">Enter Invoice No !!!<p/>';
+            document.getElementById("value").innerHTML = error;
             return;
         }
         else {
+            document.getElementById("value").innerHTML = val;
             var newrow = '<tr id="data"><td>' + d1 + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal + '</td><td>' + discount + '</td><td>' + tax1 + '</td><td>' + tax2 + '</td><td id="total' + i + '">' + Total + '</td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;">' + ILedger + '</td><td style="display:none;">' + ALedger + '</td><td style="display:none;">' + final_Qty + '</td><td style="display:none;">' + final_Total + '</td><td id="Final_Total_last" style="display:none;"></td><td style="display:none;">' + mfr + '</td></tr>';
             $('#selected_units tr:last').after(newrow);
             i++;

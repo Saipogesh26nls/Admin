@@ -53,24 +53,24 @@
             <div>
                 <div class="card">
                     <div class="card-header">
-                        <p class="text-sm">Index Type : @Html.DropDownListFor(model => model.Index_Type, ViewBag.Index as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })</p>
+                        <p class="text-sm">Index Type : &nbsp &nbsp @Html.DropDownListFor(model => model.Index_Type, ViewBag.Index as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })</p>
                         <p class="text-sm">
-                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;", @readonly = "readonly" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:0.25%;", @readonly = "readonly" })
-                            Reference No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { required = "required", style = "margin-left:2%;width:15%;" } })    Reference Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:1%;" })
+                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:13%;margin-left:1%;", @readonly = "readonly" } })  Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:14%;margin-left:1%;", @readonly = "readonly" })
+                            Reference No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:13%;" } })    Reference Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:14%;margin-left:1%;" })
                         </p>
                         <p class="text-sm">
-                            Issue/Reason:@Html.DropDownListFor(model => model.GI_Tag, ViewBag.GI as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })    Issue/Reason for Process :  @Html.DropDownListFor(model => model.Process_Tag, ViewBag.Process as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
-                            Project:@Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })    Requested By :  @Html.DropDownListFor(model => model.Employee, ViewBag.Employee as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
+                            &nbsp &nbsp &nbsp Reason: &nbsp &nbsp @Html.DropDownListFor(model => model.GI_Tag, ViewBag.GI as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })  &nbsp &nbsp  Reason for Process :  &nbsp &nbsp @Html.DropDownListFor(model => model.Process_Tag, ViewBag.Process as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
+                            &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })  &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  Requested By : &nbsp &nbsp  @Html.DropDownListFor(model => model.Employee, ViewBag.Employee as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
                         </p>
                         <p class="text-sm">
-                            Note : @Html.TextAreaFor(model => model.Note, new { @style = "color:black; width:50%; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })
+                            &nbsp &nbsp &nbsp &nbsp Note :  &nbsp &nbsp @Html.TextAreaFor(model => model.Note, new { @style = "color:black; width:50%; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })
                         </p>
                     </div>
                     <div class="card-body table-responsive">
                         <div class="table-responsive">
-                            <p class="text-sm">Part No : @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-right:10%;" } }) Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 5%;" placeholder="Quantity"><button class="btn btn-sm btn-secondary" id="Insert">Insert</button>@*<i class="fa fa-search" id="myBtn" style="margin-right:5%"></i>*@</p><p id="value" class="text-sm" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
+                            <p class="text-sm" id="ToHide">Part No : @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-right:10%;" } }) Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 5%;" placeholder="Quantity"><button class="btn btn-sm btn-secondary" id="Insert">Insert</button>@*<i class="fa fa-search" id="myBtn" style="margin-right:5%"></i>*@</p><p id="value" class="text-sm" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
 
-                            <button class="btn btn-sm btn-secondary float-right" id="Submit" style="width:8%;margin-left:2%;margin-top:30px;">Submit</button>
+                            <p id="ToHide"><button class="btn btn-sm btn-secondary float-right" id="Submit" style="width:8%;margin-left:2%;margin-top:30px;">Submit</button></p>
                             <a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 30px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>
                             <table id="selected_units" class="text-sm font-weight-normal scroll" style="margin-top:10px;">
                                 <tbody>
@@ -96,7 +96,7 @@
                 </div>
                 <p id="voucher" style="background-color:yellow;width:20%"></p>
                 <p id="Enter_Inv_No"></p>
-                <button class="btn btn-sm btn-secondary" style="width:8%;" id="Edit">@Html.ActionLink("Edit", "Goods_Receipt_Issue_List")</button>
+                <p id="ToHide"><a href="@Url.Action("Goods_Receipt_Issue_List", "NewPurchase")"><button class="btn btn-sm btn-secondary" style="width:8%;" id="Edit">Edit</button></a></p>
             </div>
         </div>
     </div>
