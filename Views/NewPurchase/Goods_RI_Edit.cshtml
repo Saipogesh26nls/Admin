@@ -89,6 +89,7 @@
                                         <th style="display: none;">Project</th>
                                         <th style="display: none;">Employee</th>
                                         <th style="display: none;">Note</th>
+                                        <th style="display: none;">P_code</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -110,6 +111,7 @@
                                         <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Project)</td>
                                         <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Employee)</td>
                                         <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Note)</td>
+                                        <td class="row-data" style="display:none;">@dr["P_code"].ToString()</td>
                                     </tr>
                                         i++;
                                     }
@@ -193,7 +195,7 @@
                         count++;
                     }
                     var l_row = last_row - 1;
-                    var newrow = '<tr id="' + l_row + '"><td class="row-data">' + d1 + '</td><td class="row-data">' + data[0].Description + '</td><td>' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td class="row-data" style="display:none;">' + v_no + '</td><td class="row-data" style="display:none;">' + v_date + '</td><td class="row-data" style="display:none;">' + index_type + '</td><td class="row-data" style="display:none;">' + ref_no + '</td><td class="row-data" style="display:none;">' + ref_date + '</td><td class="row-data" style="display:none;">' + GI + '</td><td class="row-data" style="display:none;">' + process + '</td><td class="row-data" style="display:none;">' + project + '</td><td class="row-data" style="display:none;">' + emp + '</td><td class="row-data" style="display:none;">' + note + '</td></tr>';
+                    var newrow = '<tr id="' + l_row + '"><td class="row-data">' + d1 + '</td><td class="row-data">' + data[0].Description + '</td><td>' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td class="row-data" style="display:none;">' + v_no + '</td><td class="row-data" style="display:none;">' + v_date + '</td><td class="row-data" style="display:none;">' + index_type + '</td><td class="row-data" style="display:none;">' + ref_no + '</td><td class="row-data" style="display:none;">' + ref_date + '</td><td class="row-data" style="display:none;">' + GI + '</td><td class="row-data" style="display:none;">' + process + '</td><td class="row-data" style="display:none;">' + project + '</td><td class="row-data" style="display:none;">' + emp + '</td><td class="row-data" style="display:none;">' + note + '</td><td class="row-data" style="display:none;">' + data[0].P_code + '</td></tr>';
                     $('#selected_units tr:last').after(newrow);
             },
             failure: function (errMsg) {
@@ -272,9 +274,9 @@
             };
             $.ajax({
                 url: '/NewPurchase/Edited_Goods_RI',
-                data: JSON.stringify(myRows),
+                data: JSON.stringify(myObj),
                 type: 'POST',
-                contentType: 'application/json;',
+                contentType: "application/json; charset=utf - 8",
                 dataType: 'json',
                 success: function (result) {
                     document.getElementById("Enter_Inv_No").innerHTML = "Submitted Successfully !!!";

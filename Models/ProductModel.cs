@@ -395,9 +395,9 @@ namespace Admin.Models
         public string Part_No { get; set; }
         public string Description { get; set; }
         public int Quantity { get; set; }
-        public string Voucher_No { get; set; }
+        public int Voucher_No { get; set; }
         public DateTime Voucher_Date { get; set; }
-        public string Index_Type { get; set; }
+        public int Index_Type { get; set; }
         public string Ref_No { get; set; }
         public DateTime Ref_Date { get; set; }
         public string GI_Tag { get; set; }

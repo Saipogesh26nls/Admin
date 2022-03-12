@@ -9,6 +9,8 @@ using Newtonsoft.Json.Linq;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
+using System.Web.Script.Serialization;
 
 namespace Admin.Controllers
 {
@@ -321,8 +323,8 @@ namespace Admin.Controllers
                 dataSet.Tables[0].Rows[i]["P_Part_No"] = Descp[0].P_Part_No;
                 dataSet.Tables[0].Rows[i]["P_Description"] = Descp[0].P_Description;
             }
-            goodsRI.Index_Type = v_type.ToString();
-            goodsRI.Voucher_No = gv_no.ToString();
+            goodsRI.Index_Type = v_type;
+            goodsRI.Voucher_No = gv_no;
             goodsRI.Voucher_Date = gv_date;
             goodsRI.Ref_No = ref_no.ToString();
             goodsRI.Ref_Date = ref_date;
@@ -338,11 +340,16 @@ namespace Admin.Controllers
             return View(goodsRI);
         }
         [HttpPost]
-        public ActionResult Edited_Goods_RI(List<GoodsRI> data) // Adding Edited Goods RI to DB
+        public ActionResult Edited_Goods_RI() // Adding Edited Goods RI to DB
         {
+            /*Goods_RI goods_RI = new Goods_RI();
+            goods_RI.Update_GoodsRI_json(data);*/
+            var resolveRequest = HttpContext.Request;
+            resolveRequest.InputStream.Seek(0, SeekOrigin.Begin);
+            string jsonString = new StreamReader(resolveRequest.InputStream).ReadToEnd();
             Goods_RI goods_RI = new Goods_RI();
-            goods_RI.Update_GoodsRI_json(data);
-            return Json(data);
+            goods_RI.Update_GoodsRI_json(jsonString);
+            return Json(jsonString);
         }
         public ActionResult Goods_ED(GoodsRI name) // For Delete
         {
