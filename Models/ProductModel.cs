@@ -406,6 +406,7 @@ namespace Admin.Models
         public string Employee { get; set; }
         public string Note { get; set; }
         public int v_no { get; set; }
+        public string alphabet { get; set; }
         public DataSet EditGoods(int vtype, int g_vno)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
@@ -432,5 +433,12 @@ namespace Admin.Models
         public string Employee { get; set; }
         public string Note { get; set; }
         public string P_code { get; set; }
+    }
+    public class PM_list
+    {
+        public string P_code { get; set; }
+        public string Part_No { get; set; }
+        public string Description { get; set; }
+        public string P_Part_NO { get; set; }
     }
 }

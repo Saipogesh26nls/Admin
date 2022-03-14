@@ -68,10 +68,18 @@
                     </div>
                     <div class="card-body table-responsive">
                         <div class="table-responsive">
-                            <p class="text-sm">Part No : @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-right:10%;" } }) Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 5%;" placeholder="Quantity"><button class="btn btn-sm btn-secondary" id="Insert">Insert</button><button class="btn btn-sm btn-secondary" style="display: none; margin-top: 10px;" id="Add" onclick="ToAdd()">Add</button>@*<i class="fa fa-search" id="myBtn" style="margin-right:5%"></i>*@</p><p id="value" class="text-sm" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
+                            <p class="text-sm">Part No : @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:9%"></i>  Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 5%;" placeholder="Quantity"><button class="btn btn-sm btn-secondary" id="Insert">Insert</button><button class="btn btn-sm btn-secondary" style="display: none; margin-top: 10px;" id="Add" onclick="ToAdd()">Add</button>@*<i class="fa fa-search" id="myBtn" style="margin-right:5%"></i>*@</p><p id="value" class="text-sm" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
 
                             <button class="btn btn-sm btn-secondary float-right" id="Submit" style="width:8%;margin-left:2%;margin-top:30px;">Submit</button>
                             <a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 30px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>
+                            <div id="myModal" class="modal">
+
+                                <!-- Modal content -->
+                                <div class="modal-content">
+                                    <i class="close">&times;</i>
+                                    <p class="text-sm" style="margin-top:10px;">Choose Part No : @Html.DropDownListFor(model => model.PM_DD, ViewBag.Dropdown_partno as SelectList, new { htmlAttributes = new { id = "PartNo_DD", style = "width:25%;margin-right:1%;" } }) <button id="select_partno" class="btn btn-sm btn-secondary" style="margin-top:25px;margin-left:8%;">Select</button></p>
+                                </div>
+                            </div>
                             <table id="selected_units" class="text-sm font-weight-normal scroll" style="margin-top:10px;">
                                 <thead>
                                     <tr>
@@ -195,7 +203,7 @@
                         count++;
                     }
                     var l_row = last_row - 1;
-                    var newrow = '<tr id="' + l_row + '"><td class="row-data">' + d1 + '</td><td class="row-data">' + data[0].Description + '</td><td>' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td class="row-data" style="display:none;">' + v_no + '</td><td class="row-data" style="display:none;">' + v_date + '</td><td class="row-data" style="display:none;">' + index_type + '</td><td class="row-data" style="display:none;">' + ref_no + '</td><td class="row-data" style="display:none;">' + ref_date + '</td><td class="row-data" style="display:none;">' + GI + '</td><td class="row-data" style="display:none;">' + process + '</td><td class="row-data" style="display:none;">' + project + '</td><td class="row-data" style="display:none;">' + emp + '</td><td class="row-data" style="display:none;">' + note + '</td><td class="row-data" style="display:none;">' + data[0].P_code + '</td></tr>';
+                    var newrow = '<tr id="' + l_row + '"><td class="row-data">' + d1 + '</td><td class="row-data">' + data[0].Description + '</td><td class="row-data">' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td class="row-data" style="display:none;">' + v_no + '</td><td class="row-data" style="display:none;">' + v_date + '</td><td class="row-data" style="display:none;">' + index_type + '</td><td class="row-data" style="display:none;">' + ref_no + '</td><td class="row-data" style="display:none;">' + ref_date + '</td><td class="row-data" style="display:none;">' + GI + '</td><td class="row-data" style="display:none;">' + process + '</td><td class="row-data" style="display:none;">' + project + '</td><td class="row-data" style="display:none;">' + emp + '</td><td class="row-data" style="display:none;">' + note + '</td><td class="row-data" style="display:none;">' + data[0].P_code + '</td></tr>';
                     $('#selected_units tr:last').after(newrow);
             },
             failure: function (errMsg) {
@@ -437,5 +445,26 @@
     function freeze() {
         $('#Index_Type').prop('disabled', true);
         $('#Voucher_No').prop('disabled', true);
+    }
+
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("myBtn");
+    var span = document.getElementsByClassName("close")[0];
+    var select = document.getElementById("select_partno");
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+    select.onclick = function () {
+        var DD = document.getElementById("PM_DD").value;
+        document.getElementById("Part_No").value = DD;
+        modal.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
     }
 </script>

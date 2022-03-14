@@ -64,7 +64,6 @@ namespace Admin.Models
             }
             Con.Close();
             return ItemQm;
-
         }
         public int Add_Data(List<PurchaseTable> data, int Qty, double total, double final_total, double final_discount, double final_tax1, double final_tax2)
         {
@@ -365,7 +364,7 @@ namespace Admin.Models
             }
             return ItemQm;
         }
-        public int json_test_add(List<GoodsRI> data)
+        public int Goods_Add_json(List<GoodsRI> data)
         {
             SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con1.Open();
@@ -402,16 +401,16 @@ namespace Admin.Models
                 SqlDataReader dr2 = SqlCmd3.ExecuteReader();
                 while (dr2.Read())
                 {
-                    data[i].Part_No = dr2["P_code"].ToString();
+                    data[i].P_code = dr2["P_code"].ToString();
                 }
-                data[i].v_no = GR_V_No;
+                data[i].Voucher_No = GR_V_No;
                 dr2.Close();
             }
             var json = JsonConvert.SerializeObject(data);
-            SqlCommand sql_cmnd = new SqlCommand("[dbo].[json_test]", Con1);
+            string js = "{"+'"'+"myrows" +'"'+ ":" + json + "}";
+            SqlCommand sql_cmnd = new SqlCommand("[dbo].[Goods_Add_json]", Con1);
             sql_cmnd.CommandType = CommandType.StoredProcedure;
-            sql_cmnd.Parameters.AddWithValue("@json", json);
-            sql_cmnd.Parameters.AddWithValue("@vtype", vtype);
+            sql_cmnd.Parameters.AddWithValue("@json", js);
             sql_cmnd.ExecuteReader();
             Con1.Close();
             return GR_V_No;
@@ -553,7 +552,7 @@ namespace Admin.Models
                 return ItemQm;
             }
         }
-        public void Update_Close_Bal(string Part_No, int vtype)
+        public void Update_Close_Bal(string Part_No, int vtype, int vno)
         {
             SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con1.Open();
@@ -571,28 +570,67 @@ namespace Admin.Models
             }
             dr.Close ();
             string pcode = string.Join("", ItemQm.Select(m => m.P_code));
+
+            string cmd3 = "Select Purchase_Qty from I_Ledger where Voucher_Type = '"+vtype+"' and P_code = '" + pcode + "' and Goods_Voucher_No = '"+vno+"'";
+            SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con1);
+            SqlDataReader dr1 = SqlCmd3.ExecuteReader();
+            int qty = 0;
+            while (dr1.Read())
+            {
+                string i = dr1["Purchase_Qty"].ToString();
+                qty = int.Parse(i);
+            }
+            dr1.Close();
+
             if (vtype == 1)
             {
-                string cmd1 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance - P_Open_Balance where P_code = '" + pcode + "'";
+                string cmd1 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance - '"+qty+"' where P_code = '" + pcode + "'";
+                string cmd4 = "delete from I_Ledger where Voucher_Type = '" + vtype + "' and P_code = '" + pcode + "' and Goods_Voucher_No = '" + vno + "'";
                 SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con1);
                 SqlCmd1.ExecuteNonQuery();
+                SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con1);
+                SqlCmd4.ExecuteNonQuery();
             }
             else
             {
-                string cmd1 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance + P_Open_Balance where P_code = '" + pcode + "'";
+                string cmd1 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance + '" + qty + "' where P_code = '" + pcode + "'";
+                string cmd4 = "delete from I_Ledger where Voucher_Type = '" + vtype + "' and P_code = '" + pcode + "' and Goods_Voucher_No = '" + vno + "'";
                 SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con1);
                 SqlCmd1.ExecuteNonQuery();
+                SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con1);
+                SqlCmd4.ExecuteNonQuery();
             }
         }
         public void Update_GoodsRI_json(string data)
         {
             SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con1.Open();
-            SqlCommand sql_cmnd = new SqlCommand("[dbo].[json_test]", Con1);
+            SqlCommand sql_cmnd = new SqlCommand("[dbo].[Goods_ED_json]", Con1);
             sql_cmnd.CommandType = CommandType.StoredProcedure;
             sql_cmnd.Parameters.AddWithValue("@json", data);
             sql_cmnd.ExecuteReader();
             Con1.Close();
+        }
+        public List<GoodsRI> PM_list(string data)
+        {
+            List<GoodsRI> ItemQm = new List<GoodsRI>();
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "SELECT * FROM Product_Master WHERE P_Part_No LIKE '%"+data+"%'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlDataReader dr = SqlCmd1.ExecuteReader();
+            while (dr.Read())
+            {
+                ItemQm.Add(new GoodsRI
+                {
+                    Part_No = dr["P_Part_No"].ToString(),
+                    Description = dr["P_Description"].ToString(),
+                    P_code = dr["P_code"].ToString()
+                }
+                );
+            }
+            Con.Close();
+            return ItemQm;
         }
     }
 }

@@ -190,6 +190,14 @@ namespace Admin.Controllers
             ViewBag.ILedger = 1;
             ViewBag.ALedger = 2;
             ViewBag.Ref_No = ref_no;
+            NewPurchase_Insert newPurchase_Insert1 = new NewPurchase_Insert();
+            var PM_Data1 = newPurchase_Insert1.Product_Master();
+            List<SelectListItem> model = new List<SelectListItem>();
+            for (int i = 0; i < PM_Data1.Count; i++)
+            {
+                model.Add(new SelectListItem { Text = PM_Data1[i].P_Part_No + " | " + PM_Data1[i].P_Description, Value = PM_Data1[i].P_Part_No });
+            }
+            ViewBag.Dropdown_partno = new SelectList(model, "Value", "Text");
             return View(newPurchase_Insert);
         } 
         [HttpPost]
@@ -241,6 +249,14 @@ namespace Admin.Controllers
             Index.Add(new SelectListItem { Text = "Goods-Receipt", Value = "1" });
             Index.Add(new SelectListItem { Text = "Goods-Issue", Value = "2" });
             ViewBag.Index = new SelectList(Index, "Value", "Text");
+            NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
+            var PM_Data = newPurchase_Insert.Product_Master();
+            List<SelectListItem> model = new List<SelectListItem>();
+            for (int i = 0; i < PM_Data.Count; i++)
+            {
+                model.Add(new SelectListItem { Text = PM_Data[i].P_Part_No + " | " + PM_Data[i].P_Description, Value = PM_Data[i].P_Part_No });
+            }
+            ViewBag.Dropdown_partno = new SelectList(model, "Value", "Text");
             _con.Close();
             return View(Model);
         }
@@ -265,13 +281,16 @@ namespace Admin.Controllers
                 }
                 dr2.Close();
             }
-            _con.Close();
+            _con.Close();*/
             Goods_RI dblogin = new Goods_RI();
-            int Descp = dblogin.Goods_add(data);
-            var json = JsonConvert.SerializeObject(data);*/
+            int Vno = dblogin.Goods_Add_json(data);
+            /*var json = JsonConvert.SerializeObject(data);
+            var resolveRequest = HttpContext.Request;
+            resolveRequest.InputStream.Seek(0, SeekOrigin.Begin);
+            string jsonString = new StreamReader(resolveRequest.InputStream).ReadToEnd();
             Goods_RI goods_RI = new Goods_RI();
-            int vno = goods_RI.json_test_add(data);
-            return Json(vno);
+            goods_RI.Goods_Add_json(jsonString);*/
+            return Json(Vno);
         }
         public ActionResult P_to_DQ(GoodsRI name) // conversion of part_no to description, qty
         {
@@ -337,6 +356,14 @@ namespace Admin.Controllers
                 goodsRI.Note = note.ToString();
             }
             ViewBag.Goods = dataSet.Tables[0];
+            NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
+            var PM_Data = newPurchase_Insert.Product_Master();
+            List<SelectListItem> model = new List<SelectListItem>();
+            for (int i = 0; i < PM_Data.Count; i++)
+            {
+                model.Add(new SelectListItem { Text = PM_Data[i].P_Part_No + " | " + PM_Data[i].P_Description, Value = PM_Data[i].P_Part_No });
+            }
+            ViewBag.Dropdown_partno = new SelectList(model, "Value", "Text");
             return View(goodsRI);
         }
         [HttpPost]
@@ -354,9 +381,15 @@ namespace Admin.Controllers
         public ActionResult Goods_ED(GoodsRI name) // For Delete
         {
             Goods_RI dblogin = new Goods_RI();
-            dblogin.Update_Close_Bal(name.Part_No, name.Index_Type);
+            dblogin.Update_Close_Bal(name.Part_No, name.Index_Type, name.Voucher_No);
             return Json(name, JsonRequestBehavior.AllowGet);
         }
         
+        public ActionResult PM_List(GoodsRI name)
+        {
+            Goods_RI dblogin = new Goods_RI();
+            var Descp = dblogin.PM_list(name.alphabet);
+            return Json(Descp);
+        }
     }
 }
