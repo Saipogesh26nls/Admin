@@ -16,34 +16,31 @@
             border: 2px solid black;
             width: auto;
         }
-
             table.scroll tbody,
             table.scroll thead {
                 display: block;
             }
-
         thead tr th {
             height: 20px;
             line-height: 20px;
         }
-
         table.scroll tbody {
             height: 200px;
             overflow-y: auto;
             overflow-x: auto;
         }
-
         tbody {
             border-top: 2px solid black;
         }
-
             tbody td, thead th {
                 border-right: 1px solid black;
             }
-
                 tbody td:last-child, thead th:last-child {
                     border-right: none;
                 }
+        #list:hover {
+            background-color: aliceblue;
+        }
     </style>
 </head>
 <body onload="freeze();">
@@ -55,7 +52,7 @@
                     <div class="card-header">
                         <p class="text-sm">Index Type : &nbsp &nbsp @Html.DropDownListFor(model => model.Index_Type, ViewBag.Index as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })</p>
                         <p class="text-sm">
-                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:13%;margin-left:1%;", @readonly = "readonly" } })  Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:14%;margin-left:1%;", @readonly = "readonly" })
+                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:13%;margin-left:1%;", @readonly = "readonly" } })  Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:14%;margin-left:1%;"})
                             Reference No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:13%;" } })    Reference Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:14%;margin-left:1%;" })
                         </p>
                         <p class="text-sm">
@@ -77,7 +74,23 @@
                                 <!-- Modal content -->
                                 <div class="modal-content">
                                     <i class="close">&times;</i>
-                                    <p class="text-sm" style="margin-top:10px;">Choose Part No : @Html.DropDownListFor(model => model.PM_DD, ViewBag.Dropdown_partno as SelectList, new { htmlAttributes = new { id = "PartNo_DD", style = "width:25%;margin-right:1%;" } }) <button id="select_partno" class="btn btn-sm btn-secondary" style="margin-top:25px;margin-left:8%;">Select</button></p>
+                                    <p class="text-sm" style="margin-top:10px;">Choose Part No : @Html.EditorFor(model => model.alphabet, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })</p>
+                                    <table class="table text-sm" id="pm_list">
+                                        <tbody>
+                                            <tr>
+                                                <th>
+                                                    Product Code
+                                                </th>
+                                                <th>
+                                                    Part No
+                                                </th>
+                                                <th>
+                                                    Description
+                                                </th>
+                                                <th></th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             <table id="selected_units" class="text-sm font-weight-normal scroll" style="margin-top:10px;">
@@ -173,7 +186,12 @@
                         document.getElementById("value").innerHTML = qty_err;
                         return;
                     }
-                    
+                    else if(ref_date == "")
+                    {
+                        var qty_err = '<p style="color:red;">Enter Reference Date !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
                     else if (d2 == "") {
                         var qty_err = '<p style="color:red;">Enter Quantity !!!<p/>';
                         document.getElementById("value").innerHTML = qty_err;
@@ -264,8 +282,8 @@
 
             var myRows = [];
             var headersText = [];
-            var $headers = $("th");
-            var $rows = $("tbody tr").each(function (index) {
+            var $headers = $("#selected_units th");
+            var $rows = $("#selected_units tbody tr").each(function (index) {
                 $cells = $(this).find("td");
                 myRows[index] = {};
 
@@ -445,26 +463,60 @@
     function freeze() {
         $('#Index_Type').prop('disabled', true);
         $('#Voucher_No').prop('disabled', true);
+        @*var date = @ViewBag.date;
+        document.getElementById("Ref_Date").value = date;*@
     }
 
     var modal = document.getElementById("myModal");
     var btn = document.getElementById("myBtn");
     var span = document.getElementsByClassName("close")[0];
-    var select = document.getElementById("select_partno");
+
     btn.onclick = function () {
         modal.style.display = "block";
     }
     span.onclick = function () {
         modal.style.display = "none";
     }
-    select.onclick = function () {
-        var DD = document.getElementById("PM_DD").value;
-        document.getElementById("Part_No").value = DD;
-        modal.style.display = "none";
-    }
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
+        }
+    }
+
+    btn.addEventListener("click", list);
+    span.removeEventListener("click", list);
+    window.removeEventListener("click", list);
+
+    function list() {
+        document.addEventListener("keyup", function (event) {
+            var letter = document.querySelector("#alphabet").value;
+            var model = new Object();
+            model.alphabet = letter;
+            $.ajax({
+                url: '/NewPurchase/PM_List',
+                data: JSON.stringify({ name: model }),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+                    $("#pm_list").find("tr:not(:first)").remove();
+                    for (var i = 0; i <= result.length - 1; i++) {
+                        var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td></tr>';
+                        $('#pm_list tr:last').after(newrow);
+                    }
+                }
+            });
+        })
+    }
+
+    function List_to_View() {
+        var table = document.getElementById('pm_list');
+        for (var i = 0; i < table.rows.length; i++) {
+            table.rows[i].addEventListener('click', function () {
+                var partno = this.cells[1].innerHTML;
+                document.getElementById("Part_No").value = partno;
+                modal.style.display = "none";
+            });
         }
     }
 </script>

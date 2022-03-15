@@ -44,6 +44,7 @@
                 tbody td:last-child, thead th:last-child {
                     border-right: none;
                 }
+        #list:hover{background-color:aliceblue;}
     </style>
 </head>
 <body onload="vno()">
@@ -77,8 +78,8 @@
                                 <!-- Modal content -->
                                 <div class="modal-content">
                                     <i class="close">&times;</i>
-                                    <p class="text-sm" style="margin-top:10px;">Choose Part No : @Html.EditorFor(model => model.alphabet, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) <button id="select_partno" class="btn btn-sm btn-secondary" style="margin-top:25px;margin-left:8%;">Select</button></p>
-                                    <table class="table" id="pm_list">
+                                    <p class="text-sm" style="margin-top:10px;">Choose Part No : @Html.EditorFor(model => model.alphabet, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })</p>
+                                    <table class="table text-sm" id="pm_list">
                                         <tbody>
                                             <tr>
                                                 <th>
@@ -103,10 +104,10 @@
                                         <th style="padding-right:100px">Description</th>
                                         <th style="padding-right:100px">Quantity</th>
                                         <th style="display:none;">Voucher_No</th>
-                                        <th style="display: none;">Voucher_Date</th>
+                                        <th style="display: none;">V_Date</th>
                                         <th style="display:none;">Index_type</th>
                                         <th style="display: none;">Ref_No</th>
-                                        <th style="display: none;">Ref_Date</th>
+                                        <th style="display: none;">R_Date</th>
                                         <th style="display: none;">GI_tag</th>
                                         <th style="display: none;">Process_Tag</th>
                                         <th style="display: none;">Project</th>
@@ -217,8 +218,8 @@
             document.getElementById("Enter_Inv_No").innerHTML = Null;
             var myRows = [];
             var headersText = [];
-            var $headers = $("th");
-            var $rows = $("tbody #data").each(function (index) {
+            var $headers = $(" #selected_units th");
+            var $rows = $("#selected_units tbody #data").each(function (index) {
                 $cells = $(this).find("td");
                 myRows[index] = {};
 
@@ -292,17 +293,11 @@
     var modal = document.getElementById("myModal");
     var btn = document.getElementById("myBtn");
     var span = document.getElementsByClassName("close")[0];
-    var select = document.getElementById("select_partno");
 
     btn.onclick = function () {
         modal.style.display = "block";
     }
     span.onclick = function () {
-        modal.style.display = "none";
-    }
-    select.onclick = function () {
-        var DD = document.getElementById("alphabet").value;
-        document.getElementById("Part_No").value = DD;
         modal.style.display = "none";
     }
     window.onclick = function (event) {
@@ -313,7 +308,6 @@
 
     btn.addEventListener("click", list);
     span.removeEventListener("click", list);
-    select.removeEventListener("click", list);
     window.removeEventListener("click", list);
 
     function list() {
@@ -330,12 +324,23 @@
                 success: function (result) {
                     $("#pm_list").find("tr:not(:first)").remove();
                     for (var i = 0; i <= result.length - 1; i++) {
-                        var newrow = '<tr id="list"><td>' + result[i].P_code + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td></tr>';
+                        var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td></tr>';
                         $('#pm_list tr:last').after(newrow);
                     }
                 }
             });
         })
     }
-        
+
+    function List_to_View() {
+        var table = document.getElementById('pm_list');
+        for (var i = 0; i < table.rows.length; i++) {
+            table.rows[i].addEventListener('click', function () {
+                var partno = this.cells[1].innerHTML;
+                document.getElementById("Part_No").value = partno;
+                modal.style.display = "none";
+            });
+        }
+    }
+
 </script>

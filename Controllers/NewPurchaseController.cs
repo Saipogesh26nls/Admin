@@ -11,6 +11,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Web.Script.Serialization;
+using System.Globalization;
 
 namespace Admin.Controllers
 {
@@ -34,14 +35,6 @@ namespace Admin.Controllers
             _da1.Fill(_dt1);
             ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
             _con.Close();
-            NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
-            var PM_Data = newPurchase_Insert.Product_Master();
-            List<SelectListItem> model = new List<SelectListItem>();
-            for (int i=0;i<PM_Data.Count;i++)
-            {
-                model.Add(new SelectListItem { Text = PM_Data[i].P_Part_No + " | " + PM_Data[i].P_Description, Value = PM_Data[i].P_Part_No });
-            }
-            ViewBag.Dropdown_partno = new SelectList(model,"Value","Text");
             return View(new_Purchase);
         }
         [NonAction]
@@ -121,8 +114,10 @@ namespace Admin.Controllers
             ViewBag.PL = PM_Data;
             return View(PM_Data);
         }
+
+        //Edit Purchase
         static int V_no = 0;
-        public ActionResult Edit_Purchase_View(int v_no, DateTime v_date, int inv_no, DateTime inv_date, string a_code) // edit purchase view
+        public ActionResult Edit_Purchase_View(int v_no, DateTime v_date, string inv_no, DateTime inv_date, string a_code) // edit purchase view
         {
             New_Purchase newPurchase_Insert = new New_Purchase();
             PurchaseTable mfr = new PurchaseTable();
@@ -182,7 +177,7 @@ namespace Admin.Controllers
             dr2.Close();
             newPurchase_Insert.Voucher_No = v_no.ToString();
             newPurchase_Insert.Voucher_Date = v_date;
-            newPurchase_Insert.Invoice_No = inv_no.ToString();
+            newPurchase_Insert.Invoice_No = inv_no;
             newPurchase_Insert.Invoice_Date = inv_date;
             
             ViewBag.PL = PM_Data.Tables[0];
@@ -190,14 +185,6 @@ namespace Admin.Controllers
             ViewBag.ILedger = 1;
             ViewBag.ALedger = 2;
             ViewBag.Ref_No = ref_no;
-            NewPurchase_Insert newPurchase_Insert1 = new NewPurchase_Insert();
-            var PM_Data1 = newPurchase_Insert1.Product_Master();
-            List<SelectListItem> model = new List<SelectListItem>();
-            for (int i = 0; i < PM_Data1.Count; i++)
-            {
-                model.Add(new SelectListItem { Text = PM_Data1[i].P_Part_No + " | " + PM_Data1[i].P_Description, Value = PM_Data1[i].P_Part_No });
-            }
-            ViewBag.Dropdown_partno = new SelectList(model, "Value", "Text");
             return View(newPurchase_Insert);
         } 
         [HttpPost]
@@ -222,6 +209,102 @@ namespace Admin.Controllers
             purchase.Edit_and_Delete(Purchase, Final_Quantity, Final_SubTotal, Final_Discount, Final_Tax1, Final_Tax2, Final_Total);
             return Json(Purchase);
         }
+
+        //Delete Purchase
+        public ActionResult Delete_Purchase_view(int v_no, DateTime v_date, string inv_no, DateTime inv_date, string a_code)
+        {
+            New_Purchase newPurchase_Insert = new New_Purchase();
+            PurchaseTable mfr = new PurchaseTable();
+            DataSet PM_Data = newPurchase_Insert.EditPurchase(v_no);
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<0", Con);
+            DataTable _dt1 = new DataTable();
+            _da1.Fill(_dt1);
+            ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
+            ViewBag.Mfr = a_code;
+            string cmd2 = "select Final_Discount, Final_Tax1, Final_Tax2, Amount from A_Ledger where Voucher_No = '" + v_no + "'";
+            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+            SqlDataReader dr1 = SqlCmd2.ExecuteReader();
+            while (dr1.Read())
+            {
+                string a1 = dr1["Amount"].ToString();
+                string a2 = dr1["Final_Discount"].ToString();
+                string a3 = dr1["Final_Tax1"].ToString();
+                string a4 = dr1["Final_Tax2"].ToString();
+                ViewBag.Final_Total = double.Parse(a1);
+                ViewBag.Final_Discount = double.Parse(a2);
+                ViewBag.Final_Tax1 = double.Parse(a3);
+                ViewBag.Final_Tax2 = double.Parse(a4);
+            }
+            dr1.Close();
+            PM_Data.Tables[0].Columns.Add("P_Part_No");
+            PM_Data.Tables[0].Columns.Add("P_Description");
+            PM_Data.Tables[0].Columns.Add("Discount(%)");
+            PM_Data.Tables[0].Columns.Add("Tax1(%)");
+            PM_Data.Tables[0].Columns.Add("Tax2(%)");
+            PM_Data.Tables[0].Columns.Add("Ref_No");
+            /*List<string> table_data = new List<string>();*/
+            for (int i = 0; i < PM_Data.Tables[0].Rows.Count; i++)
+            {
+                string Text = PM_Data.Tables[0].Rows[i]["P_code"].ToString();
+                NewPurchase_Insert dblogin = new NewPurchase_Insert();
+                var Descp = dblogin.Pcode_to_PartNo(Text);
+                /*string cmd3 = "select Ref_No from I_Ledger where Voucher_No = '" + v_no + "'";
+                SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
+                SqlDataReader dr2 = SqlCmd3.ExecuteReader();
+                dr2.Read();
+                int Ref_No = dr2.GetInt32(0);*/
+                /*table_data.Add(Descp[0].P_Part_No);
+                table_data.Add(Descp[0].P_Description);*/
+                PM_Data.Tables[0].Rows[i]["P_Part_No"] = Descp[0].P_Part_No;
+                PM_Data.Tables[0].Rows[i]["P_Description"] = Descp[0].P_Description;
+            }
+            string cmd3 = "select top 1 Ref_No from I_Ledger where Voucher_NO = '" + v_no + "'";
+            SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
+            SqlDataReader dr2 = SqlCmd3.ExecuteReader();
+            string ref_no = "";
+            while (dr2.Read())
+            {
+                ref_no = dr2["Ref_No"].ToString();
+            }
+            dr2.Close();
+            newPurchase_Insert.Voucher_No = v_no.ToString();
+            newPurchase_Insert.Voucher_Date = v_date;
+            newPurchase_Insert.Invoice_No = inv_no;
+            newPurchase_Insert.Invoice_Date = inv_date;
+
+            ViewBag.PL = PM_Data.Tables[0];
+            V_no = v_no;
+            ViewBag.ILedger = 1;
+            ViewBag.ALedger = 2;
+            ViewBag.Ref_No = ref_no;
+            return View(newPurchase_Insert);
+        }
+        public ActionResult Add_Deleted_Purchase(List<PurchaseTable> Purchase)
+        {
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "delete from Purchase where Voucher_No ='" + Purchase[0].Voucher_No + "'";
+            string cmd2 = "delete from I_Ledger where Voucher_No ='" + Purchase[0].Voucher_No + "'";
+            string cmd3 = "delete from A_Ledger where Voucher_No ='" + Purchase[0].Voucher_No + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+            SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
+            SqlCmd1.ExecuteNonQuery();
+            SqlCmd2.ExecuteNonQuery();
+            SqlCmd3.ExecuteNonQuery();
+            for(int i = 0;i<= Purchase.Count - 1; i++)
+            {
+                string cmd4 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance - '"+Purchase[i].Quantity+"' where P_code ='" + Purchase[i].Pcode + "'";
+                SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con);
+                SqlCmd4.ExecuteNonQuery();
+            }
+            Con.Close();
+            return Json(Purchase);
+        }
+
+        //Goods Receipt/Issue
         public ActionResult Goods_Receipt_Issue() // Goods Issue View
         {
             GoodsRI Model = new GoodsRI();
@@ -249,14 +332,6 @@ namespace Admin.Controllers
             Index.Add(new SelectListItem { Text = "Goods-Receipt", Value = "1" });
             Index.Add(new SelectListItem { Text = "Goods-Issue", Value = "2" });
             ViewBag.Index = new SelectList(Index, "Value", "Text");
-            NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
-            var PM_Data = newPurchase_Insert.Product_Master();
-            List<SelectListItem> model = new List<SelectListItem>();
-            for (int i = 0; i < PM_Data.Count; i++)
-            {
-                model.Add(new SelectListItem { Text = PM_Data[i].P_Part_No + " | " + PM_Data[i].P_Description, Value = PM_Data[i].P_Part_No });
-            }
-            ViewBag.Dropdown_partno = new SelectList(model, "Value", "Text");
             _con.Close();
             return View(Model);
         }
@@ -305,8 +380,19 @@ namespace Admin.Controllers
             ViewBag.PL = PM_Data;
             return View(PM_Data);
         }
-        public ActionResult Goods_RI_Edit(int v_type, int gv_no, DateTime gv_date, string ref_no, DateTime ref_date, int GI, int process, int project, int employee, string note) // Goods RI Edit View
+
+        //Edit Goods Receipt/Issue 
+        public ActionResult Goods_RI_Edit(string v_type, int gv_no, DateTime gv_date, string ref_no, DateTime ref_date, int GI, int process, int project, int employee, string note) // Goods RI Edit View
         {
+            int vtype = 0;
+            if(v_type == "Goods Receipt")
+            {
+                vtype = 1;
+            }
+            else
+            {
+                vtype = 2;
+            }
             SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             _con.Open();
             SqlDataAdapter _da = new SqlDataAdapter("Select * From Project_Master", _con);
@@ -331,7 +417,7 @@ namespace Admin.Controllers
             ViewBag.Index = new SelectList(Index, "Value", "Text");
             _con.Close();
             GoodsRI goodsRI = new GoodsRI();
-            DataSet dataSet = goodsRI.EditGoods(v_type, gv_no);
+            DataSet dataSet = goodsRI.EditGoods(vtype, gv_no);
             dataSet.Tables[0].Columns.Add("P_Part_No");
             dataSet.Tables[0].Columns.Add("P_Description");
             for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
@@ -342,11 +428,11 @@ namespace Admin.Controllers
                 dataSet.Tables[0].Rows[i]["P_Part_No"] = Descp[0].P_Part_No;
                 dataSet.Tables[0].Rows[i]["P_Description"] = Descp[0].P_Description;
             }
-            goodsRI.Index_Type = v_type;
+            goodsRI.Index_Type = vtype;
             goodsRI.Voucher_No = gv_no;
             goodsRI.Voucher_Date = gv_date;
             goodsRI.Ref_No = ref_no.ToString();
-            goodsRI.Ref_Date = ref_date;
+            /*goodsRI.Ref_Date = ref_date;*/
             goodsRI.GI_Tag = GI.ToString();
             goodsRI.Process_Tag = process.ToString();
             goodsRI.Project = project.ToString();
@@ -356,14 +442,8 @@ namespace Admin.Controllers
                 goodsRI.Note = note.ToString();
             }
             ViewBag.Goods = dataSet.Tables[0];
-            NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
-            var PM_Data = newPurchase_Insert.Product_Master();
-            List<SelectListItem> model = new List<SelectListItem>();
-            for (int i = 0; i < PM_Data.Count; i++)
-            {
-                model.Add(new SelectListItem { Text = PM_Data[i].P_Part_No + " | " + PM_Data[i].P_Description, Value = PM_Data[i].P_Part_No });
-            }
-            ViewBag.Dropdown_partno = new SelectList(model, "Value", "Text");
+            string date = ref_date.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
+            ViewBag.date = date;
             return View(goodsRI);
         }
         [HttpPost]
@@ -384,12 +464,14 @@ namespace Admin.Controllers
             dblogin.Update_Close_Bal(name.Part_No, name.Index_Type, name.Voucher_No);
             return Json(name, JsonRequestBehavior.AllowGet);
         }
-        
         public ActionResult PM_List(GoodsRI name)
         {
             Goods_RI dblogin = new Goods_RI();
             var Descp = dblogin.PM_list(name.alphabet);
             return Json(Descp);
         }
+
+        //Delete Goods Receipt/Issue
+
     }
 }

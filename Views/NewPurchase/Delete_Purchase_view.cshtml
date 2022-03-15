@@ -16,12 +16,12 @@
             /* border-collapse: collapse; */
             border-spacing: 0;
             border: 2px solid black;
-            width:auto;
+            width: auto;
         }
 
             table.scroll tbody,
             table.scroll thead {
-                display:block;
+                display: block;
             }
 
         thead tr th {
@@ -49,12 +49,13 @@
                 tbody td:last-child, thead th:last-child {
                     border-right: none;
                 }
+
         #list:hover {
             background-color: aliceblue;
         }
     </style>
 </head>
-<body onload="total_cal();">
+<body onload="total_cal(); hover();">
     <div class="container-fluid">
         <br />
         <div id="ui-view" data-select2-id="ui-view">
@@ -62,7 +63,7 @@
                 <div class="card">
                     <div class="card-header">
                         <p class="text-sm">
-                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:0.25%;"})
+                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:0.25%;" })
                             Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:15%;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:1%;" })
                         </p>
                         <p class="text-sm"> &nbsp &nbsp Supplier : &nbsp &nbsp @Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p></p>
@@ -90,25 +91,11 @@
 
                                 <!-- Modal content -->
                                 <div class="modal-content">
-                                    <i class="close">&times;</i>
-                                    <p class="text-sm" style="margin-top:10px;">Choose Part No : @Html.EditorFor(model => model.alphabet, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })</p>
-                                    <table class="table text-sm" id="pm_list">
-                                        <tbody>
-                                            <tr>
-                                                <th>
-                                                    Product Code
-                                                </th>
-                                                <th>
-                                                    Part No
-                                                </th>
-                                                <th>
-                                                    Description
-                                                </th>
-                                                <th></th>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    <a href="@Url.Action("PurchaseList", "NewPurchase")"><i class="close float-left">&times;</i></a>
+                                        <p class="text-sm" style="text-align:center;"> Are you sure, you want to delete ?</p>
+                                        <p class="text-sm" style="text-align:center;"><button class="btn btn-sm btn-secondary" style="width:5%;" id="yes">Yes</button><a href="@Url.Action("PurchaseList", "NewPurchase")"> <button class="btn btn-sm btn-secondary" style="width:5%;">No</button> </a> </p>
+                                        <p id="delete" style="text-align:center;"></p>
+</div>
                             </div>
                             <table id="selected_units" class="text-sm font-weight-normal scroll" style="margin-top:10px;">
                                 <thead>
@@ -226,8 +213,8 @@
                             <div style="margin-right:5px;" class="text-sm">
                                 @Html.LabelFor(model => model.Quantity, new { htmlAttributes = new { id = "Qty_Label" } }) : <h6 id="Qty_display"></h6>
                                 @*Discount(%) : @Html.EditorFor(model => model.Final_Discount_per, new { htmlAttributes = new { } })
-            Tax1(%) : @Html.EditorFor(model => model.Final_Tax1_per, new { htmlAttributes = new { } })
-            Tax2(%) : @Html.EditorFor(model => model.Final_Tax2_per, new { htmlAttributes = new { } })*@
+                                    Tax1(%) : @Html.EditorFor(model => model.Final_Tax1_per, new { htmlAttributes = new { } })
+                                    Tax2(%) : @Html.EditorFor(model => model.Final_Tax2_per, new { htmlAttributes = new { } })*@
                             </div>
                             <button class="btn btn-sm btn-secondary" id="Submit" style="width:10%;margin-left:2%;margin-top:10%;">Submit</button>
                             <div class="float-right text-sm">
@@ -419,7 +406,7 @@
         document.getElementById("Final_Total").innerHTML = Total.toFixed(2);
     }
 
-    $('#Submit').click(function (e) {
+    $('#yes').click(function (e) {
 
         var Inv_No = $('#Invoice_No').val();
         if (Inv_No == "") {
@@ -478,18 +465,17 @@
                 "myrows": myRows
             };
             $.ajax({
-                url: '/NewPurchase/Edited_Table_Data',
+                url: '/NewPurchase/Add_Deleted_Purchase',
                 data: JSON.stringify(myRows, undefined, 2),
                 type: 'POST',
                 contentType: 'application/json;',
                 dataType: 'json',
                 success: function (result) {
-                    //  alert(result.ItemList[0].Str);
+                    var del = '<p style="color: red;">Voucher No : ' + result[0].Voucher_No + ' is Removed Successfully !!!</p>';
+                    document.getElementById("delete").innerHTML = del;
                 }
             });
             @*document.getElementById("json_op").innerHTML = JSON.stringify(myRows, undefined, 2);*@
-            var str = "Submitted Successfully !!!";
-            document.getElementById("Enter_Inv_No").innerHTML = str;
         }
     });
 
@@ -895,57 +881,8 @@
     }
 
     var modal = document.getElementById("myModal");
-    var btn = document.getElementById("myBtn");
-    var span = document.getElementsByClassName("close")[0];
-    var select = document.getElementById("select_partno");
 
-    btn.onclick = function () {
+    function hover() {
         modal.style.display = "block";
-    }
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-
-    btn.addEventListener("click", list);
-    span.removeEventListener("click", list);
-    select.removeEventListener("click", list);
-    window.removeEventListener("click", list);
-
-    function list() {
-        document.addEventListener("keyup", function (event) {
-            var letter = document.querySelector("#alphabet").value;
-            var model = new Object();
-            model.alphabet = letter;
-            $.ajax({
-                url: '/NewPurchase/PM_List',
-                data: JSON.stringify({ name: model }),
-                type: 'POST',
-                contentType: 'application/json;',
-                dataType: 'json',
-                success: function (result) {
-                    $("#pm_list").find("tr:not(:first)").remove();
-                    for (var i = 0; i <= result.length - 1; i++) {
-                        var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td></tr>';
-                        $('#pm_list tr:last').after(newrow);
-                    }
-                }
-            });
-        })
-    }
-
-    function List_to_View() {
-        var table = document.getElementById('pm_list');
-        for (var i = 0; i < table.rows.length; i++) {
-            table.rows[i].addEventListener('click', function () {
-                var partno = this.cells[1].innerHTML;
-                document.getElementById("Part_No").value = partno;
-                modal.style.display = "none";
-            });
-        }
     }
 </script>

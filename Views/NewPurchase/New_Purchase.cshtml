@@ -44,6 +44,9 @@
                 tbody td:last-child, thead th:last-child {
                     border-right: none;
                 }
+        #list:hover {
+            background-color: aliceblue;
+        }
     </style>
 </head>
 <body>
@@ -83,26 +86,49 @@
                                 <!-- Modal content -->
                                 <div class="modal-content">
                                     <i class="close">&times;</i>
-                                    <p class="text-sm" style="margin-top:10px;">Choose Part No : @Html.DropDownListFor(model => model.P_Description_DD, ViewBag.Dropdown_partno as SelectList, new { htmlAttributes = new { id = "PartNo_DD", style = "width:25%;margin-right:1%;" } }) <button id="select_partno" class="btn btn-sm btn-secondary" style="margin-top:25px;margin-left:8%;">Select</button></p>
+                                    <p class="text-sm" style="margin-top:10px;">Choose Part No : @Html.EditorFor(model => model.alphabet, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })</p>
+                                    <table class="table text-sm" id="pm_list">
+                                        <tbody>
+                                            <tr>
+                                                <th>
+                                                    Product Code
+                                                </th>
+                                                <th>
+                                                    Part No
+                                                </th>
+                                                <th>
+                                                    Description
+                                                </th>
+                                                <th></th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             <table id="selected_units" class="text-sm font-weight-normal scroll" style="margin-top:10px;">
                                 <tbody>
                                     <tr>
                                         <th style="padding-right:50px">Part_No</th>
-                                        <th style="padding-right:50px">Quantity</th>
-                                        <th style="padding-right:50px">Price</th>
-                                        <th style="padding-right:50px">SubTotal</th>
-                                        <th style="padding-right:50px">Discount</th>
-                                        <th style="padding-right:50px">Tax1</th>
-                                        <th style="padding-right:50px">Tax2</th>
-                                        <th style="padding-right:50px">Total</th>
+                                        <th style="padding-right:50px">Description</th>
+                                        <th style="padding-right:10px">Quantity</th>
+                                        <th style="padding-right:10px">Price</th>
+                                        <th style="padding-right:10px">SubTotal</th>
+                                        <th style="padding-right:10px">Dis_per</th>
+                                        <th style="padding-right:10px">Dis_Rs</th>
+                                        <th style="padding-right:10px">Tax1_per</th>
+                                        <th style="padding-right:10px">Tax1_Rs</th>
+                                        <th style="padding-right:10px">Tax2_per</th>
+                                        <th style="padding-right:10px">Tax2_Rs</th>
+                                        <th style="padding-right:10px">Total</th>
                                         <th style="display:none;">Invoice_No</th>
                                         <th style="display: none;">Invoice_Date</th>
                                         <th style="display:none;">ILedger</th>
                                         <th style="display: none;">ALedger</th>
                                         <th style="display: none;">final_Qty</th>
                                         <th style="display: none;">final_Sub_Total</th>
+                                        <th style="display: none;">final_Discount</th>
+                                        <th style="display: none;">final_Tax1</th>
+                                        <th style="display: none;">final_Tax2</th>
                                         <th style="display: none;">final_total</th>
                                         <th style="display: none;">supplier</th>
                                     </tr>
@@ -174,25 +200,32 @@
         var subtotal = d2 * d3;
         if (d4 == "") {
             var discount = 0;
+            var discount_per = 0;
         }
         else {
             var discount = (subtotal * d4) / 100;
+            var discount_per = (discount / subtotal) * 100;
         }
         if (d5 == "") {
             var tax1 = 0;
+            var tax1_per = 0;
         }
         else {
             var tax1 = (subtotal * d5) / 100;
+            var tax1_per = (tax1 / subtotal) * 100;
         }
         if (d6 == "") {
             var tax2 = 0;
+            var tax2_per = 0;
         }
         else {
             var tax2 = (subtotal * d6) / 100;
+            var tax2_per = (tax2 / subtotal) * 100;
         }
 
         var Invoice_No = $('#Invoice_No').val();
         var Invoice_Date = $('#Invoice_Date').val();
+        var qty_field = $('#Quantity').val();
         if (d1 == "" || d2 == "" || d3 == "") {
             document.getElementById("Qty_display").innerHTML = 0;
             document.getElementById("total_display").innerHTML = 0;
@@ -206,32 +239,50 @@
         }
         var final_Qty = document.getElementById("Qty_display").innerHTML;
         var final_Total = document.getElementById("total_display").innerHTML;
-        if (d1 == "") {
-            var error = '<p style="color:red;">Enter Part No !!!<p/>';
-            document.getElementById("value").innerHTML = error;
-            return;
-        }
-        else if (d2 == "" || d2 == 0) {
-            var error = '<p style="color:red;">Enter Quantity !!!<p/>';
-            document.getElementById("value").innerHTML = error;
-            return;
-        }
-        else if (d3 == "" || d3 == 0) {
-            var error = '<p style="color:red;">Enter Price per unit !!!<p/>';
-            document.getElementById("value").innerHTML = error;
-            return;
-        }
-        else if (Invoice_No == "") {
-            var error = '<p style="color:red;">Enter Invoice No !!!<p/>';
-            document.getElementById("value").innerHTML = error;
-            return;
-        }
-        else {
-            document.getElementById("value").innerHTML = val;
-            var newrow = '<tr id="data"><td>' + d1 + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal + '</td><td>' + discount + '</td><td>' + tax1 + '</td><td>' + tax2 + '</td><td id="total' + i + '">' + Total + '</td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;">' + ILedger + '</td><td style="display:none;">' + ALedger + '</td><td style="display:none;">' + final_Qty + '</td><td style="display:none;">' + final_Total + '</td><td id="Final_Total_last" style="display:none;"></td><td style="display:none;">' + mfr + '</td></tr>';
-            $('#selected_units tr:last').after(newrow);
-            i++;
-        }
+        var final_discount = $("#Final_Discount").val();
+        var final_tax1 = $("#Final_Tax1").val();
+        var final_tax2 = $("#Final_Tax2").val();
+        var model = new Object();
+            model.Part_No = document.getElementById("Part_No").value;
+
+            jQuery.ajax({
+            type: "POST",
+            url: "@Url.Action("P_to_DQ")",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ name: model }),
+                success: function (data) {
+                    if (d1 == "") {
+                        var error = '<p style="color:red;">Enter Part No !!!<p/>';
+                        document.getElementById("value").innerHTML = error;
+                        return;
+                    }
+                    else if (qty_field == "" || qty_field == 0) {
+                        var error = '<p style="color:red;">Enter Quantity !!!<p/>';
+                        document.getElementById("value").innerHTML = error;
+                        return;
+                    }
+                    else if (d3 == "" || d3 == 0) {
+                        var error = '<p style="color:red;">Enter Price per unit !!!<p/>';
+                        document.getElementById("value").innerHTML = error;
+                        return;
+                    }
+                    else if (Invoice_No == "") {
+                        var error = '<p style="color:red;">Enter Invoice No !!!<p/>';
+                        document.getElementById("value").innerHTML = error;
+                        return;
+                    }
+                    else {
+                        document.getElementById("value").innerHTML = val;
+                        var newrow = '<tr id="data"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal.toFixed(2) + '</td><td>' + discount_per + '</td><td>' + discount + '</td><td>' + tax1_per + '</td><td>' + tax1 + '</td><td>' + tax2_per + '</td><td>' + tax2 + '</td><td id="total' + i + '">' + Total + '</td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;">' + ILedger + '</td><td style="display:none;">' + ALedger + '</td><td style="display:none;">' + final_Qty + '</td><td style="display:none;">' + final_Total + '</td><td style="display:none;">' + final_discount + '</td><td style="display:none;">' + final_tax1 + '</td><td style="display:none;">' + final_tax2 + '</td><td id="Final_Total_last" style="display:none;"></td><td style="display:none;">' + mfr + '</td></tr>';
+                        $('#selected_units tr:last').after(newrow);
+                        i++;
+                    }
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
         formClear();
         final_calculation();
     });
@@ -273,7 +324,7 @@
     }
 
     $('#Submit').click(function (e) {
-
+        final_calculation();
         var Inv_No = $('#Invoice_No').val();
         var part = document.getElementById("selected_units").tBodies[0].rows.length;
         if (Inv_No == "" || part==1) {
@@ -286,8 +337,8 @@
             document.getElementById("Enter_Inv_No").innerHTML = submit1;
             var myRows = [];
             var headersText = [];
-            var $headers = $("th");
-            var $rows = $("tbody #data").each(function (index) {
+            var $headers = $("#selected_units th");
+            var $rows = $("#selected_units tbody #data").each(function (index) {
                 $cells = $(this).find("td");
                 myRows[index] = {};
 
@@ -309,7 +360,7 @@
                 contentType: 'application/json;',
                 dataType: 'json',
                 success: function (result) {
-                    //  alert(result.ItemList[0].Str);
+                    //alert(result.ItemList[0].Str);
                     var data = result;
                     document.getElementById("vno").innerHTML = "Your Voucher.No is " + data + "";
                     var submit = "Submitted Successfully !!!";
@@ -317,7 +368,7 @@
                 }
             });
             @*document.getElementById("json_op").innerHTML = JSON.stringify(myRows, undefined, 2);*@
-            
+
         }
     });
 
@@ -345,7 +396,7 @@
                         var inv = "";
                         document.getElementById("Enter_Inv_No").innerHTML = inv;
                     }
-                    
+
                     else {
                         button.disabled = false;
                         var inv = "";
@@ -364,20 +415,54 @@
     var btn = document.getElementById("myBtn");
     var span = document.getElementsByClassName("close")[0];
     var select = document.getElementById("select_partno");
+
     btn.onclick = function () {
         modal.style.display = "block";
     }
     span.onclick = function () {
         modal.style.display = "none";
     }
-    select.onclick = function () {
-        var DD = document.getElementById("P_Description_DD").value;
-        document.getElementById("Part_No").value = DD;
-        modal.style.display = "none";
-    }
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
+        }
+    }
+
+    btn.addEventListener("click", list);
+    span.removeEventListener("click", list);
+    select.removeEventListener("click", list);
+    window.removeEventListener("click", list);
+
+    function list() {
+        document.addEventListener("keyup", function (event) {
+            var letter = document.querySelector("#alphabet").value;
+            var model = new Object();
+            model.alphabet = letter;
+            $.ajax({
+                url: '/NewPurchase/PM_List',
+                data: JSON.stringify({ name: model }),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+                    $("#pm_list").find("tr:not(:first)").remove();
+                    for (var i = 0; i <= result.length - 1; i++) {
+                        var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td></tr>';
+                        $('#pm_list tr:last').after(newrow);
+                    }
+                }
+            });
+        })
+    }
+
+    function List_to_View() {
+        var table = document.getElementById('pm_list');
+        for (var i = 0; i < table.rows.length; i++) {
+            table.rows[i].addEventListener('click', function () {
+                var partno = this.cells[1].innerHTML;
+                document.getElementById("Part_No").value = partno;
+                modal.style.display = "none";
+            });
         }
     }
 </script>

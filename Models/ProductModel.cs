@@ -287,7 +287,7 @@ namespace Admin.Models
         public string P_Manufacturer { get; set; }
         public string P_Part_No { get; set; }
         public string P_Description { get; set; }
-        public string P_Description_DD { get; set; }
+        public string alphabet { get; set; }
         public string Supplier { get; set; }
         public DataSet EditPurchase(int id)
         {
@@ -407,6 +407,8 @@ namespace Admin.Models
         public string Note { get; set; }
         public int v_no { get; set; }
         public string alphabet { get; set; }
+        public string V_Date { get; set; }
+        public string R_Date { get; set; }
         public DataSet EditGoods(int vtype, int g_vno)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);

@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using Admin.Models;
 using System.Configuration;
 using Newtonsoft.Json;
+using System.Globalization;
 
 namespace Admin.Models
 {
@@ -451,7 +452,7 @@ namespace Admin.Models
                     {
                         ItemQm.Add(new GoodsList
                         {
-                            Voucher_Type = dr["Voucher_Type"].ToString(),
+                            Voucher_Type = "Goods Issue",
                             G_Voucher_No = dr["Goods_Voucher_No"].ToString(),
                             G_Voucher_Date = dr["Goods_Voucher_Date"].ToString(),
                             Ref_No = dr["Ref_No"].ToString(),
@@ -480,7 +481,7 @@ namespace Admin.Models
                     {
                         ItemQm.Add(new GoodsList
                         {
-                            Voucher_Type = dr["Voucher_Type"].ToString(),
+                            Voucher_Type = "Goods Receipt",
                             G_Voucher_No = dr["Goods_Voucher_No"].ToString(),
                             G_Voucher_Date = dr["Goods_Voucher_Date"].ToString(),
                             Ref_No = dr["Ref_No"].ToString(),
@@ -509,7 +510,7 @@ namespace Admin.Models
                     {
                         ItemQm.Add(new GoodsList
                         {
-                            Voucher_Type = dr["Voucher_Type"].ToString(),
+                            Voucher_Type = "Goods Receipt",
                             G_Voucher_No = dr["Goods_Voucher_No"].ToString(),
                             G_Voucher_Date = dr["Goods_Voucher_Date"].ToString(),
                             Ref_No = dr["Ref_No"].ToString(),
@@ -533,7 +534,7 @@ namespace Admin.Models
                     {
                         ItemQm.Add(new GoodsList
                         {
-                            Voucher_Type = dr["Voucher_Type"].ToString(),
+                            Voucher_Type = "Goods Issue",
                             G_Voucher_No = dr["Goods_Voucher_No"].ToString(),
                             G_Voucher_Date = dr["Goods_Voucher_Date"].ToString(),
                             Ref_No = dr["Ref_No"].ToString(),
