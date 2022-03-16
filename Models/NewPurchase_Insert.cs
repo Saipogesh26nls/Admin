@@ -622,12 +622,14 @@ namespace Admin.Models
             SqlDataReader dr = SqlCmd1.ExecuteReader();
             while (dr.Read())
             {
+                string cost = dr["P_Cost"].ToString();
                 ItemQm.Add(new GoodsRI
                 {
                     Part_No = dr["P_Part_No"].ToString(),
                     Description = dr["P_Description"].ToString(),
-                    P_code = dr["P_code"].ToString()
-                }
+                    P_code = dr["P_code"].ToString(),
+                    P_Cost = double.Parse(cost)
+            }
                 );
             }
             Con.Close();

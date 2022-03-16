@@ -104,7 +104,9 @@
                                                 <th>
                                                     Description
                                                 </th>
-                                                <th></th>
+                                                <th>
+                                                    Product Cost
+                                                </th>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -930,7 +932,7 @@
                 success: function (result) {
                     $("#pm_list").find("tr:not(:first)").remove();
                     for (var i = 0; i <= result.length - 1; i++) {
-                        var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td></tr>';
+                        var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td><td style="text-align:right">' + result[i].P_Cost + '</td></tr>';
                         $('#pm_list tr:last').after(newrow);
                     }
                 }
@@ -943,7 +945,11 @@
         for (var i = 0; i < table.rows.length; i++) {
             table.rows[i].addEventListener('click', function () {
                 var partno = this.cells[1].innerHTML;
+                var descp = this.cells[2].innerHTML;
+                var cost = this.cells[3].innerHTML;
                 document.getElementById("Part_No").value = partno;
+                document.getElementById("value").innerHTML = descp;
+                document.getElementById("P_Rate").value = cost;
                 modal.style.display = "none";
             });
         }

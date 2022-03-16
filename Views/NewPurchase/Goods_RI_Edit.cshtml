@@ -181,11 +181,11 @@
                         document.getElementById("value").innerHTML = qty_err;
                         return;
                     }
-                    else if (index_type == "2" && qty > data[0].Quantity) {
+                    @*else if (index_type == "2" && qty > data[0].Quantity) {
                         var qty_err = '<p style="color:red;">Out of Stock !!! Available Quantity is <b>' + data[0].Quantity + '</b><p/>';
                         document.getElementById("value").innerHTML = qty_err;
                         return;
-                    }
+                    }*@
                     else if(ref_date == "")
                     {
                         var qty_err = '<p style="color:red;">Enter Reference Date !!!<p/>';
@@ -197,11 +197,11 @@
                         document.getElementById("value").innerHTML = qty_err;
                         return;
                     }
-                    else if (index_type == "2" && d2 == 0 || index_type == "1" && d2 == 0 ) {
+                    @*else if (index_type == "2" && d2 == 0 || index_type == "1" && d2 == 0 ) {
                         var qty_err = '<p style="color:red;">Quantity should not be less than 0 !!!<p/>';
                         document.getElementById("value").innerHTML = qty_err;
                         return;
-                    }
+                    }*@
                     else if (d1 == "") {
                         var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
                         document.getElementById("value").innerHTML = qty_err;
@@ -514,7 +514,9 @@
         for (var i = 0; i < table.rows.length; i++) {
             table.rows[i].addEventListener('click', function () {
                 var partno = this.cells[1].innerHTML;
+                var descp = this.cells[2].innerHTML;
                 document.getElementById("Part_No").value = partno;
+                document.getElementById("value").innerHTML = descp;
                 modal.style.display = "none";
             });
         }

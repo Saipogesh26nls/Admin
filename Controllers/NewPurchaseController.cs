@@ -17,7 +17,7 @@ namespace Admin.Controllers
 {
     public class NewPurchaseController : Controller
     {
-        // New Purchase
+        //New Purchase
         public ActionResult New_Purchase(New_Purchase Purchase) // New Purchase Entry View
         {
             New_Purchase new_Purchase = new New_Purchase();
@@ -307,7 +307,7 @@ namespace Admin.Controllers
             return Json(Purchase);
         }
 
-        // New Goods Receipt/Issue
+        //New Goods Receipt/Issue
         public ActionResult Goods_Receipt_Issue() // Goods Issue View
         {
             GoodsRI Model = new GoodsRI();

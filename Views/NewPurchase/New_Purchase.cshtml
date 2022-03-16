@@ -99,7 +99,9 @@
                                                 <th>
                                                     Description
                                                 </th>
-                                                <th></th>
+                                                <th>
+                                                    Product Cost
+                                                </th>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -235,7 +237,7 @@
             var Total = (subtotal - discount) + tax1 + tax2;
             total = total + Total;
             document.getElementById("Qty_display").innerHTML = qty;
-            document.getElementById("total_display").innerHTML = total;
+            document.getElementById("total_display").innerHTML = total.toFixed(2);
         }
         var model = new Object();
             model.Part_No = document.getElementById("Part_No").value;
@@ -269,7 +271,7 @@
                     }
                     else {
                         document.getElementById("value").innerHTML = val;
-                        var newrow = '<tr id="data"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal.toFixed(2) + '</td><td>' + discount_per + '</td><td>' + discount + '</td><td>' + tax1_per + '</td><td>' + tax1 + '</td><td>' + tax2_per + '</td><td>' + tax2 + '</td><td id="total' + i + '">' + Total + '</td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;">' + ILedger + '</td><td style="display:none;">' + ALedger + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td style="display:none;" class="row-data" id="final_Discount"></td><td style="display:none;" class="row-data" id="final_Tax1"></td><td style="display:none;" class="row-data" id="final_Tax2"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;">' + mfr + '</td></tr>';
+                        var newrow = '<tr id="data"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal.toFixed(2) + '</td><td>' + discount_per + '</td><td>' + discount + '</td><td>' + tax1_per + '</td><td>' + tax1 + '</td><td>' + tax2_per + '</td><td>' + tax2 + '</td><td id="total' + i + '">' + Total.toFixed(2) + '</td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;">' + ILedger + '</td><td style="display:none;">' + ALedger + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td style="display:none;" class="row-data" id="final_Discount"></td><td style="display:none;" class="row-data" id="final_Tax1"></td><td style="display:none;" class="row-data" id="final_Tax2"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;">' + mfr + '</td></tr>';
                         $('#selected_units tr:last').after(newrow);
                         i++;
                     }
@@ -451,7 +453,7 @@
                 success: function (result) {
                     $("#pm_list").find("tr:not(:first)").remove();
                     for (var i = 0; i <= result.length - 1; i++) {
-                        var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td></tr>';
+                        var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td><td style="text-align:right">' + result[i].P_Cost + '</td></tr>';
                         $('#pm_list tr:last').after(newrow);
                     }
                 }
@@ -464,7 +466,11 @@
         for (var i = 0; i < table.rows.length; i++) {
             table.rows[i].addEventListener('click', function () {
                 var partno = this.cells[1].innerHTML;
+                var descp = this.cells[2].innerHTML;
+                var cost = this.cells[3].innerHTML;
                 document.getElementById("Part_No").value = partno;
+                document.getElementById("value").innerHTML = descp;
+                document.getElementById("Purchase_Rate").value = cost;
                 modal.style.display = "none";
             });
         }
