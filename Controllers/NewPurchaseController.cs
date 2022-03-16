@@ -17,7 +17,7 @@ namespace Admin.Controllers
 {
     public class NewPurchaseController : Controller
     {
-        // GET: NewPurchase
+        // New Purchase
         public ActionResult New_Purchase(New_Purchase Purchase) // New Purchase Entry View
         {
             New_Purchase new_Purchase = new New_Purchase();
@@ -54,8 +54,8 @@ namespace Admin.Controllers
         [HttpPost]
         public ActionResult Table_Data(List<PurchaseTable> Purchase)  // For Adding Purchase Data to DB
         {
-            int Quantity = Purchase[Purchase.Count - 1].final_Qty;
-            double Total = Purchase[Purchase.Count - 1].final_Sub_Total;
+            int Quantity = Purchase[0].final_Qty;
+            double Total = Purchase[0].final_Sub_Total;
             double Final_Total = Purchase[0].final_total;
             double Final_Discount = Purchase[0].final_Discount;
             double Final_Tax1 = Purchase[0].final_Tax1;
@@ -211,7 +211,7 @@ namespace Admin.Controllers
         }
 
         //Delete Purchase
-        public ActionResult Delete_Purchase_view(int v_no, DateTime v_date, string inv_no, DateTime inv_date, string a_code)
+        public ActionResult Delete_Purchase_view(int v_no, DateTime v_date, string inv_no, DateTime inv_date, string a_code) // delete purchase view
         {
             New_Purchase newPurchase_Insert = new New_Purchase();
             PurchaseTable mfr = new PurchaseTable();
@@ -281,20 +281,23 @@ namespace Admin.Controllers
             ViewBag.Ref_No = ref_no;
             return View(newPurchase_Insert);
         }
-        public ActionResult Add_Deleted_Purchase(List<PurchaseTable> Purchase)
+        public ActionResult Add_Deleted_Purchase(List<PurchaseTable> Purchase) // add deleted purchase to DB
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
             string cmd1 = "delete from Purchase where Voucher_No ='" + Purchase[0].Voucher_No + "'";
             string cmd2 = "delete from I_Ledger where Voucher_No ='" + Purchase[0].Voucher_No + "'";
             string cmd3 = "delete from A_Ledger where Voucher_No ='" + Purchase[0].Voucher_No + "'";
+            string cmd5 = "update Number_Master set Purchase_Voucher_No = Purchase_Voucher_No - 1";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
             SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
             SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
+            SqlCommand SqlCmd5 = new SqlCommand(cmd5, Con);
             SqlCmd1.ExecuteNonQuery();
             SqlCmd2.ExecuteNonQuery();
             SqlCmd3.ExecuteNonQuery();
-            for(int i = 0;i<= Purchase.Count - 1; i++)
+            SqlCmd5.ExecuteNonQuery();
+            for (int i = 0;i<= Purchase.Count - 1; i++)
             {
                 string cmd4 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance - '"+Purchase[i].Quantity+"' where P_code ='" + Purchase[i].Pcode + "'";
                 SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con);
@@ -304,7 +307,7 @@ namespace Admin.Controllers
             return Json(Purchase);
         }
 
-        //Goods Receipt/Issue
+        // New Goods Receipt/Issue
         public ActionResult Goods_Receipt_Issue() // Goods Issue View
         {
             GoodsRI Model = new GoodsRI();
@@ -458,13 +461,13 @@ namespace Admin.Controllers
             goods_RI.Update_GoodsRI_json(jsonString);
             return Json(jsonString);
         }
-        public ActionResult Goods_ED(GoodsRI name) // For Delete
+        public ActionResult Goods_ED(GoodsRI name) // For Delete individual row from DB
         {
             Goods_RI dblogin = new Goods_RI();
             dblogin.Update_Close_Bal(name.Part_No, name.Index_Type, name.Voucher_No);
             return Json(name, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult PM_List(GoodsRI name)
+        public ActionResult PM_List(GoodsRI name) // To show full Product Master stocks from DB
         {
             Goods_RI dblogin = new Goods_RI();
             var Descp = dblogin.PM_list(name.alphabet);
@@ -472,6 +475,102 @@ namespace Admin.Controllers
         }
 
         //Delete Goods Receipt/Issue
-
+        public ActionResult Delete_GoodsRI_View(string v_type, int gv_no, DateTime gv_date, string ref_no, DateTime ref_date, int GI, int process, int project, int employee, string note) // delete GoodsRI view
+        {
+            int vtype = 0;
+            if (v_type == "Goods Receipt")
+            {
+                vtype = 1;
+            }
+            else
+            {
+                vtype = 2;
+            }
+            SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            _con.Open();
+            SqlDataAdapter _da = new SqlDataAdapter("Select * From Project_Master", _con);
+            DataTable _dt = new DataTable();
+            _da.Fill(_dt);
+            ViewBag.Project = ToSelectList(_dt, "Project_Id", "Project_Name");
+            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Process_Tag", _con);
+            DataTable _dt1 = new DataTable();
+            _da1.Fill(_dt1);
+            ViewBag.Process = ToSelectList(_dt1, "Process_Id", "Process_Name");
+            SqlDataAdapter _da2 = new SqlDataAdapter("Select * From GI_Tag", _con);
+            DataTable _dt2 = new DataTable();
+            _da2.Fill(_dt2);
+            ViewBag.GI = ToSelectList(_dt2, "GI_Id", "TagName");
+            SqlDataAdapter _da3 = new SqlDataAdapter("Select * From Employee_Master", _con);
+            DataTable _dt3 = new DataTable();
+            _da3.Fill(_dt3);
+            ViewBag.Employee = ToSelectList(_dt3, "Employee_Id", "Employee_Name");
+            List<SelectListItem> Index = new List<SelectListItem>();
+            Index.Add(new SelectListItem { Text = "Goods-Receipt", Value = "1" });
+            Index.Add(new SelectListItem { Text = "Goods-Issue", Value = "2" });
+            ViewBag.Index = new SelectList(Index, "Value", "Text");
+            _con.Close();
+            GoodsRI goodsRI = new GoodsRI();
+            DataSet dataSet = goodsRI.EditGoods(vtype, gv_no);
+            dataSet.Tables[0].Columns.Add("P_Part_No");
+            dataSet.Tables[0].Columns.Add("P_Description");
+            for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
+            {
+                string Text = dataSet.Tables[0].Rows[i]["P_code"].ToString();
+                NewPurchase_Insert dblogin = new NewPurchase_Insert();
+                var Descp = dblogin.Pcode_to_PartNo(Text);
+                dataSet.Tables[0].Rows[i]["P_Part_No"] = Descp[0].P_Part_No;
+                dataSet.Tables[0].Rows[i]["P_Description"] = Descp[0].P_Description;
+            }
+            goodsRI.Index_Type = vtype;
+            goodsRI.Voucher_No = gv_no;
+            goodsRI.Voucher_Date = gv_date;
+            goodsRI.Ref_No = ref_no.ToString();
+            /*goodsRI.Ref_Date = ref_date;*/
+            goodsRI.GI_Tag = GI.ToString();
+            goodsRI.Process_Tag = process.ToString();
+            goodsRI.Project = project.ToString();
+            goodsRI.Employee = employee.ToString();
+            if (note != null)
+            {
+                goodsRI.Note = note.ToString();
+            }
+            ViewBag.Goods = dataSet.Tables[0];
+            string date = ref_date.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
+            ViewBag.date = date;
+            return View(goodsRI);
+        }
+        public ActionResult Add_Deleted_GoodsRI(List<GoodsRI> data) // add deleted GoodsRI to DB
+        {
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "delete from I_Ledger where Goods_Voucher_No ='" + data[0].Voucher_No + "' and Voucher_Type = '"+data[0].Index_Type+"'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlCmd1.ExecuteNonQuery();
+            if (data[0].Index_Type == 1)
+            {
+                string cmd2 = "update Number_Master set GReceipt_Voucher_No = GReceipt_Voucher_No - 1";
+                SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+                SqlCmd2.ExecuteNonQuery();
+                for (int i = 0; i <= data.Count - 1; i++)
+                {
+                    string cmd4 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance - '" + data[i].Quantity + "' where P_code ='" + data[i].P_code + "'";
+                    SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con);
+                    SqlCmd4.ExecuteNonQuery();
+                }
+            }
+            else
+            {
+                string cmd2 = "update Number_Master set GIssue_Voucher_No = GIssue_Voucher_No - 1";
+                SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+                SqlCmd2.ExecuteNonQuery();
+                for (int i = 0; i <= data.Count - 1; i++)
+                {
+                    string cmd4 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance + '" + data[i].Quantity + "' where P_code ='" + data[i].P_code + "'";
+                    SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con);
+                    SqlCmd4.ExecuteNonQuery();
+                }
+            }
+            return Json(data);
+        }
     }
 }

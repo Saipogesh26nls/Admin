@@ -1,0 +1,469 @@
+﻿@model Admin.Models.GoodsRI
+@{
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="~/Content/Purchase.css" />
+    <style>
+        table.scroll {
+            border-spacing: 0;
+            border: 2px solid black;
+            width: auto;
+        }
+
+            table.scroll tbody,
+            table.scroll thead {
+                display: block;
+            }
+
+        thead tr th {
+            height: 20px;
+            line-height: 20px;
+        }
+
+        table.scroll tbody {
+            height: 200px;
+            overflow-y: auto;
+            overflow-x: auto;
+        }
+
+        tbody {
+            border-top: 2px solid black;
+        }
+
+            tbody td, thead th {
+                border-right: 1px solid black;
+            }
+
+                tbody td:last-child, thead th:last-child {
+                    border-right: none;
+                }
+
+        #list:hover {
+            background-color: aliceblue;
+        }
+    </style>
+</head>
+<body onload="freeze(); hover();">
+    <div class="container-fluid">
+        <br />
+        <div id="ui-view" data-select2-id="ui-view">
+            <div>
+                <div class="card">
+                    <div class="card-header">
+                        <p class="text-sm">Index Type : &nbsp &nbsp @Html.DropDownListFor(model => model.Index_Type, ViewBag.Index as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })</p>
+                        <p class="text-sm">
+                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:13%;margin-left:1%;", @readonly = "readonly" } })  Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:14%;margin-left:1%;" })
+                            Reference No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:13%;" } })    Reference Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:14%;margin-left:1%;" })
+                        </p>
+                        <p class="text-sm">
+                            &nbsp &nbsp &nbsp Reason: &nbsp &nbsp @Html.DropDownListFor(model => model.GI_Tag, ViewBag.GI as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })  &nbsp &nbsp  Reason for Process :  &nbsp &nbsp @Html.DropDownListFor(model => model.Process_Tag, ViewBag.Process as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
+                            &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })  &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  Requested By : &nbsp &nbsp  @Html.DropDownListFor(model => model.Employee, ViewBag.Employee as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
+                        </p>
+                        <p class="text-sm">
+                            &nbsp &nbsp &nbsp &nbsp Note :  &nbsp &nbsp @Html.TextAreaFor(model => model.Note, new { @style = "color:black; width:50%; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })
+                        </p>
+                    </div>
+                    <div class="card-body table-responsive">
+                        <div class="table-responsive">
+                            <p class="text-sm">Part No : @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:9%"></i>  Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 5%;" placeholder="Quantity"><button class="btn btn-sm btn-secondary" id="Insert">Insert</button><button class="btn btn-sm btn-secondary" style="display: none; margin-top: 10px;" id="Add" onclick="ToAdd()">Add</button>@*<i class="fa fa-search" id="myBtn" style="margin-right:5%"></i>*@</p><p id="value" class="text-sm" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
+
+                            <button class="btn btn-sm btn-secondary float-right" id="Submit" style="width:8%;margin-left:2%;margin-top:30px;">Submit</button>
+                            <a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 30px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>
+                            <div id="myModal" class="modal">
+
+                                <!-- Modal content -->
+                                <div class="modal-content">
+                                    <a href="@Url.Action("Goods_Receipt_Issue_List", "NewPurchase")"><i class="close float-left">&times;</i></a>
+                                    <p class="text-sm" style="text-align:center;"> Are you sure, you want to delete ?</p>
+                                    <p class="text-sm" style="text-align:center;"><button class="btn btn-sm btn-secondary" style="width:5%;" id="yes">Yes</button><a href="@Url.Action("Goods_Receipt_Issue_List", "NewPurchase")"> <button class="btn btn-sm btn-secondary" style="width:5%;">No</button> </a> </p>
+                                    <p id="delete" style="text-align:center;"></p>
+                                </div>
+                            </div>
+                            <table id="selected_units" class="text-sm font-weight-normal scroll" style="margin-top:10px;">
+                                <thead>
+                                    <tr>
+                                        <th style="padding-right:90px">Part_No</th>
+                                        <th style="padding-right:450px">Description</th>
+                                        <th>Quantity</th>
+                                        <th style="padding-right: 35px">E/D</th>
+                                        <th style="display:none;">Voucher_No</th>
+                                        <th style="display: none;">Voucher_Date</th>
+                                        <th style="display:none;">Index_type</th>
+                                        <th style="display: none;">Ref_No</th>
+                                        <th style="display: none;">Ref_Date</th>
+                                        <th style="display: none;">GI_tag</th>
+                                        <th style="display: none;">Process_Tag</th>
+                                        <th style="display: none;">Project</th>
+                                        <th style="display: none;">Employee</th>
+                                        <th style="display: none;">Note</th>
+                                        <th style="display: none;">P_code</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{ int i = 0; }
+                                    @foreach (System.Data.DataRow dr in ViewBag.Goods.Rows)
+                                    {
+                                        <tr id="@i">
+                                            <td class="row-data">@dr["P_Part_No"].ToString()</td>
+                                            <td class="row-data" style="width:550px;">@dr["P_Description"].ToString()</td>
+                                            <td class="row-data text-sm-left" style="width:50px;">@dr["Purchase_Qty"].ToString()</td>
+                                            <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i> </td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Voucher_No)</td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Voucher_Date)</td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Index_Type)</td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Ref_No)</td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Ref_Date)</td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.GI_Tag)</td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Process_Tag)</td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Project)</td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Employee)</td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Note)</td>
+                                            <td class="row-data" style="display:none;">@dr["P_code"].ToString()</td>
+                                        </tr>
+                                        i++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <p id="voucher" style="background-color:yellow;width:20%"></p>
+                <p id="Enter_Inv_No"></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    var last_row = document.getElementById("selected_units").rows.length;
+    var row_id = 0;
+    $('#Insert').click(function () {
+        var d1 = $('#Part_No').val();
+        var d2 = document.getElementById("Quantity").value;
+        var v_no = $('#Voucher_No').val();
+        var v_date = $('#Voucher_Date').val();
+        var index_type = $('#Index_Type').val();
+        var ref_no = $('#Ref_No').val();
+        var ref_date = $('#Ref_Date').val();
+        var GI = $('#GI_Tag').val();
+        var process = $('#Process_Tag').val();
+        var project = $('#Project').val();
+        var emp = $('#Employee').val();
+        var note = $('#Note').val();
+        var qty = parseInt(d2);
+
+        var model = new Object();
+            model.Part_No = document.getElementById("Part_No").value;
+
+            jQuery.ajax({
+            type: "POST",
+            url: "@Url.Action("P_to_DQ")",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ name: model }),
+                success: function (data) {
+                    if(d1 == "" && d2 == "") {
+                        var qty_err = '<p style="color:red;">Enter Part No and Quantity !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (index_type == "2" && qty > data[0].Quantity) {
+                        var qty_err = '<p style="color:red;">Out of Stock !!! Available Quantity is <b>' + data[0].Quantity + '</b><p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if(ref_date == "")
+                    {
+                        var qty_err = '<p style="color:red;">Enter Reference Date !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (d2 == "") {
+                        var qty_err = '<p style="color:red;">Enter Quantity !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (index_type == "2" && d2 == 0 || index_type == "1" && d2 == 0 ) {
+                        var qty_err = '<p style="color:red;">Quantity should not be less than 0 !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (d1 == "") {
+                        var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+                    var l_row1 = last_row1 - 1;
+                    var count = 0;
+                    for (var i = 0; i <= l_row1; i++) {
+                        var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
+                        var e_partno = document.getElementById("Part_No").value;
+                        if (e_part_no == e_partno) {
+                            var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
+                            document.getElementById("value").innerHTML = qty_err;
+                            return;
+                        }
+                        count++;
+                    }
+                    var l_row = last_row - 1;
+                    var newrow = '<tr id="' + l_row + '"><td class="row-data">' + d1 + '</td><td class="row-data">' + data[0].Description + '</td><td class="row-data">' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td class="row-data" style="display:none;">' + v_no + '</td><td class="row-data" style="display:none;">' + v_date + '</td><td class="row-data" style="display:none;">' + index_type + '</td><td class="row-data" style="display:none;">' + ref_no + '</td><td class="row-data" style="display:none;">' + ref_date + '</td><td class="row-data" style="display:none;">' + GI + '</td><td class="row-data" style="display:none;">' + process + '</td><td class="row-data" style="display:none;">' + project + '</td><td class="row-data" style="display:none;">' + emp + '</td><td class="row-data" style="display:none;">' + note + '</td><td class="row-data" style="display:none;">' + data[0].P_code + '</td></tr>';
+                    $('#selected_units tr:last').after(newrow);
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+            });
+    });
+
+    function formClear() {
+        $("#Quantity").val("");
+        $("#Part_No").val("");
+        var qty_err = "";
+        document.getElementById("value").innerHTML = qty_err;
+    }
+
+    $('#yes').click(function (e) {
+        var part = document.getElementById("selected_units").tBodies[0].rows.length;
+        var Null = "";
+        var ref_no = $('#Ref_No').val();
+        if (ref_no == "") {
+            document.getElementById("Enter_Inv_No").innerHTML = "Enter Reference No !!!";
+            return;
+        }
+        else if (part == 0) {
+            document.getElementById("Enter_Inv_No").innerHTML = "Table is Empty !!!";
+            return;
+        }
+        else {
+            document.getElementById("Enter_Inv_No").innerHTML = Null;
+            var v_no = $('#Voucher_No').val();
+            var v_date = $('#Voucher_Date').val();
+            var index_type = $('#Index_Type').val();
+            var ref_no = $('#Ref_No').val();
+            var ref_date = $('#Ref_Date').val();
+            var GI = $('#GI_Tag').val();
+            var process = $('#Process_Tag').val();
+            var project = $('#Project').val();
+            var emp = $('#Employee').val();
+            var note = $('#Note').val();
+
+            var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+            var l_row1 = last_row1 - 1;
+            var count = 0;
+            for (var i = 0; i <= l_row1; i++) {
+                var table = document.getElementById("selected_units").tBodies[0].rows[count];
+                table.cells[4].innerHTML = v_no;
+                table.cells[5].innerHTML = v_date;
+                table.cells[6].innerHTML = index_type;
+                table.cells[7].innerHTML = ref_no;
+                table.cells[8].innerHTML = ref_date;
+                table.cells[9].innerHTML = GI;
+                table.cells[10].innerHTML = process;
+                table.cells[11].innerHTML = project;
+                table.cells[12].innerHTML = emp;
+                table.cells[13].innerHTML = note;
+                count++;
+            }
+
+            var myRows = [];
+            var headersText = [];
+            var $headers = $("#selected_units th");
+            var $rows = $("#selected_units tbody tr").each(function (index) {
+                $cells = $(this).find("td");
+                myRows[index] = {};
+
+                $cells.each(function (cellIndex) {
+                    if (headersText[cellIndex] === undefined) {
+                        headersText[cellIndex] = $($headers[cellIndex]).text();
+                    }
+                    myRows[index][headersText[cellIndex]] = $(this).text();
+                });
+            });
+
+            var myObj = {
+                "myrows": myRows
+            };
+            $.ajax({
+                url: '/NewPurchase/Add_Deleted_GoodsRI',
+                data: JSON.stringify(myRows),
+                type: 'POST',
+                contentType: "application/json; charset=utf - 8",
+                dataType: 'json',
+                success: function (result) {
+                    var del = '<p style="color: red;">Voucher No : ' + result[0].Voucher_No + ' is Removed Successfully !!!</p>';
+                    document.getElementById("delete").innerHTML = del;
+                }
+            });
+            @*document.getElementById("json_op").innerHTML = JSON.stringify(myRows, undefined, 2);*@
+        }
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.keyCode === 9) {
+
+            var model = new Object();
+            model.Part_No = document.getElementById("Part_No").value;
+            var partno_null = document.getElementById("Part_No").value;
+            jQuery.ajax({
+            type: "POST",
+            url: "@Url.Action("P_to_DQ")",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ name: model }),
+                success: function (data) {
+                    if (partno_null == "") {
+                        var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    if (data.length == 0) {
+                        var qty_err = '<p style="color:red;">Enter Valid Part No !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    var descp = data[0].Description;
+                    var qty = data[0].Quantity;
+                    let QTY = "<b>Qty : "+qty+"</b>"
+                    document.getElementById("value").innerHTML = descp + "," + QTY;
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+            });
+        }
+    });
+
+    function del_row(node) {
+        a = node.parentNode.parentNode;
+        r = node.parentNode.parentNode.cells[0].innerHTML;
+        var model = new Object();
+        model.Part_No = r;
+        model.Index_Type = $('#Index_Type').val();
+        model.Voucher_No = $('#Voucher_No').val();
+        model.Ref_No = $('#Ref_No').val();
+        $.ajax({
+            url: '/NewPurchase/Goods_ED',
+            data: JSON.stringify({ name: model }),
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (result) {
+            }
+        });
+        a.parentNode.removeChild(a);
+    }
+
+    function del_row1(node) {
+        a = node.parentNode.parentNode;
+        a.parentNode.removeChild(a);
+    }
+
+    function Toshow() {
+        var rowId = event.target.parentNode.parentNode.id;
+        row_id = rowId;
+        var data = document.getElementById(rowId).querySelectorAll(".row-data");
+
+        var part_no = data[0].innerHTML;
+        var p_qty = data[2].innerHTML;
+
+        document.getElementById("Part_No").value = part_no;
+        document.getElementById("Quantity").value = p_qty;
+
+        document.getElementById("Insert").style.display = "none";
+        document.getElementById("Add").style.display = "block";
+    }
+
+    function ToAdd() {
+        var d1 = $('#Part_No').val();
+        var d2 = document.getElementById("Quantity").value;
+        var index_type = $('#Index_Type').val();
+        var qty = parseInt(d2);
+
+        document.getElementById("Insert").style.display = "block";
+        document.getElementById("Add").style.display = "none";
+
+        var part_no = document.getElementById("Part_No").value;
+        var p_qty = document.getElementById("Quantity").value;
+
+        var model = new Object();
+            model.Part_No = document.getElementById("Part_No").value;
+
+            jQuery.ajax({
+            type: "POST",
+            url: "@Url.Action("P_to_DQ")",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ name: model }),
+                success: function (data1) {
+                    if (index_type == "2" && qty > data1[0].Quantity) {
+                        var qty_err = '<p style="color:red;">Out of Stock !!! Available Quantity is <b>' + data1[0].Quantity + '</b><p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (index_type == "2" && d2 == 0 || index_type == "1" && d2 == 0 ) {
+                        var qty_err = '<p style="color:red;">Quantity should not be less than 0 !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (d1 == "" && d2 == "") {
+                        var qty_err = '<p style="color:red;">Enter Part No and Quantity !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (d2 == "") {
+                        var qty_err = '<p style="color:red;">Enter Quantity !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (d1 == "") {
+                        var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+                    var l_row1 = last_row1 - 1;
+                    var count = 0;
+                    for (var i = 0; i < l_row1; i++) {
+                        var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
+                        var e_partno = document.getElementById("Part_No").value;
+                        if (e_part_no == e_partno) {
+                            var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
+                            document.getElementById("value").innerHTML = qty_err;
+                            return;
+                        }
+                        count++;
+                    }
+                    var rowId = row_id;
+                    var data = document.getElementById(rowId).querySelectorAll(".row-data");
+                    data[0].innerHTML = part_no;
+                    data[1].innerHTML = data1[0].Description;
+                    data[2].innerHTML = p_qty;
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+            });
+        formClear();
+    }
+
+    function freeze() {
+        $('#Index_Type').prop('disabled', true);
+        $('#Voucher_No').prop('disabled', true);
+        @*var date = @ViewBag.date;
+        document.getElementById("Ref_Date").value = date;*@
+    }
+
+    var modal = document.getElementById("myModal");
+
+    function hover() {
+        modal.style.display = "block";
+    }
+</script>

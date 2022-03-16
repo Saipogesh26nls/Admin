@@ -237,11 +237,6 @@
             document.getElementById("Qty_display").innerHTML = qty;
             document.getElementById("total_display").innerHTML = total;
         }
-        var final_Qty = document.getElementById("Qty_display").innerHTML;
-        var final_Total = document.getElementById("total_display").innerHTML;
-        var final_discount = $("#Final_Discount").val();
-        var final_tax1 = $("#Final_Tax1").val();
-        var final_tax2 = $("#Final_Tax2").val();
         var model = new Object();
             model.Part_No = document.getElementById("Part_No").value;
 
@@ -274,7 +269,7 @@
                     }
                     else {
                         document.getElementById("value").innerHTML = val;
-                        var newrow = '<tr id="data"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal.toFixed(2) + '</td><td>' + discount_per + '</td><td>' + discount + '</td><td>' + tax1_per + '</td><td>' + tax1 + '</td><td>' + tax2_per + '</td><td>' + tax2 + '</td><td id="total' + i + '">' + Total + '</td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;">' + ILedger + '</td><td style="display:none;">' + ALedger + '</td><td style="display:none;">' + final_Qty + '</td><td style="display:none;">' + final_Total + '</td><td style="display:none;">' + final_discount + '</td><td style="display:none;">' + final_tax1 + '</td><td style="display:none;">' + final_tax2 + '</td><td id="Final_Total_last" style="display:none;"></td><td style="display:none;">' + mfr + '</td></tr>';
+                        var newrow = '<tr id="data"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal.toFixed(2) + '</td><td>' + discount_per + '</td><td>' + discount + '</td><td>' + tax1_per + '</td><td>' + tax1 + '</td><td>' + tax2_per + '</td><td>' + tax2 + '</td><td id="total' + i + '">' + Total + '</td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;">' + ILedger + '</td><td style="display:none;">' + ALedger + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td style="display:none;" class="row-data" id="final_Discount"></td><td style="display:none;" class="row-data" id="final_Tax1"></td><td style="display:none;" class="row-data" id="final_Tax2"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;">' + mfr + '</td></tr>';
                         $('#selected_units tr:last').after(newrow);
                         i++;
                     }
@@ -332,7 +327,18 @@
             return;
         }
         else {
-            document.getElementById("Final_Total_last").innerHTML = document.getElementById("Final_Total").innerHTML;
+            var f1 = document.getElementById("Qty_display").innerHTML;
+            var f2 = document.getElementById("total_display").innerHTML;
+            var f3 = document.getElementById("Final_Discount").value;
+            var f4 = document.getElementById("Final_Tax1").value;
+            var f5 = document.getElementById("Final_Tax2").value;
+            var f6 = document.getElementById("Final_Total").innerHTML;
+            document.getElementById("final_qty").innerHTML = f1;
+            document.getElementById("final_SubTotal").innerHTML = f2;
+            document.getElementById("final_Discount").innerHTML = f3;
+            document.getElementById("final_Tax1").innerHTML = f4;
+            document.getElementById("final_Tax2").innerHTML = f5;
+            document.getElementById("final_Total").innerHTML = f6;
             var submit1 = "";
             document.getElementById("Enter_Inv_No").innerHTML = submit1;
             var myRows = [];
@@ -414,7 +420,6 @@
     var modal = document.getElementById("myModal");
     var btn = document.getElementById("myBtn");
     var span = document.getElementsByClassName("close")[0];
-    var select = document.getElementById("select_partno");
 
     btn.onclick = function () {
         modal.style.display = "block";
@@ -430,7 +435,6 @@
 
     btn.addEventListener("click", list);
     span.removeEventListener("click", list);
-    select.removeEventListener("click", list);
     window.removeEventListener("click", list);
 
     function list() {
