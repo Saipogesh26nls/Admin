@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Admin.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
-using System.Web.Script.Serialization;
 using System.Globalization;
 
 namespace Admin.Controllers
@@ -18,6 +13,7 @@ namespace Admin.Controllers
     public class NewPurchaseController : Controller
     {
         //New Purchase
+        [HttpGet]
         public ActionResult New_Purchase(New_Purchase Purchase) // New Purchase Entry View
         {
             New_Purchase new_Purchase = new New_Purchase();
@@ -81,6 +77,9 @@ namespace Admin.Controllers
             }
             
         } 
+
+        //Purchase List
+        [HttpGet]
         public ActionResult PurchaseList() // To show full purchase list view
         {
             NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
@@ -211,6 +210,7 @@ namespace Admin.Controllers
         }
 
         //Delete Purchase
+        [HttpGet]
         public ActionResult Delete_Purchase_view(int v_no, DateTime v_date, string inv_no, DateTime inv_date, string a_code) // delete purchase view
         {
             New_Purchase newPurchase_Insert = new New_Purchase();
@@ -281,6 +281,7 @@ namespace Admin.Controllers
             ViewBag.Ref_No = ref_no;
             return View(newPurchase_Insert);
         }
+        [HttpPost]
         public ActionResult Add_Deleted_Purchase(List<PurchaseTable> Purchase) // add deleted purchase to DB
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
@@ -308,6 +309,7 @@ namespace Admin.Controllers
         }
 
         //New Goods Receipt/Issue
+        [HttpGet]
         public ActionResult Goods_Receipt_Issue() // Goods Issue View
         {
             GoodsRI Model = new GoodsRI();
@@ -344,6 +346,7 @@ namespace Admin.Controllers
             string Descp = dblogin.P_Description(name.Part_No);
             return Json(Descp, JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
         public JsonResult Add_Goods(List<GoodsRI> data) // For Adding Goods to DB - Json
         {
             /*SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
@@ -376,6 +379,9 @@ namespace Admin.Controllers
             var Descp = dblogin.Descp_Qty(name.Part_No);
             return Json(Descp, JsonRequestBehavior.AllowGet);
         }
+
+        //Goods RI List
+        [HttpGet]
         public ActionResult Goods_Receipt_Issue_List () // Goods RI List View
         {
             Goods_RI newPurchase_Insert = new Goods_RI();
@@ -385,6 +391,7 @@ namespace Admin.Controllers
         }
 
         //Edit Goods Receipt/Issue 
+        [HttpGet]
         public ActionResult Goods_RI_Edit(string v_type, int gv_no, DateTime gv_date, string ref_no, DateTime ref_date, int GI, int process, int project, int employee, string note) // Goods RI Edit View
         {
             int vtype = 0;
@@ -475,6 +482,7 @@ namespace Admin.Controllers
         }
 
         //Delete Goods Receipt/Issue
+        [HttpGet]
         public ActionResult Delete_GoodsRI_View(string v_type, int gv_no, DateTime gv_date, string ref_no, DateTime ref_date, int GI, int process, int project, int employee, string note) // delete GoodsRI view
         {
             int vtype = 0;
@@ -539,6 +547,7 @@ namespace Admin.Controllers
             ViewBag.date = date;
             return View(goodsRI);
         }
+        [HttpPost] 
         public ActionResult Add_Deleted_GoodsRI(List<GoodsRI> data) // add deleted GoodsRI to DB
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
