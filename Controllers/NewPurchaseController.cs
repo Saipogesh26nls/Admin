@@ -100,7 +100,7 @@ namespace Admin.Controllers
             }
             for (int i = 0; i < PM_Data.Count; i++)
             {
-                string cmd1 = "select Amount from A_Ledger where A_code = '" + PM_Data[i].A_code + "'";
+                string cmd1 = "select Amount from A_Ledger where Voucher_No = '" + PM_Data[i].Voucher_No + "'";
                 SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
                 SqlDataReader dr = SqlCmd1.ExecuteReader();
                 while (dr.Read())
