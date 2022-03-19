@@ -197,6 +197,20 @@ namespace Admin.Models
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
+            for (int k = 0; k <= data.Count - 1; k++)
+            {
+                string cmd4 = "select Purchase_Qty from Purchase where Voucher_No = '" + data[k].Voucher_No + "' and P_code = '"+data[k].Pcode+"'";
+                SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con);
+                SqlDataReader dr2 = SqlCmd4.ExecuteReader();
+                while (dr2.Read())
+                {
+                    data[k].I_Qty = (int)dr2["Purchase_Qty"];
+                }
+                dr2.Close();
+                string cmd5 = "update Product_Master set P_Closing_Balance = P_Closing_Balance - '" + data[k].I_Qty + "' where P_Part_No = '" + data[k].Part_No + "'";
+                SqlCommand SqlCmd5 = new SqlCommand(cmd5, Con);
+                SqlCmd5.ExecuteNonQuery();
+            }
             string cmd1 = "delete from Purchase where Voucher_No ='" + data[0].Voucher_No + "'";
             string cmd2 = "delete from I_Ledger where Voucher_No ='" + data[0].Voucher_No + "'";
             string cmd3 = "delete from A_Ledger where Voucher_No ='" + data[0].Voucher_No + "'";
@@ -318,22 +332,35 @@ namespace Admin.Models
                 GR_V_No = dr.GetInt32(0);
                 dr.Close();
             }
+            for (int j = 0; j < data.Count(); j++)
+            {
+                string cmd3 = "select P_code from Product_Master where P_Part_No = '" + data[j].Part_No + "'";
+                SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con1);
+                SqlDataReader dr2 = SqlCmd3.ExecuteReader();
+                while (dr2.Read())
+                {
+                    data[j].P_code = dr2["P_code"].ToString();
+                }
+                data[j].Voucher_No = GR_V_No;
+                dr2.Close();
+            }
             int i = 0;
             while (i < data.Count())
             {
-                SqlCommand sql_cmnd = new SqlCommand("[dbo].[GoodsReceiptIssue]", Con1);
+                SqlCommand sql_cmnd = new SqlCommand("[dbo].[GoodsRI_Add]", Con1);
                 sql_cmnd.CommandType = CommandType.StoredProcedure;
-                sql_cmnd.Parameters.AddWithValue("@index_type", SqlDbType.NVarChar).Value = data[i].Index_Type;
+                sql_cmnd.Parameters.AddWithValue("@v_type", SqlDbType.Int).Value = data[i].Index_Type;
                 sql_cmnd.Parameters.AddWithValue("@voucher_no", SqlDbType.Int).Value = GR_V_No;
-                sql_cmnd.Parameters.AddWithValue("@voucher_date", data[i].Voucher_Date);
+                sql_cmnd.Parameters.AddWithValue("@voucher_date", data[i].V_Date);
                 sql_cmnd.Parameters.AddWithValue("@ref_no", SqlDbType.Int).Value = data[i].Ref_No;
-                sql_cmnd.Parameters.AddWithValue("@ref_date", data[i].Ref_Date);
+                sql_cmnd.Parameters.AddWithValue("@ref_date", data[i].R_Date);
                 sql_cmnd.Parameters.AddWithValue("@GI", SqlDbType.Int).Value = data[i].GI_Tag;
                 sql_cmnd.Parameters.AddWithValue("@Process", SqlDbType.Int).Value = data[i].Process_Tag;
                 sql_cmnd.Parameters.AddWithValue("@Project", SqlDbType.Int).Value = data[i].Project;
                 sql_cmnd.Parameters.AddWithValue("@Employee", SqlDbType.Int).Value = data[i].Employee;
                 sql_cmnd.Parameters.AddWithValue("@note", SqlDbType.NVarChar).Value = data[i].Note;
                 sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = data[i].Part_No;
+                sql_cmnd.Parameters.AddWithValue("@pcode", SqlDbType.NChar).Value = data[i].P_code;
                 sql_cmnd.Parameters.AddWithValue("@qty", SqlDbType.Int).Value = data[i].Quantity;
                 sql_cmnd.ExecuteNonQuery();
                 if (i == data.Count() - 1)
@@ -602,14 +629,61 @@ namespace Admin.Models
                 SqlCmd4.ExecuteNonQuery();
             }
         }
-        public void Update_GoodsRI_json(string data)
+        public void Update_GoodsRI_json(List<GoodsRI> data)
         {
             SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con1.Open();
-            SqlCommand sql_cmnd = new SqlCommand("[dbo].[Goods_ED_json]", Con1);
-            sql_cmnd.CommandType = CommandType.StoredProcedure;
-            sql_cmnd.Parameters.AddWithValue("@json", data);
-            sql_cmnd.ExecuteReader();
+            for(int j = 0; j <= data.Count-1; j++)
+            {
+                string cmd3 = "select Purchase_Qty from I_Ledger where P_code = '" + data[j].P_code + "' and Voucher_Type = '"+data[j].Index_Type+"' and Goods_Voucher_No = '"+data[j].Voucher_No+"'";
+                SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con1);
+                SqlDataReader dr2 = SqlCmd3.ExecuteReader();
+                while (dr2.Read())
+                {
+                    data[j].I_Qty =(int) dr2["Purchase_Qty"];
+                }
+                dr2.Close();
+                if(data[j].Index_Type == 1)
+                {
+                    string cmd2 = "update Product_Master set P_Closing_Balance = P_Closing_Balance - '"+data[j].I_Qty+"' where P_Part_No = '"+data[j].Part_No+"'";
+                    SqlCommand SqlCmd1 = new SqlCommand(cmd2, Con1);
+                    SqlCmd1.ExecuteNonQuery();
+                }
+                else
+                {
+                    string cmd2 = "update Product_Master set P_Closing_Balance = P_Closing_Balance + '" + data[j].I_Qty + "' where P_Part_No = '" + data[j].Part_No + "'";
+                    SqlCommand SqlCmd1 = new SqlCommand(cmd2, Con1);
+                    SqlCmd1.ExecuteNonQuery();
+                }
+            }
+            string cmd = "delete from I_Ledger where Voucher_Type = '"+data[0].Index_Type+"' and Goods_Voucher_No = '"+data[0].Voucher_No+"'";
+            SqlCommand Sqlcmd = new SqlCommand(cmd, Con1);
+            Sqlcmd.ExecuteNonQuery();
+            int i = 0;
+            while (i < data.Count())
+            {
+                SqlCommand sql_cmnd = new SqlCommand("[dbo].[GoodsRI_Add]", Con1);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                sql_cmnd.Parameters.AddWithValue("@v_type", SqlDbType.Int).Value = data[i].Index_Type;
+                sql_cmnd.Parameters.AddWithValue("@voucher_no", SqlDbType.Int).Value = data[i].Voucher_No;
+                sql_cmnd.Parameters.AddWithValue("@voucher_date", data[i].V_Date);
+                sql_cmnd.Parameters.AddWithValue("@ref_no", SqlDbType.Int).Value = data[i].Ref_No;
+                sql_cmnd.Parameters.AddWithValue("@ref_date", data[i].R_Date);
+                sql_cmnd.Parameters.AddWithValue("@GI", SqlDbType.Int).Value = data[i].GI_Tag;
+                sql_cmnd.Parameters.AddWithValue("@Process", SqlDbType.Int).Value = data[i].Process_Tag;
+                sql_cmnd.Parameters.AddWithValue("@Project", SqlDbType.Int).Value = data[i].Project;
+                sql_cmnd.Parameters.AddWithValue("@Employee", SqlDbType.Int).Value = data[i].Employee;
+                sql_cmnd.Parameters.AddWithValue("@note", SqlDbType.NVarChar).Value = data[i].Note;
+                sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = data[i].Part_No;
+                sql_cmnd.Parameters.AddWithValue("@pcode", SqlDbType.NChar).Value = data[i].P_code;
+                sql_cmnd.Parameters.AddWithValue("@qty", SqlDbType.Int).Value = data[i].Quantity;
+                sql_cmnd.ExecuteNonQuery();
+                if (i == data.Count() - 1)
+                {
+                    break;
+                }
+                i++;
+            }
             Con1.Close();
         }
         public List<GoodsRI> PM_list(string data)

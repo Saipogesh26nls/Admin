@@ -349,28 +349,8 @@ namespace Admin.Controllers
         [HttpPost]
         public JsonResult Add_Goods(List<GoodsRI> data) // For Adding Goods to DB - Json
         {
-            /*SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
-            _con.Open();
-            for(int i=0;i<data.Count();i++)
-            {
-                string cmd3 = "select P_code from Product_Master where P_Part_No = '" + data[i].Part_No + "'";
-                SqlCommand SqlCmd3 = new SqlCommand(cmd3, _con);
-                SqlDataReader dr2 = SqlCmd3.ExecuteReader();
-                while (dr2.Read())
-                {
-                    data[i].Part_No = dr2["P_code"].ToString();
-                }
-                dr2.Close();
-            }
-            _con.Close();*/
             Goods_RI dblogin = new Goods_RI();
-            int Vno = dblogin.Goods_Add_json(data);
-            /*var json = JsonConvert.SerializeObject(data);
-            var resolveRequest = HttpContext.Request;
-            resolveRequest.InputStream.Seek(0, SeekOrigin.Begin);
-            string jsonString = new StreamReader(resolveRequest.InputStream).ReadToEnd();
-            Goods_RI goods_RI = new Goods_RI();
-            goods_RI.Goods_Add_json(jsonString);*/
+            int Vno = dblogin.Goods_add(data);
             return Json(Vno);
         }
         public ActionResult P_to_DQ(GoodsRI name) // conversion of part_no to description, qty
@@ -457,16 +437,11 @@ namespace Admin.Controllers
             return View(goodsRI);
         }
         [HttpPost]
-        public ActionResult Edited_Goods_RI() // Adding Edited Goods RI to DB
+        public ActionResult Edited_Goods_RI(List<GoodsRI> data) // Adding Edited Goods RI to DB
         {
-            /*Goods_RI goods_RI = new Goods_RI();
-            goods_RI.Update_GoodsRI_json(data);*/
-            var resolveRequest = HttpContext.Request;
-            resolveRequest.InputStream.Seek(0, SeekOrigin.Begin);
-            string jsonString = new StreamReader(resolveRequest.InputStream).ReadToEnd();
             Goods_RI goods_RI = new Goods_RI();
-            goods_RI.Update_GoodsRI_json(jsonString);
-            return Json(jsonString);
+            goods_RI.Update_GoodsRI_json(data);
+            return Json(data);
         }
         public ActionResult Goods_ED(GoodsRI name) // For Delete individual row from DB
         {

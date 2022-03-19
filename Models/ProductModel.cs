@@ -348,6 +348,7 @@ namespace Admin.Models
         public double final_Tax2 { get; set; }
         public double final_total { get; set; }
         public string Ref_No { get; set; }
+        public int I_Qty { get; set; }
     }
     public class PurchaseList
     {
@@ -411,6 +412,7 @@ namespace Admin.Models
         public string V_Date { get; set; }
         public string R_Date { get; set; }
         public double P_Cost { get; set; }
+        public int I_Qty { get; set; }
         public DataSet EditGoods(int vtype, int g_vno)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
