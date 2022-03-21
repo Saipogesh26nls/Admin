@@ -63,10 +63,10 @@
                         </p>
                         <p class="text-sm">
                             &nbsp &nbsp &nbsp Reason: &nbsp &nbsp @Html.DropDownListFor(model => model.GI_Tag, ViewBag.GI as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })  &nbsp &nbsp  Reason for Process :  &nbsp &nbsp @Html.DropDownListFor(model => model.Process_Tag, ViewBag.Process as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
-                            &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })  &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  Requested By : &nbsp &nbsp  @Html.DropDownListFor(model => model.Employee, ViewBag.Employee as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
+                            &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })  &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  Requested By : &nbsp &nbsp  @Html.DropDownListFor(model => model.Employee, ViewBag.Employee as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
                         </p>
                         <p class="text-sm">
-                            &nbsp &nbsp &nbsp &nbsp Note :  &nbsp &nbsp @Html.TextAreaFor(model => model.Note, new { @style = "color:black; width:50%; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })
+                            &nbsp &nbsp &nbsp &nbsp Note : &nbsp &nbsp @Html.TextAreaFor(model => model.Note, new { @style = "color:black; width:50%; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })
                         </p>
                     </div>
                     <div class="card-body table-responsive">
@@ -123,7 +123,7 @@
                 </div>
                 <p id="voucher" style="background-color:yellow;width:20%"></p>
                 <p id="Enter_Inv_No"></p>
-                <p id="ToHide"><a href="@Url.Action("Goods_Receipt_Issue_List", "NewPurchase")"><button class="btn btn-sm btn-secondary" style="width:8%;" id="Edit">Edit</button> </a> </p>
+                <p id="ToHide"><a href="@Url.Action("Goods_Receipt_Issue_List", "NewPurchase")"> <button class="btn btn-sm btn-secondary" style="width:8%;" id="Edit">Edit</button> </a> </p>
             </div>
         </div>
     </div>

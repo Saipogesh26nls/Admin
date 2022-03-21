@@ -1,0 +1,78 @@
+﻿@model Admin.Models.Price_List
+<head>
+    <link rel="stylesheet" href="~/Content/Purchase.css" />
+</head>
+<body style="background-color: #f5f5f7;">
+    <p style="margin-top:20px; margin-bottom:20px; margin-left:12.5px">Enter Description : @Html.EditorFor(model => model.alphabet, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = "text-sm uppercase" } })</p>
+    <table class="table text-sm" id="pm_list">
+        <tbody>
+            <tr>
+                <th>
+                    Product Code
+                </th>
+                <th>
+                    Part No
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Cost
+                </th>
+                <th>
+                    MRP
+                </th>
+                <th></th>
+            </tr>
+        </tbody>
+    </table>
+</body>
+<script>
+        document.addEventListener("keyup", function (event) {
+            var letter = document.querySelector("#alphabet").value;
+            var model = new Object();
+            model.alphabet = letter;
+            $.ajax({
+                url: '/Price/List_Update',
+                data: JSON.stringify({ name: model }),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+                    $("#pm_list").find("tr:not(:first)").remove();
+                    for (var i = 0; i <= result.length - 1; i++) {
+                        var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td><td style="text-align:right">' + result[i].P_Cost + '</td><td style="text-align:right">' + result[i].P_MRP + '</td><td><a href="@Url.Action("Price_Update", "Price")"> <i class="fa fa-plus" style="margin-right:0.5%; margin-left:0.5;" onclick="List_to_View();" ></i> </a> </td></tr>';
+                        $('#pm_list tr:last').after(newrow);
+                    }
+                }
+            });
+        })
+
+    function List_to_View() {
+        var table = document.getElementById('pm_list');
+        for (var i = 0; i < table.rows.length; i++) {
+            table.rows[i].addEventListener('click', function () {
+                var partno = this.cells[1].innerHTML;
+                var descp = this.cells[2].innerHTML;
+                var cost = this.cells[3].innerHTML;
+                var mrp = this.cells[4].innerHTML;
+
+                var model = new Object();
+                model.Part_No = partno;
+                model.Description = descp;
+                model.P_Cost = cost;
+                model.P_MRP = mrp;
+                $.ajax({
+                url: '/Price/Price_List_Update',
+                data: JSON.stringify({ name: model }),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                    success: function (result) {
+
+                    }
+            });
+           });
+        }
+    }
+</script>

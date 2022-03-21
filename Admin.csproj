@@ -2377,6 +2377,8 @@
     <Content Include="Views\NewPurchase\Goods_RI_Edit.cshtml" />
     <Content Include="Views\NewPurchase\Delete_Purchase_view.cshtml" />
     <Content Include="Views\NewPurchase\Delete_GoodsRI_View.cshtml" />
+    <Content Include="Views\BOM\BOM_List.cshtml" />
+    <Content Include="Views\Price\Price_List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

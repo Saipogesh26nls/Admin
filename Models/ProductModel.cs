@@ -117,6 +117,12 @@ namespace Admin.Models
         public string Quantity { get; set; }
         public string SP_Part_No { get; set; }
     }
+    public class BOM_List
+    {
+        public int BOM_No { get; set; }
+        public string BOM_Date { get; set; }
+        public string SP_code { get; set; }
+    }
     public class AccountsField
     {
         [DisplayName("Account Name")]
@@ -225,6 +231,18 @@ namespace Admin.Models
         [DisplayName("Selling Price")]
         public double P_SP { get; set; }
         public string Reg_success { get; set; }
+    }
+    public class Price_List
+    {
+        public string P_code { get; set; }
+        public string Part_No { get; set; }
+        public string Description { get; set; }
+        public double? P_Cost { get; set; }
+        public string alphabet { get; set; }
+        public double? P_MRP { get; set; }
+        public double P_Price_USD { get; set; }
+        public double P_SP { get; set; }
+        public double Reg_success { get; set; }
     }
     public class New_Purchase
     {

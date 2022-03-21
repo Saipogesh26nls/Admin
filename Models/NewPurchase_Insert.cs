@@ -691,7 +691,7 @@ namespace Admin.Models
             List<GoodsRI> ItemQm = new List<GoodsRI>();
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd1 = "SELECT * FROM Product_Master WHERE P_Part_No LIKE '%"+data+"%'";
+            string cmd1 = "SELECT * FROM Product_Master WHERE P_Description LIKE '%"+data+"%'";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
             SqlDataReader dr = SqlCmd1.ExecuteReader();
             while (dr.Read())

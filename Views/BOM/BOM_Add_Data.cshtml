@@ -52,7 +52,7 @@
             <div>
                 <div class="card">
                     <div class="card-header">
-                        <p class="text-sm">SP Part No : @Html.EditorFor(model => model.SP_Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:3%" } }) <button class="btn btn-sm btn-secondary" id="insert" onclick="SP_part_no();">Insert</button></p> <p id="value" class="text-sm" style="width:50%"></p>     
+                        <p class="text-sm">SP Part No : @Html.EditorFor(model => model.SP_Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:3%" } }) <button class="btn btn-sm btn-secondary" id="insert" onclick="SP_part_no();">Insert</button></p> <p id="value" class="text-sm" style="width:50%"></p>
                     </div>
                     <div class="card-body table-responsive">
                         <div class="table-responsive">
@@ -77,6 +77,7 @@
                 </div>
                 <p id="voucher" style="background-color:yellow;width:20%"></p>
                 <p id="Enter_Inv_No"></p>
+                <p><a href="@Url.Action("BOM_List", "BOM")"> <button class="btn btn-sm btn-secondary" style="width:8%;" id="Edit">Edit</button> </a> </p>
             </div>
         </div>
     </div>

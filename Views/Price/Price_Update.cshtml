@@ -1,4 +1,4 @@
-﻿@model Admin.Models.PriceFields
+﻿@model Admin.Models.Price_List
 
 @{
     ViewBag.Title = "Price_Update";
@@ -8,66 +8,26 @@
         text-transform: uppercase;
     }
 </style>
-@using (Html.BeginForm("Price_Insert","Price",FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
 <body>
-    <div class="form-horizontal" style="margin-left:10%;">
+    <div style="margin-left:10%;">
         <br />
         <br />
         <br />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Part_No, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "form-control uppercase", style = "width:50%", @id = "part_no", required = "required" } })
-                @Html.ValidationMessageFor(model => model.Part_No, "", new { @class = "text-danger" })
-            </div>
+        <div>
+            <p>Part No &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "uppercase", style = "width:15%", @id = "part_no", required = "required" } })</p>
+            <p id="value" style="width:50%; margin-left:1%"></p>
+            <p>Cost (.Rs) &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_Cost, new { htmlAttributes = new { @class = "", style = "width:15%", required = "required" } })</p>
+            <p>USD ($) &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_Price_USD, new { htmlAttributes = new { @class = "", style = "width:15%" } })</p>
+            <p>MRP (.Rs) &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_MRP, new { htmlAttributes = new { @class = "", style = "width:15%" } })</p>
+            <p>Sell Price (.Rs) &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_SP, new { htmlAttributes = new { @class = "", style = "width:15%" } })</p>
         </div>
-        <div style="width:50%; margin-left:1%">
-            <p id="value"></p>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.P_Cost, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.P_Cost, new { htmlAttributes = new { @class = "form-control", style = "width:50%", required = "required" } })
-                @Html.ValidationMessageFor(model => model.P_Cost, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.P_Price_USD, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.P_Price_USD, new { htmlAttributes = new { @class = "form-control", style = "width:50%" } })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.P_MRP, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.P_MRP, new { htmlAttributes = new { @class = "form-control", style = "width:50%" } })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.P_SP, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.P_SP, new { htmlAttributes = new { @class = "form-control", style = "width:50%" } })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-10 text-danger">
-                @Html.DisplayFor(model => model.Reg_success, new { htmlAttributes = new { @class = "text-danger" } })
-            </div>
-        </div>
-        <div class="form-group">
+        <div>
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-sm btn-secondary" />
             </div>
         </div>
     </div>
 </body>
-}
 <script>
     document.addEventListener('keydown', function (event) {
         if (event.keyCode === 9) {
