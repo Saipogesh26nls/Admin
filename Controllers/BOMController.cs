@@ -8,15 +8,16 @@ using System;
 using System.Web;
 using System.Web.Mvc;
 using System.Configuration;
+using System.Globalization;
 
 namespace Admin.Controllers
 {
     public class BOMController : Controller
     {
         // GET: BOM
-        static int i = 2;
         public ActionResult BOM_Add_Data(BOMFields data) // BOM Add Data View
         {
+            data.BOM_Date = DateTime.Today;
             return View(data);
         }
         public ActionResult Order(List<BOM_Table> name) // Add List to DB
@@ -79,6 +80,29 @@ namespace Admin.Controllers
                 Con.Close();
                 return View(ItemQm);
             }
+        }
+        [HttpGet]
+        public ActionResult BOM_Edit_Delete(int BOM_No, DateTime bomdate, string spcode) // BOM Edit Delete View
+        {
+            BOMFields bOMFields = new BOMFields();
+            DataSet ds = bOMFields.EditBOM(BOM_No,spcode);
+            ds.Tables[0].Columns.Add("P_Part_No");
+            ds.Tables[0].Columns.Add("P_Description");
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                string Text = ds.Tables[0].Rows[i]["SP_Code"].ToString();
+                NewPurchase_Insert dblogin = new NewPurchase_Insert();
+                var Descp = dblogin.Pcode_to_PartNo(Text);
+                ds.Tables[0].Rows[i]["P_Part_No"] = Descp[0].P_Part_No;
+                ds.Tables[0].Rows[i]["P_Description"] = Descp[0].P_Description;
+            }
+            NewPurchase_Insert dblogin1 = new NewPurchase_Insert();
+            var sp_partno = dblogin1.Pcode_to_PartNo(spcode);
+            bOMFields.BOM_No = BOM_No.ToString();
+            bOMFields.SP_Part_No = sp_partno[0].P_Part_No;
+            bOMFields.BOM_Date = bomdate;
+            ViewBag.Goods = ds.Tables[0];
+            return View(bOMFields);
         }
     }
 }

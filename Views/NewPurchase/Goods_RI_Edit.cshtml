@@ -58,7 +58,7 @@
                     <div class="card-header">
                         <p class="text-sm">Index Type : &nbsp &nbsp @Html.DropDownListFor(model => model.Index_Type, ViewBag.Index as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })</p>
                         <p class="text-sm">
-                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:13%;margin-left:1%;", @readonly = "readonly" } })  Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;"})
+                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:13%;margin-left:1%;", @readonly = "readonly" } })  Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;", @readonly = "readonly" })
                             Reference No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:13%;" } })    Reference Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
                         </p>
                         <p class="text-sm">

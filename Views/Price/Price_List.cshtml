@@ -1,9 +1,32 @@
 ﻿@model Admin.Models.Price_List
 <head>
     <link rel="stylesheet" href="~/Content/Purchase.css" />
+    <style>
+        .modal-content{
+            width:30%;
+        }
+    </style>
 </head>
 <body style="background-color: #f5f5f7;">
     <p style="margin-top:20px; margin-bottom:20px; margin-left:12.5px">Enter Description : @Html.EditorFor(model => model.alphabet, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = "text-sm uppercase" } })</p>
+    
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <i class="close">&times;</i>
+                <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Part No &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "uppercase", style = "width:200px" } })</p>
+                <p id="value" style="width:400px; margin-left:7%"></p>
+                <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Cost (.Rs) &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_Cost, new { htmlAttributes = new { @class = "", style = "width:200px" } })</p>
+                <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp USD ($) &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_Price_USD, new { htmlAttributes = new { @class = "", style = "width:200px" } })</p>
+                <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp MRP (.Rs) &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_MRP, new { htmlAttributes = new { @class = "", style = "width:200px" } })</p>
+                <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Sell Price (.Rs) &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_SP, new { htmlAttributes = new { @class = "", style = "width:200px" } })</p>
+                <p id="success" style="text-align:center;"></p>
+                <div class="col-md-offset-2 col-md-10" style="margin-left:200px">
+                    <input type="submit" value="Save" class="btn btn-sm btn-secondary" onclick="Price_to_DB();"/>
+                </div>
+        </div>
+    </div>
+
     <table class="table text-sm" id="pm_list">
         <tbody>
             <tr>
@@ -41,7 +64,7 @@
                 success: function (result) {
                     $("#pm_list").find("tr:not(:first)").remove();
                     for (var i = 0; i <= result.length - 1; i++) {
-                        var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td><td style="text-align:right">' + result[i].P_Cost + '</td><td style="text-align:right">' + result[i].P_MRP + '</td><td><a href="@Url.Action("Price_Update", "Price")"> <i class="fa fa-plus" style="margin-right:0.5%; margin-left:0.5;" onclick="List_to_View();" ></i> </a> </td></tr>';
+                        var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td><td style="text-align:right">' + result[i].P_Cost + '</td><td style="text-align:right">' + result[i].P_MRP + '</td><td><i class="fa fa-plus" style="margin-right:0.5%; margin-left:0.5;" onclick="List_to_View();" ></i></td></tr>';
                         $('#pm_list tr:last').after(newrow);
                     }
                 }
@@ -56,23 +79,50 @@
                 var descp = this.cells[2].innerHTML;
                 var cost = this.cells[3].innerHTML;
                 var mrp = this.cells[4].innerHTML;
-
-                var model = new Object();
-                model.Part_No = partno;
-                model.Description = descp;
-                model.P_Cost = cost;
-                model.P_MRP = mrp;
-                $.ajax({
-                url: '/Price/Price_List_Update',
-                data: JSON.stringify({ name: model }),
-                type: 'POST',
-                contentType: 'application/json;',
-                dataType: 'json',
-                    success: function (result) {
-
-                    }
+                modal.style.display = "block";
+                document.getElementById("Part_No").value = partno;
+                document.getElementById("value").innerHTML = descp;
+                document.getElementById("P_Cost").value = cost;
+                document.getElementById("P_MRP").value = mrp;
             });
-           });
         }
+    }
+
+    var modal = document.getElementById("myModal");
+    var span = document.getElementsByClassName("close")[0];
+
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    function Price_to_DB() {
+        var partno = document.getElementById("Part_No").value;
+        var cost = document.getElementById("P_Cost").value;
+        var usd = document.getElementById("P_Price_USD").value;
+        var sp = document.getElementById("P_SP").value;
+        var mrp = document.getElementById("P_MRP").value;
+
+        var model = new Object();
+        model.Part_No = partno;
+        model.P_Cost = cost;
+        model.P_Price_USD = usd;
+        model.P_SP = sp;
+        model.P_MRP = mrp;
+        $.ajax({
+            url: '/Price/Price_Insert',
+            data: JSON.stringify({ name: model }),
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (result) {
+                var qty_err = '<p style="color:red;">Price Updated Successfully !!!<p/>';
+                document.getElementById("success").innerHTML = qty_err;
+            }
+        });
     }
 </script>

@@ -30,7 +30,7 @@
             @Html.DisplayFor(modelItem => item.SP_code)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) | @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            @Html.ActionLink("Edit", "BOM_Edit_Delete", new { bom_no=item.BOM_No ,bomdate = item.BOM_Date, spcode = item.SP_code  }) | @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
         </td>
     </tr>
 }

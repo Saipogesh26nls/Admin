@@ -13,35 +13,7 @@ namespace Admin.Controllers
 {
     public class PriceController : Controller
     {
-        public ActionResult Price_Update(string partno, double? cost, string descp, double? mrp) // Price Update View
-        {
-            Price_List price_list = new Price_List();
-            price_list.Part_No = partno;
-            price_list.P_Cost = cost;
-            price_list.Description = descp;
-            price_list.P_MRP = mrp;
-            return View(price_list);
-        }
-        [HttpPost]
-        public void Price_List_Update(Price_List name) // Price Update View
-        {
-            Price_Update(name.Part_No,name.P_Cost,name.Description,name.P_MRP);
-        }
-        public ActionResult Price_Insert(PriceFields newdata) // Adding Data to DB
-        {
-            Price_Updation price_Updation = new Price_Updation();
-            int data = price_Updation.AddPrice(newdata.Part_No, newdata.P_Cost, newdata.P_Price_USD, newdata.P_MRP, newdata.P_SP);
-            newdata.Reg_success = "Submitted Successfully !!!!";
-            return View(newdata);
-        }
-        public ActionResult Partno_to_Descp(PriceFields name) // conversion of part_no to description
-        {
-            Price_Updation dblogin = new Price_Updation();
-            string Descp = dblogin.Product_Description(name.Part_No);
-            return Json(Descp, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult Price_List()
+        public ActionResult Price_List() // PM List View
         {
             return View();
         }
@@ -69,6 +41,13 @@ namespace Admin.Controllers
             }
             Con.Close();
             return Json(ItemQm);
+        } // add DB dat to Price_List View
+        public ActionResult Price_Insert(Price_List name) // Adding Data to DB
+        {
+            Price_Updation price_Updation = new Price_Updation();
+            int data = price_Updation.AddPrice(name.Part_No, name.P_Cost, name.P_Price_USD, name.P_MRP, name.P_SP);
+            return Json(name);
         }
+
     }
 }

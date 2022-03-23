@@ -94,6 +94,7 @@ namespace Admin.Models
                 SqlCommand sql_cmnd = new SqlCommand("[dbo].[BOM_Prod]", Con1);
                 sql_cmnd.CommandType = CommandType.StoredProcedure;
                 sql_cmnd.Parameters.AddWithValue("@bom_no", SqlDbType.Int).Value = BOM_No;
+                sql_cmnd.Parameters.AddWithValue("@bom_date", SqlDbType.NVarChar).Value = orderDetail[i].BOM_Date;
                 sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = orderDetail[i].Part_No.ToUpper();
                 sql_cmnd.Parameters.AddWithValue("@mp_partno", SqlDbType.NVarChar).Value = orderDetail[i].SP_Part_No.ToUpper();
                 sql_cmnd.Parameters.AddWithValue("@quantity", SqlDbType.NVarChar).Value = orderDetail[i].Quantity;

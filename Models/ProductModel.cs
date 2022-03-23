@@ -109,6 +109,20 @@ namespace Admin.Models
         public string Quantity1 { get; set; }
         public string Part_to_Descp { get; set; }
         public string P_code { get; set; }
+        public string BOM_No { get; set; }
+        public DateTime BOM_Date { get; set; }
+        public DataSet EditBOM(int bomno, string spcode)
+        {
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "select BOM_Date, SP_Code, Quantity from BOM where MP_Code = '" + spcode + "' and BOM_No = '" + bomno + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            DataSet ds = new DataSet();
+            SqlDataAdapter da = new SqlDataAdapter(SqlCmd1);
+            da.Fill(ds);
+            Con.Close();
+            return ds;
+        }
     }
     public class BOM_Table
     {
@@ -116,6 +130,7 @@ namespace Admin.Models
         public string Description { get; set; }
         public string Quantity { get; set; }
         public string SP_Part_No { get; set; }
+        public string BOM_Date { get; set; }
     }
     public class BOM_List
     {
@@ -237,9 +252,9 @@ namespace Admin.Models
         public string P_code { get; set; }
         public string Part_No { get; set; }
         public string Description { get; set; }
-        public double? P_Cost { get; set; }
+        public double P_Cost { get; set; }
         public string alphabet { get; set; }
-        public double? P_MRP { get; set; }
+        public double P_MRP { get; set; }
         public double P_Price_USD { get; set; }
         public double P_SP { get; set; }
         public double Reg_success { get; set; }
@@ -443,6 +458,16 @@ namespace Admin.Models
             Con.Close();
             return ds;
         }
+
+        //Add New Product
+        public string Add_Name { get; set; }
+        public string Add_Group { get; set;}
+        public string Add_Manufacturer { get; set; }
+        public string Add_PartNo { get; set; }
+        public string Add_Description { get; set; }
+        public double Add_Cost { get; set; }
+        public double Add_MRP { get; set; }
+        public double Add_SellPrice { get; set; }
     }
     public class GoodsList
     {

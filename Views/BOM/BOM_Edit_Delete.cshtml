@@ -45,7 +45,7 @@
                 }
     </style>
 </head>
-<body>
+<body onload="freeze();">
     <div class="container-fluid">
         <br />
         <div id="ui-view" data-select2-id="ui-view">
@@ -53,25 +53,43 @@
                 <div class="card">
                     <div class="card-header">
                         <p class="text-sm">BOM No : @Html.EditorFor(model => model.BOM_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1.8%;margin-right:3%", @readonly = "readonly" } }) BOM Date : @Html.TextBoxFor(x => x.BOM_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })</p>
-                        <p class="text-sm">SP Part No : @Html.EditorFor(model => model.SP_Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:3%" } }) <button class="btn btn-sm btn-secondary" id="insert" onclick="SP_part_no();">Insert</button></p> <p id="value" class="text-sm" style="width:50%"></p>
+                        <p class="text-sm">SP Part No : @Html.EditorFor(model => model.SP_Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:3%", @readonly = "readonly" } }) <button class="btn btn-sm btn-secondary" id="insert" onclick="SP_part_no();">Insert</button></p> <p id="value" class="text-sm" style="width:50%"></p>
                     </div>
                     <div class="card-body table-responsive">
                         <div class="table-responsive">
                             <p class="text-sm">
-                                Part_No:@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:3%" } }) Quantity : @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:15%;margin-right:3%;" } }) <button class="btn btn-sm btn-secondary" id="add">Add</button>
+                                Part_No:@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:3%" } }) Quantity : @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:15%;margin-right:3%;" } }) <button class="btn btn-sm btn-secondary" id="add">Add</button><button class="btn btn-sm btn-secondary" id="add_edit" style="display:none;">Add</button>
                             </p>
                             <p id="value1" class="text-sm" style="width:50%"></p>
                             <button class="btn btn-sm btn-secondary float-right" id="Submit" style="width:8%;margin-left:2%;margin-top:30px;">Submit</button>
                             <a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 30px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>
                             <table id="selected_units" class="text-sm font-weight-normal scroll" style="margin-top:10px;">
-                                <tbody>
+                                <thead>
                                     <tr>
-                                        <th style="padding-right:100px">Part_No</th>
-                                        <th style="padding-right:100px">Description</th>
+                                        <th style="padding-right:95px">Part_No</th>
+                                        <th style="padding-right:350px">Description</th>
                                         <th style="padding-right:100px">Quantity</th>
+                                        <th style="padding-right: 35px">E/D</th>
                                         <th style="display:none;">SP_Part_No</th>
+                                        <th style="display:none;">BOM_No</th>
                                         <th style="display:none;">BOM_Date</th>
                                     </tr>
+                                </thead>
+                                <tbody>
+                                    @{ int i = 0; }
+                                    @foreach (System.Data.DataRow dr in ViewBag.Goods.Rows)
+                                    {
+                                    <tr id="@i">
+                                        <td class="row-data">@dr["P_Part_No"].ToString()</td>
+                                        <td class="row-data" style="width:550px;">@dr["P_Description"].ToString()</td>
+                                        <td class="row-data text-sm-left" style="width:50px;">@dr["Quantity"].ToString()</td>
+                                        <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i> </td>
+                                        <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.SP_Part_No)</td>
+                                        <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.BOM_No)</td>
+                                        <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.BOM_Date)</td>
+                                    </tr>
+                                        i++;
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -90,8 +108,9 @@
         var partno = $('#Part_No').val();
         var d2 = document.getElementById("Quantity").value;
         var sp_partno = $('#SP_Part_No').val();
-        var bomdate = $('#BOM_Date').val();
         var qty = parseInt(d2);
+        var bomno = $('#BOM_No').val();
+        var bomdate = $('#BOM_Date').val();
 
         var model = new Object();
             model.Part_No = document.getElementById("Part_No").value;
@@ -118,7 +137,7 @@
                         document.getElementById("value").innerHTML = qty_err;
                         return;
                     }
-                    var newrow = '<tr id="data"><td>' + partno + '</td><td>' + data[0].Description + '</td><td>' + qty + '</td><td style="display:none;">' + sp_partno + '</td><td style="display:none;">' + bomdate + '</td></tr>';
+                    var newrow = '<tr id="data"><td>' + partno + '</td><td>' + data[0].Description + '</td><td>' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td style="display:none;">' + sp_partno + '</td><td style="display:none;">' + bomno + '</td><td style="display:none;">' + bomdate + '</td></tr>';
                     $('#selected_units tr:last').after(newrow);
             },
             failure: function (errMsg) {
@@ -137,6 +156,14 @@
     }
 
     $('#Submit').click(function (e) {
+        var part = document.getElementById("selected_units").tBodies[0].rows.length;
+        var Null = "";
+        if (part == 1) {
+            document.getElementById("Enter_Inv_No").innerHTML = "Table is Empty !!!";
+            return;
+        }
+        else {
+            document.getElementById("Enter_Inv_No").innerHTML = Null;
             var myRows = [];
             var headersText = [];
             var $headers = $("th");
@@ -168,6 +195,7 @@
                 }
             });
             @*document.getElementById("json_op").innerHTML = JSON.stringify(myRows, undefined, 2);*@
+        }
     });
 
     document.addEventListener('keydown', function (event) {
@@ -234,5 +262,10 @@
             }
             });
         }
+    }
+    function freeze() {
+        $('#BOM_No').prop('disabled', true);
+        $('#BOM_Date').prop('disabled', true);
+        $('#SP_Part_No').prop('disabled', true);
     }
 </script>

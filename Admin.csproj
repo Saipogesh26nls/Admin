@@ -2368,7 +2368,6 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Price\Price_Update.cshtml" />
     <Content Include="Views\NewPurchase\New_Purchase.cshtml" />
     <Content Include="Views\NewPurchase\PurchaseList.cshtml" />
     <Content Include="Views\NewPurchase\Edit_Purchase_View.cshtml" />
@@ -2379,6 +2378,7 @@
     <Content Include="Views\NewPurchase\Delete_GoodsRI_View.cshtml" />
     <Content Include="Views\BOM\BOM_List.cshtml" />
     <Content Include="Views\Price\Price_List.cshtml" />
+    <Content Include="Views\BOM\BOM_Edit_Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

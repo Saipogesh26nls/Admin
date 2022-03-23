@@ -337,6 +337,14 @@ namespace Admin.Controllers
             Index.Add(new SelectListItem { Text = "Goods-Receipt", Value = "1" });
             Index.Add(new SelectListItem { Text = "Goods-Issue", Value = "2" });
             ViewBag.Index = new SelectList(Index, "Value", "Text");
+            SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
+            DataTable _dt4 = new DataTable();
+            _da4.Fill(_dt4);
+            ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
+            SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", _con);
+            DataTable _dt5 = new DataTable();
+            _da5.Fill(_dt5);
+            ViewBag.MfdList = ToSelectList(_dt5, "A_code", "A_Name");
             _con.Close();
             return View(Model);
         }
