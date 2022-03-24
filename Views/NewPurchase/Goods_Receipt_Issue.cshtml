@@ -47,7 +47,7 @@
         #list:hover {
             background-color: aliceblue;
         }
-        .modal-content {
+        #add_pd {
             width: 30%;
         }
     </style>
@@ -101,17 +101,18 @@
                                 </div>
                             </div>
                             <div id="myModal1" class="modal">
-                                <div class="modal-content">
+                                <div class="modal-content" id="add_pd">
                                     <i class="close" id="close1">&times;</i>
                                     <div style="margin-left:60px;">
                                         <p>Product Name &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Name)</p>
-                                        <p>Group &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp:  &nbsp &nbsp @Html.DropDownListFor(model => model.Add_Group, ViewBag.ProductList as SelectList)</p>
-                                        <p>Manufacturer  &nbsp &nbsp:  &nbsp &nbsp @Html.DropDownListFor(model => model.Add_Manufacturer, ViewBag.MfdList as SelectList)</p>
+                                        <p>Group &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp:  &nbsp &nbsp @Html.DropDownListFor(model => model.Add_Group, ViewBag.ProductList as SelectList, new { htmlAttributes = new { @style = "width:10%;" } })</p>
+                                        <p>Manufacturer  &nbsp &nbsp:  &nbsp &nbsp @Html.DropDownListFor(model => model.Add_Manufacturer, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:10%;" } })</p>
                                         <p>Part No  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_PartNo)</p>
                                         <p>Description &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_Description)</p>
                                         <p>Cost &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Cost)</p>
                                         <p>MRP &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_MRP)</p>
                                         <p>Sell Price &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_SellPrice)</p>
+                                        <button class="btn btn-sm btn-secondary" style="width:75px;margin-left:32.5%;" id="add_Submit" onclick="Add_Prod()">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -380,6 +381,46 @@
                 modal.style.display = "none";
             });
         }
+    }
+
+    function Add_Prod() {
+        var Name = document.getElementById("Add_Name").value;
+        var Group = document.getElementById("Add_Group").value;
+        var Mfr = document.getElementById("Add_Manufacturer").value;
+        var PartNo = document.getElementById("Add_PartNo").value;
+        var Descp = document.getElementById("Add_Description").value;
+        var Cost = document.getElementById("Add_Cost").value;
+        var MRP = document.getElementById("Add_MRP").value;
+        var SellPrice = document.getElementById("Add_SellPrice").value;
+
+        var model = new Object();
+        model.Add_Name = Name;
+        model.Add_Group = Group;
+        model.Add_Manufacturer = Mfr;
+        model.Add_PartNo = PartNo;
+        model.Add_Description = Descp;
+        model.Add_Cost = Cost;
+        model.Add_MRP = MRP;
+        model.Add_SellPrice = SellPrice;
+            $.ajax({
+                url: '/NewPurchase/Prod_Entry',
+                data: JSON.stringify({ name: model }),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+                    if (result != null) {
+                        var qty_err = '<p style="color:red;">Part No already exists !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else {
+                        var qty_err = '<p style="color:red;">Submitted Successfully !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                }
+            });
     }
 
 </script>

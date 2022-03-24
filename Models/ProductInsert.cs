@@ -11,7 +11,7 @@ namespace Admin.Models
 {
     public class ProductInsert
     {
-        public int AddData(string cP_Name, string cP_Disp_Name, string cP_Manufacturer, string cP_Region, string cP_Part_No, string cP_Description, double cP_Cost, double cP_MRP, double cP_SP) 
+        public int AddData(string cP_Name, string cP_Disp_Name, string cP_Manufacturer, string cP_Part_No, string cP_Description, double cP_Cost, double cP_MRP, double cP_SP) 
         {
              SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
              Con.Open();
