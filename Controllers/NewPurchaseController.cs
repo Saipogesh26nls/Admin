@@ -30,6 +30,14 @@ namespace Admin.Controllers
             DataTable _dt1 = new DataTable();
             _da1.Fill(_dt1);
             ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
+            SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
+            DataTable _dt4 = new DataTable();
+            _da4.Fill(_dt4);
+            ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
+            SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", _con);
+            DataTable _dt5 = new DataTable();
+            _da5.Fill(_dt5);
+            ViewBag.Mfd = ToSelectList(_dt5, "A_code", "A_Name");
             _con.Close();
             return View(new_Purchase);
         }
@@ -127,6 +135,14 @@ namespace Admin.Controllers
             DataTable _dt1 = new DataTable();
             _da1.Fill(_dt1);
             ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
+            SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", Con);
+            DataTable _dt4 = new DataTable();
+            _da4.Fill(_dt4);
+            ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
+            SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", Con);
+            DataTable _dt5 = new DataTable();
+            _da5.Fill(_dt5);
+            ViewBag.Mfd = ToSelectList(_dt5, "A_code", "A_Name");
             ViewBag.Mfr = a_code;
             string cmd2 = "select Final_Discount, Final_Tax1, Final_Tax2, Amount from A_Ledger where Voucher_No = '" + v_no + "'";
             SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
@@ -332,7 +348,7 @@ namespace Admin.Controllers
             SqlDataAdapter _da3 = new SqlDataAdapter("Select * From Employee_Master", _con);
             DataTable _dt3 = new DataTable();
             _da3.Fill(_dt3);
-            ViewBag.Employee = ToSelectList(_dt3, "Employee_Id", "Employee_Name");
+            ViewBag.Employee = ToSelectList(_dt3, "Id", "Employee_Name");
             List<SelectListItem> Index = new List<SelectListItem>();
             Index.Add(new SelectListItem { Text = "Goods-Receipt", Value = "1" });
             Index.Add(new SelectListItem { Text = "Goods-Issue", Value = "2" });
@@ -408,11 +424,19 @@ namespace Admin.Controllers
             SqlDataAdapter _da3 = new SqlDataAdapter("Select * From Employee_Master", _con);
             DataTable _dt3 = new DataTable();
             _da3.Fill(_dt3);
-            ViewBag.Employee = ToSelectList(_dt3, "Employee_Id", "Employee_Name");
+            ViewBag.Employee = ToSelectList(_dt3, "Id", "Employee_Name");
             List<SelectListItem> Index = new List<SelectListItem>();
             Index.Add(new SelectListItem { Text = "Goods-Receipt", Value = "1" });
             Index.Add(new SelectListItem { Text = "Goods-Issue", Value = "2" });
             ViewBag.Index = new SelectList(Index, "Value", "Text");
+            SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
+            DataTable _dt4 = new DataTable();
+            _da4.Fill(_dt4);
+            ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
+            SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", _con);
+            DataTable _dt5 = new DataTable();
+            _da5.Fill(_dt5);
+            ViewBag.MfdList = ToSelectList(_dt5, "A_code", "A_Name");
             _con.Close();
             GoodsRI goodsRI = new GoodsRI();
             DataSet dataSet = goodsRI.EditGoods(vtype, gv_no);
@@ -566,6 +590,29 @@ namespace Admin.Controllers
         }
 
         // Add Product
-        
+        public ActionResult Add_Product(GoodsRI name) // add new products to db
+        {
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "select P_Part_No from Product_Master where P_Part_No = '" + name.Add_PartNo + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlDataReader dr = SqlCmd1.ExecuteReader();
+            string ItemQm = string.Empty;
+            while (dr.Read())
+            {
+                ItemQm = dr["P_Part_No"].ToString();
+            }
+            if (ItemQm != name.Add_PartNo)
+            {
+                ProductInsert dblogin = new ProductInsert();
+                int userid = dblogin.AddData(name.Add_Name, name.Add_Group, name.Add_Manufacturer, name.Add_PartNo, name.Add_Description, name.Add_Cost, name.Add_MRP, name.Add_SellPrice);
+                return Json(name);
+            }
+            else
+            {
+                return Json(name);
+            }
+            
+        }
     }
 }

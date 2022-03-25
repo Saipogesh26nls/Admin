@@ -52,6 +52,9 @@
         #list:hover {
             background-color: aliceblue;
         }
+        #add_pd {
+            width: 30%;
+        }
     </style>
 </head>
 <body onload="total_cal();">
@@ -71,7 +74,7 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <p class="text-sm">
-                                Part No : @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%; margin-top: 10px; margin-right: 1%;margin-left:0.5%;", @placeholder = "Part No", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:3%"></i> @Html.DisplayFor(model => model.Part_No)
+                                Part No : @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%; margin-top: 10px; margin-right: 1%;margin-left:0.5%;", @placeholder = "Part No", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:3%"></i> @Html.DisplayFor(model => model.Part_No)
                                 Quantity : @Html.EditorFor(model => model.P_Qty, new { htmlAttributes = new { @style = "width:15%; margin-right: 5%;", @placeholder = "Quantity" } })
                                 Price Per Unit : @Html.EditorFor(model => model.P_Rate, new { htmlAttributes = new { @style = "width:15%; margin-right: 10%;", @placeholder = "Price Per Unit" } })
                             </p>
@@ -90,7 +93,7 @@
 
                                 <!-- Modal content -->
                                 <div class="modal-content">
-                                    <i class="close">&times;</i>
+                                    <i class="close" id="close1">&times;</i>
                                     <p class="text-sm" style="margin-top:10px;">Choose Part No : @Html.EditorFor(model => model.alphabet, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })</p>
                                     <table class="table text-sm" id="pm_list">
                                         <tbody>
@@ -110,6 +113,23 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                </div>
+                            </div>
+                            <div id="myModal1" class="modal">
+                                <div class="modal-content" id="add_pd">
+                                    <i class="close" id="close2">&times;</i>
+                                    <div style="margin-left:60px;">
+                                        <p>Product Name &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Name, new { htmlAttributes = new { required = "required" } })</p>
+                                        <p>Group &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp:  &nbsp &nbsp @Html.DropDownListFor(model => model.Add_Group, ViewBag.ProductList as SelectList, new { htmlAttributes = new { @style = "width:10%;" } })</p>
+                                        <p>Manufacturer  &nbsp &nbsp:  &nbsp &nbsp @Html.DropDownListFor(model => model.Add_Manufacturer, ViewBag.Mfd as SelectList, new { htmlAttributes = new { @style = "width:10%;" } })</p>
+                                        <p>Part No  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_PartNo, new { htmlAttributes = new { required = "required" } })</p>
+                                        <p>Description &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.TextAreaFor(model => model.Add_Description, new { @style = "color:black; width:50%; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })</p>
+                                        <p>Cost &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Cost)</p>
+                                        <p>MRP &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_MRP)</p>
+                                        <p>Sell Price &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_SellPrice)</p>
+                                        <p id="message"></p>
+                                        <button class="btn btn-sm btn-secondary" style="width:75px;margin-left:32.5%;" id="add_Submit" onclick="Add_Prod()">Submit</button>
+                                    </div>
                                 </div>
                             </div>
                             <table id="selected_units" class="text-sm font-weight-normal scroll" style="margin-top:10px;">
@@ -381,7 +401,7 @@
                     alert(errMsg);
                 }
             });
-        
+
     });
 
     function formClear() {
@@ -897,18 +917,32 @@
     }
 
     var modal = document.getElementById("myModal");
+    var modal1 = document.getElementById("myModal1");
     var btn = document.getElementById("myBtn");
-    var span = document.getElementsByClassName("close")[0];
+    var btn1 = document.getElementById("addproduct");
+    var span = document.getElementById("close1");
+    var span1 = document.getElementById("close2");
 
     btn.onclick = function () {
         modal.style.display = "block";
     }
+    btn1.onclick = function () {
+        modal1.style.display = "block";
+    }
     span.onclick = function () {
         modal.style.display = "none";
+    }
+    span1.onclick = function () {
+        modal1.style.display = "none";
     }
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
+        }
+    }
+    window.onclick = function (event) {
+        if (event.target == modal1) {
+            modal1.style.display = "none";
         }
     }
 
@@ -951,5 +985,54 @@
                 modal.style.display = "none";
             });
         }
+    }
+     function Add_Prod() {
+        var Name = document.getElementById("Add_Name").value;
+        var Group = document.getElementById("Add_Group").value;
+        var Mfr = document.getElementById("Add_Manufacturer").value;
+        var PartNo = document.getElementById("Add_PartNo").value;
+        var Descp = document.getElementById("Add_Description").value;
+        var Cost = document.getElementById("Add_Cost").value;
+        var MRP = document.getElementById("Add_MRP").value;
+        var SellPrice = document.getElementById("Add_SellPrice").value;
+
+        if (Name == "") {
+            var qty_err = '<p style="color:red;">Field Product Name is required !!!<p/>';
+            document.getElementById("message").innerHTML = qty_err;
+            return;
+        }
+        else if (PartNo == "") {
+            var qty_err = '<p style="color:red;">Field Part No is required !!!<p/>';
+            document.getElementById("message").innerHTML = qty_err;
+            return;
+        }
+        var model = new Object();
+        model.Add_Name = Name;
+        model.Add_Group = Group;
+        model.Add_Manufacturer = Mfr;
+        model.Add_PartNo = PartNo;
+        model.Add_Description = Descp;
+        model.Add_Cost = Cost;
+        model.Add_MRP = MRP;
+        model.Add_SellPrice = SellPrice;
+            $.ajax({
+                url: "@Url.Action("Add_Product")",
+                data: JSON.stringify({ name: model }),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+                    if (result != null) {
+                        var qty_err = '<p style="color:red;">Part No already exists !!!<p/>';
+                        document.getElementById("message").innerHTML = qty_err;
+                        return;
+                    }
+                    else {
+                        var qty_err = '<p style="color:red;">Submitted Successfully !!!<p/>';
+                        document.getElementById("message").innerHTML = qty_err;
+                        return;
+                    }
+                }
+            });
     }
 </script>

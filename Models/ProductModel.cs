@@ -347,6 +347,14 @@ namespace Admin.Models
 
             return ds;
         }
+        public string Add_Name { get; set; }
+        public string Add_Group { get; set; }
+        public string Add_Manufacturer { get; set; }
+        public string Add_PartNo { get; set; }
+        public string Add_Description { get; set; }
+        public double Add_Cost { get; set; }
+        public double Add_MRP { get; set; }
+        public double Add_SellPrice { get; set; }
 
     }
     public class PurchaseTable
@@ -489,5 +497,19 @@ namespace Admin.Models
         public string Part_No { get; set; }
         public string Description { get; set; }
         public string P_Part_NO { get; set; }
+    }
+    public class UserModel
+    {
+        [DisplayName("Employee Name")]
+        public string Employee_Name { get; set; }
+        [DisplayName("Employee Designation")]
+        public string Employee_Designation { get; set; }
+        [DisplayName("Employee Id")]
+        public string Employee_Id { get; set; }
+        [DisplayName("Process Name")]
+        public string Process_Name { get; set; }
+        [DisplayName("Project Name")]
+        public string Project_Name { get; set; }
+        public string Company { get; set; }
     }
 }

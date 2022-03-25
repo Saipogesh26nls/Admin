@@ -243,6 +243,7 @@
     <Compile Include="Controllers\NewPurchaseController.cs" />
     <Compile Include="Controllers\PriceController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -2379,6 +2380,8 @@
     <Content Include="Views\BOM\BOM_List.cshtml" />
     <Content Include="Views\Price\Price_List.cshtml" />
     <Content Include="Views\BOM\BOM_Edit_Delete.cshtml" />
+    <Content Include="Views\User\Add_New_Employee.cshtml" />
+    <Content Include="Views\User\Add_New_Project.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

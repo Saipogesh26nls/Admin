@@ -104,14 +104,15 @@
                                 <div class="modal-content" id="add_pd">
                                     <i class="close" id="close1">&times;</i>
                                     <div style="margin-left:60px;">
-                                        <p>Product Name &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Name)</p>
+                                        <p>Product Name &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Name, new { htmlAttributes = new { required = "required" } })</p>
                                         <p>Group &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp:  &nbsp &nbsp @Html.DropDownListFor(model => model.Add_Group, ViewBag.ProductList as SelectList, new { htmlAttributes = new { @style = "width:10%;" } })</p>
                                         <p>Manufacturer  &nbsp &nbsp:  &nbsp &nbsp @Html.DropDownListFor(model => model.Add_Manufacturer, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:10%;" } })</p>
-                                        <p>Part No  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_PartNo)</p>
-                                        <p>Description &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_Description)</p>
+                                        <p>Part No  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_PartNo, new { htmlAttributes = new { required = "required" } })</p>
+                                        <p>Description &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.TextAreaFor(model => model.Add_Description, new { @style = "color:black; width:200px; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })</p>
                                         <p>Cost &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Cost)</p>
                                         <p>MRP &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_MRP)</p>
                                         <p>Sell Price &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_SellPrice)</p>
+                                        <p id="message"></p>
                                         <button class="btn btn-sm btn-secondary" style="width:75px;margin-left:32.5%;" id="add_Submit" onclick="Add_Prod()">Submit</button>
                                     </div>
                                 </div>
@@ -393,6 +394,16 @@
         var MRP = document.getElementById("Add_MRP").value;
         var SellPrice = document.getElementById("Add_SellPrice").value;
 
+        if (Name == "") {
+            var qty_err = '<p style="color:red;">Field Product Name is required !!!<p/>';
+            document.getElementById("message").innerHTML = qty_err;
+            return;
+        }
+        else if (PartNo == "") {
+            var qty_err = '<p style="color:red;">Field Part No is required !!!<p/>';
+            document.getElementById("message").innerHTML = qty_err;
+            return;
+        }
         var model = new Object();
         model.Add_Name = Name;
         model.Add_Group = Group;
@@ -403,7 +414,7 @@
         model.Add_MRP = MRP;
         model.Add_SellPrice = SellPrice;
             $.ajax({
-                url: '/NewPurchase/Prod_Entry',
+                url: "@Url.Action("Add_Product")",
                 data: JSON.stringify({ name: model }),
                 type: 'POST',
                 contentType: 'application/json;',
@@ -411,12 +422,12 @@
                 success: function (result) {
                     if (result != null) {
                         var qty_err = '<p style="color:red;">Part No already exists !!!<p/>';
-                        document.getElementById("value").innerHTML = qty_err;
+                        document.getElementById("message").innerHTML = qty_err;
                         return;
                     }
                     else {
                         var qty_err = '<p style="color:red;">Submitted Successfully !!!<p/>';
-                        document.getElementById("value").innerHTML = qty_err;
+                        document.getElementById("message").innerHTML = qty_err;
                         return;
                     }
                 }
