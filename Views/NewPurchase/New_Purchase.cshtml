@@ -89,12 +89,18 @@
                                 <!-- Modal content -->
                                 <div class="modal-content">
                                     <i class="close" id="close1">&times;</i>
-                                    <p class="text-sm" style="margin-top:10px;">Choose Part No : @Html.EditorFor(model => model.alphabet, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })</p>
+                                    <p class="text-sm" style="margin-top:10px;text-align:center;"> Package : @Html.EditorFor(model => model.Package_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Value : @Html.EditorFor(model => model.Value_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Part No : @Html.EditorFor(model => model.Partno_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })</p>
                                     <table class="table text-sm" id="pm_list">
                                         <tbody>
                                             <tr>
                                                 <th>
                                                     Product Code
+                                                </th>
+                                                <th>
+                                                    Package
+                                                </th>
+                                                <th>
+                                                    Value
                                                 </th>
                                                 <th>
                                                     Part No
@@ -105,6 +111,7 @@
                                                 <th>
                                                     Product Cost
                                                 </th>
+                                                <th></th>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -114,10 +121,12 @@
                                 <div class="modal-content" id="add_pd">
                                     <i class="close" id="close2">&times;</i>
                                     <div style="margin-left:60px;">
-                                        <p>Product Name &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Name, new { htmlAttributes = new { required = "required" } })</p>
+                                        <p>Product Name &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Name, new { htmlAttributes = new { required = "required", @class = " uppercase" } })</p>
                                         <p>Group &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp:  &nbsp &nbsp @Html.DropDownListFor(model => model.Add_Group, ViewBag.ProductList as SelectList, new { htmlAttributes = new { @style = "width:10%;" } })</p>
-                                        <p>Manufacturer  &nbsp &nbsp:  &nbsp &nbsp @Html.DropDownListFor(model => model.Add_Manufacturer, ViewBag.Mfd as SelectList, new { htmlAttributes = new { @style = "width:10%;" } })</p>
-                                        <p>Part No  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_PartNo, new { htmlAttributes = new { required = "required" } })</p>
+                                        <p>Manufacturer  &nbsp &nbsp:  &nbsp &nbsp @Html.DropDownListFor(model => model.Add_Manufacturer, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:10%;" } })</p>
+                                        <p>Package  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Package, new { htmlAttributes = new { @class = " uppercase" } })</p>
+                                        <p>Value  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_Value, new { htmlAttributes = new { @class = " uppercase" } })</p>
+                                        <p>Part No  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_PartNo, new { htmlAttributes = new { @class = " uppercase" } })</p>
                                         <p>Description &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.TextAreaFor(model => model.Add_Description, new { @style = "color:black; width:50%; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })</p>
                                         <p>Cost &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Cost)</p>
                                         <p>MRP &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_MRP)</p>
@@ -475,19 +484,23 @@
 
     function list() {
         document.addEventListener("keyup", function (event) {
-            var letter = document.querySelector("#alphabet").value;
+            var package = document.querySelector("#Package_letter").value;
+            var value = document.querySelector("#Value_letter").value;
+            var partno = document.querySelector("#Partno_letter").value;
             var model = new Object();
-            model.alphabet = letter;
+            model.Package_letter = package;
+            model.Value_letter = value;
+            model.Partno_letter = partno;
             $.ajax({
                 url: '/NewPurchase/PM_List',
-                data: JSON.stringify({ name: model }),
+                data: JSON.stringify({name : model}),
                 type: 'POST',
                 contentType: 'application/json;',
                 dataType: 'json',
                 success: function (result) {
                     $("#pm_list").find("tr:not(:first)").remove();
                     for (var i = 0; i <= result.length - 1; i++) {
-                        var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td><td style="text-align:right">' + result[i].P_Cost + '</td></tr>';
+                        var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Package + '</td><td>' + result[i].Value + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td><td style="text-align:right">' + result[i].P_Cost + '</td></tr>';
                         $('#pm_list tr:last').after(newrow);
                     }
                 }
@@ -499,12 +512,12 @@
         var table = document.getElementById('pm_list');
         for (var i = 0; i < table.rows.length; i++) {
             table.rows[i].addEventListener('click', function () {
-                var partno = this.cells[1].innerHTML;
-                var descp = this.cells[2].innerHTML;
-                var cost = this.cells[3].innerHTML;
+                var partno = this.cells[3].innerHTML;
+                var descp = this.cells[4].innerHTML;
+                var cost = this.cells[5].innerHTML;
                 document.getElementById("Part_No").value = partno;
                 document.getElementById("value").innerHTML = descp;
-                document.getElementById("Purchase_Rate").value = cost;
+                document.getElementById("P_Rate").value = cost;
                 modal.style.display = "none";
             });
         }
@@ -514,6 +527,8 @@
         var Name = document.getElementById("Add_Name").value;
         var Group = document.getElementById("Add_Group").value;
         var Mfr = document.getElementById("Add_Manufacturer").value;
+        var pkg = document.getElementById("Add_Package").value;
+        var value = document.getElementById("Add_Value").value;
         var PartNo = document.getElementById("Add_PartNo").value;
         var Descp = document.getElementById("Add_Description").value;
         var Cost = document.getElementById("Add_Cost").value;
@@ -538,6 +553,8 @@
         model.Add_Description = Descp;
         model.Add_Cost = Cost;
         model.Add_MRP = MRP;
+        model.Add_Package = pkg;
+        model.Add_Value = value;
         model.Add_SellPrice = SellPrice;
             $.ajax({
                 url: "@Url.Action("Add_Product")",

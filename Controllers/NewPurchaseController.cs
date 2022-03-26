@@ -484,7 +484,7 @@ namespace Admin.Controllers
         public ActionResult PM_List(GoodsRI name) // To show full Product Master stocks from DB
         {
             Goods_RI dblogin = new Goods_RI();
-            var Descp = dblogin.PM_list(name.alphabet);
+            var Descp = dblogin.PM_list(name.Package_letter,name.Value_letter,name.Partno_letter);
             return Json(Descp);
         }
 
@@ -605,7 +605,7 @@ namespace Admin.Controllers
             if (ItemQm != name.Add_PartNo)
             {
                 ProductInsert dblogin = new ProductInsert();
-                int userid = dblogin.AddData(name.Add_Name, name.Add_Group, name.Add_Manufacturer, name.Add_PartNo, name.Add_Description, name.Add_Cost, name.Add_MRP, name.Add_SellPrice);
+                int userid = dblogin.AddData(name.Add_Name, name.Add_Group, name.Add_Manufacturer,name.Add_Package,name.Add_Value, name.Add_PartNo, name.Add_Description, name.Add_Cost, name.Add_MRP, name.Add_SellPrice);
                 return Json(name);
             }
             else

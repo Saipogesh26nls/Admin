@@ -686,28 +686,56 @@ namespace Admin.Models
             }
             Con1.Close();
         }
-        public List<GoodsRI> PM_list(string data)
+        public List<GoodsRI> PM_list(string package, string value, string partno)
         {
             List<GoodsRI> ItemQm = new List<GoodsRI>();
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd1 = "SELECT * FROM Product_Master WHERE P_Description LIKE '%"+data+"%'";
-            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
-            SqlDataReader dr = SqlCmd1.ExecuteReader();
-            while (dr.Read())
+            if(package == null && value == null && partno != null || package == null && value == null && partno == null)
             {
-                string cost = dr["P_Cost"].ToString();
-                ItemQm.Add(new GoodsRI
+                string cmd1 = "SELECT * FROM Product_Master WHERE P_Part_No Like '%" + partno + "%'";
+                SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                SqlDataReader dr = SqlCmd1.ExecuteReader();
+                while (dr.Read())
                 {
-                    Part_No = dr["P_Part_No"].ToString(),
-                    Description = dr["P_Description"].ToString(),
-                    P_code = dr["P_code"].ToString(),
-                    P_Cost = double.Parse(cost)
+                    string cost = dr["P_Cost"].ToString();
+                    ItemQm.Add(new GoodsRI
+                    {
+                        Part_No = dr["P_Part_No"].ToString(),
+                        Description = dr["P_Description"].ToString(),
+                        P_code = dr["P_code"].ToString(),
+                        P_Cost = double.Parse(cost),
+                        Package = dr["P_Package"].ToString(),
+                        Value = dr["P_Value"].ToString()
+                    }
+                    );
+                }
+                Con.Close();
+                return ItemQm;
             }
-                );
+            else
+            {
+                string cmd1 = "SELECT * FROM Product_Master WHERE P_Package LIKE '%" + package + "%' and P_Value Like '%" + value + "%' and P_Part_No Like '%" + partno + "%'";
+                SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                SqlDataReader dr = SqlCmd1.ExecuteReader();
+                while (dr.Read())
+                {
+                    string cost = dr["P_Cost"].ToString();
+                    ItemQm.Add(new GoodsRI
+                    {
+                        Part_No = dr["P_Part_No"].ToString(),
+                        Description = dr["P_Description"].ToString(),
+                        P_code = dr["P_code"].ToString(),
+                        P_Cost = double.Parse(cost),
+                        Package = dr["P_Package"].ToString(),
+                        Value = dr["P_Value"].ToString()
+                    }
+                    );
+                }
+                Con.Close();
+                return ItemQm;
             }
-            Con.Close();
-            return ItemQm;
+            
         }
         
     }

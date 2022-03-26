@@ -249,7 +249,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </li>
                         <li class="nav-item">
                             <a href="@Url.Action("New_Purchase","NewPurchase")" class="nav-link">
-                                <i class="nav-icon fas fa-shopping-cart"></i>
+                                <i class="nav-icon fas fa-cart-plus"></i>
                                 <p>
                                     Purchase
                                 </p>
@@ -276,6 +276,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <i class="nav-icon fas fa-project-diagram"></i>
                                 <p @*style="font-weight:bold"*@>
                                     Project Master
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("Add_New_Process","User")" class="nav-link">
+                                <i class="nav-icon fas fa-cogs"></i>
+                                <p @*style="font-weight:bold"*@>
+                                    Process Master
                                 </p>
                             </a>
                         </li>

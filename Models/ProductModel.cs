@@ -32,6 +32,8 @@ namespace Admin.Models
         [DisplayName("SellPrice")]
         public double P_SP { get; set; }
         public string Reg_Success { get; set; }
+        public string Package { get; set; }
+        public string Value { get; set; }
     }
     public class MFRFields
     {
@@ -320,7 +322,11 @@ namespace Admin.Models
         public string P_Manufacturer { get; set; }
         public string P_Part_No { get; set; }
         public string P_Description { get; set; }
-        public string alphabet { get; set; }
+        public string Package { get; set; }
+        public string Value { get; set; }
+        public string Partno_letter { get; set; }
+        public string Package_letter { get; set; }
+        public string Value_letter { get; set; }
         public string Supplier { get; set; }
         public double P_Cost { get; set; }  
         public DataSet EditPurchase(int id)
@@ -350,6 +356,8 @@ namespace Admin.Models
         public string Add_Name { get; set; }
         public string Add_Group { get; set; }
         public string Add_Manufacturer { get; set; }
+        public string Add_Package { get; set; }
+        public string Add_Value { get; set; }
         public string Add_PartNo { get; set; }
         public string Add_Description { get; set; }
         public double Add_Cost { get; set; }
@@ -449,11 +457,15 @@ namespace Admin.Models
         public string Employee { get; set; }
         public string Note { get; set; }
         public int v_no { get; set; }
-        public string alphabet { get; set; }
         public string V_Date { get; set; }
         public string R_Date { get; set; }
         public double P_Cost { get; set; }
         public int I_Qty { get; set; }
+        public string Package { get; set; }
+        public string Value { get; set; }
+        public string Partno_letter { get; set;}
+        public string Package_letter { get; set; }
+        public string Value_letter { get; set; }
         public DataSet EditGoods(int vtype, int g_vno)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
@@ -471,6 +483,8 @@ namespace Admin.Models
         public string Add_Name { get; set; }
         public string Add_Group { get; set;}
         public string Add_Manufacturer { get; set; }
+        public string Add_Package { get; set; }
+        public string Add_Value { get; set; }
         public string Add_PartNo { get; set; }
         public string Add_Description { get; set; }
         public double Add_Cost { get; set; }

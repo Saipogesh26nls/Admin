@@ -2382,6 +2382,7 @@
     <Content Include="Views\BOM\BOM_Edit_Delete.cshtml" />
     <Content Include="Views\User\Add_New_Employee.cshtml" />
     <Content Include="Views\User\Add_New_Project.cshtml" />
+    <Content Include="Views\User\Add_New_Process.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
