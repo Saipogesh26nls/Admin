@@ -50,6 +50,9 @@
         #add_pd {
             width: 30%;
         }
+        #add_submit {
+            width: 30%;
+        }
     </style>
 </head>
 <body onload="vno()">
@@ -81,7 +84,7 @@
                             <div id="myModal" class="modal">
                                 <div class="modal-content">
                                     <i class="close" id="close">&times;</i>
-                                    <p class="text-sm" style="margin-top:10px;text-align:center;"> Package : @Html.EditorFor(model => model.Package_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Value : @Html.EditorFor(model => model.Value_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Part No : @Html.EditorFor(model => model.Partno_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })</p>
+                                    <p class="text-sm" style="margin-top:10px;text-align:center;"> Package : @Html.EditorFor(model => model.Package_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Value : @Html.EditorFor(model => model.Value_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Part No : @Html.EditorFor(model => model.Partno_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Description : @Html.EditorFor(model => model.Descp_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })</p>
                                     <table class="table text-sm" id="pm_list">
                                         <tbody>
                                             <tr>
@@ -104,6 +107,13 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                </div>
+                            </div>
+                            <div id="myModal2" class="modal" style="display:none;text-align:center;">
+                                <!-- Modal content -->
+                                <div class="modal-content" id="add_submit">
+                                    <p id="voucher_view"></p>
+                                    <p id="submit_view"></p>
                                 </div>
                             </div>
                             <div id="myModal1" class="modal">
@@ -274,10 +284,17 @@
                 contentType: 'application/json;',
                 dataType: 'json',
                 success: function (result) {
+                    var modal2 = document.getElementById("myModal2");
+                    modal2.style.display = "block";
                     var data = result;
-                    document.getElementById("Voucher_No").innerHTML = data;
-                    document.getElementById("Enter_Inv_No").innerHTML = "Submitted Successfully !!!";
-                    document.getElementById("voucher").innerHTML = "Your Voucher.No is " + data + "";
+                    var vno = '<p style="background-color:yellow;width:20%">Your Voucher.No is ' + data + '<p/>';
+                    document.getElementById("voucher_view").innerHTML = "Your Voucher.No is " + data + "";
+                    document.getElementById("Voucher_No").value = data;
+                    var submit = '<p style="color:red;">Submitted Successfully !!!<p/>';
+                    document.getElementById("submit_view").innerHTML = submit;
+                    setTimeout(function () {
+                        window.location.reload(1);
+                    }, 3000);
                 }
             });
             @*document.getElementById("json_op").innerHTML = JSON.stringify(myRows, undefined, 2);*@
@@ -362,10 +379,12 @@
             var package = document.querySelector("#Package_letter").value;
             var value = document.querySelector("#Value_letter").value;
             var partno = document.querySelector("#Partno_letter").value;
+            var descp = document.querySelector("#Descp_letter").value;
             var model = new Object();
             model.Package_letter = package;
             model.Value_letter = value;
             model.Partno_letter = partno;
+            model.Descp_letter = descp;
             $.ajax({
                 url: '/NewPurchase/PM_List',
                 data: JSON.stringify({name : model}),

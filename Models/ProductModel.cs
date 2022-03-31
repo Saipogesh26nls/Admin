@@ -255,11 +255,17 @@ namespace Admin.Models
         public string Part_No { get; set; }
         public string Description { get; set; }
         public double P_Cost { get; set; }
-        public string alphabet { get; set; }
         public double P_MRP { get; set; }
         public double P_Price_USD { get; set; }
         public double P_SP { get; set; }
+        [DisplayName("Stock")]
+        public double Current_Stock { get; set; }
         public double Reg_success { get; set; }
+        public string Partno_letter { get; set; }
+        public string Package_letter { get; set; }
+        public string Value_letter { get; set; }
+        public string Descp_letter { get; set; }
+
     }
     public class New_Purchase
     {
@@ -327,13 +333,14 @@ namespace Admin.Models
         public string Partno_letter { get; set; }
         public string Package_letter { get; set; }
         public string Value_letter { get; set; }
+        public string Descp_letter { get; set; }
         public string Supplier { get; set; }
         public double P_Cost { get; set; }  
         public DataSet EditPurchase(int id)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd1 = "select Voucher_No, Voucher_Date, Invoice_No, Invoice_Date, P_code, Purchase_Qty, Purchase_Rate, Purchase_Discount, Purchase_Tax_1, Purchase_Tax_2, Purchase_SubTotal, Purchase_Total from Purchase where Voucher_No = '" + id + "'";
+            string cmd1 = "select Voucher_No, Voucher_Date, Invoice_No, Invoice_Date, P_code, Purchase_Qty, Purchase_Rate, Purchase_Discount, Purchase_Tax_1, Purchase_Tax_2, Purchase_SubTotal, Purchase_Total, Project from Purchase where Voucher_No = '" + id + "'";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
             DataSet ds = new DataSet();
             SqlDataAdapter da = new SqlDataAdapter(SqlCmd1);
@@ -363,6 +370,7 @@ namespace Admin.Models
         public double Add_Cost { get; set; }
         public double Add_MRP { get; set; }
         public double Add_SellPrice { get; set; }
+        public string Project { get; set; }
 
     }
     public class PurchaseTable
@@ -398,6 +406,7 @@ namespace Admin.Models
         public double final_total { get; set; }
         public string Ref_No { get; set; }
         public int I_Qty { get; set; }
+        public string project { get; set; }
     }
     public class PurchaseList
     {
@@ -415,6 +424,8 @@ namespace Admin.Models
         [DisplayName("Total")]
         public double Purchase_Total { get; set; }
         public List<string> Ref_No { get; set ; }
+
+        public string project { get; set; }
     }
     public class EditPurchase
     {
@@ -466,6 +477,7 @@ namespace Admin.Models
         public string Partno_letter { get; set;}
         public string Package_letter { get; set; }
         public string Value_letter { get; set; }
+        public string Descp_letter { get; set; }
         public DataSet EditGoods(int vtype, int g_vno)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
@@ -490,6 +502,8 @@ namespace Admin.Models
         public double Add_Cost { get; set; }
         public double Add_MRP { get; set; }
         public double Add_SellPrice { get; set; }
+        public double Current_Stock { get; set; }
+        public double P_MRP { get; set; }
     }
     public class GoodsList
     {

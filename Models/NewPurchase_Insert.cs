@@ -66,7 +66,7 @@ namespace Admin.Models
             Con.Close();
             return ItemQm;
         }
-        public int Add_Data(List<PurchaseTable> data, int Qty, double total, double final_total, double final_discount, double final_tax1, double final_tax2)
+        public int Add_Data(List<PurchaseTable> data, int Qty, double total, double final_total, double final_discount, double final_tax1, double final_tax2, int project)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
@@ -114,6 +114,7 @@ namespace Admin.Models
                 sql_cmnd.Parameters.AddWithValue("@acc_name", SqlDbType.NVarChar).Value = data[i].supplier;
                 sql_cmnd.Parameters.AddWithValue("@goodsissue", SqlDbType.NVarChar).Value = null;
                 sql_cmnd.Parameters.AddWithValue("@ARefNo", SqlDbType.NVarChar).Value = ARefNo;
+                sql_cmnd.Parameters.AddWithValue("@project", SqlDbType.Int).Value = project;
 
                 if (j == data.Count() - 1)
                 {
@@ -153,7 +154,7 @@ namespace Admin.Models
             {
                 for (int i = 0; i < vno.Count; i++)
                 {
-                    string cmd1 = "select Top 1 Invoice_No,Invoice_Date,Voucher_No,Voucher_Date,A_code from Purchase where Voucher_No = '" + vno[i] + "' ORDER BY Voucher_No Asc;";
+                    string cmd1 = "select Top 1 Invoice_No,Invoice_Date,Voucher_No,Voucher_Date,A_code,Project from Purchase where Voucher_No = '" + vno[i] + "' ORDER BY Voucher_No Asc;";
                     SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
                     SqlDataReader dr = SqlCmd1.ExecuteReader();
                     while (dr.Read())
@@ -164,9 +165,10 @@ namespace Admin.Models
                             Invoice_Date = dr["Invoice_Date"].ToString(),
                             Voucher_No = dr["Voucher_No"].ToString(),
                             Voucher_Date = dr["Voucher_Date"].ToString(),
-                            A_code = dr["A_code"].ToString()
+                            A_code = dr["A_code"].ToString(),
+                            project = dr["Project"].ToString()
                         }
-                        );
+                        ) ;
                     }
                     dr.Close();
                 }
@@ -686,12 +688,12 @@ namespace Admin.Models
             }
             Con1.Close();
         }
-        public List<GoodsRI> PM_list(string package, string value, string partno)
+        public List<GoodsRI> PM_list(string package, string value, string partno, string descp)
         {
             List<GoodsRI> ItemQm = new List<GoodsRI>();
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            if(package == null && value == null && partno != null || package == null && value == null && partno == null)
+            if(package == null && value == null && partno != null || package == null && value == null && partno == null && descp == null)
             {
                 string cmd1 = "SELECT * FROM Product_Master WHERE P_Part_No Like '%" + partno + "%'";
                 SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
@@ -699,6 +701,8 @@ namespace Admin.Models
                 while (dr.Read())
                 {
                     string cost = dr["P_Cost"].ToString();
+                    string mrp = dr["P_MRP"].ToString();
+                    string qty = dr["P_Closing_Balance"].ToString();
                     ItemQm.Add(new GoodsRI
                     {
                         Part_No = dr["P_Part_No"].ToString(),
@@ -706,7 +710,113 @@ namespace Admin.Models
                         P_code = dr["P_code"].ToString(),
                         P_Cost = double.Parse(cost),
                         Package = dr["P_Package"].ToString(),
-                        Value = dr["P_Value"].ToString()
+                        Value = dr["P_Value"].ToString(),
+                        P_MRP = double.Parse(mrp),
+                        Current_Stock = int.Parse(qty)
+                    }
+                    );
+                }
+                Con.Close();
+                return ItemQm;
+            }
+            else if (descp != null)
+            {
+                string cmd1 = "SELECT * FROM Product_Master WHERE P_Description Like '%" + descp + "%'";
+                SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                SqlDataReader dr = SqlCmd1.ExecuteReader();
+                while (dr.Read())
+                {
+                    string cost = dr["P_Cost"].ToString();
+                    string mrp = dr["P_MRP"].ToString();
+                    string qty = dr["P_Closing_Balance"].ToString();
+                    ItemQm.Add(new GoodsRI
+                    {
+                        Part_No = dr["P_Part_No"].ToString(),
+                        Description = dr["P_Description"].ToString(),
+                        P_code = dr["P_code"].ToString(),
+                        P_Cost = double.Parse(cost),
+                        Package = dr["P_Package"].ToString(),
+                        Value = dr["P_Value"].ToString(),
+                        P_MRP = double.Parse(mrp),
+                        Current_Stock = int.Parse(qty)
+                    }
+                    );
+                }
+                Con.Close();
+                return ItemQm;
+            }
+            else if(package != null && value != null && partno == null && descp == null)
+            {
+                string cmd1 = "SELECT * FROM Product_Master WHERE P_Package LIKE '%" + package + "%' and P_Value Like '%" + value + "%'";
+                SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                SqlDataReader dr = SqlCmd1.ExecuteReader();
+                while (dr.Read())
+                {
+                    string cost = dr["P_Cost"].ToString();
+                    string mrp = dr["P_MRP"].ToString();
+                    string qty = dr["P_Closing_Balance"].ToString();
+                    ItemQm.Add(new GoodsRI
+                    {
+                        Part_No = dr["P_Part_No"].ToString(),
+                        Description = dr["P_Description"].ToString(),
+                        P_code = dr["P_code"].ToString(),
+                        P_Cost = double.Parse(cost),
+                        Package = dr["P_Package"].ToString(),
+                        Value = dr["P_Value"].ToString(),
+                        P_MRP = double.Parse(mrp),
+                        Current_Stock = int.Parse(qty)
+                    }
+                    );
+                }
+                Con.Close();
+                return ItemQm;
+            }
+            else if (package != null && value == null && partno == null && descp == null)
+            {
+                string cmd1 = "SELECT * FROM Product_Master WHERE P_Package LIKE '%" + package + "%'";
+                SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                SqlDataReader dr = SqlCmd1.ExecuteReader();
+                while (dr.Read())
+                {
+                    string cost = dr["P_Cost"].ToString();
+                    string mrp = dr["P_MRP"].ToString();
+                    string qty = dr["P_Closing_Balance"].ToString();
+                    ItemQm.Add(new GoodsRI
+                    {
+                        Part_No = dr["P_Part_No"].ToString(),
+                        Description = dr["P_Description"].ToString(),
+                        P_code = dr["P_code"].ToString(),
+                        P_Cost = double.Parse(cost),
+                        Package = dr["P_Package"].ToString(),
+                        Value = dr["P_Value"].ToString(),
+                        P_MRP = double.Parse(mrp),
+                        Current_Stock = int.Parse(qty)
+                    }
+                    );
+                }
+                Con.Close();
+                return ItemQm;
+            }
+            else if (value != null && partno == null && descp == null && package == null)
+            {
+                string cmd1 = "SELECT * FROM Product_Master WHERE P_Value Like '%" + value + "%'";
+                SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                SqlDataReader dr = SqlCmd1.ExecuteReader();
+                while (dr.Read())
+                {
+                    string cost = dr["P_Cost"].ToString();
+                    string mrp = dr["P_MRP"].ToString();
+                    string qty = dr["P_Closing_Balance"].ToString();
+                    ItemQm.Add(new GoodsRI
+                    {
+                        Part_No = dr["P_Part_No"].ToString(),
+                        Description = dr["P_Description"].ToString(),
+                        P_code = dr["P_code"].ToString(),
+                        P_Cost = double.Parse(cost),
+                        Package = dr["P_Package"].ToString(),
+                        Value = dr["P_Value"].ToString(),
+                        P_MRP = double.Parse(mrp),
+                        Current_Stock = int.Parse(qty)
                     }
                     );
                 }
@@ -715,12 +825,14 @@ namespace Admin.Models
             }
             else
             {
-                string cmd1 = "SELECT * FROM Product_Master WHERE P_Package LIKE '%" + package + "%' and P_Value Like '%" + value + "%' and P_Part_No Like '%" + partno + "%'";
+                string cmd1 = "SELECT * FROM Product_Master WHERE P_Package LIKE '%" + package + "%' and P_Value Like '%" + value + "%' and P_Part_No Like '%"+partno+"%'";
                 SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
                 SqlDataReader dr = SqlCmd1.ExecuteReader();
                 while (dr.Read())
                 {
                     string cost = dr["P_Cost"].ToString();
+                    string mrp = dr["P_MRP"].ToString();
+                    string qty = dr["P_Closing_Balance"].ToString();
                     ItemQm.Add(new GoodsRI
                     {
                         Part_No = dr["P_Part_No"].ToString(),
@@ -728,14 +840,16 @@ namespace Admin.Models
                         P_code = dr["P_code"].ToString(),
                         P_Cost = double.Parse(cost),
                         Package = dr["P_Package"].ToString(),
-                        Value = dr["P_Value"].ToString()
+                        Value = dr["P_Value"].ToString(),
+                        P_MRP = double.Parse(mrp),
+                        Current_Stock = int.Parse(qty)
                     }
                     );
                 }
                 Con.Close();
                 return ItemQm;
             }
-            
+
         }
         
     }

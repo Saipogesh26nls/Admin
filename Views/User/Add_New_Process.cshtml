@@ -47,7 +47,9 @@
                     else {
                         var qty_err = '<p style="color:red;">Submitted Successfully !!!<p/>';
                         document.getElementById("message").innerHTML = qty_err;
-                        return;
+                        setTimeout(function () {
+                            window.location.reload(1);
+                        }, 3000);
                     }
                 }
             });

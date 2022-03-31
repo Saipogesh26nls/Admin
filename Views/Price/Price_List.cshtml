@@ -8,7 +8,7 @@
     </style>
 </head>
 <body style="background-color: #f5f5f7;">
-    <p style="margin-top:20px; margin-bottom:20px; margin-left:12.5px">Enter Description : @Html.EditorFor(model => model.alphabet, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = "text-sm uppercase" } })</p>
+    <p class="text-sm" style="margin-top:10px;text-align:center;"> Package : @Html.EditorFor(model => model.Package_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } }) Value : @Html.EditorFor(model => model.Value_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } }) Part No : @Html.EditorFor(model => model.Partno_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } }) Description : @Html.EditorFor(model => model.Descp_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } })</p>
     
     <div id="myModal" class="modal">
         <!-- Modal content -->
@@ -34,10 +34,19 @@
                     Product Code
                 </th>
                 <th>
+                    Package
+                </th>
+                <th>
+                    Value
+                </th>
+                <th>
                     Part No
                 </th>
                 <th>
                     Description
+                </th>
+                <th>
+                    Stock
                 </th>
                 <th>
                     Cost
@@ -52,9 +61,15 @@
 </body>
 <script>
         document.addEventListener("keyup", function (event) {
-            var letter = document.querySelector("#alphabet").value;
+            var package = document.querySelector("#Package_letter").value;
+            var value = document.querySelector("#Value_letter").value;
+            var partno = document.querySelector("#Partno_letter").value;
+            var descp = document.querySelector("#Descp_letter").value;
             var model = new Object();
-            model.alphabet = letter;
+            model.Package_letter = package;
+            model.Value_letter = value;
+            model.Partno_letter = partno;
+            model.Descp_letter = descp;
             $.ajax({
                 url: '/Price/List_Update',
                 data: JSON.stringify({ name: model }),
@@ -64,7 +79,7 @@
                 success: function (result) {
                     $("#pm_list").find("tr:not(:first)").remove();
                     for (var i = 0; i <= result.length - 1; i++) {
-                        var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td><td style="text-align:right">' + result[i].P_Cost + '</td><td style="text-align:right">' + result[i].P_MRP + '</td><td><i class="fa fa-plus" style="margin-right:0.5%; margin-left:0.5;" onclick="List_to_View();" ></i></td></tr>';
+                        var newrow = '<tr id="list"><td>' + result[i].P_code + '</td><td>' + result[i].Package + '</td><td>' + result[i].Value + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td><td>' + result[i].Current_Stock + '</td><td style="text-align:right">' + result[i].P_Cost + '</td><td style="text-align:right">' + result[i].P_MRP + '</td><td><i class="fa fa-plus" style="margin-right:0.5%; margin-left:0.5;" onclick="List_to_View();" ></i></td></tr>';
                         $('#pm_list tr:last').after(newrow);
                     }
                 }
@@ -75,10 +90,10 @@
         var table = document.getElementById('pm_list');
         for (var i = 0; i < table.rows.length; i++) {
             table.rows[i].addEventListener('click', function () {
-                var partno = this.cells[1].innerHTML;
-                var descp = this.cells[2].innerHTML;
-                var cost = this.cells[3].innerHTML;
-                var mrp = this.cells[4].innerHTML;
+                var partno = this.cells[3].innerHTML;
+                var descp = this.cells[4].innerHTML;
+                var cost = this.cells[6].innerHTML;
+                var mrp = this.cells[7].innerHTML;
                 modal.style.display = "block";
                 document.getElementById("Part_No").value = partno;
                 document.getElementById("value").innerHTML = descp;
@@ -92,10 +107,14 @@
     var span = document.getElementsByClassName("close")[0];
 
     span.onclick = function () {
+        qty_err = "";
+        document.getElementById("success").innerHTML = qty_err;
         modal.style.display = "none";
     }
     window.onclick = function (event) {
         if (event.target == modal) {
+            qty_err = "";
+            document.getElementById("success").innerHTML = qty_err;
             modal.style.display = "none";
         }
     }
@@ -122,6 +141,9 @@
             success: function (result) {
                 var qty_err = '<p style="color:red;">Price Updated Successfully !!!<p/>';
                 document.getElementById("success").innerHTML = qty_err;
+                setTimeout(function () {
+                    window.location.reload(1);
+                }, 3000);
             }
         });
     }

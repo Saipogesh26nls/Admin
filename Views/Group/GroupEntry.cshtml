@@ -96,10 +96,20 @@
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" />
+                    <input type="submit" value="Create" class="btn btn-default" onclick="reload()"/>
                 </div>
             </div>
         </div>
     }
 
 </body>
+<script>
+    function reload() {
+        var P_Disp_Name = document.getElementById("P_Disp_Name").value;
+        if (P_Disp_Name != "") {
+            setTimeout(function () {
+                window.location.reload(1);
+            }, 3000);
+        }
+    }
+</script>

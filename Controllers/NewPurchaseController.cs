@@ -38,6 +38,10 @@ namespace Admin.Controllers
             DataTable _dt5 = new DataTable();
             _da5.Fill(_dt5);
             ViewBag.Mfd = ToSelectList(_dt5, "A_code", "A_Name");
+            SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Project_Master", _con);
+            DataTable _dt2 = new DataTable();
+            _da2.Fill(_dt2);
+            ViewBag.Project = ToSelectList(_dt2, "Project_Id", "Project_Name");
             _con.Close();
             return View(new_Purchase);
         }
@@ -58,6 +62,7 @@ namespace Admin.Controllers
         [HttpPost]
         public ActionResult Table_Data(List<PurchaseTable> Purchase)  // For Adding Purchase Data to DB
         {
+            int project = int.Parse(Purchase[0].project);
             int Quantity = Purchase[0].final_Qty;
             double Total = Purchase[0].final_Sub_Total;
             double Final_Total = Purchase[0].final_total;
@@ -65,7 +70,7 @@ namespace Admin.Controllers
             double Final_Tax1 = Purchase[0].final_Tax1;
             double Final_Tax2 = Purchase[0].final_Tax2;
             NewPurchase_Insert purchase = new NewPurchase_Insert();
-            int v_no = purchase.Add_Data(Purchase, Quantity, Total, Final_Total, Final_Discount, Final_Tax1, Final_Tax2);
+            int v_no = purchase.Add_Data(Purchase, Quantity, Total, Final_Total, Final_Discount, Final_Tax1, Final_Tax2, project);
             return Json(v_no);
         }
         public ActionResult Partno_to_Descp(BOMFields name) // conversion of part_no to description
@@ -124,7 +129,7 @@ namespace Admin.Controllers
 
         //Edit Purchase
         static int V_no = 0;
-        public ActionResult Edit_Purchase_View(int v_no, DateTime v_date, string inv_no, DateTime inv_date, string a_code) // edit purchase view
+        public ActionResult Edit_Purchase_View(int v_no, DateTime v_date, string inv_no, DateTime inv_date, string a_code, string data) // edit purchase view
         {
             New_Purchase newPurchase_Insert = new New_Purchase();
             PurchaseTable mfr = new PurchaseTable();
@@ -144,6 +149,10 @@ namespace Admin.Controllers
             _da5.Fill(_dt5);
             ViewBag.Mfd = ToSelectList(_dt5, "A_code", "A_Name");
             ViewBag.Mfr = a_code;
+            SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Project_Master", Con);
+            DataTable _dt2 = new DataTable();
+            _da2.Fill(_dt2);
+            ViewBag.Project = ToSelectList(_dt2, "Project_Id", "Project_Name");
             string cmd2 = "select Final_Discount, Final_Tax1, Final_Tax2, Amount from A_Ledger where Voucher_No = '" + v_no + "'";
             SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
             SqlDataReader dr1 = SqlCmd2.ExecuteReader();
@@ -194,7 +203,9 @@ namespace Admin.Controllers
             newPurchase_Insert.Voucher_Date = v_date;
             newPurchase_Insert.Invoice_No = inv_no;
             newPurchase_Insert.Invoice_Date = inv_date;
-            
+            newPurchase_Insert.Supplier = a_code;
+            newPurchase_Insert.Project = data;
+
             ViewBag.PL = PM_Data.Tables[0];
             V_no = v_no;
             ViewBag.ILedger = 1;
@@ -305,15 +316,12 @@ namespace Admin.Controllers
             string cmd1 = "delete from Purchase where Voucher_No ='" + Purchase[0].Voucher_No + "'";
             string cmd2 = "delete from I_Ledger where Voucher_No ='" + Purchase[0].Voucher_No + "'";
             string cmd3 = "delete from A_Ledger where Voucher_No ='" + Purchase[0].Voucher_No + "'";
-            string cmd5 = "update Number_Master set Purchase_Voucher_No = Purchase_Voucher_No - 1";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
             SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
             SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
-            SqlCommand SqlCmd5 = new SqlCommand(cmd5, Con);
             SqlCmd1.ExecuteNonQuery();
             SqlCmd2.ExecuteNonQuery();
             SqlCmd3.ExecuteNonQuery();
-            SqlCmd5.ExecuteNonQuery();
             for (int i = 0;i<= Purchase.Count - 1; i++)
             {
                 string cmd4 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance - '"+Purchase[i].Quantity+"' where P_code ='" + Purchase[i].Pcode + "'";
@@ -484,7 +492,7 @@ namespace Admin.Controllers
         public ActionResult PM_List(GoodsRI name) // To show full Product Master stocks from DB
         {
             Goods_RI dblogin = new Goods_RI();
-            var Descp = dblogin.PM_list(name.Package_letter,name.Value_letter,name.Partno_letter);
+            var Descp = dblogin.PM_list(name.Package_letter,name.Value_letter,name.Partno_letter,name.Descp_letter);
             return Json(Descp);
         }
 
@@ -564,9 +572,6 @@ namespace Admin.Controllers
             SqlCmd1.ExecuteNonQuery();
             if (data[0].Index_Type == 1)
             {
-                string cmd2 = "update Number_Master set GReceipt_Voucher_No = GReceipt_Voucher_No - 1";
-                SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
-                SqlCmd2.ExecuteNonQuery();
                 for (int i = 0; i <= data.Count - 1; i++)
                 {
                     string cmd4 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance - '" + data[i].Quantity + "' where P_code ='" + data[i].P_code + "'";
@@ -576,9 +581,6 @@ namespace Admin.Controllers
             }
             else
             {
-                string cmd2 = "update Number_Master set GIssue_Voucher_No = GIssue_Voucher_No - 1";
-                SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
-                SqlCmd2.ExecuteNonQuery();
                 for (int i = 0; i <= data.Count - 1; i++)
                 {
                     string cmd4 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance + '" + data[i].Quantity + "' where P_code ='" + data[i].P_code + "'";
