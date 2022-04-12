@@ -1,29 +1,31 @@
 ﻿@model Admin.Models.Price_List
+<!DOCTYPE html>
+<html>
 <head>
     <link rel="stylesheet" href="~/Content/Purchase.css" />
     <style>
-        .modal-content{
-            width:30%;
+        .modal-content {
+            width: 30%;
         }
     </style>
 </head>
 <body style="background-color: #f5f5f7;">
     <p class="text-sm" style="margin-top:10px;text-align:center;"> Package : @Html.EditorFor(model => model.Package_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } }) Value : @Html.EditorFor(model => model.Value_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } }) Part No : @Html.EditorFor(model => model.Partno_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } }) Description : @Html.EditorFor(model => model.Descp_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } })</p>
-    
+
     <div id="myModal" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
             <i class="close">&times;</i>
-                <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Part No &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "uppercase", style = "width:200px" } })</p>
-                <p id="value" style="width:400px; margin-left:7%"></p>
-                <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Cost (.Rs) &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_Cost, new { htmlAttributes = new { @class = "", style = "width:200px" } })</p>
-                <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp USD ($) &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_Price_USD, new { htmlAttributes = new { @class = "", style = "width:200px" } })</p>
-                <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp MRP (.Rs) &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_MRP, new { htmlAttributes = new { @class = "", style = "width:200px" } })</p>
-                <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Sell Price (.Rs) &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_SP, new { htmlAttributes = new { @class = "", style = "width:200px" } })</p>
-                <p id="success" style="text-align:center;"></p>
-                <div class="col-md-offset-2 col-md-10" style="margin-left:200px">
-                    <input type="submit" value="Save" class="btn btn-sm btn-secondary" onclick="Price_to_DB();"/>
-                </div>
+            <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Part No &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @class = "uppercase", style = "width:200px" } })</p>
+            <p id="value" style="width:400px; margin-left:7%"></p>
+            <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Cost (.Rs) &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_Cost, new { htmlAttributes = new { @class = "", style = "width:200px" } })</p>
+            <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp USD ($) &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_Price_USD, new { htmlAttributes = new { @class = "", style = "width:200px" } })</p>
+            <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp MRP (.Rs) &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_MRP, new { htmlAttributes = new { @class = "", style = "width:200px" } })</p>
+            <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Sell Price (.Rs) &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_SP, new { htmlAttributes = new { @class = "", style = "width:200px" } })</p>
+            <p id="success" style="text-align:center;"></p>
+            <div class="col-md-offset-2 col-md-10" style="margin-left:200px">
+                <input type="submit" value="Save" class="btn btn-sm btn-secondary" onclick="Price_to_DB();" />
+            </div>
         </div>
     </div>
 
@@ -59,6 +61,7 @@
         </tbody>
     </table>
 </body>
+</html>
 <script>
         document.addEventListener("keyup", function (event) {
             var package = document.querySelector("#Package_letter").value;

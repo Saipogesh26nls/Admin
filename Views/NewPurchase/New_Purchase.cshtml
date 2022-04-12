@@ -269,7 +269,7 @@
         var Invoice_No = $('#Invoice_No').val();
         var Invoice_Date = $('#Invoice_Date').val();
         var qty_field = $('#Quantity').val();
-        if (d1 == "" || d2 == "" || d3 == "") {
+        if (d1 == "" || d2 == "" || d3 == "" || Invoice_No == "") {
             document.getElementById("Qty_display").innerHTML = 0;
             document.getElementById("total_display").innerHTML = 0;
         }
@@ -321,8 +321,8 @@
                     alert(errMsg);
                 }
             });
-        formClear();
         final_calculation();
+        formClear();
     });
 
     function formClear() {
@@ -568,7 +568,7 @@
         model.Add_Name = Name;
         model.Add_Group = Group;
         model.Add_Manufacturer = Mfr;
-        model.Add_PartNo = PartNo;
+        model.Add_PartNo = PartNo.toUpperCase();
         model.Add_Description = Descp;
         model.Add_Cost = Cost;
         model.Add_MRP = MRP;
@@ -582,7 +582,7 @@
                 contentType: 'application/json;',
                 dataType: 'json',
                 success: function (result) {
-                    if (result != null) {
+                    if (result != "") {
                         var qty_err = '<p style="color:red;">Part No already exists !!!<p/>';
                         document.getElementById("message").innerHTML = qty_err;
                         return;

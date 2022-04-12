@@ -240,6 +240,7 @@
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\BOMController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\NewPurchaseController.cs" />
     <Compile Include="Controllers\PriceController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
@@ -250,6 +251,7 @@
     <Compile Include="Models\AccountInsert.cs" />
     <Compile Include="Models\BOM_Insert.cs" />
     <Compile Include="Models\GroupInsert.cs" />
+    <Compile Include="Models\LoginField.cs" />
     <Compile Include="Models\NewPurchase_Insert.cs" />
     <Compile Include="Models\Price_Updation.cs" />
     <Compile Include="Models\ProductInsert.cs" />
@@ -2383,6 +2385,8 @@
     <Content Include="Views\User\Add_New_Employee.cshtml" />
     <Content Include="Views\User\Add_New_Project.cshtml" />
     <Content Include="Views\User\Add_New_Process.cshtml" />
+    <Content Include="Views\Login\Login.cshtml" />
+    <Content Include="Views\Login\Err.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

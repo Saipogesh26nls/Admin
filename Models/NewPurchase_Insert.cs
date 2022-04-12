@@ -42,6 +42,7 @@ namespace Admin.Models
             }
             else
             {
+                Con.Close();
                 return null;
             }
 
@@ -193,6 +194,7 @@ namespace Admin.Models
                 }
                 );
             }
+            Con.Close();
             return ItemQm;
         }
         public void Edit_and_Delete(List<PurchaseTable> data, int final_Qty, double final_subtotal, double final_discount, double final_tax1, double final_tax2, double final_total)
@@ -299,6 +301,7 @@ namespace Admin.Models
             }
             else
             {
+                Con.Close();
                 return null;
             }
         }
@@ -392,6 +395,7 @@ namespace Admin.Models
                 }
                 );
             }
+            Con.Close();
             return ItemQm;
         }
         public int Goods_Add_json(List<GoodsRI> data)
@@ -630,6 +634,7 @@ namespace Admin.Models
                 SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con1);
                 SqlCmd4.ExecuteNonQuery();
             }
+            Con1.Close();
         }
         public void Update_GoodsRI_json(List<GoodsRI> data)
         {

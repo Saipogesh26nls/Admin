@@ -62,7 +62,7 @@
             <div>
                 <div class="card">
                     <div class="card-header">
-                        <p class="text-sm">Index Type : &nbsp &nbsp @Html.DropDownListFor(model => model.Index_Type, ViewBag.Index as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })</p>
+                        <p class="text-sm">Voucher Type : &nbsp &nbsp @Html.DropDownListFor(model => model.Index_Type, ViewBag.Index as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })</p>
                         <p class="text-sm">
                             Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:13%;margin-left:1%;", @readonly = "readonly" } })  Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
                             Reference No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:13%;", @class = " uppercase" } })    Reference Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
@@ -441,7 +441,7 @@
         model.Add_Name = Name;
         model.Add_Group = Group;
         model.Add_Manufacturer = Mfr;
-        model.Add_PartNo = PartNo;
+        model.Add_PartNo = PartNo.toUpperCase();
         model.Add_Description = Descp;
         model.Add_Cost = Cost;
         model.Add_MRP = MRP;
@@ -455,7 +455,7 @@
                 contentType: 'application/json;',
                 dataType: 'json',
                 success: function (result) {
-                    if (result != null) {
+                    if (result != "") {
                         var qty_err = '<p style="color:red;">Part No already exists !!!<p/>';
                         document.getElementById("message").innerHTML = qty_err;
                         return;

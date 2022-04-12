@@ -1,0 +1,75 @@
+﻿@model Admin.Models.LoginModel
+@{
+    Layout = null;
+}
+<link rel="stylesheet" href="~/Content/Purchase.css" />
+<link rel="stylesheet" href="~/Content/bootstrap-4.0.0.min.css">
+<script src="~/Scripts/bootstrap-4.0.0.bundle.min.js"></script>
+<style>
+    #login-div {
+        position: absolute;
+        background-color: lightblue;
+        left: 40%;
+        top: 5%;
+        border: 1px solid #ccc;
+        padding: 80px 30px;
+    }
+    table, tr, td {
+        border:none;
+    }
+</style>
+
+<div id="login-div" style="box-shadow: 0px 10px 20px rgba(198, 198, 198, 0.15);border-radius: 12px;">
+    <p><img src="~/adminlte/img/credit/logo.png" style=" margin-left:15%;"></p>
+    @using (Html.BeginForm("Authorise", "Login", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <table>
+            <tr>
+                <td>   </td>
+                <td style="text-decoration:underline">Login</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(model => model.UserName)</td>
+                <td>@Html.EditorFor(model => model.UserName)</td>
+
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+                <td></td>
+                <td>@Html.ValidationMessageFor(model => model.UserName)</td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.Password)</td>
+                <td>@Html.EditorFor(model => model.Password)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>@Html.ValidationMessageFor(model => model.Password)</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <label> @Html.DisplayFor(model => model.LoginErr) </label>
+
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <input type="submit" value="Login" class="btn btn-sm btn-secondary" />
+                    <input type="reset" value="Clear" class="btn btn-sm btn-secondary" />
+                </td>
+                <td></td>
+            </tr>
+        </table>
+
+    }
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+</div>

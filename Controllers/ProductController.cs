@@ -7,9 +7,6 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using Admin.Models;
-using System.IO;
-using System.Drawing;
-using System.Drawing.Imaging;
 
 namespace Admin.Controllers
 {
@@ -18,21 +15,29 @@ namespace Admin.Controllers
         [HttpGet]
         public ActionResult ProductEntry() // Product entry View
         {
-            SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
-            _con.Open();
-            SqlDataAdapter _da = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
-            DataTable _dt = new DataTable();
-            _da.Fill(_dt);
-            ViewBag.ProductList = ToSelectList(_dt,"P_code","P_Name");
-            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", _con);
-            DataTable _dt1 = new DataTable();
-            _da1.Fill(_dt1);
-            ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
-            /*SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Manufacturer_Details", _con);
-            DataTable _dt2 = new DataTable();
-            _da2.Fill(_dt2);
-            ViewBag.RegList = ToSelectList(_dt2, "M_Region", "M_Region");*/
-            return View();
+            if (Session["userID"] != null)
+            {
+                SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+                _con.Open();
+                SqlDataAdapter _da = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
+                DataTable _dt = new DataTable();
+                _da.Fill(_dt);
+                ViewBag.ProductList = ToSelectList(_dt, "P_code", "P_Name");
+                SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", _con);
+                DataTable _dt1 = new DataTable();
+                _da1.Fill(_dt1);
+                ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
+                /*SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Manufacturer_Details", _con);
+                DataTable _dt2 = new DataTable();
+                _da2.Fill(_dt2);
+                ViewBag.RegList = ToSelectList(_dt2, "M_Region", "M_Region");*/
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Err", "Login");
+
+            }
         }
 
         [NonAction]
@@ -74,7 +79,7 @@ namespace Admin.Controllers
             }
             else
             {
-                newuser.P_Part_No = "Part No is already exists !!!";
+                newuser.Reg_Success = "Part No is already exists !!!";
                 ProductEntry();
                 return View("ProductEntry", newuser);
             }

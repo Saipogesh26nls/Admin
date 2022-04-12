@@ -864,6 +864,8 @@
         var tax2_from_db = @ViewBag.Final_Tax2;
         var T_qty = 0;
         var T_subtotal = 0;
+        var project = @ViewBag.Project_data;
+        document.getElementById("Project").value = project;
         for (i = 0; i <= tbodyRowCount - 1; i++) {
             var p_qty = document.getElementById("selected_units").tBodies[0].rows[i].cells[3].innerHTML;
             var p_total = document.getElementById("selected_units").tBodies[0].rows[i].cells[12].innerHTML;
@@ -999,7 +1001,7 @@
                 var cost = this.cells[5].innerHTML;
                 document.getElementById("Part_No").value = partno;
                 document.getElementById("value").innerHTML = descp;
-                document.getElementById("Purchase_Rate").value = cost;
+                document.getElementById("P_Rate").value = cost;
                 modal.style.display = "none";
             });
         }
@@ -1031,7 +1033,7 @@
         model.Add_Name = Name;
         model.Add_Group = Group;
         model.Add_Manufacturer = Mfr;
-        model.Add_PartNo = PartNo;
+        model.Add_PartNo = PartNo.toUpperCase();
         model.Add_Description = Descp;
         model.Add_Cost = Cost;
         model.Add_MRP = MRP;
@@ -1045,7 +1047,7 @@
                 contentType: 'application/json;',
                 dataType: 'json',
                 success: function (result) {
-                    if (result != null) {
+                    if (result != "") {
                         var qty_err = '<p style="color:red;">Part No already exists !!!<p/>';
                         document.getElementById("message").innerHTML = qty_err;
                         return;

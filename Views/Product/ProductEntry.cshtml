@@ -1,126 +1,127 @@
 ﻿ @model Admin.Models.ProductModel
-
-<style>
-    .uppercase {
-        text-transform: uppercase;
-    }
-</style>
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .uppercase {
+            text-transform: uppercase;
+        }
+    </style>
+</head>
 <body style="background-color: #f5f5f7;">
 
     @using (Html.BeginForm("ProductEntry", "Product", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <br />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-horizontal">
+            <br />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.P_Disp_Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.P_Disp_Name, new { htmlAttributes = new { @class = "form-control uppercase", required = "required" } })
-                @Html.ValidationMessageFor(model => model.P_Disp_Name, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.P_Disp_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.P_Disp_Name, new { htmlAttributes = new { @class = "form-control uppercase", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.P_Disp_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.P_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.P_Name, ViewBag.ProductList as SelectList, new { @class = "form-control uppercase" })
+                    @Html.ValidationMessageFor(model => model.P_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.P_Manufacturer, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.P_Manufacturer, ViewBag.MfdList as SelectList, new { @class = "form-control uppercase" })
+                    @Html.ValidationMessageFor(model => model.P_Manufacturer, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.P_Region, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.P_Region, ViewBag.RegList as SelectList, new { @class = "form-control uppercase" })
+                        @Html.ValidationMessageFor(model => model.P_Region, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Package, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Package, new { htmlAttributes = new { @class = "form-control uppercase" } })
+                    @Html.ValidationMessageFor(model => model.Package, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control uppercase" } })
+                    @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.P_Part_No, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.P_Part_No, new { htmlAttributes = new { @class = "form-control uppercase", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.P_Part_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.P_Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.P_Description, new { @style = "color:black; width:100%; height:100px;", @placeholder = "Enter your text here", @class = " uppercase" })
+                    @Html.ValidationMessageFor(model => model.P_Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.P_Cost, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.P_Cost, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.P_MRP, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.P_MRP, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.P_SP, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.P_SP, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.Reg_Success)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input id="reload" type="submit" value="Create" class="btn btn-default" />
+                </div>
+                @if (ViewBag.BarcodeImage != null)
+                {
+                    <img src="@ViewBag.BarcodeImage" alt="" />
+                }
             </div>
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.P_Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.P_Name, ViewBag.ProductList as SelectList, new { @class = "form-control uppercase" })
-                @Html.ValidationMessageFor(model => model.P_Name, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.P_Manufacturer, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.P_Manufacturer, ViewBag.MfdList as SelectList, new { @class = "form-control uppercase" })
-                @Html.ValidationMessageFor(model => model.P_Manufacturer, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        @*<div class="form-group">
-            @Html.LabelFor(model => model.P_Region, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.P_Region, ViewBag.RegList as SelectList, new { @class = "form-control uppercase" })
-                @Html.ValidationMessageFor(model => model.P_Region, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Package, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Package, new { htmlAttributes = new { @class = "form-control uppercase" } })
-                @Html.ValidationMessageFor(model => model.Package, "", new { @class = "text-danger" })
-                @Html.DisplayFor(model => model.Package)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control uppercase" } })
-                @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
-                @Html.DisplayFor(model => model.Value)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.P_Part_No, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.P_Part_No, new { htmlAttributes = new { @class = "form-control uppercase", required = "required" } })
-                @Html.ValidationMessageFor(model => model.P_Part_No, "", new { @class = "text-danger" })
-                @Html.DisplayFor(model => model.P_Part_No)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.P_Description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextAreaFor(model => model.P_Description, new { @style = "color:black; width:100%; height:100px;", @placeholder = "Enter your text here", @class = " uppercase" })
-                @Html.ValidationMessageFor(model => model.P_Description, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.P_Cost, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.P_Cost, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.P_MRP, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.P_MRP, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.P_SP, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.P_SP, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-10">
-                @Html.DisplayFor(model => model.Reg_Success)
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" onclick="reload()" />
-            </div>
-            @if (ViewBag.BarcodeImage != null)
-            {
-                <img src="@ViewBag.BarcodeImage" alt="" />
-            }
-        </div>
-    </div>
     }
 </body>
+</html>
 <script>
     function reload() {
         var P_Disp_Name = document.getElementById("P_Disp_Name").value;
@@ -131,4 +132,5 @@
             }, 3000);
         }
     }
+    document.getElementById("reload").addEventListener("click", reload);
 </script>

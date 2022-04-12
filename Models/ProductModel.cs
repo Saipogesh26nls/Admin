@@ -540,4 +540,18 @@ namespace Admin.Models
         public string Project_Name { get; set; }
         public string Company { get; set; }
     }
+    public class LoginModel
+    {
+        public string UserId { get; set; }
+        [DisplayName("User Name")]
+        [Required(ErrorMessage = "This Field is required")]
+        public string UserName { get; set; }
+        [DisplayName("Password")]
+        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "This Field is required")]
+        public string Password { get; set; }
+        public string LoginErr { get; set; }
+        public string Roll { get; set; }
+        public string Display_name { get; set; }
+    }
 }

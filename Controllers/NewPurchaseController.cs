@@ -5,7 +5,6 @@ using Admin.Models;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.IO;
 using System.Globalization;
 
 namespace Admin.Controllers
@@ -124,6 +123,7 @@ namespace Admin.Controllers
                 dr.Close();
             }
             ViewBag.PL = PM_Data;
+            Con.Close();
             return View(PM_Data);
         }
 
@@ -206,11 +206,13 @@ namespace Admin.Controllers
             newPurchase_Insert.Supplier = a_code;
             newPurchase_Insert.Project = data;
 
+            ViewBag.Project_data = data;
             ViewBag.PL = PM_Data.Tables[0];
             V_no = v_no;
             ViewBag.ILedger = 1;
             ViewBag.ALedger = 2;
             ViewBag.Ref_No = ref_no;
+            Con.Close();
             return View(newPurchase_Insert);
         } 
         [HttpPost]
@@ -306,6 +308,7 @@ namespace Admin.Controllers
             ViewBag.ILedger = 1;
             ViewBag.ALedger = 2;
             ViewBag.Ref_No = ref_no;
+            Con.Close();
             return View(newPurchase_Insert);
         }
         [HttpPost]
@@ -588,6 +591,7 @@ namespace Admin.Controllers
                     SqlCmd4.ExecuteNonQuery();
                 }
             }
+            Con.Close();
             return Json(data);
         }
 
@@ -607,12 +611,14 @@ namespace Admin.Controllers
             if (ItemQm != name.Add_PartNo)
             {
                 ProductInsert dblogin = new ProductInsert();
-                int userid = dblogin.AddData(name.Add_Name, name.Add_Group, name.Add_Manufacturer,name.Add_Package,name.Add_Value, name.Add_PartNo, name.Add_Description, name.Add_Cost, name.Add_MRP, name.Add_SellPrice);
-                return Json(name);
+                int userid = dblogin.AddData(name.Add_Group, name.Add_Name, name.Add_Manufacturer,name.Add_Package,name.Add_Value, name.Add_PartNo, name.Add_Description, name.Add_Cost, name.Add_MRP, name.Add_SellPrice);
+                Con.Close();
+                return Json(ItemQm);
             }
             else
             {
-                return Json(name);
+                Con.Close();
+                return Json(ItemQm);
             }
             
         }
