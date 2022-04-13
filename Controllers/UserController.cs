@@ -15,7 +15,15 @@ namespace Admin.Controllers
         // Employee
         public ActionResult Add_New_Employee() //Employee View
         {
-            return View();
+            var roll = Convert.ToInt32(Session["roll"]);
+            if (Session["userID"] != null && roll == 1)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Err", "Login");
+            }
         }
         public ActionResult Employee_to_DB(UserModel name) //Add New Employee to DB
         {
@@ -48,7 +56,15 @@ namespace Admin.Controllers
         // Project
         public ActionResult Add_New_Project() //Project View
         {
-            return View();
+            var roll = Convert.ToInt32(Session["roll"]);
+            if (Session["userID"] != null && roll == 1)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Err", "Login");
+            }
         }
         public ActionResult Project_to_DB(UserModel name) //Add New Project to DB
         {
@@ -80,7 +96,15 @@ namespace Admin.Controllers
         //Process
         public ActionResult Add_New_Process() //Process View
         {
-            return View();
+            var roll = Convert.ToInt32(Session["roll"]);
+            if (Session["userID"] != null && roll == 1)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Err", "Login");
+            }
         }
         public ActionResult Process_to_DB(UserModel name) //Add New Process to DB
         {

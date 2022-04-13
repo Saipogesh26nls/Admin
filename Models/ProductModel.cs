@@ -265,6 +265,7 @@ namespace Admin.Models
         public string Package_letter { get; set; }
         public string Value_letter { get; set; }
         public string Descp_letter { get; set; }
+        public int Stock { get; set; }
 
     }
     public class New_Purchase
@@ -553,5 +554,15 @@ namespace Admin.Models
         public string LoginErr { get; set; }
         public string Roll { get; set; }
         public string Display_name { get; set; }
+    }
+    public class SignupModel
+    {
+        public int Id { get; set; }
+        public string DisplayName { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }    
+        public int Roll { get; set; }
+        public string Permission_Detail { get; set; }
+        public string success { get; set; }
     }
 }

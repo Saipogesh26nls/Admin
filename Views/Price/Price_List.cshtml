@@ -22,6 +22,7 @@
             <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp USD ($) &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_Price_USD, new { htmlAttributes = new { @class = "", style = "width:200px" } })</p>
             <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp MRP (.Rs) &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_MRP, new { htmlAttributes = new { @class = "", style = "width:200px" } })</p>
             <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Sell Price (.Rs) &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.P_SP, new { htmlAttributes = new { @class = "", style = "width:200px" } })</p>
+            <p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Stock &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Stock, new { htmlAttributes = new { @class = "", style = "width:200px" } })</p>
             <p id="success" style="text-align:center;"></p>
             <div class="col-md-offset-2 col-md-10" style="margin-left:200px">
                 <input type="submit" value="Save" class="btn btn-sm btn-secondary" onclick="Price_to_DB();" />
@@ -97,11 +98,13 @@
                 var descp = this.cells[4].innerHTML;
                 var cost = this.cells[6].innerHTML;
                 var mrp = this.cells[7].innerHTML;
+                var qty = this.cells[5].innerHTML;
                 modal.style.display = "block";
                 document.getElementById("Part_No").value = partno;
                 document.getElementById("value").innerHTML = descp;
                 document.getElementById("P_Cost").value = cost;
                 document.getElementById("P_MRP").value = mrp;
+                document.getElementById("Stock").value = qty;
             });
         }
     }
@@ -128,6 +131,7 @@
         var usd = document.getElementById("P_Price_USD").value;
         var sp = document.getElementById("P_SP").value;
         var mrp = document.getElementById("P_MRP").value;
+        var qty = document.getElementById("Stock").value;
 
         var model = new Object();
         model.Part_No = partno;
@@ -135,6 +139,7 @@
         model.P_Price_USD = usd;
         model.P_SP = sp;
         model.P_MRP = mrp;
+        model.Stock = qty;
         $.ajax({
             url: '/Price/Price_Insert',
             data: JSON.stringify({ name: model }),

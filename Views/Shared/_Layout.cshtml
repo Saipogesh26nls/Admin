@@ -25,6 +25,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
+                @{
+                    var roll1 = Convert.ToInt32(Session["roll"]);
+                    if (Session["userid"] != null && roll1 == 2)
+
+                    {
+                        <li class="nav-item ">
+                            @Html.ActionLink("Change Password", "ChangePassword", "Login", null, new { @class = "nav-link" })
+                        </li>
+                    }
+
+                }
 
             </ul>
             <ul class="navbar-nav ml-auto">
@@ -135,8 +146,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
                         </div>
                     </li>-->
-                
+                @{
+                    var roll = Convert.ToInt32(Session["roll"]);
+                    if (Session["userid"] != null && roll == 1)
 
+                    {
+                        <li class="nav-item ">
+                            @Html.ActionLink("Users List", "Signup", "Login", null, new { @class = "nav-link" })
+                        </li>
+                    }
+
+                }
                 @{
                     if (Session["userid"] != null)
 

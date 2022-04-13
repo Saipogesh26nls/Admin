@@ -15,13 +15,20 @@ namespace Admin.Controllers
         // GET: Accounts
         public ActionResult Accounts_Detail() // Accounts Detail View
         {
-            SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
-            _con.Open();
-            SqlDataAdapter _da = new SqlDataAdapter("Select * From Account_Master where A_Level>0", _con);
-            DataTable _dt = new DataTable();
-            _da.Fill(_dt);
-            ViewBag.ProductList = ToSelectList(_dt, "A_Name", "A_Name");
-            return View();
+            if (Session["userID"] != null)
+            {
+                SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+                _con.Open();
+                SqlDataAdapter _da = new SqlDataAdapter("Select * From Account_Master where A_Level>0", _con);
+                DataTable _dt = new DataTable();
+                _da.Fill(_dt);
+                ViewBag.ProductList = ToSelectList(_dt, "A_Name", "A_Name");
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Err", "Login");
+            }
         }
         [NonAction]
         public SelectList ToSelectList(DataTable table, string textField, string valueField) //  For making Dropdown list

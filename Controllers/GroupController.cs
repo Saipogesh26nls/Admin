@@ -15,14 +15,21 @@ namespace Admin.Controllers
         [HttpGet]
         public ActionResult GroupEntry() // Group Entry View
         {
-            SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
-            _con.Open();
-            SqlDataAdapter _da = new SqlDataAdapter("Select * From Product_Master where P_Level>0", _con);
-            DataTable _dt = new DataTable();
-            _da.Fill(_dt);
-            ViewBag.GroupList = ToSelectList(_dt, "P_Name", "P_Name");
+            if (Session["userID"] != null)
+            {
+                SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+                _con.Open();
+                SqlDataAdapter _da = new SqlDataAdapter("Select * From Product_Master where P_Level>0", _con);
+                DataTable _dt = new DataTable();
+                _da.Fill(_dt);
+                ViewBag.GroupList = ToSelectList(_dt, "P_Name", "P_Name");
 
-            return View();
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Err", "Login");
+            }
         }
 
         [NonAction]

@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Admin.Models.SignupModel>
+
+@{
+    ViewBag.Title = "Log_User_List";
+}
+<br />
+<p>
+    @Html.ActionLink("Add New User", "CreateUser")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DisplayName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th style="display:none">
+            @Html.DisplayNameFor(model => model.Password)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Roll)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Permission_Detail)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Id)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.DisplayName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.UserName)
+    </td>
+    <td style="display:none">
+        @Html.DisplayFor(modelItem => item.Password)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Roll)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Permission_Detail)
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "EditUser", new { id = item.Id }) |
+        @Html.ActionLink("Delete", "DeleteUser", new { id = item.Id })
+    </td>
+</tr>
+}
+
+</table>

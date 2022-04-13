@@ -1,0 +1,78 @@
+﻿@model Admin.Models.SignupModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/Content/bootstrap-4.0.0.min.css">
+    <script src="~/Scripts/bootstrap-4.0.0.bundle.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="~/Content/Purchase.css" />
+</head>
+<body style="background-color: #f5f5f7;">
+    <div class="form-horizontal" style="border: 1px solid #F0F3FF; box-sizing: border-box; box-shadow: 0px 10px 20px rgba(198, 198, 198, 0.15);text-align:center; border-radius: 12px; width: 50%; margin: 0% 0% 0% 25%;">
+        <br />
+
+        <p>@Html.LabelFor(model => model.DisplayName) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.DisplayName, new { htmlAttributes = new { @style = "width:200px;" } })</p>
+        <p>@Html.LabelFor(model => model.UserName) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @style = "width:200px;" } })</p>
+        <p>@Html.LabelFor(model => model.Password) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @style = "width:200px;" } })</p>
+        <p>@Html.LabelFor(model => model.Roll) : &nbsp; &nbsp; @Html.DropDownListFor(model => model.Roll, ViewBag.LROLL as SelectList, new { htmlAttributes = new { @style = "width:200px;" } })</p>
+        <p>@Html.LabelFor(model => model.Permission_Detail) &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.Permission_Detail, new { htmlAttributes = new { @style = "width:200px;" } })</p>
+        <p id="message"></p>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button class="btn btn-sm btn-secondary" id="Submit" style="width:75px;margin-left:20%;" onclick="project()">Submit</button>
+            </div>
+        </div>
+    </div>
+    @Html.EditorFor(m => m.Id, new { htmlAttributes = new { @style = "display:none" } })
+</body>
+</html>
+<script>
+    function project() {
+        var DisplayName = document.getElementById("DisplayName").value;
+        var UserName = document.getElementById("UserName").value;
+        var Password = document.getElementById("Password").value;
+        var Roll = document.getElementById("Roll").value;
+        var permission = document.getElementById("Permission_Detail").value;
+        var id = document.getElementById("Id").value;
+
+        if (DisplayName == "") {
+            var qty_err = '<p style="color:red;">Field Display Name is required !!!<p/>';
+            document.getElementById("message").innerHTML = qty_err;
+            return;
+        }
+        if (UserName == "") {
+            var qty_err = '<p style="color:red;">Field Username is required !!!<p/>';
+            document.getElementById("message").innerHTML = qty_err;
+            return;
+        }
+        if (Password == "") {
+            var qty_err = '<p style="color:red;">Field Password is required !!!<p/>';
+            document.getElementById("message").innerHTML = qty_err;
+            return;
+        }
+
+        var model = new Object();
+        model.DisplayName = DisplayName;
+        model.UserName = UserName;
+        model.Password = Password;
+        model.Roll = Roll;
+        model.permission = permission;
+        model.Id = id;
+            $.ajax({
+                url: "@Url.Action("UpdateUser")",
+                data: JSON.stringify({ name: model }),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+                        var qty_err = '<p style="color:red;">Submitted Successfully !!!<p/>';
+                        document.getElementById("message").innerHTML = qty_err;
+                        setTimeout(function () {
+                            window.location.reload(1);
+                        }, 3000);
+                    }
+            });
+    }
+</script>
+
