@@ -240,6 +240,7 @@
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\BOMController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
+    <Compile Include="Controllers\IssueController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\NewPurchaseController.cs" />
     <Compile Include="Controllers\PriceController.cs" />
@@ -256,6 +257,7 @@
     <Compile Include="Models\Price_Updation.cs" />
     <Compile Include="Models\ProductInsert.cs" />
     <Compile Include="Models\ProductModel.cs" />
+    <Compile Include="Models\Stock_Issue_Insert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValuesController1.cs" />
   </ItemGroup>
@@ -2392,6 +2394,7 @@
     <Content Include="Views\Login\ChangePassword.cshtml" />
     <Content Include="Views\Login\EditUser.cshtml" />
     <Content Include="Views\Login\DeleteUser.cshtml" />
+    <Content Include="Views\Issue\StockIssue.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

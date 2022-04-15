@@ -1,0 +1,377 @@
+﻿@model Admin.Models.GoodsRI
+<!DOCTYPE html>
+<html>
+<head>
+    @*<link rel="stylesheet" href="~/Content/bootstrap-4.0.0.min.css">
+    <script src="~/Scripts/bootstrap-4.0.0.bundle.min.js"></script>*@
+    <script type="text/javascript" src="~/Scripts/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="~/Content/Purchase.css" />
+    <style>
+        #list:hover {
+            background-color: aliceblue;
+        }
+
+        #add_pd {
+            width: 30%;
+        }
+
+        #add_submit {
+            width: 30%;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <br />
+        <div>
+            <p class="text-sm">
+                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Reference No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:13%;", @class = " uppercase" } })   &nbsp &nbsp &nbsp &nbsp   Reference Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
+                &nbsp &nbsp &nbsp &nbsp Reason: &nbsp &nbsp @Html.DropDownListFor(model => model.GI_Tag, ViewBag.GI as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })   &nbsp &nbsp &nbsp &nbsp  Reason for Process :  &nbsp &nbsp @Html.DropDownListFor(model => model.Process_Tag, ViewBag.Process as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
+                &nbsp &nbsp &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })  &nbsp &nbsp &nbsp &nbsp Requested By : &nbsp &nbsp  @Html.DropDownListFor(model => model.Employee, ViewBag.Employee as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
+            </p>
+            <p class="text-sm">
+                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Note : &nbsp &nbsp @Html.TextAreaFor(model => model.Note, new { @style = "color:black; width:34.5%; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })  &nbsp &nbsp &nbsp &nbsp Part No : @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct"></i>  &nbsp &nbsp &nbsp &nbspQuantity : <input id="Quantity" type="number" style="border: 1px solid gray; margin-right: 5%;" placeholder="Quantity"> <button class="btn btn-sm btn-secondary float-right" id="Add" style="width:75px;margin-right:5%;margin-top:25px;">Add</button>
+            </p>
+            <p id="value" style="margin-left:2%;"></p>
+        </div>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <i class="close" id="close">&times;</i>
+                <p class="text-sm" style="margin-top:10px;text-align:center;"> Package : @Html.EditorFor(model => model.Package_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Value : @Html.EditorFor(model => model.Value_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Part No : @Html.EditorFor(model => model.Partno_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Description : @Html.EditorFor(model => model.Descp_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })</p>
+                <table class="table text-sm" id="pm_list">
+                    <tbody>
+                        <tr>
+                            <th>
+                                Product Code
+                            </th>
+                            <th>
+                                Package
+                            </th>
+                            <th>
+                                Value
+                            </th>
+                            <th>
+                                Part No
+                            </th>
+                            <th>
+                                Description
+                            </th>
+                            <th></th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="myModal2" class="modal" style="display:none;text-align:center;">
+            <!-- Modal content -->
+            <div class="modal-content" id="add_submit">
+                <p id="voucher_view"></p>
+                <p id="submit_view"></p>
+            </div>
+        </div>
+        <div id="myModal1" class="modal">
+            <div class="modal-content" id="add_pd">
+                <i class="close" id="close1">&times;</i>
+                <div style="margin-left:60px;">
+                    <p>Product Name &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Name, new { htmlAttributes = new { required = "required", @class = " uppercase" } })</p>
+                    <p>Group &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp:  &nbsp &nbsp @Html.DropDownListFor(model => model.Add_Group, ViewBag.ProductList as SelectList, new { htmlAttributes = new { @style = "width:10%;" } })</p>
+                    <p>Manufacturer  &nbsp &nbsp:  &nbsp &nbsp @Html.DropDownListFor(model => model.Add_Manufacturer, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:10%;" } })</p>
+                    <p>Package  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Package, new { htmlAttributes = new { @class = " uppercase" } })</p>
+                    <p>Value  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_Value, new { htmlAttributes = new { @class = " uppercase" } })</p>
+                    <p>Part No  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_PartNo, new { htmlAttributes = new { @class = " uppercase" } })</p>
+                    <p>Description &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.TextAreaFor(model => model.Add_Description, new { @style = "color:black; width:200px; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })</p>
+                    <p>Cost &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Cost)</p>
+                    <p>MRP &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_MRP)</p>
+                    <p>Sell Price &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_SellPrice)</p>
+                    <p id="message"></p>
+                    <button class="btn btn-sm btn-secondary" style="width:75px;margin-left:32.5%;" id="add_Submit" onclick="Add_Prod()">Submit</button>
+                </div>
+            </div>
+        </div>
+        <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 600px;">
+            <table id="selected_units" class="table text-sm">
+                <thead>
+                    <tr>
+                        <th>Ref.No</th>
+                        <th>Ref.Date</th>
+                        <th>Reason</th>
+                        <th>Process</th>
+                        <th>Project</th>
+                        <th>Request By</th>
+                        <th>Note</th>
+                        <th>Part.No</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var key = Convert.ToInt32(Session["DB"]);
+                        if (key==1)
+                        {
+                            int i = 0;
+                            foreach (System.Data.DataRow dr in ViewBag.Goods.Rows)
+                            {
+                            <tr id="@i">
+                                <td class="row-data">@dr["RefNo"].ToString()</td>
+                                <td class="row-data">@dr["RefDate"].ToString()</td>
+                                <td class="row-data text-sm">@dr["GI_Reason"].ToString()</td>
+                                <td class="row-data">@dr["Process"].ToString()</td>
+                                <td class="row-data">@dr["Project"].ToString()</td>
+                                <td class="row-data">@dr["RequestBy"].ToString()</td>
+                                <td class="row-data">@dr["Note"].ToString()</td>
+                                <td class="row-data">@dr["PartNo"].ToString()</td>
+                                <td class="row-data">@dr["Description"].ToString()</td>
+                                <td class="row-data">@dr["Quantity"].ToString()</td>
+                            </tr>
+                                i++;
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    $('#Add').click(function () {
+        var d1 = $('#Part_No').val();
+        var d2 = $('#Quantity').val();
+        var ref_no = $('#Ref_No').val();
+        var ref_date = $('#Ref_Date').val();
+        var GI = $('#GI_Tag').val();
+        var process = $('#Process_Tag').val();
+        var project = $('#Project').val();
+        var emp = $('#Employee').val();
+        var note = $('#Note').val();
+        document.getElementById("value").innerHTML = "";
+        var model = new Object();
+        model.Ref_No = ref_no;
+        model.Ref_Date = ref_date;
+        model.GI_Tag = GI;
+        model.Process_Tag = process;
+        model.Project = project;
+        model.Employee = emp;
+        model.Note = note;
+        model.Part_No = d1;
+        model.Quantity = d2;
+
+            jQuery.ajax({
+            type: "POST",
+            url: "@Url.Action("P_to_DQ")",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ name: model }),
+                success: function (data) {
+                    if(ref_no == "") {
+                        var qty_err = '<p style="color:red;">Enter Reference No !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (d1 == "") {
+                        var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (d2 == "") {
+                        var qty_err = '<p style="color:red;">Enter Quantity !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (d1 == "" && d2 == "") {
+                        var qty_err = '<p style="color:red;">Enter Part No and Quantity !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (d2 > data.db_qty) {
+                        var qty_err = '<p style="color:red;">Out of Stock !!! Available Quantity is <b>' + data.db_qty + '</b><p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    @*var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+                    var l_row1 = last_row1 - 1;
+                    var count = 1;
+                    for (var i = 0; i < l_row1; i++) {
+                        var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
+                        var e_partno = document.getElementById("Part_No").value;
+                        if (e_part_no == e_partno) {
+                            var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
+                            document.getElementById("value").innerHTML = qty_err;
+                            return;
+                        }
+                        count++;
+                    }*@
+                    var newrow = '<tr id="data"><td>' + ref_no + '</td><td>' + ref_date + '</td><td>' + GI + '</td><td>' + process + '</td><td>' + project + '</td><td>' + emp + '</td><td>' + note + '</td><td>' + d1 + '</td><td>' + data.Description + '</td><td>' + d2 + '</td></tr>';
+                    $('#selected_units tr:last').after(newrow);
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+            });
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.keyCode === 9) {
+
+            var model = new Object();
+            model.Part_No = document.getElementById("Part_No").value;
+            var partno_null = document.getElementById("Part_No").value;
+            jQuery.ajax({
+            type: "POST",
+            url: "@Url.Action("Tab_P_to_DQ")",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ name: model }),
+                success: function (data) {
+                    if (partno_null == "") {
+                        var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    if (data.Description == "") {
+                        var qty_err = '<p style="color:red;">Enter Valid Part No !!!<p/>';
+                        document.getElementById("value").innerHTML = qty_err;
+                        return;
+                    }
+                    var descp = data.Description;
+                    var qty = data.Quantity;
+                    let QTY = "<b>Qty : "+qty+"</b>"
+                    document.getElementById("value").innerHTML = descp + "," + QTY;
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+            });
+        }
+    });
+
+     var modal = document.getElementById("myModal");
+    var modal1 = document.getElementById("myModal1");
+    var btn = document.getElementById("myBtn");
+    var btn1 = document.getElementById("addproduct");
+    var span = document.getElementById("close");
+    var span1 = document.getElementById("close1");
+
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+    btn1.onclick = function () {
+        modal1.style.display = "block";
+    }
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+    span1.onclick = function () {
+        modal1.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    window.onclick = function (event) {
+        if (event.target == modal1) {
+            modal1.style.display = "none";
+        }
+    }
+
+    btn.addEventListener("click", list);
+    span.removeEventListener("click", list);
+    window.removeEventListener("click", list);
+
+    function list() {
+        document.addEventListener("keyup", function (event) {
+            var package = document.querySelector("#Package_letter").value;
+            var value = document.querySelector("#Value_letter").value;
+            var partno = document.querySelector("#Partno_letter").value;
+            var descp = document.querySelector("#Descp_letter").value;
+            var model = new Object();
+            model.Package_letter = package;
+            model.Value_letter = value;
+            model.Partno_letter = partno;
+            model.Descp_letter = descp;
+            $.ajax({
+                url: '/NewPurchase/PM_List',
+                data: JSON.stringify({name : model}),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+                    $("#pm_list").find("tr:not(:first)").remove();
+                    for (var i = 0; i <= result.length - 1; i++) {
+                        var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Package + '</td><td>' + result[i].Value + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td></tr>';
+                        $('#pm_list tr:last').after(newrow);
+                    }
+                }
+            });
+        })
+    }
+
+    function List_to_View() {
+        var table = document.getElementById('pm_list');
+        for (var i = 0; i < table.rows.length; i++) {
+            table.rows[i].addEventListener('click', function () {
+                var partno = this.cells[3].innerHTML;
+                var descp = this.cells[4].innerHTML;
+                document.getElementById("Part_No").value = partno;
+                document.getElementById("value").innerHTML = descp;
+                modal.style.display = "none";
+            });
+        }
+    }
+
+    function Add_Prod() {
+        var Name = document.getElementById("Add_Name").value;
+        var Group = document.getElementById("Add_Group").value;
+        var Mfr = document.getElementById("Add_Manufacturer").value;
+        var pkg = document.getElementById("Add_Package").value;
+        var value = document.getElementById("Add_Value").value;
+        var PartNo = document.getElementById("Add_PartNo").value;
+        var Descp = document.getElementById("Add_Description").value;
+        var Cost = document.getElementById("Add_Cost").value;
+        var MRP = document.getElementById("Add_MRP").value;
+        var SellPrice = document.getElementById("Add_SellPrice").value;
+
+        if (Name == "") {
+            var qty_err = '<p style="color:red;">Field Product Name is required !!!<p/>';
+            document.getElementById("message").innerHTML = qty_err;
+            return;
+        }
+        else if (PartNo == "") {
+            var qty_err = '<p style="color:red;">Field Part No is required !!!<p/>';
+            document.getElementById("message").innerHTML = qty_err;
+            return;
+        }
+        var model = new Object();
+        model.Add_Name = Name;
+        model.Add_Group = Group;
+        model.Add_Manufacturer = Mfr;
+        model.Add_PartNo = PartNo.toUpperCase();
+        model.Add_Description = Descp;
+        model.Add_Cost = Cost;
+        model.Add_MRP = MRP;
+        model.Add_Package = pkg;
+        model.Add_Value = value;
+        model.Add_SellPrice = SellPrice;
+            $.ajax({
+                url: "@Url.Action("Add_Product")",
+                data: JSON.stringify({ name: model }),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+                    if (result != "") {
+                        var qty_err = '<p style="color:red;">Part No already exists !!!<p/>';
+                        document.getElementById("message").innerHTML = qty_err;
+                        return;
+                    }
+                    else {
+                        var qty_err = '<p style="color:red;">Submitted Successfully !!!<p/>';
+                        document.getElementById("message").innerHTML = qty_err;
+                        return;
+                    }
+                }
+            });
+    }
+</script>

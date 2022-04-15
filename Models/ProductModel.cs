@@ -491,6 +491,19 @@ namespace Admin.Models
             Con.Close();
             return ds;
         }
+        public DataSet SelectIssue()
+        {
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "select * from Temp_Stock_Issue";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            DataSet ds = new DataSet();
+            SqlDataAdapter da = new SqlDataAdapter(SqlCmd1);
+            da.Fill(ds);
+            Con.Close();
+            return ds;
+        }
+        public int db_qty { get; set; }
 
         //Add New Product
         public string Add_Name { get; set; }
