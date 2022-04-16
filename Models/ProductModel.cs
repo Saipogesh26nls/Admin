@@ -491,11 +491,11 @@ namespace Admin.Models
             Con.Close();
             return ds;
         }
-        public DataSet SelectIssue()
+        public DataSet SelectIndent()
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd1 = "select * from Temp_Stock_Issue";
+            string cmd1 = "select * from Temp_Stock_Indent";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
             DataSet ds = new DataSet();
             SqlDataAdapter da = new SqlDataAdapter(SqlCmd1);

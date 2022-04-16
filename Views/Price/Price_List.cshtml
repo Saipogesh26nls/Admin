@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="~/Content/Purchase.css" />
     <style>
         .modal-content {
-            width: 30%;
+            width: 500px;
         }
     </style>
 </head>
@@ -29,38 +29,39 @@
             </div>
         </div>
     </div>
-
-    <table class="table text-sm" id="pm_list">
-        <tbody>
-            <tr>
-                <th>
-                    Product Code
-                </th>
-                <th>
-                    Package
-                </th>
-                <th>
-                    Value
-                </th>
-                <th>
-                    Part No
-                </th>
-                <th>
-                    Description
-                </th>
-                <th>
-                    Stock
-                </th>
-                <th>
-                    Cost
-                </th>
-                <th>
-                    MRP
-                </th>
-                <th></th>
-            </tr>
-        </tbody>
-    </table>
+    <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 800px;">
+        <table class="table text-sm" id="pm_list">
+            <tbody>
+                <tr>
+                    <th>
+                        Product Code
+                    </th>
+                    <th>
+                        Package
+                    </th>
+                    <th>
+                        Value
+                    </th>
+                    <th>
+                        Part No
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Stock
+                    </th>
+                    <th>
+                        Cost
+                    </th>
+                    <th>
+                        MRP
+                    </th>
+                    <th></th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
 <script>

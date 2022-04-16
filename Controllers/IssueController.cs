@@ -13,54 +13,59 @@ namespace Admin.Controllers
     public class IssueController : Controller
     {
         // GET: Issue
-        public ActionResult StockIssue()
+        public ActionResult StockIssue() // Stock Issue View
         {
-            GoodsRI Model = new GoodsRI();
-            Model.Ref_Date = DateTime.Today;
-            SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
-            _con.Open();
-            SqlDataAdapter _da = new SqlDataAdapter("Select * From Project_Master", _con);
-            DataTable _dt = new DataTable();
-            _da.Fill(_dt);
-            ViewBag.Project = ToSelectList(_dt, "Project_Id", "Project_Name");
-            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Process_Tag", _con);
-            DataTable _dt1 = new DataTable();
-            _da1.Fill(_dt1);
-            ViewBag.Process = ToSelectList(_dt1, "Process_Id", "Process_Name");
-            SqlDataAdapter _da2 = new SqlDataAdapter("Select * From GI_Tag", _con);
-            DataTable _dt2 = new DataTable();
-            _da2.Fill(_dt2);
-            ViewBag.GI = ToSelectList(_dt2, "GI_Id", "TagName");
-            SqlDataAdapter _da3 = new SqlDataAdapter("Select * From Employee_Master", _con);
-            DataTable _dt3 = new DataTable();
-            _da3.Fill(_dt3);
-            ViewBag.Employee = ToSelectList(_dt3, "Id", "Employee_Name");
-            List<SelectListItem> Index = new List<SelectListItem>();
-            Index.Add(new SelectListItem { Text = "Goods-Receipt", Value = "1" });
-            Index.Add(new SelectListItem { Text = "Goods-Issue", Value = "2" });
-            ViewBag.Index = new SelectList(Index, "Value", "Text");
-            SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
-            DataTable _dt4 = new DataTable();
-            _da4.Fill(_dt4);
-            ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
-            SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", _con);
-            DataTable _dt5 = new DataTable();
-            _da5.Fill(_dt5);
-            ViewBag.MfdList = ToSelectList(_dt5, "A_code", "A_Name");
-            _con.Close();
-            GoodsRI goodsRI = new GoodsRI();
-            DataSet dataSet = goodsRI.SelectIssue();
-            if(dataSet != null)
+            if (Session["userID"] != null)
             {
-                Session["DB"] = 1;
-                ViewBag.Goods = dataSet.Tables[0];
+                GoodsRI Model = new GoodsRI();
+                Model.Ref_Date = DateTime.Today;
+                SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+                _con.Open();
+                SqlDataAdapter _da = new SqlDataAdapter("Select * From Project_Master", _con);
+                DataTable _dt = new DataTable();
+                _da.Fill(_dt);
+                ViewBag.Project = ToSelectList(_dt, "Project_Id", "Project_Name");
+                SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Process_Tag", _con);
+                DataTable _dt1 = new DataTable();
+                _da1.Fill(_dt1);
+                ViewBag.Process = ToSelectList(_dt1, "Process_Id", "Process_Name");
+                SqlDataAdapter _da2 = new SqlDataAdapter("Select * From GI_Tag", _con);
+                DataTable _dt2 = new DataTable();
+                _da2.Fill(_dt2);
+                ViewBag.GI = ToSelectList(_dt2, "GI_Id", "TagName");
+                SqlDataAdapter _da3 = new SqlDataAdapter("Select * From Employee_Master", _con);
+                DataTable _dt3 = new DataTable();
+                _da3.Fill(_dt3);
+                ViewBag.Employee = ToSelectList(_dt3, "Id", "Employee_Name");
+                List<SelectListItem> Index = new List<SelectListItem>();
+                Index.Add(new SelectListItem { Text = "Goods-Receipt", Value = "1" });
+                Index.Add(new SelectListItem { Text = "Goods-Issue", Value = "2" });
+                ViewBag.Index = new SelectList(Index, "Value", "Text");
+                SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
+                DataTable _dt4 = new DataTable();
+                _da4.Fill(_dt4);
+                ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
+                SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", _con);
+                DataTable _dt5 = new DataTable();
+                _da5.Fill(_dt5);
+                ViewBag.MfdList = ToSelectList(_dt5, "A_code", "A_Name");
+                string cmd1 = "Update Number_master Set Indent_No = Indent_No + 1 ";
+                SqlCommand SqlCmd1 = new SqlCommand(cmd1, _con);
+                SqlCmd1.ExecuteNonQuery();
+                string cmd2 = "Select Indent_No from Number_master ";
+                SqlCommand SqlCmd2 = new SqlCommand(cmd2, _con);
+                SqlDataReader dr = SqlCmd2.ExecuteReader();
+                dr.Read();
+                Model.Ref_No = dr["Indent_No"].ToString();
+                dr.Close();
+                _con.Close();
                 return View(Model);
             }
             else
             {
-                return View(Model);
+                return RedirectToAction("Err", "Login");
             }
-        } // Stock Issue View
+        }
         [NonAction]
         public SelectList ToSelectList(DataTable table, string valueField, string textField) // For making Dropdown list
         {
@@ -95,7 +100,7 @@ namespace Admin.Controllers
             var Descp = dblogin.PM_list(name.Package_letter, name.Value_letter, name.Partno_letter, name.Descp_letter);
             return Json(Descp);
         }
-        public ActionResult Add_Product(GoodsRI name) // add new products to db
+        public ActionResult Add_Product(GoodsRI name) // add new products to DB
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
@@ -122,12 +127,11 @@ namespace Admin.Controllers
 
         }
         [HttpPost]
-        public ActionResult Add_StockIssue(GoodsRI data)
+        public ActionResult Add_StockIssue(GoodsRI data) // Add Issue Stocks to DB
         {
             Stock_Issue_Insert dblogin = new Stock_Issue_Insert();
-            dblogin.Temp_StockIssue_add(data);
             dblogin.StockIssue_add(data);
             return Json(data);        
-        }
+        } 
     }
 }

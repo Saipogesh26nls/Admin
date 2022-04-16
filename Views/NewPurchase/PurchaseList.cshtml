@@ -10,58 +10,61 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>*@
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Voucher_No)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Voucher_Date)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Invoice_No)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Invoice_Date)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.A_Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Purchase_Total)
-        </th>
-        <th style="display:none">
-            @Html.DisplayNameFor(model => model.project)
-        </th>
-    </tr>
+<div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 850px;">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Voucher_No)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Voucher_Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Invoice_No)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Invoice_Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.A_Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Purchase_Total)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.project)
+            </th>
+        </tr>
 
-@foreach (var item in Model) {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Voucher_No)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Voucher_Date)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Invoice_No)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Invoice_Date)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.A_Name)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Purchase_Total)
-    </td>
-    <td style="display:none">
-        @Html.DisplayFor(modelItem => item.project)
-    </td>
-    <td>
-        @Html.ActionLink("Edit", "Edit_Purchase_View", new { v_no = item.Voucher_No, v_date = item.Voucher_Date, inv_no = item.Invoice_No, inv_date = item.Invoice_Date, a_code = item.A_code, data = item.project }) | @Html.ActionLink("Delete", "Delete_Purchase_view", new { v_no = item.Voucher_No, v_date = item.Voucher_Date, inv_no = item.Invoice_No, inv_date = item.Invoice_Date, a_code = item.A_code })
-    </td>
-</tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Voucher_No)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Voucher_Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Invoice_No)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Invoice_Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.A_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Purchase_Total)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.project)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit_Purchase_View", new { v_no = item.Voucher_No, v_date = item.Voucher_Date, inv_no = item.Invoice_No, inv_date = item.Invoice_Date, a_code = item.A_code, data = item.project }) | @Html.ActionLink("Delete", "Delete_Purchase_view", new { v_no = item.Voucher_No, v_date = item.Voucher_Date, inv_no = item.Invoice_No, inv_date = item.Invoice_Date, a_code = item.A_code })
+                </td>
+            </tr>
+        }
 
-</table>
+    </table>
+</div>

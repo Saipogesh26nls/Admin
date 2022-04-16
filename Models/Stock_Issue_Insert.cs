@@ -10,30 +10,11 @@ namespace Admin.Models
 {
     public class Stock_Issue_Insert
     {
-        public void Temp_StockIssue_add(GoodsRI data)
-        {
-            SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
-            Con1.Open();
-                SqlCommand sql_cmnd = new SqlCommand("[dbo].[Temp_StockIssue]", Con1);
-                sql_cmnd.CommandType = CommandType.StoredProcedure;
-                sql_cmnd.Parameters.AddWithValue("@ref_no", SqlDbType.Int).Value = data.Ref_No;
-                sql_cmnd.Parameters.AddWithValue("@ref_date", data.Ref_Date);
-                sql_cmnd.Parameters.AddWithValue("@GI", SqlDbType.Int).Value = data.GI_Tag;
-                sql_cmnd.Parameters.AddWithValue("@Process", SqlDbType.Int).Value = data.Process_Tag;
-                sql_cmnd.Parameters.AddWithValue("@Project", SqlDbType.Int).Value = data.Project;
-                sql_cmnd.Parameters.AddWithValue("@Employee", SqlDbType.Int).Value = data.Employee;
-                sql_cmnd.Parameters.AddWithValue("@note", SqlDbType.NVarChar).Value = data.Note;
-                sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = data.Part_No;
-                sql_cmnd.Parameters.AddWithValue("@descp", SqlDbType.NChar).Value = data.Description;
-                sql_cmnd.Parameters.AddWithValue("@qty", SqlDbType.Int).Value = data.Quantity;
-                sql_cmnd.ExecuteNonQuery();
-            Con1.Close();
-        }
         public void StockIssue_add(GoodsRI data)
         {
             SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con1.Open();
-            SqlCommand sql_cmnd = new SqlCommand("[dbo].[StockIssue]", Con1);
+            SqlCommand sql_cmnd = new SqlCommand("[dbo].[StockIndent]", Con1);
             sql_cmnd.CommandType = CommandType.StoredProcedure;
             sql_cmnd.Parameters.AddWithValue("@ref_no", SqlDbType.Int).Value = data.Ref_No;
             sql_cmnd.Parameters.AddWithValue("@ref_date", data.Ref_Date);

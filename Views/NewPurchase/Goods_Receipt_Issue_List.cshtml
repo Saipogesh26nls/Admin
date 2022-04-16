@@ -3,77 +3,79 @@
 @{
     ViewBag.Title = "Goods_Receipt_Issue_List";
 }
+<div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 850px;">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Voucher_Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.G_Voucher_No)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.G_Voucher_Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ref_No)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ref_Date)
+            </th>
+            <th style="display:none;">
+                @Html.DisplayNameFor(model => model.GI_Tag)
+            </th>
+            <th style="display:none;">
+                @Html.DisplayNameFor(model => model.Process)
+            </th>
+            <th style="display:none;">
+                @Html.DisplayNameFor(model => model.Project)
+            </th>
+            <th style="display:none;">
+                @Html.DisplayNameFor(model => model.Employee)
+            </th>
+            <th style="display:none;">
+                @Html.DisplayNameFor(model => model.Note)
+            </th>
+        </tr>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Voucher_Type)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.G_Voucher_No)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.G_Voucher_Date)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Ref_No)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Ref_Date)
-        </th>
-        <th style="display:none;">
-            @Html.DisplayNameFor(model => model.GI_Tag)
-        </th>
-        <th style="display:none;">
-            @Html.DisplayNameFor(model => model.Process)
-        </th>
-        <th style="display:none;">
-            @Html.DisplayNameFor(model => model.Project)
-        </th>
-        <th style="display:none;">
-            @Html.DisplayNameFor(model => model.Employee)
-        </th>
-        <th style="display:none;">
-            @Html.DisplayNameFor(model => model.Note)
-        </th>
-    </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Voucher_Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.G_Voucher_No)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.G_Voucher_Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ref_No)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ref_Date)
+                </td>
+                <th style="display:none;">
+                    @Html.DisplayFor(modelItem => item.GI_Tag)
+                </th>
+                <th style="display:none;">
+                    @Html.DisplayFor(modelItem => item.Process)
+                </th>
+                <th style="display:none;">
+                    @Html.DisplayFor(modelItem => item.Project)
+                </th>
+                <th style="display:none;">
+                    @Html.DisplayFor(modelItem => item.Employee)
+                </th>
+                <th style="display:none;">
+                    @Html.DisplayFor(modelItem => item.Note)
+                </th>
+                <td>
+                    @Html.ActionLink("Edit", "Goods_RI_Edit", new { v_type = item.Voucher_Type, gv_no = item.G_Voucher_No, gv_date = item.G_Voucher_Date, ref_no = item.Ref_No, ref_date = item.Ref_Date, GI = item.GI_Tag, process = item.Process, project = item.Project, employee = item.Employee, note = item.Note }) | @Html.ActionLink("Delete", "Delete_GoodsRI_View", new { v_type = item.Voucher_Type, gv_no = item.G_Voucher_No, gv_date = item.G_Voucher_Date, ref_no = item.Ref_No, ref_date = item.Ref_Date, GI = item.GI_Tag, process = item.Process, project = item.Project, employee = item.Employee, note = item.Note })
+                </td>
+            </tr>
+        }
 
-@foreach (var item in Model) {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Voucher_Type)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.G_Voucher_No)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.G_Voucher_Date)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Ref_No)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Ref_Date)
-    </td>
-    <th style="display:none;">
-        @Html.DisplayFor(modelItem => item.GI_Tag)
-    </th>
-    <th style="display:none;">
-        @Html.DisplayFor(modelItem => item.Process)
-    </th>
-    <th style="display:none;">
-        @Html.DisplayFor(modelItem => item.Project)
-    </th>
-    <th style="display:none;">
-        @Html.DisplayFor(modelItem => item.Employee)
-    </th>
-    <th style="display:none;">
-        @Html.DisplayFor(modelItem => item.Note)
-    </th>
-    <td>
-        @Html.ActionLink("Edit", "Goods_RI_Edit", new { v_type = item.Voucher_Type, gv_no = item.G_Voucher_No, gv_date = item.G_Voucher_Date, ref_no = item.Ref_No, ref_date = item.Ref_Date, GI = item.GI_Tag, process = item.Process, project = item.Project, employee = item.Employee, note = item.Note }) | @Html.ActionLink("Delete", "Delete_GoodsRI_View", new { v_type = item.Voucher_Type, gv_no = item.G_Voucher_No, gv_date = item.G_Voucher_Date, ref_no = item.Ref_No, ref_date = item.Ref_Date, GI = item.GI_Tag, process = item.Process, project = item.Project, employee = item.Employee, note = item.Note })
-    </td>
-</tr>
-}
-
-</table>
+    </table>
+</div>

@@ -365,7 +365,7 @@ namespace Admin.Controllers
 
         //New Goods Receipt/Issue
         [HttpGet]
-        public ActionResult Goods_Receipt_Issue() // Goods Issue View
+        public ActionResult Goods_Receipt_Issue(List<GoodsRI> data) // Goods Issue View
         {
             if (Session["userID"] != null)
             {

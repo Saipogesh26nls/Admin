@@ -12,7 +12,7 @@
         }
 
         #add_pd {
-            width: 30%;
+            width: 500px;
         }
 
         #add_submit {
@@ -20,17 +20,17 @@
         }
     </style>
 </head>
-<body>
+<body onload="onload()">
     <div>
         <br />
         <div>
             <p class="text-sm">
-                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Reference No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:13%;", @class = " uppercase" } })   &nbsp &nbsp &nbsp &nbsp   Reference Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
+                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Indent No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:13%;", @class = " uppercase" } })   &nbsp &nbsp &nbsp &nbsp   Indent Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
                 &nbsp &nbsp &nbsp &nbsp Reason: &nbsp &nbsp @Html.DropDownListFor(model => model.GI_Tag, ViewBag.GI as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })   &nbsp &nbsp &nbsp &nbsp  Reason for Process :  &nbsp &nbsp @Html.DropDownListFor(model => model.Process_Tag, ViewBag.Process as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
                 &nbsp &nbsp &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })  &nbsp &nbsp &nbsp &nbsp Requested By : &nbsp &nbsp  @Html.DropDownListFor(model => model.Employee, ViewBag.Employee as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
             </p>
             <p class="text-sm">
-                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Note : &nbsp &nbsp @Html.TextAreaFor(model => model.Note, new { @style = "color:black; width:34.5%; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })  &nbsp &nbsp &nbsp &nbsp Part No : @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct"></i>  &nbsp &nbsp &nbsp &nbspQuantity : <input id="Quantity" type="number" style="border: 1px solid gray; margin-right: 5%;" placeholder="Quantity"> <button class="btn btn-sm btn-secondary float-right" id="Add" style="width:75px;margin-right:5%;margin-top:25px;">Add</button>
+                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Note : &nbsp &nbsp @Html.TextAreaFor(model => model.Note, new { @style = "color:black; width:32%; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })  &nbsp &nbsp &nbsp &nbsp Part No : &nbsp &nbsp @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:1%"></i>  &nbsp &nbsp &nbsp &nbsp &nbsp Quantity : &nbsp &nbsp <input id="Quantity" type="number" style="border: 1px solid gray; margin-right: 10.75%;" placeholder="Quantity"> <button class="btn btn-sm btn-secondary" id="Add" style="width:75px;">Add</button>
             </p>
             <p id="value" style="margin-left:2%;"></p>
         </div>
@@ -38,28 +38,30 @@
             <div class="modal-content">
                 <i class="close" id="close">&times;</i>
                 <p class="text-sm" style="margin-top:10px;text-align:center;"> Package : @Html.EditorFor(model => model.Package_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Value : @Html.EditorFor(model => model.Value_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Part No : @Html.EditorFor(model => model.Partno_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Description : @Html.EditorFor(model => model.Descp_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })</p>
-                <table class="table text-sm" id="pm_list">
-                    <tbody>
-                        <tr>
-                            <th>
-                                Product Code
-                            </th>
-                            <th>
-                                Package
-                            </th>
-                            <th>
-                                Value
-                            </th>
-                            <th>
-                                Part No
-                            </th>
-                            <th>
-                                Description
-                            </th>
-                            <th></th>
-                        </tr>
-                    </tbody>
-                </table>
+                <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 650px;">
+                    <table class="table text-sm" id="pm_list">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    Product Code
+                                </th>
+                                <th>
+                                    Package
+                                </th>
+                                <th>
+                                    Value
+                                </th>
+                                <th>
+                                    Part No
+                                </th>
+                                <th>
+                                    Description
+                                </th>
+                                <th></th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <div id="myModal2" class="modal" style="display:none;text-align:center;">
@@ -90,10 +92,10 @@
         </div>
         <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 600px;">
             <table id="selected_units" class="table text-sm">
-                <thead>
+                <tbody>
                     <tr>
-                        <th>Ref.No</th>
-                        <th>Ref.Date</th>
+                        <th>Indent.No</th>
+                        <th>Indent.Date</th>
                         <th>Reason</th>
                         <th>Process</th>
                         <th>Project</th>
@@ -103,35 +105,12 @@
                         <th>Description</th>
                         <th>Quantity</th>
                     </tr>
-                </thead>
-                <tbody>
-                    @{
-                        var key = Convert.ToInt32(Session["DB"]);
-                        if (key==1)
-                        {
-                            int i = 0;
-                            foreach (System.Data.DataRow dr in ViewBag.Goods.Rows)
-                            {
-                            <tr id="@i">
-                                <td class="row-data">@dr["RefNo"].ToString()</td>
-                                <td class="row-data">@dr["RefDate"].ToString()</td>
-                                <td class="row-data text-sm">@dr["GI_Reason"].ToString()</td>
-                                <td class="row-data">@dr["Process"].ToString()</td>
-                                <td class="row-data">@dr["Project"].ToString()</td>
-                                <td class="row-data">@dr["RequestBy"].ToString()</td>
-                                <td class="row-data">@dr["Note"].ToString()</td>
-                                <td class="row-data">@dr["PartNo"].ToString()</td>
-                                <td class="row-data">@dr["Description"].ToString()</td>
-                                <td class="row-data">@dr["Quantity"].ToString()</td>
-                            </tr>
-                                i++;
-                            }
-                        }
-                    }
                 </tbody>
             </table>
         </div>
-    </div>
+        <br/>
+        <a href="@Url.Action("Goods_Receipt_Issue", "NewPurchase")"><button class="btn btn-sm btn-secondary" id="Submit" style="width:75px;margin-left:20px">Issue</button></a>
+</div>
 </body>
 </html>
 <script>
@@ -189,25 +168,44 @@
                         document.getElementById("value").innerHTML = qty_err;
                         return;
                     }
-                    @*var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
-                    var l_row1 = last_row1 - 1;
-                    var count = 1;
-                    for (var i = 0; i < l_row1; i++) {
-                        var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
-                        var e_partno = document.getElementById("Part_No").value;
-                        if (e_part_no == e_partno) {
-                            var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
-                            document.getElementById("value").innerHTML = qty_err;
-                            return;
-                        }
-                        count++;
-                    }*@
                     var newrow = '<tr id="data"><td>' + ref_no + '</td><td>' + ref_date + '</td><td>' + GI + '</td><td>' + process + '</td><td>' + project + '</td><td>' + emp + '</td><td>' + note + '</td><td>' + d1 + '</td><td>' + data.Description + '</td><td>' + d2 + '</td></tr>';
                     $('#selected_units tr:last').after(newrow);
             },
             failure: function (errMsg) {
                 alert(errMsg);
             }
+            });
+    });
+
+    $('#Submit').click(function (e) {
+        var part = document.getElementById("selected_units").tBodies[0].rows.length;
+        var ref_no = $('#Ref_No').val();
+            var myRows = [];
+            var headersText = [];
+            var $headers = $(" #selected_units th");
+            var $rows = $("#selected_units tbody #data").each(function (index) {
+                $cells = $(this).find("td");
+                myRows[index] = {};
+
+                $cells.each(function (cellIndex) {
+                    if (headersText[cellIndex] === undefined) {
+                        headersText[cellIndex] = $($headers[cellIndex]).text();
+                    }
+                    myRows[index][headersText[cellIndex]] = $(this).text();
+                });
+            });
+
+            var myObj = {
+                "myrows": myRows
+            };
+            $.ajax({
+                url: '/NewPurchase/Goods_Receipt_Issue',
+                data: JSON.stringify(myRows),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+                }
             });
     });
 
@@ -373,5 +371,8 @@
                     }
                 }
             });
+    }
+    function onload() {
+        $('#Ref_No').prop('disabled', true);
     }
 </script>
