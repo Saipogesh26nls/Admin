@@ -90,7 +90,6 @@
 
                                 <!-- Modal content -->
                                 <div class="modal-content">
-                                    <a href="@Url.Action("PurchaseList", "NewPurchase")"><i class="close float-left">&times;</i></a>
                                         <p class="text-sm" style="text-align:center;"> Are you sure, you want to delete ?</p>
                                         <p class="text-sm" style="text-align:center;"><button class="btn btn-sm btn-secondary" style="width:5%;" id="yes">Yes</button><a href="@Url.Action("PurchaseList", "NewPurchase")"> <button class="btn btn-sm btn-secondary" style="width:5%;">No</button> </a> </p>
                                         <p id="delete" style="text-align:center;"></p>
@@ -472,6 +471,9 @@
                 success: function (result) {
                     var del = '<p style="color: red;">Voucher No : ' + result[0].Voucher_No + ' is Removed Successfully !!!</p>';
                     document.getElementById("delete").innerHTML = del;
+                    setTimeout(function () {
+                        window.location.href = "@Url.Action("PurchaseList", "NewPurchase")";
+                    }, 2000);
                 }
             });
             @*document.getElementById("json_op").innerHTML = JSON.stringify(myRows, undefined, 2);*@

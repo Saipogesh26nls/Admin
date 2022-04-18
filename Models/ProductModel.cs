@@ -282,7 +282,7 @@ namespace Admin.Models
         [DisplayName("Voucher Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime Voucher_Date { get; set; } 
+        public DateTime Voucher_Date { get; set; }
         [DisplayName("Part No")]
         public string Part_No { get; set; }
         [DisplayName("ILedger")]
@@ -336,7 +336,7 @@ namespace Admin.Models
         public string Value_letter { get; set; }
         public string Descp_letter { get; set; }
         public string Supplier { get; set; }
-        public double P_Cost { get; set; }  
+        public double P_Cost { get; set; }
         public DataSet EditPurchase(int id)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
@@ -412,7 +412,7 @@ namespace Admin.Models
     public class PurchaseList
     {
         [DisplayName("Invoice No")]
-        public string Invoice_No { get; set;}
+        public string Invoice_No { get; set; }
         [DisplayName("Invoice Date")]
         public string Invoice_Date { get; set; }
         [DisplayName("Voucher No")]
@@ -424,7 +424,7 @@ namespace Admin.Models
         public string A_Name { get; set; }
         [DisplayName("Total")]
         public double Purchase_Total { get; set; }
-        public List<string> Ref_No { get; set ; }
+        public List<string> Ref_No { get; set; }
 
         public string project { get; set; }
     }
@@ -475,7 +475,7 @@ namespace Admin.Models
         public int I_Qty { get; set; }
         public string Package { get; set; }
         public string Value { get; set; }
-        public string Partno_letter { get; set;}
+        public string Partno_letter { get; set; }
         public string Package_letter { get; set; }
         public string Value_letter { get; set; }
         public string Descp_letter { get; set; }
@@ -491,11 +491,11 @@ namespace Admin.Models
             Con.Close();
             return ds;
         }
-        public DataSet SelectIndent()
+        public DataSet SelectIndent(string Indent)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd1 = "select * from Temp_Stock_Indent";
+            string cmd1 = "select * from Stock_Indent where IndentNo = "+Indent+"";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
             DataSet ds = new DataSet();
             SqlDataAdapter da = new SqlDataAdapter(SqlCmd1);
@@ -507,7 +507,7 @@ namespace Admin.Models
 
         //Add New Product
         public string Add_Name { get; set; }
-        public string Add_Group { get; set;}
+        public string Add_Group { get; set; }
         public string Add_Manufacturer { get; set; }
         public string Add_Package { get; set; }
         public string Add_Value { get; set; }
@@ -522,7 +522,7 @@ namespace Admin.Models
     public class GoodsList
     {
         public string Voucher_Type { get; set; }
-        public string G_Voucher_No { get;set;}
+        public string G_Voucher_No { get; set; }
         public string G_Voucher_Date { get; set; }
         public string Ref_No { get; set; }
         public string Ref_Date { get; set; }
@@ -573,9 +573,23 @@ namespace Admin.Models
         public int Id { get; set; }
         public string DisplayName { get; set; }
         public string UserName { get; set; }
-        public string Password { get; set; }    
+        public string Password { get; set; }
         public int Roll { get; set; }
         public string Permission_Detail { get; set; }
         public string success { get; set; }
+    }
+    public class Issue
+    {
+        public string IndentNo { get; set; }
+        public DateTime IndentDate { get; set; }
+        public int Reason { get; set; }
+        public int Process { get; set; }
+        public int Project { get; set; }
+        public int RequestBy { get; set; }
+        public string Note { get; set; }
+        public string PartNo { get; set; }
+        public string Description { get; set; }
+        public int Quantity { get; set; }
+
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -49,15 +50,6 @@ namespace Admin.Controllers
                 DataTable _dt5 = new DataTable();
                 _da5.Fill(_dt5);
                 ViewBag.MfdList = ToSelectList(_dt5, "A_code", "A_Name");
-                string cmd1 = "Update Number_master Set Indent_No = Indent_No + 1 ";
-                SqlCommand SqlCmd1 = new SqlCommand(cmd1, _con);
-                SqlCmd1.ExecuteNonQuery();
-                string cmd2 = "Select Indent_No from Number_master ";
-                SqlCommand SqlCmd2 = new SqlCommand(cmd2, _con);
-                SqlDataReader dr = SqlCmd2.ExecuteReader();
-                dr.Read();
-                Model.Ref_No = dr["Indent_No"].ToString();
-                dr.Close();
                 _con.Close();
                 return View(Model);
             }
@@ -85,7 +77,6 @@ namespace Admin.Controllers
             Stock_Issue_Insert dblogin = new Stock_Issue_Insert();
             var Descp = dblogin.Issue_Descp(name.Part_No);
             name.Description = Descp.Description;
-            Add_StockIssue(name);
             return Json(Descp, JsonRequestBehavior.AllowGet);
         }
         public ActionResult Tab_P_to_DQ(GoodsRI name) // conversion of part_no to description, qty
@@ -127,11 +118,120 @@ namespace Admin.Controllers
 
         }
         [HttpPost]
-        public ActionResult Add_StockIssue(GoodsRI data) // Add Issue Stocks to DB
+        public ActionResult Add_StockIssue(List<Issue> data) // Add Issue Stocks to DB
         {
+            SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            _con.Open();
+            string cmd1 = "Update Number_master Set Indent_No = Indent_No + 1 ";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, _con);
+            SqlCmd1.ExecuteNonQuery();
+            string cmd2 = "Select Indent_No from Number_master ";
+            SqlCommand SqlCmd2 = new SqlCommand(cmd2, _con);
+            SqlDataReader dr = SqlCmd2.ExecuteReader();
+            dr.Read();
+            data[0].IndentNo = dr["Indent_No"].ToString();
+            dr.Close();
+            _con.Close();
             Stock_Issue_Insert dblogin = new Stock_Issue_Insert();
             dblogin.StockIssue_add(data);
             return Json(data);        
-        } 
+        }
+
+        [HttpGet]
+        public ActionResult IndentList() // To show full Indent list view
+        {
+            if (Session["userID"] != null)
+            {
+                Stock_Issue_Insert newPurchase_Insert = new Stock_Issue_Insert();
+                var PM_Data = newPurchase_Insert.Indent_List();
+                ViewBag.PL = PM_Data;
+                return View(PM_Data);
+            }
+            else
+            {
+                return RedirectToAction("Err", "Login");
+            }
+        }
+        [HttpGet]
+        public ActionResult Indent_to_GoodsIssue(string Indent, string Project, string Request)
+        {
+            if (Session["userID"] != null)
+            {
+                GoodsRI Model = new GoodsRI();
+                Model.Voucher_Date = DateTime.Today;
+                SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+                _con.Open();
+                SqlDataAdapter _da = new SqlDataAdapter("Select * From Project_Master", _con);
+                DataTable _dt = new DataTable();
+                _da.Fill(_dt);
+                ViewBag.Project = ToSelectList(_dt, "Project_Id", "Project_Name");
+                SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Process_Tag", _con);
+                DataTable _dt1 = new DataTable();
+                _da1.Fill(_dt1);
+                ViewBag.Process = ToSelectList(_dt1, "Process_Id", "Process_Name");
+                SqlDataAdapter _da2 = new SqlDataAdapter("Select * From GI_Tag", _con);
+                DataTable _dt2 = new DataTable();
+                _da2.Fill(_dt2);
+                ViewBag.GI = ToSelectList(_dt2, "GI_Id", "TagName");
+                SqlDataAdapter _da3 = new SqlDataAdapter("Select * From Employee_Master", _con);
+                DataTable _dt3 = new DataTable();
+                _da3.Fill(_dt3);
+                ViewBag.Employee = ToSelectList(_dt3, "Id", "Employee_Name");
+                List<SelectListItem> Index = new List<SelectListItem>();
+                Index.Add(new SelectListItem { Text = "Goods-Receipt", Value = "1" });
+                Index.Add(new SelectListItem { Text = "Goods-Issue", Value = "2" });
+                ViewBag.Index = new SelectList(Index, "Value", "Text");
+                SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
+                DataTable _dt4 = new DataTable();
+                _da4.Fill(_dt4);
+                ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
+                SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", _con);
+                DataTable _dt5 = new DataTable();
+                _da5.Fill(_dt5);
+                ViewBag.MfdList = ToSelectList(_dt5, "A_code", "A_Name");
+                _con.Close();
+                DataSet set = Model.SelectIndent(Indent);
+                set.Tables[0].Columns.Add("P_code");
+                for (int i = 0; i < set.Tables[0].Rows.Count; i++)
+                {
+                    string Text = set.Tables[0].Rows[i]["PartNo"].ToString();
+                    Stock_Issue_Insert dblogin = new Stock_Issue_Insert();
+                    var Descp = dblogin.partno_to_pcode(Text);
+                    set.Tables[0].Rows[i]["P_code"] = Descp;
+                }
+                ViewBag.Goods = set.Tables[0];
+                Model.Ref_No = set.Tables[0].Rows[0]["IndentNo"].ToString();
+                Model.Ref_Date = DateTime.Parse(set.Tables[0].Rows[0]["IndentDate"].ToString());
+                Model.GI_Tag = set.Tables[0].Rows[0]["GI_Reason"].ToString();
+                Model.Process_Tag = set.Tables[0].Rows[0]["Process"].ToString();
+                Model.Project = Project;
+                Model.Employee = Request;
+                ViewBag.Request = Request;
+                Model.Note = set.Tables[0].Rows[0]["Note"].ToString();
+                Model.Index_Type = 2;
+                return View(Model);
+            }
+            else
+            {
+                return RedirectToAction("Err", "Login");
+            }
+        } // Transfer data from StockIssue to GoodsIssue
+        [HttpPost]
+        public JsonResult Add_Goods(List<GoodsRI> data) // For Adding Goods to DB - Json
+        {
+            DateTime v = DateTime.Parse(data[0].V_Date);
+            string v_date = v.ToString("yyyy-MM-dd");
+            DateTime r = DateTime.Parse(data[0].R_Date);
+            string r_date = r.ToString("yyyy-MM-dd");
+            Stock_Issue_Insert dblogin = new Stock_Issue_Insert();
+            int Vno = dblogin.Goods_add(data, v_date, r_date);
+            SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            _con.Open();
+            string cmd1 = "Delete from Stock_Indent where IndentNo = "+data[0].Ref_No+"";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, _con);
+            SqlCmd1.ExecuteNonQuery();
+            _con.Close();
+            return Json(Vno);
+        }
     }
 }

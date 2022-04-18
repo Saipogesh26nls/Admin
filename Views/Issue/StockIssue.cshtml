@@ -94,23 +94,23 @@
             <table id="selected_units" class="table text-sm">
                 <tbody>
                     <tr>
-                        <th>Indent.No</th>
-                        <th>Indent.Date</th>
+                        <th>IndentNo</th>
+                        <th>IndentDate</th>
                         <th>Reason</th>
                         <th>Process</th>
                         <th>Project</th>
-                        <th>Request By</th>
+                        <th>RequestBy</th>
                         <th>Note</th>
-                        <th>Part.No</th>
+                        <th>PartNo</th>
                         <th>Description</th>
                         <th>Quantity</th>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <br/>
-        <a href="@Url.Action("Goods_Receipt_Issue", "NewPurchase")"><button class="btn btn-sm btn-secondary" id="Submit" style="width:75px;margin-left:20px">Issue</button></a>
-</div>
+        <br />
+        <button class="btn btn-sm btn-secondary" id="Submit" style="width:75px;margin-left:20px">Submit</button> &nbsp &nbsp &nbsp &nbsp <a href="@Url.Action("IndentList", "Issue")"><button class="btn btn-sm btn-secondary" style="width:100px;margin-left:20px">Indent List</button></a>
+    </div>
 </body>
 </html>
 <script>
@@ -125,6 +125,36 @@
         var emp = $('#Employee').val();
         var note = $('#Note').val();
         document.getElementById("value").innerHTML = "";
+
+        var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+        var l_row1 = last_row1 - 1;
+        var count = 1;
+        for (var i = 0; i < l_row1; i++) {
+            var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[7].innerHTML;
+            var e_partno = document.getElementById("Part_No").value;
+            if (e_part_no == e_partno) {
+                var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
+                document.getElementById("value").innerHTML = qty_err;
+                return;
+            }
+            count++;
+        }
+        if (d1 == "") {
+            var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
+            document.getElementById("value").innerHTML = qty_err;
+            return;
+        }
+        else if (d2 == "") {
+            var qty_err = '<p style="color:red;">Enter Quantity !!!<p/>';
+            document.getElementById("value").innerHTML = qty_err;
+            return;
+        }
+        else if (d1 == "" && d2 == "") {
+            var qty_err = '<p style="color:red;">Enter Part No and Quantity !!!<p/>';
+            document.getElementById("value").innerHTML = qty_err;
+            return;
+        }
+
         var model = new Object();
         model.Ref_No = ref_no;
         model.Ref_Date = ref_date;
@@ -143,31 +173,6 @@
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ name: model }),
                 success: function (data) {
-                    if(ref_no == "") {
-                        var qty_err = '<p style="color:red;">Enter Reference No !!!<p/>';
-                        document.getElementById("value").innerHTML = qty_err;
-                        return;
-                    }
-                    else if (d1 == "") {
-                        var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
-                        document.getElementById("value").innerHTML = qty_err;
-                        return;
-                    }
-                    else if (d2 == "") {
-                        var qty_err = '<p style="color:red;">Enter Quantity !!!<p/>';
-                        document.getElementById("value").innerHTML = qty_err;
-                        return;
-                    }
-                    else if (d1 == "" && d2 == "") {
-                        var qty_err = '<p style="color:red;">Enter Part No and Quantity !!!<p/>';
-                        document.getElementById("value").innerHTML = qty_err;
-                        return;
-                    }
-                    else if (d2 > data.db_qty) {
-                        var qty_err = '<p style="color:red;">Out of Stock !!! Available Quantity is <b>' + data.db_qty + '</b><p/>';
-                        document.getElementById("value").innerHTML = qty_err;
-                        return;
-                    }
                     var newrow = '<tr id="data"><td>' + ref_no + '</td><td>' + ref_date + '</td><td>' + GI + '</td><td>' + process + '</td><td>' + project + '</td><td>' + emp + '</td><td>' + note + '</td><td>' + d1 + '</td><td>' + data.Description + '</td><td>' + d2 + '</td></tr>';
                     $('#selected_units tr:last').after(newrow);
             },
@@ -199,12 +204,23 @@
                 "myrows": myRows
             };
             $.ajax({
-                url: '/NewPurchase/Goods_Receipt_Issue',
+                url: "@Url.Action("Add_StockIssue")",
                 data: JSON.stringify(myRows),
                 type: 'POST',
                 contentType: 'application/json;',
                 dataType: 'json',
                 success: function (result) {
+                    var modal2 = document.getElementById("myModal2");
+                    modal2.style.display = "block";
+                    var data = result[0].IndentNo;
+                    var vno = '<p style="background-color:yellow;width:20%">Your Indent.No is ' + data + '<p/>';
+                    document.getElementById("voucher_view").innerHTML = "Your Indent.No is " + data + "";
+                    document.getElementById("Ref_No").value = data;
+                    var submit = '<p style="color:red;">Submitted Successfully !!!<p/>';
+                    document.getElementById("submit_view").innerHTML = submit;
+                    setTimeout(function () {
+                        window.location.reload(1);
+                    }, 2000);
                 }
             });
     });
