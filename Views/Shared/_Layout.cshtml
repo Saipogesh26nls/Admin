@@ -214,116 +214,113 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
     with font-awesome or any other icon font library -->
-                        @*<li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
-                <i class="nav-icon fas fa-tachometer-alt"></i>
-                <p>
-                    Starter Pages
-                    <i class="right fas fa-angle-left"></i>
-                </p>
-            </a>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="@Url.Action("ProductEntry", "Home")" class="nav-link active">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Product</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="@Url.Action("ProductEntry", "Home")" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Product</p>
-                    </a>
-                </li>
-            </ul>
-        </li>*@
-                        <li class="nav-item">
-                            <a href="@Url.Action("ProductEntry", "Product")" class="nav-link">
-                                <i class="nav-icon fas  fa-envelope-open-text"></i>
-                                <p>Product</p>
-
-                            </a>
+                        <li class="nav-item menu">
+                            <a href="#" class="nav-link active" style="background-color:dodgerblue;">
+                            <i class="nav-icon fas fa-database"></i>
+                            <p>
+                                Master
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                             </a>
+                            <ul class="nav nav-treeview" style="background-color: #ebf1fa;">
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ProductEntry", "Product")" class="nav-link">
+                                        <i class="nav-icon fas  fa-envelope-open-text"></i>
+                                        <p>Product</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("GroupEntry","Group")" class="nav-link">
+                                        <i class="nav-icon fas fa-network-wired"></i>
+                                        <p>
+                                            Group
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("BOM_Add_Data","BOM")" class="nav-link">
+                                        <i class="nav-icon fas fa-receipt"></i>
+                                        <p>
+                                            BOM
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Accounts_Detail","Accounts")" class="nav-link">
+                                        <i class="nav-icon fas fa-industry"></i>
+                                        <p>
+                                            Account Details
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Price_List","Price")" class="nav-link">
+                                        <i class="nav-icon fas fa-cash-register"></i>
+                                        <p>
+                                            Stock Price Updation
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Add_New_Employee","User")" class="nav-link">
+                                        <i class="nav-icon fas fa-user"></i>
+                                        <p>
+                                            Employee Master
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Add_New_Project","User")" class="nav-link">
+                                        <i class="nav-icon fas fa-project-diagram"></i>
+                                        <p @*style="font-weight:bold"*@>
+                                            Project Master
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Add_New_Process","User")" class="nav-link">
+                                        <i class="nav-icon fas fa-cogs"></i>
+                                        <p @*style="font-weight:bold"*@>
+                                            Process Master
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("GroupEntry","Group")" class="nav-link">
-                                <i class="nav-icon fas fa-network-wired"></i>
+                        <li class="nav-item menu">
+                            <a href="#" class="nav-link active" style="background-color:dodgerblue;">
+                                <i class="nav-icon fas fa-luggage-cart"></i>
                                 <p>
-                                    Group
+                                    Inventory
+                                    <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="@Url.Action("BOM_Add_Data","BOM")" class="nav-link">
-                                <i class="nav-icon fas fa-receipt"></i>
-                                <p>
-                                    BOM
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("Accounts_Detail","Accounts")" class="nav-link">
-                                <i class="nav-icon fas fa-industry"></i>
-                                <p>
-                                    Account Details
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("Price_List","Price")" class="nav-link">
-                                <i class="nav-icon fas fa-cash-register"></i>
-                                <p>
-                                    Stock Price Updation
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("New_Purchase","NewPurchase")" class="nav-link">
-                                <i class="nav-icon fas fa-cart-plus"></i>
-                                <p>
-                                    Purchase
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("Goods_Receipt_Issue","NewPurchase")" class="nav-link">
-                                <i class="nav-icon fas fa-shopping-cart"></i>
-                                <p>
-                                    Goods Recipt / Issue
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("Add_New_Employee","User")" class="nav-link">
-                                <i class="nav-icon fas fa-user"></i>
-                                <p>
-                                    Employee Master
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("Add_New_Project","User")" class="nav-link">
-                                <i class="nav-icon fas fa-project-diagram"></i>
-                                <p @*style="font-weight:bold"*@>
-                                    Project Master
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("Add_New_Process","User")" class="nav-link">
-                                <i class="nav-icon fas fa-cogs"></i>
-                                <p @*style="font-weight:bold"*@>
-                                    Process Master
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("StockIssue","Issue")" class="nav-link">
-                                <i class="nav-icon fas fa-cart-arrow-down"></i>
-                                <p @*style="font-weight:bold"*@>
-                                    Stock Indent
-                                </p>
-                            </a>
+                            <ul class="nav nav-treeview" style="background-color: #ebf1fa;">
+                                <li class="nav-item">
+                                    <a href="@Url.Action("New_Purchase","NewPurchase")" class="nav-link">
+                                        <i class="nav-icon fas fa-cart-plus"></i>
+                                        <p>
+                                            Purchase
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Goods_Receipt_Issue","NewPurchase")" class="nav-link">
+                                        <i class="nav-icon fas fa-shopping-cart"></i>
+                                        <p>
+                                            Goods Recipt / Issue
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("StockIssue","Issue")" class="nav-link">
+                                        <i class="nav-icon fas fa-cart-arrow-down"></i>
+                                        <p @*style="font-weight:bold"*@>
+                                            Stock Indent
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </nav>

@@ -152,8 +152,9 @@ namespace Admin.Controllers
                 return RedirectToAction("Err", "Login");
             }
         }
+
         [HttpGet]
-        public ActionResult Indent_to_GoodsIssue(string Indent, string Project, string Request)
+        public ActionResult Indent_to_GoodsIssue(string Indent)
         {
             if (Session["userID"] != null)
             {
@@ -202,11 +203,14 @@ namespace Admin.Controllers
                 ViewBag.Goods = set.Tables[0];
                 Model.Ref_No = set.Tables[0].Rows[0]["IndentNo"].ToString();
                 Model.Ref_Date = DateTime.Parse(set.Tables[0].Rows[0]["IndentDate"].ToString());
-                Model.GI_Tag = set.Tables[0].Rows[0]["GI_Reason"].ToString();
-                Model.Process_Tag = set.Tables[0].Rows[0]["Process"].ToString();
-                Model.Project = Project;
-                Model.Employee = Request;
-                ViewBag.Request = Request;
+                ViewBag.Reason_int = set.Tables[0].Rows[0]["GI_value"].ToString();
+                ViewBag.Process_int = set.Tables[0].Rows[0]["Process_value"].ToString();
+                ViewBag.Project_int = set.Tables[0].Rows[0]["Project_value"].ToString();
+                ViewBag.Request_int = set.Tables[0].Rows[0]["Request_value"].ToString();
+                Model.GI_Tag = set.Tables[0].Rows[0]["GI_value"].ToString();
+                Model.Process_Tag = set.Tables[0].Rows[0]["Process_value"].ToString();
+                Model.Project = set.Tables[0].Rows[0]["Project_value"].ToString();
+                Model.Employee = set.Tables[0].Rows[0]["Request_value"].ToString();
                 Model.Note = set.Tables[0].Rows[0]["Note"].ToString();
                 Model.Index_Type = 2;
                 return View(Model);

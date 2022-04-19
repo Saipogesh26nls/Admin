@@ -21,10 +21,14 @@ namespace Admin.Models
                 sql_cmnd.CommandType = CommandType.StoredProcedure;
                 sql_cmnd.Parameters.AddWithValue("@ref_no", SqlDbType.Int).Value = data[0].IndentNo;
                 sql_cmnd.Parameters.AddWithValue("@ref_date", data[i].IndentDate);
-                sql_cmnd.Parameters.AddWithValue("@GI", SqlDbType.Int).Value = data[i].Reason;
-                sql_cmnd.Parameters.AddWithValue("@Process", SqlDbType.Int).Value = data[i].Process;
-                sql_cmnd.Parameters.AddWithValue("@Project", SqlDbType.Int).Value = data[i].Project;
-                sql_cmnd.Parameters.AddWithValue("@Employee", SqlDbType.Int).Value = data[i].RequestBy;
+                sql_cmnd.Parameters.AddWithValue("@GI", SqlDbType.Int).Value = data[i].Reason_int;
+                sql_cmnd.Parameters.AddWithValue("@GI_name", SqlDbType.NVarChar).Value = data[i].Reason;
+                sql_cmnd.Parameters.AddWithValue("@Process", SqlDbType.Int).Value = data[i].Process_int;
+                sql_cmnd.Parameters.AddWithValue("@Process_name", SqlDbType.NVarChar).Value = data[i].Process;
+                sql_cmnd.Parameters.AddWithValue("@Project", SqlDbType.Int).Value = data[i].Project_int;
+                sql_cmnd.Parameters.AddWithValue("@Project_name", SqlDbType.NVarChar).Value = data[i].Project;
+                sql_cmnd.Parameters.AddWithValue("@Employee", SqlDbType.Int).Value = data[i].Request_int;
+                sql_cmnd.Parameters.AddWithValue("@Employee_name", SqlDbType.NVarChar).Value = data[i].RequestBy;
                 sql_cmnd.Parameters.AddWithValue("@note", SqlDbType.NVarChar).Value = data[i].Note;
                 sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = data[i].PartNo;
                 sql_cmnd.Parameters.AddWithValue("@descp", SqlDbType.NChar).Value = data[i].Description;
@@ -178,7 +182,7 @@ namespace Admin.Models
             {
                 for (int i = 0; i < vno.Count; i++)
                 {
-                    string cmd1 = "select Top 1 IndentNo,IndentDate,GI_Reason,Process,Project,RequestBy from Stock_Indent where IndentNo = '" + vno[i] + "' ORDER BY IndentNo Asc;";
+                    string cmd1 = "select Top 1 IndentNo,IndentDate,GI_value,GI_Reason,Process_value,Process,Project_value,Project,Request_value,RequestBy from Stock_Indent where IndentNo = '" + vno[i] + "' ORDER BY IndentNo Asc;";
                     SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
                     SqlDataReader dr = SqlCmd1.ExecuteReader();
                     while (dr.Read())
@@ -187,10 +191,14 @@ namespace Admin.Models
                         {
                             IndentNo = dr["IndentNo"].ToString(),
                             IndentDate = DateTime.Parse( dr["IndentDate"].ToString()),
-                            Reason = (int) dr["GI_Reason"],
-                            Process = (int)dr["Process"],
-                            Project = (int)dr["Project"],
-                            RequestBy = (int)dr["RequestBy"]
+                            Reason = dr["GI_Reason"].ToString(),
+                            Process = dr["Process"].ToString(),
+                            Project = dr["Project"].ToString(),
+                            RequestBy = dr["RequestBy"].ToString(),
+                            Reason_int = (int)dr["GI_value"],
+                            Process_int = (int)dr["Process_value"],
+                            Project_int = (int)dr["Project_value"],
+                            Request_int = (int)dr["Request_value"]
                         }
                         );
                     }

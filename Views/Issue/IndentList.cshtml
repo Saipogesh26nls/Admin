@@ -29,34 +29,58 @@
         <th>
             @Html.DisplayNameFor(model => model.RequestBy)
         </th>
+        <th style="display:none;">
+            @Html.DisplayNameFor(model => model.Reason_int)
+        </th>
+        <th style="display:none;">
+            @Html.DisplayNameFor(model => model.Process_int)
+        </th>
+        <th style="display:none;">
+            @Html.DisplayNameFor(model => model.Project_int)
+        </th>
+        <th style="display:none;">
+            @Html.DisplayNameFor(model => model.Request_int)
+        </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.IndentNo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IndentDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Reason)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Process)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Project)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RequestBy)
-        </td>
-        <td>
-            @Html.ActionLink("Issue", "Indent_to_GoodsIssue", new {  Indent=item.IndentNo, project = item.Project, request = item.RequestBy  })
-           @* @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
-        </td>
-    </tr>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.IndentNo)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.IndentDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Reason)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Process)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Project)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.RequestBy)
+    </td>
+    <td style="display:none;">
+        @Html.DisplayFor(modelItem => item.Reason_int)
+    </td>
+    <td style="display:none;">
+        @Html.DisplayFor(modelItem => item.Process_int)
+    </td>
+    <td style="display:none;">
+        @Html.DisplayFor(modelItem => item.Project_int)
+    </td>
+    <td style="display:none;">
+        @Html.DisplayFor(modelItem => item.Request_int)
+    </td>
+    <td>
+        @Html.ActionLink("Issue", "Indent_to_GoodsIssue", new { Indent = item.IndentNo })
+        @* @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+    </td>
+</tr>
 }
 
 </table>

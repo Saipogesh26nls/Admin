@@ -582,14 +582,18 @@ namespace Admin.Models
     {
         public string IndentNo { get; set; }
         public DateTime IndentDate { get; set; }
-        public int Reason { get; set; }
-        public int Process { get; set; }
-        public int Project { get; set; }
-        public int RequestBy { get; set; }
+        public string Reason { get; set; }
+        public string Process { get; set; }
+        public string Project { get; set; }
+        public string RequestBy { get; set; }
         public string Note { get; set; }
         public string PartNo { get; set; }
         public string Description { get; set; }
         public int Quantity { get; set; }
+        public int Reason_int { get; set; }
+        public int Process_int { get; set; }
+        public int Project_int { get; set; }
+        public int Request_int { get; set; }
 
     }
 }

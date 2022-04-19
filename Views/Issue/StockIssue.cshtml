@@ -94,7 +94,6 @@
             <table id="selected_units" class="table text-sm">
                 <tbody>
                     <tr>
-                        <th>IndentNo</th>
                         <th>IndentDate</th>
                         <th>Reason</th>
                         <th>Process</th>
@@ -104,6 +103,10 @@
                         <th>PartNo</th>
                         <th>Description</th>
                         <th>Quantity</th>
+                        <th style="display:none;">Reason_int</th>
+                        <th style="display:none;">Process_int</th>
+                        <th style="display:none;">Project_int</th>
+                        <th style="display:none;">Request_int</th>
                     </tr>
                 </tbody>
             </table>
@@ -119,18 +122,22 @@
         var d2 = $('#Quantity').val();
         var ref_no = $('#Ref_No').val();
         var ref_date = $('#Ref_Date').val();
-        var GI = $('#GI_Tag').val();
-        var process = $('#Process_Tag').val();
-        var project = $('#Project').val();
-        var emp = $('#Employee').val();
+        var GI = $("#GI_Tag option:selected").text();
+        var process = $("#Process_Tag option:selected").text();
+        var project = $("#Project option:selected").text();
+        var emp = $("#Employee option:selected").text();
         var note = $('#Note').val();
+        var reason_int = $("#GI_Tag").val();
+        var process_int = $("#Process_Tag").val();
+        var project_int = $("#Project").val();
+        var request_int = $("#Employee").val();
         document.getElementById("value").innerHTML = "";
 
         var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
         var l_row1 = last_row1 - 1;
         var count = 1;
         for (var i = 0; i < l_row1; i++) {
-            var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[7].innerHTML;
+            var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[6].innerHTML;
             var e_partno = document.getElementById("Part_No").value;
             if (e_part_no == e_partno) {
                 var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
@@ -156,15 +163,7 @@
         }
 
         var model = new Object();
-        model.Ref_No = ref_no;
-        model.Ref_Date = ref_date;
-        model.GI_Tag = GI;
-        model.Process_Tag = process;
-        model.Project = project;
-        model.Employee = emp;
-        model.Note = note;
         model.Part_No = d1;
-        model.Quantity = d2;
 
             jQuery.ajax({
             type: "POST",
@@ -173,7 +172,7 @@
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ name: model }),
                 success: function (data) {
-                    var newrow = '<tr id="data"><td>' + ref_no + '</td><td>' + ref_date + '</td><td>' + GI + '</td><td>' + process + '</td><td>' + project + '</td><td>' + emp + '</td><td>' + note + '</td><td>' + d1 + '</td><td>' + data.Description + '</td><td>' + d2 + '</td></tr>';
+                    var newrow = '<tr id="data"><td>' + ref_date + '</td><td>' + GI + '</td><td>' + process + '</td><td>' + project + '</td><td>' + emp + '</td><td>' + note + '</td><td>' + d1 + '</td><td>' + data.Description + '</td><td>' + d2 + '</td><td style="display:none;">' + reason_int + '</td><td style="display:none;">' + process_int + '</td><td style="display:none;">' + project_int + '</td><td style="display:none;">' + request_int + '</td></tr>';
                     $('#selected_units tr:last').after(newrow);
             },
             failure: function (errMsg) {
@@ -184,6 +183,11 @@
 
     $('#Submit').click(function (e) {
         var part = document.getElementById("selected_units").tBodies[0].rows.length;
+        if (part == 1) {
+            var qty_err = '<p style="color:red;">Table is Empty !!!<p/>';
+            document.getElementById("value").innerHTML = qty_err;
+            return;
+        }
         var ref_no = $('#Ref_No').val();
             var myRows = [];
             var headersText = [];
@@ -390,5 +394,7 @@
     }
     function onload() {
         $('#Ref_No').prop('disabled', true);
+        document.getElementById("GI_Tag").value = 5;
+        $('#GI_Tag').prop('disabled', true);
     }
 </script>
