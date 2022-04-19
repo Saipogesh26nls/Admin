@@ -320,6 +320,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("PurchaseList","NewPurchase")" class="nav-link">
+                                        <i class="nav-icon fas fa-list"></i>
+                                        <p @*style="font-weight:bold"*@>
+                                            Purchase List
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Goods_Receipt_Issue_List","NewPurchase")" class="nav-link">
+                                        <i class="nav-icon fas fa-list"></i>
+                                        <p @*style="font-weight:bold"*@>
+                                            Receipt / Issue List
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("IndentList","Issue")" class="nav-link">
+                                        <i class="nav-icon fas fa-indent"></i>
+                                        <p @*style="font-weight:bold"*@>
+                                            Indent List
+                                        </p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     </ul>
@@ -373,7 +397,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 @Html.ActionLink("Back to Home", "ProductEntry", "Product")
             </div>
             <!-- Default to the left -->
-            <strong>Copyright &copy; 2014-2021 <a href="http://www.samtechdevices.com">Samtech Devices India Pvt.Ltd</a>.</strong> All rights reserved.
+            <strong>@*Copyright &copy; 2014-2021*@ <a href="http://www.samtechdevices.com">Samtech Devices India Pvt.Ltd</a></strong>@* All rights reserved.*@
         </footer>
     </div>
     <!-- ./wrapper -->
