@@ -608,6 +608,7 @@ namespace Admin.Models
     }
     public class Issue
     {
+        public int Vno { get; set; }
         public string IndentNo { get; set; }
         public DateTime IndentDate { get; set; }
         public string Reason { get; set; }

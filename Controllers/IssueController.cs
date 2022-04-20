@@ -190,7 +190,6 @@ namespace Admin.Controllers
                 DataTable _dt5 = new DataTable();
                 _da5.Fill(_dt5);
                 ViewBag.MfdList = ToSelectList(_dt5, "A_code", "A_Name");
-                _con.Close();
                 DataSet set = Model.SelectIndent(Indent);
                 set.Tables[0].Columns.Add("P_code");
                 for (int i = 0; i < set.Tables[0].Rows.Count; i++)
@@ -213,6 +212,24 @@ namespace Admin.Controllers
                 Model.Employee = set.Tables[0].Rows[0]["Request_value"].ToString();
                 Model.Note = set.Tables[0].Rows[0]["Note"].ToString();
                 Model.Index_Type = 2;
+                string cmd3 = "select GI_VoucherNo from Stock_Indent where IndentNo = '" + Indent + "'";
+                SqlCommand SqlCmd3 = new SqlCommand(cmd3, _con);
+                SqlDataReader dr2 = SqlCmd3.ExecuteReader();
+                int vno = 0;
+                while (dr2.Read())
+                {
+                    vno = (int)dr2["GI_VoucherNo"];
+                }
+                dr2.Close();
+                if(vno > 0)
+                {
+                    Model.Voucher_No = vno;
+                }
+                else
+                {
+                    Model.Voucher_No = (int)set.Tables[0].Rows[0]["GI_VoucherNo"];
+                }
+                _con.Close();
                 return View(Model);
             }
             else
@@ -229,12 +246,6 @@ namespace Admin.Controllers
             string r_date = r.ToString("yyyy-MM-dd");
             Stock_Issue_Insert dblogin = new Stock_Issue_Insert();
             int Vno = dblogin.Goods_add(data, v_date, r_date);
-            SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
-            _con.Open();
-            string cmd1 = "Delete from Stock_Indent where IndentNo = "+data[0].Ref_No+"";
-            SqlCommand SqlCmd1 = new SqlCommand(cmd1, _con);
-            SqlCmd1.ExecuteNonQuery();
-            _con.Close();
             return Json(Vno);
         }
     }

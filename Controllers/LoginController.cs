@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Admin.Models;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Data;
 
 namespace Admin.Controllers
 {
@@ -93,10 +94,13 @@ namespace Admin.Controllers
             var roll = Convert.ToInt32(Session["roll"]);
             if (Session["userID"] != null && roll == 1)
             {
-                List<SelectListItem> LRoll = new List<SelectListItem>();
-                LRoll.Add(new SelectListItem { Text = "Admin", Value = "1" });
-                LRoll.Add(new SelectListItem { Text = "User", Value = "2" });
-                ViewBag.LROLL = new SelectList(LRoll, "Value", "Text");
+                SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+                _con.Open();
+                SqlDataAdapter _da = new SqlDataAdapter("Select * From Log_Roll", _con);
+                DataTable _dt = new DataTable();
+                _da.Fill(_dt);
+                ViewBag.LROLL = ToSelectList(_dt, "Id", "Roll");
+                _con.Close();
                 return View();
             }
             else
@@ -168,11 +172,12 @@ namespace Admin.Controllers
                     loginModels.Roll = (int)dr["Roll"];
                     loginModels.Permission_Detail = dr["permission_detail"].ToString();
                 }
+                dr.Close();
+                SqlDataAdapter _da = new SqlDataAdapter("Select * From Log_Roll", Con);
+                DataTable _dt = new DataTable();
+                _da.Fill(_dt);
+                ViewBag.LROLL = ToSelectList(_dt, "Id", "Roll");
                 Con.Close();
-                List<SelectListItem> LRoll = new List<SelectListItem>();
-                LRoll.Add(new SelectListItem { Text = "Admin", Value = "1" });
-                LRoll.Add(new SelectListItem { Text = "User", Value = "2" });
-                ViewBag.LROLL = new SelectList(LRoll, "Value", "Text");
                 return View(loginModels);
             }
             else
@@ -234,5 +239,19 @@ namespace Admin.Controllers
             Con.Close();
             return Json(name);
         } // Delete user data from db
+        [NonAction]
+        public SelectList ToSelectList(DataTable table, string valueField, string textField) // For making Dropdown list
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            foreach (DataRow row in table.Rows)
+            {
+                list.Add(new SelectListItem()
+                {
+                    Text = row[textField].ToString(),
+                    Value = row[valueField].ToString()
+                });
+            }
+            return new SelectList(list, "Value", "Text");
+        }
     }
 }

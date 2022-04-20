@@ -155,28 +155,30 @@
                                             <th style="display: none;">Employee</th>
                                             <th style="display: none;">Note</th>
                                             <th style="display: none;">P_code</th>
+                                            <th style="display: none;">Voucher_No</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @{ int i = 0; }
                                         @foreach (System.Data.DataRow dr in ViewBag.Goods.Rows)
                                         {
-                                            <tr id="@i">
-                                                <td class="row-data">@dr["PartNo"].ToString()</td>
-                                                <td class="row-data">@dr["Description"].ToString()</td>
-                                                <td class="row-data text-sm-left">@dr["Quantity"].ToString()</td>
-                                                <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row1(this);"></i> </td>
-                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Voucher_Date)</td>
-                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Index_Type)</td>
-                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Ref_No)</td>
-                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Ref_Date)</td>
-                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.GI_Tag)</td>
-                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Process_Tag)</td>
-                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Project)</td>
-                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Employee)</td>
-                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Note)</td>
-                                                <td class="row-data" style="display:none;">@dr["P_code"].ToString()</td>
-                                            </tr>
+                                        <tr id="@i">
+                                            <td class="row-data">@dr["PartNo"].ToString()</td>
+                                            <td class="row-data">@dr["Description"].ToString()</td>
+                                            <td class="row-data text-sm-left">@dr["Quantity"].ToString()</td>
+                                            <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row1(this);"></i> </td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Voucher_Date)</td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Index_Type)</td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Ref_No)</td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Ref_Date)</td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.GI_Tag)</td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Process_Tag)</td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Project)</td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Employee)</td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Note)</td>
+                                            <td class="row-data" style="display:none;">@dr["P_code"].ToString()</td>
+                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Voucher_No)</td>
+                                        </tr>
                                             i++;
                                         }
                                     </tbody>
@@ -270,7 +272,7 @@
                         count++;
                     }
                     var l_row = last_row - 1;
-                    var newrow = '<tr id="' + l_row + '"><td class="row-data">' + d1 + '</td><td class="row-data">' + data.Description + '</td><td class="row-data">' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td style="display:none;">' + v_date + '</td><td style="display:none;">' + index_type + '</td><td style="display:none;">' + ref_no + '</td><td style="display:none;">' + ref_date + '</td><td style="display:none;">' + GI + '</td><td style="display:none;">' + process + '</td><td style="display:none;">' + project + '</td><td style="display:none;">' + emp + '</td><td style="display:none;">' + note + '</td></tr>';
+                    var newrow = '<tr id="' + l_row + '"><td class="row-data">' + d1 + '</td><td class="row-data">' + data.Description + '</td><td class="row-data">' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td style="display:none;">' + v_date + '</td><td style="display:none;">' + index_type + '</td><td style="display:none;">' + ref_no + '</td><td style="display:none;">' + ref_date + '</td><td style="display:none;">' + GI + '</td><td style="display:none;">' + process + '</td><td style="display:none;">' + project + '</td><td style="display:none;">' + emp + '</td><td style="display:none;">' + note + '</td><td style="display:none;">' + v_no + '</td></tr>';
 
                     $('#selected_units tr:last').after(newrow);
             },
@@ -285,7 +287,14 @@
         document.getElementById("Process_Tag").value = @ViewBag.Process_int;
         document.getElementById("Project").value = @ViewBag.Project_int;
         document.getElementById("Employee").value = @ViewBag.Request_int;
-        document.getElementById("Voucher_No").value = "";
+        @*var v_no = @ViewBag.Vno;
+        if (@ViewBag.Vno == "") {
+            document.getElementById("Voucher_No").value = "";
+        }
+        else {
+            document.getElementById("Voucher_No").value = @ViewBag.Vno;
+        }*@
+        $('#Voucher_No').prop('disabled', true);
         $('#Index_Type').prop('disabled', true);
         $('#Ref_No').prop('disabled', true);
         $('#Ref_Date').prop('disabled', true);
