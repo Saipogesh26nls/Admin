@@ -12,27 +12,39 @@
         <th>
             @Html.DisplayNameFor(model => model.BOM_Date)
         </th>
-        <th>
+        <th style="display:none;">
             @Html.DisplayNameFor(model => model.SP_code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Part_No)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Product_Name)
         </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.BOM_No)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BOM_Date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SP_code)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "BOM_Edit_Delete", new { bom_no=item.BOM_No ,bomdate = item.BOM_Date, spcode = item.SP_code  }) | @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
-    </tr>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.BOM_No)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.BOM_Date)
+    </td>
+    <td style="display:none;">
+        @Html.DisplayFor(modelItem => item.SP_code)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Part_No)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Product_Name)
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "BOM_Edit_Delete", new { bom_no = item.BOM_No, bomdate = item.BOM_Date, spcode = item.SP_code })@* | @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+    </td>
+</tr>
 }
 
 </table>

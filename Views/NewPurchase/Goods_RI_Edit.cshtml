@@ -47,8 +47,13 @@
         #list:hover {
             background-color: aliceblue;
         }
+
         #add_pd {
             width: 500px;
+        }
+
+        #add_submit {
+            width: 30%;
         }
     </style>
 </head>
@@ -108,6 +113,13 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                </div>
+                            </div>
+                            <div id="myModal2" class="modal" style="display:none;text-align:center;">
+                                <!-- Modal content -->
+                                <div class="modal-content" id="add_submit">
+                                    <p id="voucher_view"></p>
+                                    <p id="submit_view"></p>
                                 </div>
                             </div>
                             <div id="myModal1" class="modal">
@@ -348,7 +360,13 @@
                 contentType: "application/json; charset=utf - 8",
                 dataType: 'json',
                 success: function (result) {
-                    document.getElementById("Enter_Inv_No").innerHTML = "Submitted Successfully !!!";
+                    var modal2 = document.getElementById("myModal2");
+                    modal2.style.display = "block";
+                    var submit = '<p style="color:red;">Submitted Successfully !!!<p/>';
+                    document.getElementById("submit_view").innerHTML = submit;
+                    setTimeout(function () {
+                        window.location.href = "@Url.Action("Goods_Receipt_Issue_List", "NewPurchase")";
+                    }, 3000);
                 }
             });
             @*document.getElementById("json_op").innerHTML = JSON.stringify(myRows, undefined, 2);*@

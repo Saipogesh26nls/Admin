@@ -23,10 +23,10 @@ namespace Admin.Controllers
 
                 SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
                 _con.Open();
-                SqlDataAdapter _da = new SqlDataAdapter("Select P_Description From Product_Master where P_Level<0", _con);
+                /*SqlDataAdapter _da = new SqlDataAdapter("Select P_Description From Product_Master where P_Level<0", _con);
                 DataTable _dt = new DataTable();
                 _da.Fill(_dt);
-                ViewBag.ProductList = ToSelectList(_dt, "P_Description", "P_Description");
+                ViewBag.ProductList = ToSelectList(_dt, "P_Description", "P_Description");*/
                 SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<0", _con);
                 DataTable _dt1 = new DataTable();
                 _da1.Fill(_dt1);

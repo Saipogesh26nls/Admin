@@ -52,8 +52,13 @@
         #list:hover {
             background-color: aliceblue;
         }
+
         #add_pd {
             width: 500px;
+        }
+
+        #add_submit {
+            width: 30%;
         }
     </style>
 </head>
@@ -122,6 +127,13 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                </div>
+                            </div>
+                            <div id="myModal2" class="modal" style="display:none;text-align:center;">
+                                <!-- Modal content -->
+                                <div class="modal-content" id="add_submit">
+                                    <p id="voucher_view"></p>
+                                    <p id="submit_view"></p>
                                 </div>
                             </div>
                             <div id="myModal1" class="modal">
@@ -262,32 +274,32 @@
                                     </tbody>
                                 </table>
                             </div>
-                                <div style="margin-right:5px;" class="text-sm">
-                                    @Html.LabelFor(model => model.Quantity, new { htmlAttributes = new { id = "Qty_Label" } }) : <h6 id="Qty_display"></h6>
-                                    @*Discount(%) : @Html.EditorFor(model => model.Final_Discount_per, new { htmlAttributes = new { } })
-                Tax1(%) : @Html.EditorFor(model => model.Final_Tax1_per, new { htmlAttributes = new { } })
-                Tax2(%) : @Html.EditorFor(model => model.Final_Tax2_per, new { htmlAttributes = new { } })*@
-                                </div>
-                                <button class="btn btn-sm btn-secondary" id="Submit" style="width:10%;margin-left:2%;margin-top:10%;">Submit</button>
-                                <div class="float-right text-sm">
-                                    <div>
-                                        @Html.LabelFor(model => model.Total, new { htmlAttributes = new { id = "total_Label" } }) : <h6 id="total_display"></h6>
-                                    </div>
-                                    <div>
-                                        @Html.LabelFor(model => model.Final_Discount) : @Html.EditorFor(model => model.Final_Discount, new { htmlAttributes = new { @id = "Final_Discount" } })
-                                    </div>
-                                    <div>
-                                        @Html.LabelFor(model => model.Final_Tax1) : @Html.EditorFor(model => model.Final_Tax1, new { htmlAttributes = new { @style = "margin-left:11%;", @id = "Final_Tax1" } })
-                                    </div>
-                                    <div>
-                                        @Html.LabelFor(model => model.Final_Tax2) : @Html.EditorFor(model => model.Final_Tax2, new { htmlAttributes = new { @style = "margin-left:11%;", @id = "Final_Tax2" } })
-                                    </div>
-                                    <div>
-                                        @Html.LabelFor(model => model.Final_Total, new { htmlAttributes = new { id = "final_total_Label" } }) : <h6 id="Final_Total" style="margin-left:11%;"></h6>
-                                    </div>
-                                </div>
-                                <p id="del"></p>
+                            <div style="margin-right:5px;" class="text-sm">
+                                @Html.LabelFor(model => model.Quantity, new { htmlAttributes = new { id = "Qty_Label" } }) : <h6 id="Qty_display"></h6>
+                                @*Discount(%) : @Html.EditorFor(model => model.Final_Discount_per, new { htmlAttributes = new { } })
+            Tax1(%) : @Html.EditorFor(model => model.Final_Tax1_per, new { htmlAttributes = new { } })
+            Tax2(%) : @Html.EditorFor(model => model.Final_Tax2_per, new { htmlAttributes = new { } })*@
                             </div>
+                            <button class="btn btn-sm btn-secondary" id="Submit" style="width:10%;margin-left:2%;margin-top:10%;">Submit</button>
+                            <div class="float-right text-sm">
+                                <div>
+                                    @Html.LabelFor(model => model.Total, new { htmlAttributes = new { id = "total_Label" } }) : <h6 id="total_display"></h6>
+                                </div>
+                                <div>
+                                    @Html.LabelFor(model => model.Final_Discount) : @Html.EditorFor(model => model.Final_Discount, new { htmlAttributes = new { @id = "Final_Discount" } })
+                                </div>
+                                <div>
+                                    @Html.LabelFor(model => model.Final_Tax1) : @Html.EditorFor(model => model.Final_Tax1, new { htmlAttributes = new { @style = "margin-left:11%;", @id = "Final_Tax1" } })
+                                </div>
+                                <div>
+                                    @Html.LabelFor(model => model.Final_Tax2) : @Html.EditorFor(model => model.Final_Tax2, new { htmlAttributes = new { @style = "margin-left:11%;", @id = "Final_Tax2" } })
+                                </div>
+                                <div>
+                                    @Html.LabelFor(model => model.Final_Total, new { htmlAttributes = new { id = "final_total_Label" } }) : <h6 id="Final_Total" style="margin-left:11%;"></h6>
+                                </div>
+                            </div>
+                            <p id="del"></p>
+                        </div>
                         </div>
                 </div>
             </div>
@@ -524,12 +536,16 @@
                 contentType: 'application/json;',
                 dataType: 'json',
                 success: function (result) {
-                    //  alert(result.ItemList[0].Str);
+                    var modal2 = document.getElementById("myModal2");
+                    modal2.style.display = "block";
+                    var submit = '<p style="color:red;">Submitted Successfully !!!<p/>';
+                    document.getElementById("submit_view").innerHTML = submit;
+                    setTimeout(function () {
+                        window.location.href = "@Url.Action("PurchaseList", "NewPurchase")";
+                    }, 3000);
                 }
             });
             @*document.getElementById("json_op").innerHTML = JSON.stringify(myRows, undefined, 2);*@
-            var str = "Submitted Successfully !!!";
-            document.getElementById("Enter_Inv_No").innerHTML = str;
         }
     });
 

@@ -20,12 +20,37 @@ namespace Admin.Controllers
             if (Session["userID"] != null)
             {
                 data.BOM_Date = DateTime.Today;
+                SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+                _con.Open();
+                SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
+                DataTable _dt4 = new DataTable();
+                _da4.Fill(_dt4);
+                ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
+                SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<0", _con);
+                DataTable _dt1 = new DataTable();
+                _da1.Fill(_dt1);
+                ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
+                _con.Close();
                 return View(data);
             }
             else
             {
                 return RedirectToAction("Err", "Login");
             }
+        }
+        [NonAction]
+        public SelectList ToSelectList(DataTable table, string valueField, string textField) // For making Dropdown list
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            foreach (DataRow row in table.Rows)
+            {
+                list.Add(new SelectListItem()
+                {
+                    Text = row[textField].ToString(),
+                    Value = row[valueField].ToString()
+                });
+            }
+            return new SelectList(list, "Value", "Text");
         }
         public ActionResult Order(List<BOM_Table> name) // Add List to DB
         {
@@ -86,6 +111,21 @@ namespace Admin.Controllers
                         }
                         dr.Close();
                     }
+                    for (int i = 0; i < bom_no.Count; i++)
+                    {
+                        string cmd1 = "select P_Part_No,P_Name from Product_Master where P_code = '" + ItemQm[i].SP_code + "'";
+                        SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                        SqlDataReader dr = SqlCmd1.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            for(int j = 0; j < ItemQm.Count; j++)
+                            {
+                                ItemQm[i].Part_No = dr["P_Part_No"].ToString();
+                                ItemQm[i].Product_Name = dr["P_Name"].ToString();
+                            }
+                        }
+                        dr.Close();
+                    }
                     Con.Close();
                     return View(ItemQm);
                 }
@@ -100,6 +140,17 @@ namespace Admin.Controllers
         {
             if (Session["userID"] != null)
             {
+                SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+                _con.Open();
+                SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
+                DataTable _dt4 = new DataTable();
+                _da4.Fill(_dt4);
+                ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
+                SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<0", _con);
+                DataTable _dt1 = new DataTable();
+                _da1.Fill(_dt1);
+                ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
+                _con.Close();
                 BOMFields bOMFields = new BOMFields();
                 DataSet ds = bOMFields.EditBOM(BOM_No, spcode);
                 ds.Tables[0].Columns.Add("P_Part_No");
@@ -125,5 +176,39 @@ namespace Admin.Controllers
                 return RedirectToAction("Err", "Login");
             }
         }
+        public ActionResult Add_Product(GoodsRI name) // add new products to db
+        {
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "select P_Part_No from Product_Master where P_Part_No = '" + name.Add_PartNo + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlDataReader dr = SqlCmd1.ExecuteReader();
+            string ItemQm = string.Empty;
+            while (dr.Read())
+            {
+                ItemQm = dr["P_Part_No"].ToString();
+            }
+            if (ItemQm != name.Add_PartNo)
+            {
+                ProductInsert dblogin = new ProductInsert();
+                int userid = dblogin.AddData(name.Add_Group, name.Add_Name, name.Add_Manufacturer, name.Add_Package, name.Add_Value, name.Add_PartNo, name.Add_Description, name.Add_Cost, name.Add_MRP, name.Add_SellPrice);
+                Con.Close();
+                return Json(ItemQm);
+            }
+            else
+            {
+                Con.Close();
+                return Json(ItemQm);
+            }
+
+        }
+        public ActionResult BOMEdit(List<BOMEdit> name) // add edited BOM to db
+        {
+            DateTime v = DateTime.Parse(name[0].BOM_Date);
+            string bom_date = v.ToString("yyyy-MM-dd");
+            BOM_Insert BOM_SP = new BOM_Insert();
+            int BOM = BOM_SP.EditOrder(name, bom_date);
+            return Json(BOM);
+        } 
     }
 }

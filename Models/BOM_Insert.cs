@@ -123,6 +123,37 @@ namespace Admin.Models
             }
             return ItemQm;
         }
-        
+        public int EditOrder(List<BOMEdit> orderDetail, string bom_date)
+        {
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "Delete from BOM where BOM_No = "+orderDetail[0].BOM_No+"";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlCmd1.ExecuteNonQuery();
+            Con.Close();
+
+            SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con1.Open();
+            int i = 0;
+            while (i <= orderDetail.Count())
+            {
+                if (i == orderDetail.Count())
+                {
+                    break;
+                }
+                SqlCommand sql_cmnd = new SqlCommand("[dbo].[BOM_Prod]", Con1);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                sql_cmnd.Parameters.AddWithValue("@bom_no", SqlDbType.Int).Value = orderDetail[i].BOM_No;
+                sql_cmnd.Parameters.AddWithValue("@bom_date", SqlDbType.NVarChar).Value = bom_date;
+                sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = orderDetail[i].Part_No.ToUpper();
+                sql_cmnd.Parameters.AddWithValue("@mp_partno", SqlDbType.NVarChar).Value = orderDetail[i].SP_Part_No.ToUpper();
+                sql_cmnd.Parameters.AddWithValue("@quantity", SqlDbType.NVarChar).Value = orderDetail[i].Quantity;
+                sql_cmnd.ExecuteNonQuery();
+                i++;
+            }
+            Con1.Close();
+            return i;
+        }
+
     } 
 }

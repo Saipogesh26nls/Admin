@@ -125,6 +125,21 @@ namespace Admin.Models
             Con.Close();
             return ds;
         }
+        public string Add_Name { get; set; }
+        public string Add_Group { get; set; }
+        public string Add_Manufacturer { get; set; }
+        public string Add_Package { get; set; }
+        public string Add_Value { get; set; }
+        public string Add_PartNo { get; set; }
+        public string Add_Description { get; set; }
+        public double Add_Cost { get; set; }
+        public double Add_MRP { get; set; }
+        public double Add_SellPrice { get; set; }
+        public string Project { get; set; }
+        public string Partno_letter { get; set; }
+        public string Package_letter { get; set; }
+        public string Value_letter { get; set; }
+        public string Descp_letter { get; set; }
     }
     public class BOM_Table
     {
@@ -139,6 +154,19 @@ namespace Admin.Models
         public int BOM_No { get; set; }
         public string BOM_Date { get; set; }
         public string SP_code { get; set; }
+        [DisplayName("Sub-Assembly PartNo")]
+        public string Part_No { get; set; }
+        [DisplayName("Sub-Assembly Product Name")]
+        public string Product_Name { get; set; }
+    }
+    public class BOMEdit
+    {
+        public string Part_No { get; set; }
+        public string Description { get; set; }
+        public int Quantity { get; set; }
+        public string SP_Part_No { get; set; }
+        public string BOM_No { get; set; }
+        public string BOM_Date { get; set; }
     }
     public class AccountsField
     {

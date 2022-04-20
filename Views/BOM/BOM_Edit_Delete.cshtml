@@ -43,6 +43,17 @@
                 tbody td:last-child, thead th:last-child {
                     border-right: none;
                 }*@
+        #list:hover {
+            background-color: aliceblue;
+        }
+
+        #add_pd {
+            width: 500px;
+        }
+
+        #add_submit {
+            width: 30%;
+        }
     </style>
 </head>
 <body onload="freeze();">
@@ -58,11 +69,72 @@
                     <div class="card-body table-responsive">
                         <div class="table-responsive">
                             <p class="text-sm">
-                                Part_No:@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:3%" } }) Quantity : @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:15%;margin-right:3%;" } }) <button class="btn btn-sm btn-secondary" id="add">Add</button><button class="btn btn-sm btn-secondary" id="add_edit" style="display:none;">Add</button>
+                                Part_No:@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:1%" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:3%"></i> Quantity : @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:15%;margin-right:3%;" } }) <button class="btn btn-sm btn-secondary" id="add">Add</button><button class="btn btn-sm btn-secondary" onclick="ToAdd()" id="add_edit" style="display:none;">Add</button>
                             </p>
                             <p id="value1" class="text-sm" style="width:50%"></p>
                             <button class="btn btn-sm btn-secondary float-right" id="Submit" style="width:8%;margin-left:2%;margin-top:30px;">Submit</button>
                             <a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 30px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>
+                            <div id="myModal" class="modal">
+
+                                <!-- Modal content -->
+                                <div class="modal-content">
+                                    <i class="close" id="close1">&times;</i>
+                                    <p class="text-sm" style="margin-top:10px;text-align:center;"> Package : @Html.EditorFor(model => model.Package_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Value : @Html.EditorFor(model => model.Value_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Part No : @Html.EditorFor(model => model.Partno_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })</p>
+                                    <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 650px;">
+                                        <table class="table text-sm" id="pm_list">
+                                            <tbody>
+                                                <tr>
+                                                    <th>
+                                                        Product Code
+                                                    </th>
+                                                    <th>
+                                                        Package
+                                                    </th>
+                                                    <th>
+                                                        Value
+                                                    </th>
+                                                    <th>
+                                                        Part No
+                                                    </th>
+                                                    <th>
+                                                        Description
+                                                    </th>
+                                                    <th>
+                                                        Product Cost
+                                                    </th>
+                                                    <th></th>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="myModal2" class="modal" style="display:none;text-align:center;">
+                                <!-- Modal content -->
+                                <div class="modal-content" id="add_submit">
+                                    <p id="voucher_view"></p>
+                                    <p id="submit_view"></p>
+                                </div>
+                            </div>
+                            <div id="myModal1" class="modal">
+                                <div class="modal-content" id="add_pd">
+                                    <i class="close" id="close2">&times;</i>
+                                    <div style="margin-left:60px;">
+                                        <p>Product Name &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Name, new { htmlAttributes = new { required = "required", @class = " uppercase" } })</p>
+                                        <p>Group &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp:  &nbsp &nbsp @Html.DropDownListFor(model => model.Add_Group, ViewBag.ProductList as SelectList, new { htmlAttributes = new { @style = "width:10%;" } })</p>
+                                        <p>Manufacturer  &nbsp &nbsp:  &nbsp &nbsp @Html.DropDownListFor(model => model.Add_Manufacturer, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:10%;" } })</p>
+                                        <p>Package  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Package, new { htmlAttributes = new { @class = " uppercase" } })</p>
+                                        <p>Value  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_Value, new { htmlAttributes = new { @class = " uppercase" } })</p>
+                                        <p>Part No  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_PartNo, new { htmlAttributes = new { @class = " uppercase" } })</p>
+                                        <p>Description &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.TextAreaFor(model => model.Add_Description, new { @style = "color:black; width:50%; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })</p>
+                                        <p>Cost &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Cost)</p>
+                                        <p>MRP &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_MRP)</p>
+                                        <p>Sell Price &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_SellPrice)</p>
+                                        <p id="message"></p>
+                                        <button class="btn btn-sm btn-secondary" style="width:75px;margin-left:32.5%;" id="add_Submit" onclick="Add_Prod()">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
                             <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 400px;width:70%;">
                                 <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
                                     <thead>
@@ -84,7 +156,7 @@
                                                 <td class="row-data">@dr["P_Part_No"].ToString()</td>
                                                 <td class="row-data" style="width:550px;">@dr["P_Description"].ToString()</td>
                                                 <td class="row-data text-sm-left" style="width:50px;">@dr["Quantity"].ToString()</td>
-                                                <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i> </td>
+                                                <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row1(this);"></i> </td>
                                                 <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.SP_Part_No)</td>
                                                 <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.BOM_No)</td>
                                                 <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.BOM_Date)</td>
@@ -97,15 +169,17 @@
                         </div>
                     </div>
                 </div>
-                <p id="voucher" style="background-color:yellow;width:20%"></p>
+                @*<p id="voucher" style="background-color:yellow;width:20%"></p>*@
                 <p id="Enter_Inv_No"></p>
-                <p><a href="@Url.Action("BOM_List", "BOM")"> <button class="btn btn-sm btn-secondary" style="width:8%;" id="Edit">Edit</button> </a> </p>
+                @*<p><a href="@Url.Action("BOM_List", "BOM")"> <button class="btn btn-sm btn-secondary" style="width:8%;" id="Edit">Edit</button> </a> </p>*@
             </div>
         </div>
     </div>
 </body>
 </html>
 <script>
+    var last_row = document.getElementById("selected_units").rows.length;
+    var row_id = 0;
     $('#add').click(function () {
         var partno = $('#Part_No').val();
         var d2 = document.getElementById("Quantity").value;
@@ -113,6 +187,20 @@
         var qty = parseInt(d2);
         var bomno = $('#BOM_No').val();
         var bomdate = $('#BOM_Date').val();
+
+        var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+        var l_row1 = last_row1 - 1;
+        var count = 1;
+        for (var i = 0; i < l_row1; i++) {
+            var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
+            var e_partno = document.getElementById("Part_No").value;
+            if (e_part_no == e_partno) {
+                var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
+                document.getElementById("value1").innerHTML = qty_err;
+                return;
+            }
+            count++;
+        }
 
         var model = new Object();
             model.Part_No = document.getElementById("Part_No").value;
@@ -124,22 +212,28 @@
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ name: model }),
                 success: function (data) {
-                    if (partno == "" && d2 == "") {
+                    if (qty > data[0].Quantity) {
+                        var qty_err = '<p style="color:red;">Out of Stock !!! Available Quantity is <b>' + data[0].Quantity + '</b><p/>';
+                        document.getElementById("value1").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (partno == "" && d2 == "") {
                         var qty_err = '<p style="color:red;">Enter Part No and Quantity !!!<p/>';
-                        document.getElementById("value").innerHTML = qty_err;
+                        document.getElementById("value1").innerHTML = qty_err;
                         return;
                     }
                     else if (d2 == "") {
                         var qty_err = '<p style="color:red;">Enter Quantity !!!<p/>';
-                        document.getElementById("value").innerHTML = qty_err;
+                        document.getElementById("value1").innerHTML = qty_err;
                         return;
                     }
                     else if (partno == "") {
                         var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
-                        document.getElementById("value").innerHTML = qty_err;
+                        document.getElementById("value1").innerHTML = qty_err;
                         return;
                     }
-                    var newrow = '<tr id="data" style="font-size:13px;"><td>' + partno + '</td><td>' + data[0].Description + '</td><td>' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td style="display:none;">' + sp_partno + '</td><td style="display:none;">' + bomno + '</td><td style="display:none;">' + bomdate + '</td></tr>';
+                    var l_row = last_row - 1;
+                    var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td class="row-data">' + partno + '</td><td class="row-data">' + data[0].Description + '</td><td class="row-data">' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td style="display:none;">' + sp_partno + '</td><td style="display:none;">' + bomno + '</td><td style="display:none;">' + bomdate + '</td></tr>';
                     $('#selected_units tr:last').after(newrow);
             },
             failure: function (errMsg) {
@@ -168,8 +262,8 @@
             document.getElementById("Enter_Inv_No").innerHTML = Null;
             var myRows = [];
             var headersText = [];
-            var $headers = $("th");
-            var $rows = $("tbody #data").each(function (index) {
+            var $headers = $("#selected_units th");
+            var $rows = $("#selected_units tbody tr").each(function (index) {
                 $cells = $(this).find("td");
                 myRows[index] = {};
 
@@ -185,15 +279,19 @@
                 "myrows": myRows
             };
             $.ajax({
-                url: '/BOM/Order',
+                url: '/BOM/BOMEdit',
                 data: JSON.stringify(myRows),
                 type: 'POST',
                 contentType: 'application/json;',
                 dataType: 'json',
                 success: function (result) {
-                    var bom = result;
-                    document.getElementById("Enter_Inv_No").innerHTML = "Submitted Successfully !!!";
-                    document.getElementById("voucher").innerHTML = "Your BOM.No is " + bom + "";
+                    var modal2 = document.getElementById("myModal2");
+                    modal2.style.display = "block";
+                    var submit = '<p style="color:red;">Submitted Successfully !!!<p/>';
+                    document.getElementById("submit_view").innerHTML = submit;
+                    setTimeout(function () {
+                        window.location.href = "@Url.Action("BOM_List", "BOM")";
+                    }, 3000);
                 }
             });
             @*document.getElementById("json_op").innerHTML = JSON.stringify(myRows, undefined, 2);*@
@@ -269,5 +367,244 @@
         $('#BOM_No').prop('disabled', true);
         $('#BOM_Date').prop('disabled', true);
         $('#SP_Part_No').prop('disabled', true);
+    }
+    var modal = document.getElementById("myModal");
+    var modal1 = document.getElementById("myModal1");
+    var btn = document.getElementById("myBtn");
+    var btn1 = document.getElementById("addproduct");
+    var span = document.getElementById("close1");
+    var span1 = document.getElementById("close2");
+
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+    btn1.onclick = function () {
+        modal1.style.display = "block";
+    }
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+    span1.onclick = function () {
+        modal1.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    window.onclick = function (event) {
+        if (event.target == modal1) {
+            modal1.style.display = "none";
+        }
+    }
+
+    btn.addEventListener("click", list);
+    span.removeEventListener("click", list);
+    window.removeEventListener("click", list);
+
+    function list() {
+        document.addEventListener("keyup", function (event) {
+            var package = document.querySelector("#Package_letter").value;
+            var value = document.querySelector("#Value_letter").value;
+            var partno = document.querySelector("#Partno_letter").value;
+            var model = new Object();
+            model.Package_letter = package;
+            model.Value_letter = value;
+            model.Partno_letter = partno;
+            $.ajax({
+                url: '/NewPurchase/PM_List',
+                data: JSON.stringify({name : model}),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+                    $("#pm_list").find("tr:not(:first)").remove();
+                    for (var i = 0; i <= result.length - 1; i++) {
+                        var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Package + '</td><td>' + result[i].Value + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td><td style="text-align:right">' + result[i].P_Cost + '</td></tr>';
+                        $('#pm_list tr:last').after(newrow);
+                    }
+                }
+            });
+        })
+    }
+
+    function List_to_View() {
+        var table = document.getElementById('pm_list');
+        for (var i = 0; i < table.rows.length; i++) {
+            table.rows[i].addEventListener('click', function () {
+                var partno = this.cells[3].innerHTML;
+                var descp = this.cells[4].innerHTML;
+                var cost = this.cells[5].innerHTML;
+                document.getElementById("Part_No").value = partno;
+                document.getElementById("value1").innerHTML = descp;
+                modal.style.display = "none";
+            });
+        }
+    }
+
+    function Add_Prod() {
+        var Name = document.getElementById("Add_Name").value;
+        var Group = document.getElementById("Add_Group").value;
+        var Mfr = document.getElementById("Add_Manufacturer").value;
+        var pkg = document.getElementById("Add_Package").value;
+        var value = document.getElementById("Add_Value").value;
+        var PartNo = document.getElementById("Add_PartNo").value;
+        var Descp = document.getElementById("Add_Description").value;
+        var Cost = document.getElementById("Add_Cost").value;
+        var MRP = document.getElementById("Add_MRP").value;
+        var SellPrice = document.getElementById("Add_SellPrice").value;
+
+        if (Name == "") {
+            var qty_err = '<p style="color:red;">Field Product Name is required !!!<p/>';
+            document.getElementById("message").innerHTML = qty_err;
+            return;
+        }
+        else if (PartNo == "") {
+            var qty_err = '<p style="color:red;">Field Part No is required !!!<p/>';
+            document.getElementById("message").innerHTML = qty_err;
+            return;
+        }
+        var model = new Object();
+        model.Add_Name = Name;
+        model.Add_Group = Group;
+        model.Add_Manufacturer = Mfr;
+        model.Add_PartNo = PartNo.toUpperCase();
+        model.Add_Description = Descp;
+        model.Add_Cost = Cost;
+        model.Add_MRP = MRP;
+        model.Add_Package = pkg;
+        model.Add_Value = value;
+        model.Add_SellPrice = SellPrice;
+            $.ajax({
+                url: "@Url.Action("Add_Product")",
+                data: JSON.stringify({ name: model }),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+                    if (result != "") {
+                        var qty_err = '<p style="color:red;">Part No already exists !!!<p/>';
+                        document.getElementById("message").innerHTML = qty_err;
+                        return;
+                    }
+                    else {
+                        var qty_err = '<p style="color:red;">Submitted Successfully !!!<p/>';
+                        document.getElementById("message").innerHTML = qty_err;
+                        return;
+                    }
+                }
+            });
+    }
+    function del_row(node) {
+        a = node.parentNode.parentNode;
+        r = node.parentNode.parentNode.cells[0].innerHTML;
+        var model = new Object();
+        model.Part_No = r;
+        model.Index_Type = $('#Index_Type').val();
+        model.Voucher_No = $('#Voucher_No').val();
+        model.Ref_No = $('#Ref_No').val();
+        $.ajax({
+            url: '/NewPurchase/Goods_ED',
+            data: JSON.stringify({ name: model }),
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (result) {
+            }
+        });
+        a.parentNode.removeChild(a);
+    }
+
+    function del_row1(node) {
+        a = node.parentNode.parentNode;
+        a.parentNode.removeChild(a);
+    }
+
+    function Toshow() {
+        var rowId = event.target.parentNode.parentNode.id;
+        row_id = rowId;
+        var data = document.getElementById(rowId).querySelectorAll(".row-data");
+
+        var part_no = data[0].innerHTML;
+        var p_qty = data[2].innerHTML;
+
+        document.getElementById("Part_No").value = part_no;
+        document.getElementById("Quantity").value = p_qty;
+
+        document.getElementById("add").style.display = "none";
+        document.getElementById("add_edit").style.display = "block";
+    }
+
+    function ToAdd() {
+        var d1 = $('#Part_No').val();
+        var d2 = document.getElementById("Quantity").value;
+        var qty = parseInt(d2);
+        document.getElementById("value1").innerHTML = "";
+
+        document.getElementById("add").style.display = "block";
+        document.getElementById("add_edit").style.display = "none";
+
+        var part_no = document.getElementById("Part_No").value;
+        var p_qty = document.getElementById("Quantity").value;
+
+        var model = new Object();
+            model.Part_No = document.getElementById("Part_No").value;
+
+            jQuery.ajax({
+            type: "POST",
+            url: "@Url.Action("P_to_DQ")",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ name: model }),
+                success: function (data1) {
+                    if (qty > data1[0].Quantity) {
+                        var qty_err = '<p style="color:red;">Out of Stock !!! Available Quantity is <b>' + data1[0].Quantity + '</b><p/>';
+                        document.getElementById("value1").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (d2 == 0 ) {
+                        var qty_err = '<p style="color:red;">Quantity should not be less than 0 !!!<p/>';
+                        document.getElementById("value1").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (d1 == "" && d2 == "") {
+                        var qty_err = '<p style="color:red;">Enter Part No and Quantity !!!<p/>';
+                        document.getElementById("value1").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (d2 == "") {
+                        var qty_err = '<p style="color:red;">Enter Quantity !!!<p/>';
+                        document.getElementById("value1").innerHTML = qty_err;
+                        return;
+                    }
+                    else if (d1 == "") {
+                        var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
+                        document.getElementById("value1").innerHTML = qty_err;
+                        return;
+                    }
+                    var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+                    var l_row1 = last_row1 - 1;
+                    var count = 0;
+                    for (var i = 0; i < l_row1; i++) {
+                        var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
+                        var e_partno = document.getElementById("Part_No").value;
+                        if (e_part_no == e_partno) {
+                            var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
+                            document.getElementById("value1").innerHTML = qty_err;
+                            return;
+                        }
+                        count++;
+                    }
+                    var rowId = row_id;
+                    var data = document.getElementById(rowId).querySelectorAll(".row-data");
+                    data[0].innerHTML = part_no;
+                    data[1].innerHTML = data1[0].Description;
+                    data[2].innerHTML = p_qty;
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+            });
+        formClear();
     }
 </script>
