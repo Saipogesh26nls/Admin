@@ -70,6 +70,30 @@ namespace Admin.Controllers
                 SqlDataReader dr = SqlCmd2.ExecuteReader();
                 while (dr.Read())
                 {
+                    int view = (int)dr["View_Permission"];
+                    int add = (int)dr["Add_Permission"];
+                    int edit = (int)dr["Edit_Permission"];
+                    int delete = (int)dr["Delete_Permission"];
+                    bool view_val = false;
+                    bool add_val = false;
+                    bool edit_val = false;
+                    bool delete_val = false;
+                    if (view > 0)
+                    {
+                        view_val = true;
+                    }
+                    if (add > 0)
+                    {
+                        add_val = true;
+                    }
+                    if (edit > 0)
+                    {
+                        edit_val = true;
+                    }
+                    if (delete > 0)
+                    {
+                        delete_val = true;
+                    }
                     loginModels.Add(new SignupModel
                     {
                         Id = (int)dr["user_id"],
@@ -77,7 +101,10 @@ namespace Admin.Controllers
                         UserName = dr["username"].ToString(),
                         Password = dr["password"].ToString(),
                         Roll = (int)dr["Roll"],
-                        Permission_Detail = dr["permission_detail"].ToString()
+                        View = view_val,
+                        Add = add_val,
+                        Edit = edit_val,
+                        Delete = delete_val
                     }
                     );
                 }
@@ -113,7 +140,7 @@ namespace Admin.Controllers
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd = "Insert into Login_Fields(Display_name, username, password, Roll, permission_detail) values ('" + name.DisplayName + "','" + name.UserName + "','" + name.Password + "','" + name.Roll + "','" + name.Permission_Detail + "')";
+            string cmd = "Insert into Login_Fields(Display_name, username, password, Roll, View_Permission, Add_Permission, Edit_Permission, Delete_Permission) values ('" + name.DisplayName + "','" + name.UserName + "','" + name.Password + "','" + name.Roll + "','" +name.View_val+ "','"+name.Add_val+ "','"+name.Edit_val+ "','"+name.Delete_val+ "')";
             SqlCommand SqlCmd = new SqlCommand(cmd, Con);
             SqlCmd.ExecuteNonQuery();
             Con.Close();

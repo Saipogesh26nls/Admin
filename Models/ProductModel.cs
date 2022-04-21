@@ -604,7 +604,14 @@ namespace Admin.Models
         public string Password { get; set; }
         public int Roll { get; set; }
         public string Permission_Detail { get; set; }
-        public string success { get; set; }
+        public bool View { get; set; }
+        public bool Add { get; set; }
+        public bool Edit { get; set; }
+        public bool Delete { get; set; }
+        public int View_val { get; set; }
+        public int Add_val { get; set; }
+        public int Edit_val { get; set; }
+        public int Delete_val { get; set; }
     }
     public class Issue
     {

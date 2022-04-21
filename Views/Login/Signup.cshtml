@@ -3,58 +3,76 @@
 @{
     ViewBag.Title = "Log_User_List";
 }
-<br />
-<p>
-    @Html.ActionLink("Add New User", "CreateUser")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DisplayName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UserName)
-        </th>
-        <th style="display:none">
-            @Html.DisplayNameFor(model => model.Password)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Roll)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Permission_Detail)
-        </th>
-        <th></th>
-    </tr>
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="~/Scripts/jquery-3.5.1.min.js"></script>
+</head>
+<body onload="onload()">
+    <br />
+    <p>
+        @Html.ActionLink("Add New User", "CreateUser")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DisplayName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.Password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Roll)
+            </th>
+            <th style="text-align:center">
+                @Html.DisplayNameFor(model => model.Permission_Detail)
+            </th>
+            <th></th>
+        </tr>
+        @{ int i = 0; }
+        @foreach (var item in Model)
+        {
+            <tr id="@i">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DisplayName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Roll)
+                </td>
+                <td style="text-align:center">
+                    View @Html.CheckBoxFor(modelItem => item.View) &nbsp; &nbsp; Add @Html.CheckBoxFor(modelItem => item.Add) &nbsp; &nbsp; Edit @Html.CheckBoxFor(modelItem => item.Edit) &nbsp; &nbsp; Delete @Html.CheckBoxFor(modelItem => item.Delete)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditUser", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "DeleteUser", new { id = item.Id })
+                </td>
+            </tr>
+            i++;
+        }
 
-@foreach (var item in Model) {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Id)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.DisplayName)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.UserName)
-    </td>
-    <td style="display:none">
-        @Html.DisplayFor(modelItem => item.Password)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Roll)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Permission_Detail)
-    </td>
-    <td>
-        @Html.ActionLink("Edit", "EditUser", new { id = item.Id }) |
-        @Html.ActionLink("Delete", "DeleteUser", new { id = item.Id })
-    </td>
-</tr>
-}
-
-</table>
+    </table>
+</body>
+</html>
+<script>
+    function onload() {
+        $('#item_View').prop('disabled', true);
+        $('#item_Add').prop('disabled', true);
+        $('#item_Edit').prop('disabled', true);
+        $('#item_Delete').prop('disabled', true);
+    }
+</script>

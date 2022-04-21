@@ -14,7 +14,7 @@ namespace Admin.Models
             LoginModel LogDetail = new LoginModel();
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd2 = "select user_id, Display_name, username, password, Roll, permission_detail FROM Login_Fields where username='" + cUser + "' and password='" + cPassword + "'";
+            string cmd2 = "select user_id, Display_name, username, password, Roll FROM Login_Fields where username='" + cUser + "' and password='" + cPassword + "'";
             SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
             SqlDataReader dr = SqlCmd2.ExecuteReader();
             if (dr.HasRows)
