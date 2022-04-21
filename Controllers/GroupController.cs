@@ -48,16 +48,30 @@ namespace Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult GroupEntry(GroupFields newuser) // Adding Data to DB
+        public ActionResult Add_GroupEntry(GroupFields name) // Adding Data to DB
         {
-            GroupInsert dblogin = new GroupInsert();
-            int userid;
-
-            userid = dblogin.AddData(newuser.P_Name, newuser.P_Disp_Name, newuser.P_Manufacturer, newuser.P_Region, newuser.P_Part_No, newuser.P_Description, newuser.P_Cost, newuser.P_MRP, newuser.P_SP);
-            Session["P_Id"] = userid;
-            newuser.Regt_Success = "Registered Successfully !!!!";
-            GroupEntry();
-            return View("GroupEntry", newuser);
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "select P_Disp_Name from Product_Master where P_Disp_Name = '" + name.P_Disp_Name + "' and P_Level > 0";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlDataReader dr = SqlCmd1.ExecuteReader();
+            string ItemQm = string.Empty;
+            while (dr.Read())
+            {
+                ItemQm = dr["P_Disp_Name"].ToString();
+            }
+            if(ItemQm != name.P_Disp_Name)
+            {
+                GroupInsert dblogin = new GroupInsert();
+                int userid = dblogin.AddData(name.P_Name, name.P_Disp_Name, name.P_Manufacturer, name.P_Region, name.P_Part_No, name.P_Description, name.P_Cost, name.P_MRP, name.P_SP);
+                return Json(ItemQm);
+            }
+            else
+            {
+                Con.Close();
+                return Json(ItemQm);
+            }
+            
         }
     }
 }

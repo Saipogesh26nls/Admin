@@ -1,154 +1,84 @@
 ﻿@model Admin.Models.AccountsField
-@{
-    ViewBag.Title = "Enter the Accounts Detail";
-}
-<style>
-    .uppercase {
-        text-transform: uppercase;
-    }
-</style>
-
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/Content/bootstrap-4.0.0.min.css">
+    <script src="~/Scripts/bootstrap-4.0.0.bundle.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="~/Content/Purchase.css" />
+</head>
 <body style="background-color: #f5f5f7;">
-    @using (Html.BeginForm("Upload_Data", "Accounts", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-    <br />
-        <div class="form-horizontal">
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                @Html.LabelFor(model => model.A_Account_Name, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.A_Account_Name, new { htmlAttributes = new { @class = "form-control uppercase", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.A_Account_Name, "", new { @class = "text-danger" })
-                </div>
-            </div>
+    <div class="form-horizontal" style="border: 1px solid #F0F3FF; box-sizing: border-box; box-shadow: 0px 10px 20px rgba(198, 198, 198, 0.15); border-radius: 12px; padding-left:100px; width: 50%; margin: 0% 0% 0% 25%;">
+        <br />
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.A_Group, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.A_Group, ViewBag.ProductList as SelectList, new { @class = "form-control uppercase" })
-                    @Html.ValidationMessageFor(model => model.A_Group, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.A_Door_No, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.A_Door_No, new { htmlAttributes = new { @class = "form-control uppercase" } })
-                    @Html.ValidationMessageFor(model => model.A_Door_No, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.A_Street, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.A_Street, new { htmlAttributes = new { @class = "form-control uppercase" } })
-                    @Html.ValidationMessageFor(model => model.A_Street, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.A_Area, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.A_Area, new { htmlAttributes = new { @class = "form-control uppercase" } })
-                    @Html.ValidationMessageFor(model => model.A_Area, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.A_City, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.A_City, new { htmlAttributes = new { @class = "form-control uppercase" } })
-                    @Html.ValidationMessageFor(model => model.A_City, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.A_State, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.A_State, new { htmlAttributes = new { @class = "form-control uppercase" } })
-                    @Html.ValidationMessageFor(model => model.A_State, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.A_Country, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.A_Country, new { htmlAttributes = new { @class = "form-control uppercase" } })
-                    @Html.ValidationMessageFor(model => model.A_Country, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.A_Pincode, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.A_Pincode, new { htmlAttributes = new { @class = "form-control uppercase" } })
-                    @Html.ValidationMessageFor(model => model.A_Pincode, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.A_Contact_No, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.A_Contact_No, new { htmlAttributes = new { @class = "form-control uppercase" } })
-                    @Html.ValidationMessageFor(model => model.A_Contact_No, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.A_Mobile_No, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.A_Mobile_No, new { htmlAttributes = new { @class = "form-control uppercase" } })
-                    @Html.ValidationMessageFor(model => model.A_Mobile_No, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.A_Email_Id, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.A_Email_Id, new { htmlAttributes = new { @class = "form-control uppercase" } })
-                    @Html.ValidationMessageFor(model => model.A_Email_Id, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.A_Closing_Bal, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.A_Closing_Bal, new { htmlAttributes = new { @class = "form-control uppercase" } })
-                    @Html.ValidationMessageFor(model => model.A_Closing_Bal, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.A_Open_Bal, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.A_Open_Bal, new { htmlAttributes = new { @class = "form-control uppercase" } })
-                    @Html.ValidationMessageFor(model => model.A_Open_Bal, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-10">
-                    @Html.DisplayFor(model => model.Reg_Success)
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" onclick="reload()" />
-                </div>
+        <p>@Html.LabelFor(model => model.A_Account_Name) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.A_Account_Name, new { htmlAttributes = new { @class = "uppercase", @style = "width:200px;" } })</p>
+        <p>@Html.LabelFor(model => model.A_Group) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; &nbsp; @Html.DropDownListFor(model => model.A_Group, ViewBag.ProductList as SelectList, new { @class = "uppercase" })</p>
+        <p>@Html.LabelFor(model => model.A_Door_No) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.A_Door_No, new { htmlAttributes = new { @class = "uppercase", @style = "width:50px;" } }) &nbsp; &nbsp; @Html.LabelFor(model => model.A_Street) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.A_Street, new { htmlAttributes = new { @class = "uppercase", @style = "width:100px;" } }) &nbsp; &nbsp; &nbsp; @Html.LabelFor(model => model.A_Area) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.A_Area, new { htmlAttributes = new { @class = "uppercase", @style = "width:150px;" } })</p>
+        <p>@Html.LabelFor(model => model.A_City) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.A_City, new { htmlAttributes = new { @class = "uppercase", @style = "width:200px;" } }) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;@Html.LabelFor(model => model.A_State) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.A_State, new { htmlAttributes = new { @class = "uppercase", @style = "width:200px;" } })</p>
+        <p>@Html.LabelFor(model => model.A_Country) &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.A_Country, new { htmlAttributes = new { @class = "uppercase", @style = "width:200px;" } }) &nbsp; &nbsp; @Html.LabelFor(model => model.A_Pincode) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.A_Pincode, new { htmlAttributes = new { @class = "uppercase", @style = "width:200px;" } })</p>
+        <p>@Html.LabelFor(model => model.A_Contact_No) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.A_Contact_No, new { htmlAttributes = new { @class = "uppercase", @style = "width:200px;" } })</p>
+        <p>@Html.LabelFor(model => model.A_Mobile_No) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.A_Mobile_No, new { htmlAttributes = new { @class = "uppercase", @style = "width:200px;" } })</p>
+        <p>@Html.LabelFor(model => model.A_Email_Id) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.A_Email_Id, new { htmlAttributes = new { @class = "uppercase", @style = "width:200px;" } })</p>
+        <p>@Html.LabelFor(model => model.A_Closing_Bal) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.A_Closing_Bal, new { htmlAttributes = new { @class = "uppercase", @style = "width:200px;" } })</p>
+        <p>@Html.LabelFor(model => model.A_Open_Bal) &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.A_Open_Bal, new { htmlAttributes = new { @class = "uppercase", @style = "width:200px;" } })</p>
+        <p id="message"></p>
+        <div class="form-group" style="text-align:center">
+            <div class="col-md-offset-2 col-md-10">
+                <button class="btn btn-sm btn-secondary" id="Submit" style="width:75px;" onclick="employee()">Submit</button>
             </div>
         </div>
-    }
-
+    </div>
 </body>
+</html>
 <script>
-    function reload() {
-        var A_Account_Name = document.getElementById("A_Account_Name").value;
-        if (A_Account_Name != "") {
-            setTimeout(function () {
-                window.location.reload(1);
-            }, 3000);
+    function employee() {
+        var A_Account_Name = document.getElementById("A_Account_Name").value.toUpperCase();
+        var A_Group = document.getElementById("A_Group").value;
+        var A_Door_No = document.getElementById("A_Door_No").value.toUpperCase();
+        var A_Street = document.getElementById("A_Street").value.toUpperCase();
+        var A_Area = document.getElementById("A_Area").value.toUpperCase();
+        var A_City = document.getElementById("A_City").value.toUpperCase();
+        var A_State = document.getElementById("A_State").value.toUpperCase();
+        var A_Country = document.getElementById("A_Country").value.toUpperCase();
+        var A_Contact_No = document.getElementById("A_Contact_No").value.toUpperCase();
+        var A_Mobile_No = document.getElementById("A_Mobile_No").value.toUpperCase();
+        var A_Email_Id = document.getElementById("A_Email_Id").value.toUpperCase();
+        var A_Closing_Bal = document.getElementById("A_Closing_Bal").value;
+        var A_Open_Bal = document.getElementById("A_Open_Bal").value;
+
+        if (A_Account_Name == "") {
+            var qty_err = '<p style="color:red;">Field Account Name is required !!!<p/>';
+            document.getElementById("message").innerHTML = qty_err;
+            return;
         }
+        var model = new Object();
+        model.A_Account_Name = A_Account_Name.toUpperCase();
+        model.A_Group = A_Group;
+        model.A_Door_No = A_Door_No.toUpperCase();
+        model.A_Street = A_Street.toUpperCase();
+        model.A_Area = A_Area.toUpperCase();
+        model.A_City = A_City.toUpperCase();
+        model.A_State = A_State.toUpperCase();
+        model.A_Country = A_Country.toUpperCase();
+        model.A_Contact_No = A_Contact_No.toUpperCase();
+        model.A_Mobile_No = A_Mobile_No.toUpperCase();
+        model.A_Email_Id = A_Email_Id.toUpperCase();
+        model.A_Closing_Bal = A_Closing_Bal.toUpperCase();
+        model.A_Open_Bal = A_Open_Bal.toUpperCase();
+            $.ajax({
+                url: "@Url.Action("Upload_Data")",
+                data: JSON.stringify({ name: model }),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+                        var qty_err = '<p style="color:red;">Submitted Successfully !!!<p/>';
+                        document.getElementById("message").innerHTML = qty_err;
+                        setTimeout(function () {
+                            window.location.reload(1);
+                        }, 2000);
+                }
+            });
     }
 </script>
+

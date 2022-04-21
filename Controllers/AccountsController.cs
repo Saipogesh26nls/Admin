@@ -45,16 +45,11 @@ namespace Admin.Controllers
             return new SelectList(list, "Value", "Text");
         }
         [HttpPost]
-        public ActionResult Upload_Data(AccountsField newuser) // For Adding data to DB
+        public ActionResult Upload_Data(AccountsField name) // For Adding data to DB
         {
             AccountInsert dblogin = new AccountInsert();
-            int userid;
-
-            userid = dblogin.Add_Data(newuser.A_Account_Name, newuser.A_Group, newuser.A_Door_No, newuser.A_Street, newuser.A_Area, newuser.A_City, newuser.A_State, newuser.A_Country, newuser.A_Pincode, newuser.A_Contact_No, newuser.A_Mobile_No, newuser.A_Email_Id, newuser.A_Closing_Bal, newuser.A_Open_Bal);
-            Session["P_Id"] = userid;
-            newuser.Reg_Success = "Registered Successfully !!!!";
-            Accounts_Detail();
-            return View("Accounts_Detail", newuser);
+            int userid = dblogin.Add_Data(name.A_Account_Name, name.A_Group, name.A_Door_No, name.A_Street, name.A_Area, name.A_City, name.A_State, name.A_Country, name.A_Pincode, name.A_Contact_No, name.A_Mobile_No, name.A_Email_Id, name.A_Closing_Bal, name.A_Open_Bal);
+            return Json(name);
         }
     }
 }

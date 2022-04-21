@@ -56,11 +56,11 @@ namespace Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult ProductEntry(ProductModel newuser) // Adding Data to DB
+        public ActionResult Add_ProductEntry(ProductModel name) // Adding Data to DB
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd1 = "select P_Part_No from Product_Master where P_Part_No = '" + newuser.P_Part_No + "'";
+            string cmd1 = "select P_Part_No from Product_Master where P_Part_No = '" + name.P_Part_No + "'";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
             SqlDataReader dr = SqlCmd1.ExecuteReader();
             string ItemQm = string.Empty;
@@ -68,20 +68,17 @@ namespace Admin.Controllers
             {
                 ItemQm = dr["P_Part_No"].ToString();
             }
-            if(ItemQm != newuser.P_Part_No)
+            if(ItemQm != name.P_Part_No)
             {
                 ProductInsert dblogin = new ProductInsert();
-                int userid = dblogin.AddData(newuser.P_Name, newuser.P_Disp_Name, newuser.P_Manufacturer, newuser.Package, newuser.Value, newuser.P_Part_No, newuser.P_Description, newuser.P_Cost, newuser.P_MRP, newuser.P_SP);
-                Session["P_Id"] = userid;
-                newuser.Reg_Success = "Registered Successfully !!!!";
-                ProductEntry();
-                return View("ProductEntry", newuser);
+                int userid = dblogin.AddData(name.P_Name, name.P_Disp_Name, name.P_Manufacturer, name.Package, name.Value, name.P_Part_No, name.P_Description, name.P_Cost, name.P_MRP, name.P_SP);
+                Con.Close();
+                return Json(ItemQm);
             }
             else
             {
-                newuser.Reg_Success = "Part No is already exists !!!";
-                ProductEntry();
-                return View("ProductEntry", newuser);
+                Con.Close();
+                return Json(ItemQm);
             }
             
         }
