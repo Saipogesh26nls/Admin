@@ -9,21 +9,37 @@
     <link rel="stylesheet" href="~/Content/Purchase.css" />
 </head>
 <body style="background-color: #f5f5f7;">
-    <div class="form-horizontal" style="border: 1px solid #F0F3FF; box-sizing: border-box; box-shadow: 0px 10px 20px rgba(198, 198, 198, 0.15); text-align:center; border-radius: 12px; width: 50%; margin: 0% 0% 0% 25%;">
-        <br />
+    <br />
 
-        <p>@Html.LabelFor(model => model.DisplayName) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.DisplayName, new { htmlAttributes = new { @style = "width:200px;" } })</p>
-        <p>@Html.LabelFor(model => model.UserName) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.UserName, new { htmlAttributes = new {  @style = "width:200px;" } })</p>
-        <p>@Html.LabelFor(model => model.Password) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @style = "width:200px;" } })</p>
-        <p>@Html.LabelFor(model => model.Roll) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.DropDownListFor(model => model.Roll, ViewBag.LROLL as SelectList, new { htmlAttributes = new { @style = "width:100px;" } })</p>
-        <p>@Html.LabelFor(model => model.Permission_Detail) &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; View @Html.CheckBoxFor(model => model.View) &nbsp; &nbsp; Add @Html.CheckBoxFor(model => model.Add) &nbsp; &nbsp; Edit @Html.CheckBoxFor(model => model.Edit) &nbsp; &nbsp; Delete @Html.CheckBoxFor(model => model.Delete)</p>
-        <p id="message"></p>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <button class="btn btn-sm btn-secondary" id="Submit" style="width:75px;margin-left:20%;" onclick="project()">Submit</button>
-            </div>
-        </div>
+    <p>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; @Html.LabelFor(model => model.DisplayName) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.DisplayName, new { htmlAttributes = new { @style = "width:200px;" } }) &nbsp; &nbsp; @Html.LabelFor(model => model.UserName) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @style = "width:200px;" } })
+        &nbsp; &nbsp; @Html.LabelFor(model => model.Password) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @style = "width:200px;" } }) &nbsp; &nbsp; @Html.LabelFor(model => model.Roll) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.DropDownListFor(model => model.Roll, ViewBag.LROLL as SelectList, new { htmlAttributes = new { } }) &nbsp; &nbsp; &nbsp; Select-all &nbsp; <input type="checkbox" id="select-all">
+    </p>
+    <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 600px;">
+        <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;text-align:center;">
+            <thead>
+                <tr>
+                    <th>Menu</th>
+                    <th>Permission</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int i = 0; }
+                @foreach (System.Data.DataRow dr in ViewBag.PL.Rows)
+                {
+
+                    <tr id="@i" style="font-size:13px;">
+                        <td class="row-data">@dr["Menu"].ToString()</td>
+                        <td class="row-data"> &nbsp; &nbsp; View @Html.CheckBoxFor(model => model.View) &nbsp; &nbsp; Add @Html.CheckBoxFor(model => model.Add) &nbsp; &nbsp; Edit @Html.CheckBoxFor(model => model.Edit) &nbsp; &nbsp; Delete @Html.CheckBoxFor(model => model.Delete) &nbsp; &nbsp; Disable @Html.CheckBoxFor(model => model.Disable)</td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
     </div>
+    <br/>
+    <button class="btn btn-sm btn-secondary" id="Submit" style="width:75px;margin-left:5%;" onclick="project()">Submit</button>
+    <p id="message"></p>
 </body>
 </html>
 <script>
@@ -95,10 +111,51 @@
                         var qty_err = '<p style="color:red;">Submitted Successfully !!!<p/>';
                         document.getElementById("message").innerHTML = qty_err;
                         setTimeout(function () {
-                            window.location.reload(1);
-                        }, 3000);
+                            window.location.href = "@Url.Action("Signup", "Login")";
+                        }, 2000);
                     }
             });
     }
+    $('#Disable').click(function () {
+        // Get the checkbox
+        var checkBox = document.getElementById("Disable");
+
+        // If the checkbox is checked, display the output text
+        if (checkBox.checked == true) {
+            $('#View').prop('disabled', true);
+            $('#Add').prop('disabled', true);
+            $('#Edit').prop('disabled', true);
+            $('#Delete').prop('disabled', true);
+        }
+        else {
+            $('#View').prop('disabled', false);
+            $('#Add').prop('disabled', false);
+            $('#Edit').prop('disabled', false);
+            $('#Delete').prop('disabled', false);
+        }
+    });
+    $(document).ready(function () {
+        $('#select-all').click(function () {
+            var checked = this.checked;
+            $('input[type="checkbox"]').each(function () {
+                this.checked = checked;
+            });
+            var checkBox = document.getElementById("Disable");
+
+            // If the checkbox is checked, display the output text
+            if (checkBox.checked == true) {
+                $('#View').prop('disabled', true);
+                $('#Add').prop('disabled', true);
+                $('#Edit').prop('disabled', true);
+                $('#Delete').prop('disabled', true);
+            }
+            else {
+                $('#View').prop('disabled', false);
+                $('#Add').prop('disabled', false);
+                $('#Edit').prop('disabled', false);
+                $('#Delete').prop('disabled', false);
+            }
+        })
+    });
 </script>
 

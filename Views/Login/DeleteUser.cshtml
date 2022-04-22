@@ -25,7 +25,7 @@
         <p>@Html.LabelFor(model => model.UserName) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @style = "width:200px;" } })</p>
         <p>@Html.LabelFor(model => model.Password) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @style = "width:200px;" } })</p>
         <p>@Html.LabelFor(model => model.Roll) : &nbsp; &nbsp; @Html.DropDownListFor(model => model.Roll, ViewBag.LROLL as SelectList, new { htmlAttributes = new { @style = "width:200px;" } })</p>
-        <p>@Html.LabelFor(model => model.Permission_Detail) &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.Permission_Detail, new { htmlAttributes = new { @style = "width:200px;" } })</p>
+        <p>@Html.LabelFor(model => model.Permission_Detail) &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; View @Html.CheckBoxFor(model => model.View) &nbsp; &nbsp; Add @Html.CheckBoxFor(model => model.Add) &nbsp; &nbsp; Edit @Html.CheckBoxFor(model => model.Edit) &nbsp; &nbsp; Delete @Html.CheckBoxFor(model => model.Delete)</p>
         <p id="message"></p>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -100,8 +100,11 @@
                 contentType: 'application/json;',
                 dataType: 'json',
                 success: function (result) {
-                        var del = '<p style="color: red;">Username : ' + result.UserName + ' is Removed Successfully !!!</p>';
-                        document.getElementById("delete").innerHTML = del;
+                    var del = '<p style="color: red;">Username : ' + result.UserName + ' is Removed Successfully !!!</p>';
+                    document.getElementById("delete").innerHTML = del;
+                    setTimeout(function () {
+                        window.location.href = "@Url.Action("Signup", "Login")";
+                    }, 2000);
                     }
             });
     }

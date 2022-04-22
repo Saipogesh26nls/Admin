@@ -16,7 +16,7 @@
         <p>@Html.LabelFor(model => model.UserName) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @style = "width:200px;" } })</p>
         <p>@Html.LabelFor(model => model.Password) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @style = "width:200px;" } })</p>
         <p>@Html.LabelFor(model => model.Roll) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.DropDownListFor(model => model.Roll, ViewBag.LROLL as SelectList, new { htmlAttributes = new { @style = "width:200px;" } })</p>
-        <p>@Html.LabelFor(model => model.Permission_Detail) &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.Permission_Detail, new { htmlAttributes = new { @style = "width:200px;" } })</p>
+        <p>@Html.LabelFor(model => model.Permission_Detail) &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; View @Html.CheckBoxFor(model => model.View) &nbsp; &nbsp; Add @Html.CheckBoxFor(model => model.Add) &nbsp; &nbsp; Edit @Html.CheckBoxFor(model => model.Edit) &nbsp; &nbsp; Delete @Html.CheckBoxFor(model => model.Delete)</p>
         <p id="message"></p>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -33,8 +33,35 @@
         var UserName = document.getElementById("UserName").value;
         var Password = document.getElementById("Password").value;
         var Roll = document.getElementById("Roll").value;
-        var permission = document.getElementById("Permission_Detail").value;
         var id = document.getElementById("Id").value;
+        var View = 0;
+        var Add = 0;
+        var Edit = 0;
+        var Delete = 0;
+        if ($("#View").is(':checked')) {
+            View = 1
+        }
+        else {
+            View = 0
+        }
+        if ($("#Add").is(':checked')) {
+            Add = 2
+        }
+        else {
+            Add = 0
+        }
+        if ($("#Edit").is(':checked')) {
+            Edit = 3
+        }
+        else {
+            Edit = 0
+        }
+        if ($("#Delete").is(':checked')) {
+            Delete = 4
+        }
+        else {
+            Delete = 0
+        }
 
         if (DisplayName == "") {
             var qty_err = '<p style="color:red;">Field Display Name is required !!!<p/>';
@@ -57,8 +84,11 @@
         model.UserName = UserName;
         model.Password = Password;
         model.Roll = Roll;
-        model.permission = permission;
         model.Id = id;
+        model.View_val = View;
+        model.Add_val = Add;
+        model.Edit_val = Edit;
+        model.Delete_val = Delete;
             $.ajax({
                 url: "@Url.Action("UpdateUser")",
                 data: JSON.stringify({ name: model }),
@@ -69,8 +99,8 @@
                         var qty_err = '<p style="color:red;">Submitted Successfully !!!<p/>';
                         document.getElementById("message").innerHTML = qty_err;
                         setTimeout(function () {
-                            window.location.reload(1);
-                        }, 3000);
+                            window.location.href = "@Url.Action("Signup", "Login")";
+                        }, 2000);
                     }
             });
     }

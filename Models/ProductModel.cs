@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Web.Mvc;
 
 namespace Admin.Models
 {
@@ -595,6 +596,12 @@ namespace Admin.Models
         public string LoginErr { get; set; }
         public string Roll { get; set; }
         public string Display_name { get; set; }
+        public string View { get; set; }
+        public string Add { get; set; }
+        public string Edit { get; set; }
+        public string Delete { get; set; }
+        public string Disable { get; set; }
+        public string Menu { get; set; }
     }
     public class SignupModel
     {
@@ -603,6 +610,8 @@ namespace Admin.Models
         public string UserName { get; set; }
         public string Password { get; set; }
         public int Roll { get; set; }
+        [DisplayName("Roll")]
+        public string Roll_Name { get; set; }
         public string Permission_Detail { get; set; }
         public bool View { get; set; }
         public bool Add { get; set; }
@@ -612,6 +621,8 @@ namespace Admin.Models
         public int Add_val { get; set; }
         public int Edit_val { get; set; }
         public int Delete_val { get; set; }
+        public bool Disable { get; set; }
+        public string Menu { get; set; }
     }
     public class Issue
     {

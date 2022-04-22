@@ -16,7 +16,7 @@ namespace Admin.Controllers
         // GET: Issue
         public ActionResult StockIssue() // Stock Issue View
         {
-            if (Session["userID"] != null)
+            if (Session["roll"] != null)
             {
                 GoodsRI Model = new GoodsRI();
                 Model.Ref_Date = DateTime.Today;
@@ -136,7 +136,6 @@ namespace Admin.Controllers
             dblogin.StockIssue_add(data);
             return Json(data);        
         }
-
         [HttpGet]
         public ActionResult IndentList() // To show full Indent list view
         {
@@ -152,7 +151,6 @@ namespace Admin.Controllers
                 return RedirectToAction("Err", "Login");
             }
         }
-
         [HttpGet]
         public ActionResult Indent_to_GoodsIssue(string Indent)
         {

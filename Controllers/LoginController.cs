@@ -37,7 +37,19 @@ namespace Admin.Controllers
                 Session["userName"] = LoginD.UserName;
                 Session["roll"] = LoginD.Roll;
                 Session["displayname"] = LoginD.Display_name;
+                Session["View"] = LoginD.View;
+                Session["Add"] = LoginD.Add;
+                Session["Edit"] = LoginD.Edit;
+                Session["Delete"] = LoginD.Delete;
+                Session["Disable"] = LoginD.Disable;
+                var numbers = LoginD.Menu.Split(',').Select(Int32.Parse).ToList();
+                Session["Menu"] = numbers;
                 dblogin.AddLogUser(LoginD.UserId, 1);
+                var roll = Convert.ToInt32(Session["roll"]);
+                var view = Convert.ToInt32(Session["View"]);
+                var add = Convert.ToInt32(Session["Add"]);
+                var edit = Convert.ToInt32(Session["Edit"]);
+                var delete = Convert.ToInt32(Session["Delete"]);
                 return RedirectToAction("ProductEntry", "Product");
             }
             else
@@ -108,6 +120,18 @@ namespace Admin.Controllers
                     }
                     );
                 }
+                dr.Close();
+                for(int i = 0; i < loginModels.Count; i++)
+                {
+                    string cmd3 = "select Roll from Log_Roll where Id = '"+loginModels[i].Roll+"'";
+                    SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
+                    SqlDataReader dr1 = SqlCmd3.ExecuteReader();
+                    while (dr1.Read())
+                    {
+                        loginModels[i].Roll_Name = dr1["Roll"].ToString();
+                    }
+                    dr1.Close();
+                }
                 Con.Close();
                 return View(loginModels);
             }
@@ -118,22 +142,25 @@ namespace Admin.Controllers
         } // Users List View
         public ActionResult CreateUser()
         {
-            var roll = Convert.ToInt32(Session["roll"]);
+            /*var roll = Convert.ToInt32(Session["roll"]);
             if (Session["userID"] != null && roll == 1)
-            {
+            {*/
                 SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
                 _con.Open();
-                SqlDataAdapter _da = new SqlDataAdapter("Select * From Log_Roll", _con);
+                SqlDataAdapter _da = new SqlDataAdapter("Select * From Roll", _con);
                 DataTable _dt = new DataTable();
                 _da.Fill(_dt);
                 ViewBag.LROLL = ToSelectList(_dt, "Id", "Roll");
+                LoginField newPurchase_Insert = new LoginField();
+                DataSet PM_Data = newPurchase_Insert.EditPurchase();
+                ViewBag.PL = PM_Data.Tables[0];
                 _con.Close();
                 return View();
-            }
+            /*}
             else
             {
                 return RedirectToAction("Err", "Login");
-            }
+            }*/
         } // Create new user View
         [HttpPost]
         public ActionResult Add_UserData(SignupModel name)
@@ -149,7 +176,7 @@ namespace Admin.Controllers
         public ActionResult ChangePassword()
         {
             var roll = Convert.ToInt32(Session["roll"]);
-            if (Session["userID"] != null && roll == 2)
+            if (Session["userID"] != null && roll > 1)
             {
                 SignupModel loginModels = new SignupModel();
                 var userid = Convert.ToInt32(Session["userID"]);
@@ -160,18 +187,46 @@ namespace Admin.Controllers
                 SqlDataReader dr = SqlCmd.ExecuteReader();
                 while (dr.Read())
                 {
+                    int view = (int)dr["View_Permission"];
+                    int add = (int)dr["Add_Permission"];
+                    int edit = (int)dr["Edit_Permission"];
+                    int delete = (int)dr["Delete_Permission"];
+                    bool view_val = false;
+                    bool add_val = false;
+                    bool edit_val = false;
+                    bool delete_val = false;
+                    if (view > 0)
+                    {
+                        view_val = true;
+                    }
+                    if (add > 0)
+                    {
+                        add_val = true;
+                    }
+                    if (edit > 0)
+                    {
+                        edit_val = true;
+                    }
+                    if (delete > 0)
+                    {
+                        delete_val = true;
+                    }
                     loginModels.Id = (int)dr["user_id"];
                     loginModels.DisplayName = dr["Display_name"].ToString();
                     loginModels.UserName = dr["username"].ToString();
                     loginModels.Password = dr["password"].ToString();
                     loginModels.Roll = (int)dr["Roll"];
-                    loginModels.Permission_Detail = dr["permission_detail"].ToString();
+                    loginModels.View = view_val;
+                    loginModels.Add = add_val;
+                    loginModels.Edit = edit_val;
+                    loginModels.Delete = delete_val;
                 }
+                dr.Close();
                 Con.Close();
-                List<SelectListItem> LRoll = new List<SelectListItem>();
-                LRoll.Add(new SelectListItem { Text = "Admin", Value = "1" });
-                LRoll.Add(new SelectListItem { Text = "User", Value = "2" });
-                ViewBag.LROLL = new SelectList(LRoll, "Value", "Text");
+                SqlDataAdapter _da = new SqlDataAdapter("Select * From Log_Roll", Con);
+                DataTable _dt = new DataTable();
+                _da.Fill(_dt);
+                ViewBag.LROLL = ToSelectList(_dt, "Id", "Roll");
                 return View(loginModels);
             }
             else
@@ -192,12 +247,39 @@ namespace Admin.Controllers
                 SqlDataReader dr = SqlCmd.ExecuteReader();
                 while (dr.Read())
                 {
+                    int view = (int)dr["View_Permission"];
+                    int add = (int)dr["Add_Permission"];
+                    int edit = (int)dr["Edit_Permission"];
+                    int delete = (int)dr["Delete_Permission"];
+                    bool view_val = false;
+                    bool add_val = false;
+                    bool edit_val = false;
+                    bool delete_val = false;
+                    if (view > 0)
+                    {
+                        view_val = true;
+                    }
+                    if (add > 0)
+                    {
+                        add_val = true;
+                    }
+                    if (edit > 0)
+                    {
+                        edit_val = true;
+                    }
+                    if (delete > 0)
+                    {
+                        delete_val = true;
+                    }
                     loginModels.Id = (int)dr["user_id"];
                     loginModels.DisplayName = dr["Display_name"].ToString();
                     loginModels.UserName = dr["username"].ToString();
                     loginModels.Password = dr["password"].ToString();
                     loginModels.Roll = (int)dr["Roll"];
-                    loginModels.Permission_Detail = dr["permission_detail"].ToString();
+                    loginModels.View = view_val;
+                    loginModels.Add = add_val;
+                    loginModels.Edit = edit_val;
+                    loginModels.Delete = delete_val;
                 }
                 dr.Close();
                 SqlDataAdapter _da = new SqlDataAdapter("Select * From Log_Roll", Con);
@@ -217,7 +299,7 @@ namespace Admin.Controllers
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd = "Update Login_Fields set Display_name = '" + name.DisplayName + "', username = '" + name.UserName + "', password = '" + name.Password + "', Roll = '" + name.Roll + "', permission_detail = '" + name.Permission_Detail + "' where user_id = '" + name.Id + "'";
+            string cmd = "Update Login_Fields set Display_name = '" + name.DisplayName + "', username = '" + name.UserName + "', password = '" + name.Password + "', Roll = '" + name.Roll + "', View_Permission = '" + name.View_val + "', Add_Permission = '" + name.Add_val + "', Edit_Permission = '" + name.Edit_val + "', Delete_Permission = '" + name.Delete_val + "' where user_id = '" + name.Id + "'";
             SqlCommand SqlCmd = new SqlCommand(cmd, Con);
             SqlCmd.ExecuteNonQuery();
             Con.Close();
@@ -236,18 +318,45 @@ namespace Admin.Controllers
                 SqlDataReader dr = SqlCmd.ExecuteReader();
                 while (dr.Read())
                 {
+                    int view = (int)dr["View_Permission"];
+                    int add = (int)dr["Add_Permission"];
+                    int edit = (int)dr["Edit_Permission"];
+                    int delete = (int)dr["Delete_Permission"];
+                    bool view_val = false;
+                    bool add_val = false;
+                    bool edit_val = false;
+                    bool delete_val = false;
+                    if (view > 0)
+                    {
+                        view_val = true;
+                    }
+                    if (add > 0)
+                    {
+                        add_val = true;
+                    }
+                    if (edit > 0)
+                    {
+                        edit_val = true;
+                    }
+                    if (delete > 0)
+                    {
+                        delete_val = true;
+                    }
                     loginModels.Id = (int)dr["user_id"];
                     loginModels.DisplayName = dr["Display_name"].ToString();
                     loginModels.UserName = dr["username"].ToString();
                     loginModels.Password = dr["password"].ToString();
                     loginModels.Roll = (int)dr["Roll"];
-                    loginModels.Permission_Detail = dr["permission_detail"].ToString();
+                    loginModels.View = view_val;
+                    loginModels.Add = add_val;
+                    loginModels.Edit = edit_val;
+                    loginModels.Delete = delete_val;
                 }
                 Con.Close();
-                List<SelectListItem> LRoll = new List<SelectListItem>();
-                LRoll.Add(new SelectListItem { Text = "Admin", Value = "1" });
-                LRoll.Add(new SelectListItem { Text = "User", Value = "2" });
-                ViewBag.LROLL = new SelectList(LRoll, "Value", "Text");
+                SqlDataAdapter _da = new SqlDataAdapter("Select * From Log_Roll", Con);
+                DataTable _dt = new DataTable();
+                _da.Fill(_dt);
+                ViewBag.LROLL = ToSelectList(_dt, "Id", "Roll");
                 return View(loginModels);
             }
             else
@@ -280,5 +389,6 @@ namespace Admin.Controllers
             }
             return new SelectList(list, "Value", "Text");
         }
+        
     }
 }
