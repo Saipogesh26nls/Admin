@@ -15,7 +15,7 @@ namespace Admin.Models
             LoginModel LogDetail = new LoginModel();
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd2 = "select * FROM Login_Fields where username='" + cUser + "' and password='" + cPassword + "'";
+            string cmd2 = "select * FROM Users where username='" + cUser + "' and password='" + cPassword + "'";
             SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
             SqlDataReader dr = SqlCmd2.ExecuteReader();
             if (dr.HasRows)
@@ -45,11 +45,11 @@ namespace Admin.Models
             Con.Open();
             if (nLoginout == 1)
             {
-                cmd2 = "INSERT INTO Log_User_Schedule(User_ID,Date_Of_Log,Login_Time) VALUES ('" + cUser + "','" + DateTime.Today.Date.ToString("MM/dd/yyyy HH:mm:ss") + "','" + DateTime.Now.ToString() + "')";
+                cmd2 = "INSERT INTO Log_User(User_ID,Date_Of_Log,Login_Time) VALUES ('" + cUser + "','" + DateTime.Today.Date.ToString("MM/dd/yyyy HH:mm:ss") + "','" + DateTime.Now.ToString() + "')";
             }
             else
             {
-                cmd2 = "INSERT INTO Log_User_Schedule(User_ID,Date_Of_Log,Logout_Time) VALUES ('" + cUser + "','" + DateTime.Today.Date.ToString("MM/dd/yyyy HH:mm:ss") + "','" + DateTime.Now.ToString() + "')";
+                cmd2 = "INSERT INTO Log_User(User_ID,Date_Of_Log,Logout_Time) VALUES ('" + cUser + "','" + DateTime.Today.Date.ToString("MM/dd/yyyy HH:mm:ss") + "','" + DateTime.Now.ToString() + "')";
             }
 
             SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);

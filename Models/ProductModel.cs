@@ -624,6 +624,19 @@ namespace Admin.Models
         public bool Disable { get; set; }
         public string Menu { get; set; }
     }
+    public class Createuser
+    {
+        public string Menu { get; set; }
+        public bool View { get; set; }
+        public bool Add { get; set; }
+        public bool Edit { get; set; }
+        public bool Delete { get; set; }
+        public bool Disable_Enable { get; set; }
+        public string displayname { get; set; }
+        public string username { get; set; }
+        public string password { get; set; }
+        public int roll { get; set; }
+    }
     public class Issue
     {
         public int Vno { get; set; }

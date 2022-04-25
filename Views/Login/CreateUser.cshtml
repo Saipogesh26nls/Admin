@@ -20,7 +20,15 @@
             <thead>
                 <tr>
                     <th>Menu</th>
-                    <th>Permission</th>
+                    <th>View</th>
+                    <th>Add</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                    <th>Disable_Enable</th>
+                    <th style="display:none">displayname</th>
+                    <th style="display:none">username</th>
+                    <th style="display:none">password</th>
+                    <th style="display:none">roll</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,10 +36,18 @@
                 @foreach (System.Data.DataRow dr in ViewBag.PL.Rows)
                 {
 
-                    <tr id="@i" style="font-size:13px;">
-                        <td class="row-data">@dr["Menu"].ToString()</td>
-                        <td class="row-data"> &nbsp; &nbsp; View @Html.CheckBoxFor(model => model.View) &nbsp; &nbsp; Add @Html.CheckBoxFor(model => model.Add) &nbsp; &nbsp; Edit @Html.CheckBoxFor(model => model.Edit) &nbsp; &nbsp; Delete @Html.CheckBoxFor(model => model.Delete) &nbsp; &nbsp; Disable @Html.CheckBoxFor(model => model.Disable)</td>
-                    </tr>
+                <tr id="data" style="font-size:13px;">
+                    <td class="row-data">@dr["Menu"].ToString()</td>
+                    <td class="row-data"> &nbsp; View @Html.CheckBoxFor(model => model.View) &nbsp;</td>
+                    <td class="row-data"> &nbsp; Add @Html.CheckBoxFor(model => model.Add) &nbsp;</td>
+                    <td class="row-data"> &nbsp; Edit @Html.CheckBoxFor(model => model.Edit) &nbsp;</td>
+                    <td class="row-data"> &nbsp; Delete @Html.CheckBoxFor(model => model.Delete) &nbsp;</td>
+                    <td class="row-data"> &nbsp; Disable @Html.CheckBoxFor(model => model.Disable) &nbsp;</td>
+                    <td class="row-data" style="display:none;" id="display"></td>
+                    <td class="row-data" style="display:none;" id="user"></td>
+                    <td class="row-data" style="display:none;" id="pass"></td>
+                    <td class="row-data" style="display:none;" id="roll"></td>
+                </tr>
                     i++;
                 }
             </tbody>
@@ -48,34 +64,12 @@
         var UserName = document.getElementById("UserName").value;
         var Password = document.getElementById("Password").value;
         var Roll = document.getElementById("Roll").value;
-        var View = 0;
-        var Add = 0;
-        var Edit = 0;
-        var Delete = 0;
-        if ($("#View").is(':checked')) {
-            View = 1
-        }
-        else {
-            View = 0
-        }
-        if ($("#Add").is(':checked')) {
-            Add = 2
-        }
-        else {
-            Add = 0
-        }
-        if ($("#Edit").is(':checked')) {
-            Edit = 3
-        }
-        else {
-            Edit = 0
-        }
-        if ($("#Delete").is(':checked')) {
-            Delete = 4
-        }
-        else {
-            Delete = 0
-        }
+
+        document.getElementById("display").innerHTML = DisplayName;
+        document.getElementById("user").innerHTML = UserName;
+        document.getElementById("pass").innerHTML = Password;
+        document.getElementById("roll").innerHTML = Roll;
+
         if (DisplayName == "") {
             var qty_err = '<p style="color:red;">Field Display Name is required !!!<p/>';
             document.getElementById("message").innerHTML = qty_err;
@@ -92,31 +86,48 @@
             return;
         }
 
-        var model = new Object();
-        model.DisplayName = DisplayName;
-        model.UserName = UserName;
-        model.Password = Password;
-        model.Roll = Roll;
-        model.View_val = View;
-        model.Add_val = Add;
-        model.Edit_val = Edit;
-        model.Delete_val = Delete;
-            $.ajax({
-                url: "@Url.Action("Add_UserData")",
-                data: JSON.stringify({ name: model }),
-                type: 'POST',
-                contentType: 'application/json;',
-                dataType: 'json',
-                success: function (result) {
-                        var qty_err = '<p style="color:red;">Submitted Successfully !!!<p/>';
-                        document.getElementById("message").innerHTML = qty_err;
-                        setTimeout(function () {
-                            window.location.href = "@Url.Action("Signup", "Login")";
-                        }, 2000);
-                    }
+        var myRows = [];
+        var headersText = [];
+        var $headers = $("#selected_units th");
+        var $rows = $("#selected_units tbody #data").each(function (index) {
+            $cells = $(this).find("td");
+            myRows[index] = {};
+
+            $cells.each(function (cellIndex) {
+                if (headersText[cellIndex] === undefined) {
+                    headersText[cellIndex] = $($headers[cellIndex]).text();
+                }
+                myRows[index][headersText[cellIndex]] = $(this).text();
             });
+        });
+
+        var myObj = {
+            "myrows": myRows
+        };
+        $.ajax({
+            url: '/Login/Add_UserData',
+            data: JSON.stringify(myRows),
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (result) {
+                //alert(result.ItemList[0].Str);
+                var modal2 = document.getElementById("myModal2");
+                modal2.style.display = "block";
+                var data = result;
+                var vno = '<p style="background-color:yellow;width:20%">Your Voucher.No is ' + data + '<p/>';
+                document.getElementById("voucher_view").innerHTML = "Your Voucher.No is " + data + "";
+                document.getElementById("Voucher_No").value = data;
+                var submit = '<p style="color:red;">Submitted Successfully !!!<p/>';
+                document.getElementById("submit_view").innerHTML = submit;
+                setTimeout(function () {
+                    window.location.reload(1);
+                }, 3000);
+            }
+        });
     }
-    $('#Disable').click(function () {
+
+    @*$('#Disable').click(function () {
         // Get the checkbox
         var checkBox = document.getElementById("Disable");
 
@@ -126,6 +137,10 @@
             $('#Add').prop('disabled', true);
             $('#Edit').prop('disabled', true);
             $('#Delete').prop('disabled', true);
+            $('#View').prop('checked', false);
+            $('#Add').prop('checked', false);
+            $('#Edit').prop('checked', false);
+            $('#Delete').prop('checked', false);
         }
         else {
             $('#View').prop('disabled', false);
@@ -133,7 +148,8 @@
             $('#Edit').prop('disabled', false);
             $('#Delete').prop('disabled', false);
         }
-    });
+    });*@
+
     $(document).ready(function () {
         $('#select-all').click(function () {
             var checked = this.checked;
@@ -148,6 +164,10 @@
                 $('#Add').prop('disabled', true);
                 $('#Edit').prop('disabled', true);
                 $('#Delete').prop('disabled', true);
+                $('#View').prop('checked', false);
+                $('#Add').prop('checked', false);
+                $('#Edit').prop('checked', false);
+                $('#Delete').prop('checked', false);
             }
             else {
                 $('#View').prop('disabled', false);
@@ -156,6 +176,9 @@
                 $('#Delete').prop('disabled', false);
             }
         })
+    });
+    $(':checkbox').on('change', function () {
+        $(this).closest('tr').find(':checkbox').prop('checked', this.checked);
     });
 </script>
 

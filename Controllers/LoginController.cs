@@ -77,7 +77,7 @@ namespace Admin.Controllers
                 List<SignupModel> loginModels = new List<SignupModel>();
                 SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
                 Con.Open();
-                string cmd2 = "select * from Login_Fields";
+                string cmd2 = "select * from Users";
                 SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
                 SqlDataReader dr = SqlCmd2.ExecuteReader();
                 while (dr.Read())
@@ -123,7 +123,7 @@ namespace Admin.Controllers
                 dr.Close();
                 for(int i = 0; i < loginModels.Count; i++)
                 {
-                    string cmd3 = "select Roll from Log_Roll where Id = '"+loginModels[i].Roll+"'";
+                    string cmd3 = "select Roll from Roll where Id = '"+loginModels[i].Roll+"'";
                     SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
                     SqlDataReader dr1 = SqlCmd3.ExecuteReader();
                     while (dr1.Read())
@@ -142,9 +142,9 @@ namespace Admin.Controllers
         } // Users List View
         public ActionResult CreateUser()
         {
-            /*var roll = Convert.ToInt32(Session["roll"]);
+            var roll = Convert.ToInt32(Session["roll"]);
             if (Session["userID"] != null && roll == 1)
-            {*/
+            {
                 SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
                 _con.Open();
                 SqlDataAdapter _da = new SqlDataAdapter("Select * From Roll", _con);
@@ -156,18 +156,18 @@ namespace Admin.Controllers
                 ViewBag.PL = PM_Data.Tables[0];
                 _con.Close();
                 return View();
-            /*}
+            }
             else
             {
                 return RedirectToAction("Err", "Login");
-            }*/
+            }
         } // Create new user View
         [HttpPost]
-        public ActionResult Add_UserData(SignupModel name)
+        public ActionResult Add_UserData(List<Createuser> name)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd = "Insert into Login_Fields(Display_name, username, password, Roll, View_Permission, Add_Permission, Edit_Permission, Delete_Permission) values ('" + name.DisplayName + "','" + name.UserName + "','" + name.Password + "','" + name.Roll + "','" +name.View_val+ "','"+name.Add_val+ "','"+name.Edit_val+ "','"+name.Delete_val+ "')";
+            string cmd = "Insert into Users(Display_name, username, password, Roll, View_Permission, Add_Permission, Edit_Permission, Delete_Permission) values ('" + name[0].displayname + "','" + name[0].username + "','" + name[0].password + "','" + name[0].roll + "','" +name[0].View+ "','"+name[0].Add+ "','"+name[0].Edit+ "','"+name[0].Delete+ "')";
             SqlCommand SqlCmd = new SqlCommand(cmd, Con);
             SqlCmd.ExecuteNonQuery();
             Con.Close();
@@ -182,7 +182,7 @@ namespace Admin.Controllers
                 var userid = Convert.ToInt32(Session["userID"]);
                 SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
                 Con.Open();
-                string cmd = "select * from Login_Fields where user_id = " + userid + "";
+                string cmd = "select * from Users where user_id = " + userid + "";
                 SqlCommand SqlCmd = new SqlCommand(cmd, Con);
                 SqlDataReader dr = SqlCmd.ExecuteReader();
                 while (dr.Read())
@@ -223,7 +223,7 @@ namespace Admin.Controllers
                 }
                 dr.Close();
                 Con.Close();
-                SqlDataAdapter _da = new SqlDataAdapter("Select * From Log_Roll", Con);
+                SqlDataAdapter _da = new SqlDataAdapter("Select * From Roll", Con);
                 DataTable _dt = new DataTable();
                 _da.Fill(_dt);
                 ViewBag.LROLL = ToSelectList(_dt, "Id", "Roll");
@@ -242,7 +242,7 @@ namespace Admin.Controllers
                 SignupModel loginModels = new SignupModel();
                 SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
                 Con.Open();
-                string cmd = "select * from Login_Fields where user_id = " + id + "";
+                string cmd = "select * from Users where user_id = " + id + "";
                 SqlCommand SqlCmd = new SqlCommand(cmd, Con);
                 SqlDataReader dr = SqlCmd.ExecuteReader();
                 while (dr.Read())
@@ -282,7 +282,7 @@ namespace Admin.Controllers
                     loginModels.Delete = delete_val;
                 }
                 dr.Close();
-                SqlDataAdapter _da = new SqlDataAdapter("Select * From Log_Roll", Con);
+                SqlDataAdapter _da = new SqlDataAdapter("Select * From Roll", Con);
                 DataTable _dt = new DataTable();
                 _da.Fill(_dt);
                 ViewBag.LROLL = ToSelectList(_dt, "Id", "Roll");
@@ -299,7 +299,7 @@ namespace Admin.Controllers
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd = "Update Login_Fields set Display_name = '" + name.DisplayName + "', username = '" + name.UserName + "', password = '" + name.Password + "', Roll = '" + name.Roll + "', View_Permission = '" + name.View_val + "', Add_Permission = '" + name.Add_val + "', Edit_Permission = '" + name.Edit_val + "', Delete_Permission = '" + name.Delete_val + "' where user_id = '" + name.Id + "'";
+            string cmd = "Update Users set Display_name = '" + name.DisplayName + "', username = '" + name.UserName + "', password = '" + name.Password + "', Roll = '" + name.Roll + "', View_Permission = '" + name.View_val + "', Add_Permission = '" + name.Add_val + "', Edit_Permission = '" + name.Edit_val + "', Delete_Permission = '" + name.Delete_val + "' where user_id = '" + name.Id + "'";
             SqlCommand SqlCmd = new SqlCommand(cmd, Con);
             SqlCmd.ExecuteNonQuery();
             Con.Close();
@@ -313,7 +313,7 @@ namespace Admin.Controllers
                 SignupModel loginModels = new SignupModel();
                 SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
                 Con.Open();
-                string cmd = "select * from Login_Fields where user_id = " + id + "";
+                string cmd = "select * from Users where user_id = " + id + "";
                 SqlCommand SqlCmd = new SqlCommand(cmd, Con);
                 SqlDataReader dr = SqlCmd.ExecuteReader();
                 while (dr.Read())
@@ -353,7 +353,7 @@ namespace Admin.Controllers
                     loginModels.Delete = delete_val;
                 }
                 Con.Close();
-                SqlDataAdapter _da = new SqlDataAdapter("Select * From Log_Roll", Con);
+                SqlDataAdapter _da = new SqlDataAdapter("Select * From Roll", Con);
                 DataTable _dt = new DataTable();
                 _da.Fill(_dt);
                 ViewBag.LROLL = ToSelectList(_dt, "Id", "Roll");
@@ -369,7 +369,7 @@ namespace Admin.Controllers
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd = "Delete from Login_Fields where user_id = "+name.Id+"";
+            string cmd = "Delete from Users where user_id = "+name.Id+"";
             SqlCommand SqlCmd = new SqlCommand(cmd, Con);
             SqlCmd.ExecuteNonQuery();
             Con.Close();
