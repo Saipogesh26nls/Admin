@@ -31,9 +31,6 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Roll_Name)
                 </th>
-                <th style="text-align:center">
-                    @Html.DisplayNameFor(model => model.Permission_Detail)
-                </th>
                 <th></th>
             </tr>
         </thead>
@@ -56,9 +53,6 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Roll_Name)
-                    </td>
-                    <td style="text-align:center">
-                        View @Html.EditorFor(modelItem => item.View, new { htmlAttributes = new { disabled = "disabled" } }) &nbsp; &nbsp; Add @Html.EditorFor(modelItem => item.Add, new { htmlAttributes = new { disabled = "disabled" } }) &nbsp; &nbsp; Edit @Html.EditorFor(modelItem => item.Edit, new { htmlAttributes = new { disabled = "disabled" } }) &nbsp; &nbsp; Delete @Html.EditorFor(modelItem => item.Delete, new { htmlAttributes = new { disabled = "disabled" } })
                     </td>
                     <td>
                         @Html.ActionLink("Edit", "EditUser", new { id = item.Id }) |

@@ -29,6 +29,11 @@
                     <th style="display:none">username</th>
                     <th style="display:none">password</th>
                     <th style="display:none">roll</th>
+                    <th style="display:none">view_val</th>
+                    <th style="display:none">add_val</th>
+                    <th style="display:none">edit_val</th>
+                    <th style="display:none">delete_val</th>
+                    <th style="display:none">disable_val</th>
                 </tr>
             </thead>
             <tbody>
@@ -38,15 +43,20 @@
 
                 <tr id="data" style="font-size:13px;">
                     <td class="row-data">@dr["Menu"].ToString()</td>
-                    <td class="row-data"> &nbsp; View @Html.CheckBoxFor(model => model.View) &nbsp;</td>
-                    <td class="row-data"> &nbsp; Add @Html.CheckBoxFor(model => model.Add) &nbsp;</td>
-                    <td class="row-data"> &nbsp; Edit @Html.CheckBoxFor(model => model.Edit) &nbsp;</td>
-                    <td class="row-data"> &nbsp; Delete @Html.CheckBoxFor(model => model.Delete) &nbsp;</td>
-                    <td class="row-data"> &nbsp; Disable @Html.CheckBoxFor(model => model.Disable) &nbsp;</td>
+                    <td class="row-data"> &nbsp; View @Html.CheckBoxFor(model => model.View, htmlAttributes: new { @id = "view+" + i }) &nbsp;</td>
+                    <td class="row-data"> &nbsp; Add @Html.CheckBoxFor(model => model.Add, htmlAttributes: new { @id = "add+" + i }) &nbsp;</td>
+                    <td class="row-data"> &nbsp; Edit @Html.CheckBoxFor(model => model.Edit, htmlAttributes: new { @id = "edit+" + i }) &nbsp;</td>
+                    <td class="row-data"> &nbsp; Delete @Html.CheckBoxFor(model => model.Delete, htmlAttributes: new { @id = "delete+" + i }) &nbsp;</td>
+                    <td class="row-data"> &nbsp; Disable @Html.CheckBoxFor(model => model.Disable, htmlAttributes: new { @id = "disable+" + i, onchange = "checkbox(" + i + ");" }) &nbsp;</td>
                     <td class="row-data" style="display:none;" id="display"></td>
                     <td class="row-data" style="display:none;" id="user"></td>
                     <td class="row-data" style="display:none;" id="pass"></td>
                     <td class="row-data" style="display:none;" id="roll"></td>
+                    <td class="row-data" style="display:none;" id="view_val+@i"></td>
+                    <td class="row-data" style="display:none;" id="add_val+@i"></td>
+                    <td class="row-data" style="display:none;" id="edit_val+@i"></td>
+                    <td class="row-data" style="display:none;" id="delete_val+@i"></td>
+                    <td class="row-data" style="display:none;" id="disable_val+@i"></td>
                 </tr>
                     i++;
                 }
@@ -64,6 +74,8 @@
         var UserName = document.getElementById("UserName").value;
         var Password = document.getElementById("Password").value;
         var Roll = document.getElementById("Roll").value;
+
+        document.getElementById("message").innerHTML = "";
 
         document.getElementById("display").innerHTML = DisplayName;
         document.getElementById("user").innerHTML = UserName;
@@ -84,6 +96,49 @@
             var qty_err = '<p style="color:red;">Field Password is required !!!<p/>';
             document.getElementById("message").innerHTML = qty_err;
             return;
+        }
+
+        var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+        var l_row1 = last_row1 - 1;
+        var count = 1;
+        for (var i = 0; i <= l_row1; i++) {
+            var view = document.getElementById('view+' + i);
+            var add = document.getElementById('add+' + i);
+            var edit = document.getElementById('edit+' + i);
+            var del = document.getElementById('delete+' + i);
+            var disable = document.getElementById('disable+' + i);
+
+            if (view.checked == true) {
+                document.getElementById('view_val+'+i).innerHTML = 1;
+            }
+            else {
+                document.getElementById('view_val+' + i).innerHTML = 0;
+            }
+            if (add.checked == true) {
+                document.getElementById('add_val+' + i).innerHTML = 1;
+            }
+            else {
+                document.getElementById('add_val+' + i).innerHTML = 0;
+            }
+            if (edit.checked == true) {
+                document.getElementById('edit_val+' + i).innerHTML = 1;
+            }
+            else {
+                document.getElementById('edit_val+' + i).innerHTML = 0;
+            }
+            if (del.checked == true) {
+                document.getElementById('delete_val+' + i).innerHTML = 1;
+            }
+            else {
+                document.getElementById('delete_val+' + i).innerHTML = 0;
+            }
+            if (disable.checked == true) {
+                document.getElementById('disable_val+' + i).innerHTML = 1;
+            }
+            else {
+                document.getElementById('disable_val+' + i).innerHTML = 0;
+            }
+            count++;
         }
 
         var myRows = [];
@@ -127,58 +182,44 @@
         });
     }
 
-    @*$('#Disable').click(function () {
-        // Get the checkbox
-        var checkBox = document.getElementById("Disable");
+    function checkbox(i) {
+        var checkBox = document.getElementById('disable+'+i);
 
-        // If the checkbox is checked, display the output text
         if (checkBox.checked == true) {
-            $('#View').prop('disabled', true);
-            $('#Add').prop('disabled', true);
-            $('#Edit').prop('disabled', true);
-            $('#Delete').prop('disabled', true);
-            $('#View').prop('checked', false);
-            $('#Add').prop('checked', false);
-            $('#Edit').prop('checked', false);
-            $('#Delete').prop('checked', false);
+            document.getElementById('view+' + i).disabled = true;
+            document.getElementById('add+' + i).disabled = true;
+            document.getElementById('edit+' + i).disabled = true;
+            document.getElementById('delete+' + i).disabled = true;
+            document.getElementById('view+' + i).checked = false;
+            document.getElementById('add+' + i).checked = false;
+            document.getElementById('edit+' + i).checked = false;
+            document.getElementById('delete+' + i).checked = false;
         }
         else {
-            $('#View').prop('disabled', false);
-            $('#Add').prop('disabled', false);
-            $('#Edit').prop('disabled', false);
-            $('#Delete').prop('disabled', false);
+            document.getElementById('view+' + i).disabled = false;
+            document.getElementById('add+' + i).disabled = false;
+            document.getElementById('edit+' + i).disabled = false;
+            document.getElementById('delete+' + i).disabled = false;
         }
-    });*@
+    }
 
     $(document).ready(function () {
         $('#select-all').click(function () {
             var checked = this.checked;
-            $('input[type="checkbox"]').each(function () {
+            $('input[name="View"]').each(function () {
                 this.checked = checked;
             });
-            var checkBox = document.getElementById("Disable");
-
-            // If the checkbox is checked, display the output text
-            if (checkBox.checked == true) {
-                $('#View').prop('disabled', true);
-                $('#Add').prop('disabled', true);
-                $('#Edit').prop('disabled', true);
-                $('#Delete').prop('disabled', true);
-                $('#View').prop('checked', false);
-                $('#Add').prop('checked', false);
-                $('#Edit').prop('checked', false);
-                $('#Delete').prop('checked', false);
-            }
-            else {
-                $('#View').prop('disabled', false);
-                $('#Add').prop('disabled', false);
-                $('#Edit').prop('disabled', false);
-                $('#Delete').prop('disabled', false);
-            }
+            $('input[name="Add"]').each(function () {
+                this.checked = checked;
+            });
+            $('input[name="Edit"]').each(function () {
+                this.checked = checked;
+            });
+            $('input[name="Delete"]').each(function () {
+                this.checked = checked;
+            });
+            
         })
-    });
-    $(':checkbox').on('change', function () {
-        $(this).closest('tr').find(':checkbox').prop('checked', this.checked);
     });
 </script>
 

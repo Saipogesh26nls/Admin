@@ -636,6 +636,11 @@ namespace Admin.Models
         public string username { get; set; }
         public string password { get; set; }
         public int roll { get; set; }
+        public int view_val { get; set; }
+        public int add_val { get; set; }
+        public int edit_val { get; set; }
+        public int delete_val { get; set; }
+        public int disable_val { get; set; }
     }
     public class Issue
     {
