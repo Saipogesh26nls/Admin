@@ -146,16 +146,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
                         </div>
                     </li>-->
-               @* @{
+                @{
                     if (Session["userid"] != null && roll == 1)
 
-                    {*@
+                    {
                         <li class="nav-item ">
                             @Html.ActionLink("Users List", "Signup", "Login", null, new { @class = "nav-link" })
                         </li>
-                    @*}
+                    }
 
-                }*@
+                }
                 @{
                     if (Session["userid"] != null)
 

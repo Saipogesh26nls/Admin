@@ -641,6 +641,7 @@ namespace Admin.Models
         public int edit_val { get; set; }
         public int delete_val { get; set; }
         public int disable_val { get; set; }
+        public int Id { get; set; }
     }
     public class Issue
     {

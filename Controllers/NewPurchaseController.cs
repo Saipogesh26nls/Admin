@@ -263,7 +263,8 @@ namespace Admin.Controllers
         [HttpGet]
         public ActionResult Delete_Purchase_view(int v_no, DateTime v_date, string inv_no, DateTime inv_date, string a_code) // delete purchase view
         {
-            if (Session["userID"] != null)
+            var roll = Convert.ToInt32(Session["roll"]);
+            if (Session["userID"] != null && roll == 1)
             {
                 New_Purchase newPurchase_Insert = new New_Purchase();
                 PurchaseTable mfr = new PurchaseTable();
@@ -545,7 +546,8 @@ namespace Admin.Controllers
         [HttpGet]
         public ActionResult Delete_GoodsRI_View(string v_type, int gv_no, DateTime gv_date, string ref_no, DateTime ref_date, int GI, int process, int project, int employee, string note) // delete GoodsRI view
         {
-            if (Session["userID"] != null)
+            var roll = Convert.ToInt32(Session["roll"]);
+            if (Session["userID"] != null && roll == 1)
             {
                 int vtype = 0;
                 if (v_type == "Goods Receipt")

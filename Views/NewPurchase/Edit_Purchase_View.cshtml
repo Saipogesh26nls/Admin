@@ -431,7 +431,7 @@
                     alert(errMsg);
                 }
             });
-
+        formClear();
     });
 
     function formClear() {
@@ -964,12 +964,28 @@
     }
     btn1.onclick = function () {
         modal1.style.display = "block";
+        document.getElementById("Add_Name").value = "";
+        document.getElementById("Add_Package").value = "";
+        document.getElementById("Add_Value").value = "";
+        document.getElementById("Add_PartNo").value = "";
+        document.getElementById("Add_Description").value = "";
+        document.getElementById("Add_Cost").value = "";
+        document.getElementById("Add_MRP").value = "";
+        document.getElementById("Add_SellPrice").value = "";
     }
     span.onclick = function () {
         modal.style.display = "none";
     }
     span1.onclick = function () {
         modal1.style.display = "none";
+        document.getElementById("Add_Name").value = "";
+        document.getElementById("Add_Package").value = "";
+        document.getElementById("Add_Value").value = "";
+        document.getElementById("Add_PartNo").value = "";
+        document.getElementById("Add_Description").value = "";
+        document.getElementById("Add_Cost").value = "";
+        document.getElementById("Add_MRP").value = "";
+        document.getElementById("Add_SellPrice").value = "";
     }
     window.onclick = function (event) {
         if (event.target == modal) {

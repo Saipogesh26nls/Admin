@@ -177,5 +177,40 @@ namespace Admin.Models
             da.Fill(ds);
             return ds;
         }
+        public void Edit_user(List<Createuser> data)
+        {
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd = "Delete from Users where user_id = '" + data[0].Id + "'";
+            SqlCommand SqlCmd = new SqlCommand(cmd, Con);
+            SqlCmd.ExecuteNonQuery();
+            Con.Close();
+            SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con1.Open();
+            int i = 0;
+            while (i < data.Count())
+            {
+                SqlCommand sql_cmnd = new SqlCommand("[dbo].[CreateUser]", Con1);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                sql_cmnd.Parameters.AddWithValue("@userid", SqlDbType.Int).Value = data[0].Id;
+                sql_cmnd.Parameters.AddWithValue("@disp_name", SqlDbType.NVarChar).Value = data[0].displayname;
+                sql_cmnd.Parameters.AddWithValue("@username", SqlDbType.NVarChar).Value = data[0].username;
+                sql_cmnd.Parameters.AddWithValue("@password", SqlDbType.NVarChar).Value = data[0].password;
+                sql_cmnd.Parameters.AddWithValue("@roll", SqlDbType.Int).Value = data[0].roll;
+                sql_cmnd.Parameters.AddWithValue("@menu", SqlDbType.NVarChar).Value = data[i].Menu;
+                sql_cmnd.Parameters.AddWithValue("@view", SqlDbType.Int).Value = data[i].view_val;
+                sql_cmnd.Parameters.AddWithValue("@add", SqlDbType.Int).Value = data[i].add_val;
+                sql_cmnd.Parameters.AddWithValue("@edit", SqlDbType.Int).Value = data[i].edit_val;
+                sql_cmnd.Parameters.AddWithValue("@delete", SqlDbType.Int).Value = data[i].delete_val;
+                sql_cmnd.Parameters.AddWithValue("@disable", SqlDbType.Int).Value = data[i].disable_val;
+                sql_cmnd.ExecuteNonQuery();
+                if (i == data.Count() - 1)
+                {
+                    break;
+                }
+                i++;
+            }
+            Con1.Close();
+        }
     }
 }

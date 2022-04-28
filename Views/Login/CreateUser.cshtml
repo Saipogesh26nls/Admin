@@ -41,31 +41,31 @@
                 @foreach (System.Data.DataRow dr in ViewBag.PL.Rows)
                 {
 
-                <tr id="data" style="font-size:13px;">
-                    <td class="row-data">@dr["Menu"].ToString()</td>
-                    <td class="row-data"> &nbsp; View @Html.CheckBoxFor(model => model.View, htmlAttributes: new { @id = "view+" + i }) &nbsp;</td>
-                    <td class="row-data"> &nbsp; Add @Html.CheckBoxFor(model => model.Add, htmlAttributes: new { @id = "add+" + i }) &nbsp;</td>
-                    <td class="row-data"> &nbsp; Edit @Html.CheckBoxFor(model => model.Edit, htmlAttributes: new { @id = "edit+" + i }) &nbsp;</td>
-                    <td class="row-data"> &nbsp; Delete @Html.CheckBoxFor(model => model.Delete, htmlAttributes: new { @id = "delete+" + i }) &nbsp;</td>
-                    <td class="row-data"> &nbsp; Disable @Html.CheckBoxFor(model => model.Disable, htmlAttributes: new { @id = "disable+" + i, onchange = "checkbox(" + i + ");" }) &nbsp;</td>
-                    <td class="row-data" style="display:none;" id="display"></td>
-                    <td class="row-data" style="display:none;" id="user"></td>
-                    <td class="row-data" style="display:none;" id="pass"></td>
-                    <td class="row-data" style="display:none;" id="roll"></td>
-                    <td class="row-data" style="display:none;" id="view_val+@i"></td>
-                    <td class="row-data" style="display:none;" id="add_val+@i"></td>
-                    <td class="row-data" style="display:none;" id="edit_val+@i"></td>
-                    <td class="row-data" style="display:none;" id="delete_val+@i"></td>
-                    <td class="row-data" style="display:none;" id="disable_val+@i"></td>
-                </tr>
+                    <tr id="data" style="font-size:13px;">
+                        <td class="row-data">@dr["Menu"].ToString()</td>
+                        <td class="row-data"> &nbsp; View @Html.CheckBoxFor(model => model.View, htmlAttributes: new { @id = "view+" + i }) &nbsp;</td>
+                        <td class="row-data"> &nbsp; Add @Html.CheckBoxFor(model => model.Add, htmlAttributes: new { @id = "add+" + i }) &nbsp;</td>
+                        <td class="row-data"> &nbsp; Edit @Html.CheckBoxFor(model => model.Edit, htmlAttributes: new { @id = "edit+" + i }) &nbsp;</td>
+                        <td class="row-data"> &nbsp; Delete @Html.CheckBoxFor(model => model.Delete, htmlAttributes: new { @id = "delete+" + i }) &nbsp;</td>
+                        <td class="row-data"> &nbsp; Disable @Html.CheckBoxFor(model => model.Disable, htmlAttributes: new { @id = "disable+" + i, onchange = "checkbox(" + i + ");" }) &nbsp;</td>
+                        <td class="row-data" style="display:none;" id="display"></td>
+                        <td class="row-data" style="display:none;" id="user"></td>
+                        <td class="row-data" style="display:none;" id="pass"></td>
+                        <td class="row-data" style="display:none;" id="roll"></td>
+                        <td class="row-data" style="display:none;" id="view_val+@i"></td>
+                        <td class="row-data" style="display:none;" id="add_val+@i"></td>
+                        <td class="row-data" style="display:none;" id="edit_val+@i"></td>
+                        <td class="row-data" style="display:none;" id="delete_val+@i"></td>
+                        <td class="row-data" style="display:none;" id="disable_val+@i"></td>
+                    </tr>
                     i++;
                 }
             </tbody>
         </table>
     </div>
-    <br/>
-    <button class="btn btn-sm btn-secondary" id="Submit" style="width:75px;margin-left:5%;" onclick="project()">Submit</button>
+    <br />
     <p id="message"></p>
+    <button class="btn btn-sm btn-secondary" id="Submit" style="width:75px;margin-left:5%;" onclick="project()">Submit</button>
 </body>
 </html>
 <script>
@@ -166,17 +166,10 @@
             contentType: 'application/json;',
             dataType: 'json',
             success: function (result) {
-                //alert(result.ItemList[0].Str);
-                var modal2 = document.getElementById("myModal2");
-                modal2.style.display = "block";
-                var data = result;
-                var vno = '<p style="background-color:yellow;width:20%">Your Voucher.No is ' + data + '<p/>';
-                document.getElementById("voucher_view").innerHTML = "Your Voucher.No is " + data + "";
-                document.getElementById("Voucher_No").value = data;
                 var submit = '<p style="color:red;">Submitted Successfully !!!<p/>';
-                document.getElementById("submit_view").innerHTML = submit;
+                document.getElementById("message").innerHTML = submit;
                 setTimeout(function () {
-                    window.location.reload(1);
+                    window.location.href = "@Url.Action("Signup", "Login")";
                 }, 3000);
             }
         });
@@ -218,7 +211,7 @@
             $('input[name="Delete"]').each(function () {
                 this.checked = checked;
             });
-            
+
         })
     });
 </script>

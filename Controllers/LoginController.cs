@@ -250,12 +250,12 @@ namespace Admin.Controllers
                 signupModel.UserName = Data.Tables[0].Rows[0]["username"].ToString();
                 signupModel.Password = Data.Tables[0].Rows[0]["password"].ToString();
                 signupModel.Roll = (int)Data.Tables[0].Rows[0]["Roll"];
+                signupModel.Id = id;
                 SqlDataAdapter _da = new SqlDataAdapter("Select * From Roll", _con);
                 DataTable _dt = new DataTable();
                 _da.Fill(_dt);
                 ViewBag.LROLL = ToSelectList(_dt, "Id", "Roll");
-                string strserialize = JsonConvert.SerializeObject(createusers);
-                ViewBag.Boolean = strserialize;
+                ViewBag.Boolean = createusers;
                 _con.Close();
                 return View(signupModel);
             }
@@ -265,69 +265,96 @@ namespace Admin.Controllers
             }
         } // Edit User View
         [HttpPost]
-        public ActionResult UpdateUser(SignupModel name)
+        public ActionResult UpdateUser(List<Createuser> name)
         {
-            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
-            Con.Open();
-            string cmd = "Update Users set Display_name = '" + name.DisplayName + "', username = '" + name.UserName + "', password = '" + name.Password + "', Roll = '" + name.Roll + "', View_Permission = '" + name.View_val + "', Add_Permission = '" + name.Add_val + "', Edit_Permission = '" + name.Edit_val + "', Delete_Permission = '" + name.Delete_val + "' where user_id = '" + name.Id + "'";
-            SqlCommand SqlCmd = new SqlCommand(cmd, Con);
-            SqlCmd.ExecuteNonQuery();
-            Con.Close();
+            LoginField newLoginField = new LoginField();
+            newLoginField.Edit_user(name);
             return Json(name);
         } // Add Updated user data to db
         public ActionResult DeleteUser(int id)
         {
+            SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            _con.Open();
+            List<Createuser> createusers = new List<Createuser>();
             var roll = Convert.ToInt32(Session["roll"]);
             if (Session["userID"] != null && roll == 1)
             {
-                SignupModel loginModels = new SignupModel();
-                SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
-                Con.Open();
-                string cmd = "select * from Users where user_id = " + id + "";
-                SqlCommand SqlCmd = new SqlCommand(cmd, Con);
-                SqlDataReader dr = SqlCmd.ExecuteReader();
-                while (dr.Read())
+                LoginField loginField = new LoginField();
+                DataSet Data = loginField.EditUser(id);
+                Data.Tables[0].Columns.Add("View");
+                Data.Tables[0].Columns.Add("Add");
+                Data.Tables[0].Columns.Add("Edit");
+                Data.Tables[0].Columns.Add("Delete");
+                Data.Tables[0].Columns.Add("Disable_val");
+                Data.Tables[0].Columns.Add("Menu");
+                for (int i = 0; i < Data.Tables[0].Rows.Count; i++)
                 {
-                    int view = (int)dr["View_Permission"];
-                    int add = (int)dr["Add_Permission"];
-                    int edit = (int)dr["Edit_Permission"];
-                    int delete = (int)dr["Delete_Permission"];
-                    bool view_val = false;
-                    bool add_val = false;
-                    bool edit_val = false;
-                    bool delete_val = false;
-                    if (view > 0)
+                    bool view = false;
+                    bool add = false;
+                    bool edit = false;
+                    bool delete = false;
+                    bool disable = false;
+                    if ((int)Data.Tables[0].Rows[i]["View_Permission"] == 1)
                     {
-                        view_val = true;
+                        view = true;
                     }
-                    if (add > 0)
+                    if ((int)Data.Tables[0].Rows[i]["Add_Permission"] == 1)
                     {
-                        add_val = true;
+                        add = true;
                     }
-                    if (edit > 0)
+                    if ((int)Data.Tables[0].Rows[i]["Edit_Permission"] == 1)
                     {
-                        edit_val = true;
+                        edit = true;
                     }
-                    if (delete > 0)
+                    if ((int)Data.Tables[0].Rows[i]["Delete_Permission"] == 1)
                     {
-                        delete_val = true;
+                        delete = true;
                     }
-                    loginModels.Id = (int)dr["user_id"];
-                    loginModels.DisplayName = dr["Display_name"].ToString();
-                    loginModels.UserName = dr["username"].ToString();
-                    loginModels.Password = dr["password"].ToString();
-                    loginModels.Roll = (int)dr["Roll"];
-                    loginModels.View = view_val;
-                    loginModels.Add = add_val;
-                    loginModels.Edit = edit_val;
-                    loginModels.Delete = delete_val;
+                    if ((int)Data.Tables[0].Rows[i]["Disable"] == 1)
+                    {
+                        disable = true;
+                        view = false;
+                        add = false;
+                        edit = false;
+                        delete = false;
+                    }
+                    Data.Tables[0].Rows[i]["View"] = view;
+                    Data.Tables[0].Rows[i]["Add"] = add;
+                    Data.Tables[0].Rows[i]["Edit"] = edit;
+                    Data.Tables[0].Rows[i]["Delete"] = delete;
+                    Data.Tables[0].Rows[i]["Disable_val"] = disable;
+                    string cmd1 = "select Menu from Menu where Id = '" + (int)Data.Tables[0].Rows[i]["Menu_Id"] + "'";
+                    SqlCommand SqlCmd1 = new SqlCommand(cmd1, _con);
+                    SqlDataReader dr = SqlCmd1.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        Data.Tables[0].Rows[i]["Menu"] = dr["Menu"].ToString();
+                    }
+                    dr.Close();
+                    createusers.Add(new Createuser
+                    {
+                        View = view,
+                        Add = add,
+                        Edit = edit,
+                        Delete = delete,
+                        Disable_Enable = disable
+                    }
+                    );
                 }
-                Con.Close();
-                SqlDataAdapter _da = new SqlDataAdapter("Select * From Roll", Con);
+                ViewBag.PL = Data.Tables[0];
+                SignupModel signupModel = new SignupModel();
+                signupModel.DisplayName = Data.Tables[0].Rows[0]["Display_name"].ToString();
+                signupModel.UserName = Data.Tables[0].Rows[0]["username"].ToString();
+                signupModel.Password = Data.Tables[0].Rows[0]["password"].ToString();
+                signupModel.Roll = (int)Data.Tables[0].Rows[0]["Roll"];
+                signupModel.Id = id;
+                SqlDataAdapter _da = new SqlDataAdapter("Select * From Roll", _con);
                 DataTable _dt = new DataTable();
                 _da.Fill(_dt);
                 ViewBag.LROLL = ToSelectList(_dt, "Id", "Roll");
-                return View(loginModels);
+                ViewBag.Boolean = createusers;
+                _con.Close();
+                return View(signupModel);
             }
             else
             {

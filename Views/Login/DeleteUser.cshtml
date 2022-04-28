@@ -9,31 +9,116 @@
     <link rel="stylesheet" href="~/Content/Purchase.css" />
 </head>
 <body style="background-color: #f5f5f7;" onload="hover();">
-    <div class="form-horizontal" style="border: 1px solid #F0F3FF; box-sizing: border-box; box-shadow: 0px 10px 20px rgba(198, 198, 198, 0.15);text-align:center; border-radius: 12px; width: 50%; margin: 0% 0% 0% 25%;">
-        <br />
-        <div id="myModal" class="modal">
+    <br />
 
-            <!-- Modal content -->
-            <div class="modal-content">
-                <a href="@Url.Action("Signup", "Login")"><i class="close float-left">&times;</i></a>
-                <p class="text-sm" style="text-align:center;"> Are you sure, you want to delete ?</p>
-                <p class="text-sm" style="text-align:center;"><button class="btn btn-sm btn-secondary" style="width:5%;" id="yes" onclick="delete_data()">Yes</button><a href="@Url.Action("Signup", "Login")"> <button class="btn btn-sm btn-secondary" style="width:5%;">No</button> </a> </p>
-                <p id="delete" style="text-align:center;"></p>
-            </div>
-        </div>
-        <p>@Html.LabelFor(model => model.DisplayName) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.DisplayName, new { htmlAttributes = new { @style = "width:200px;" } })</p>
-        <p>@Html.LabelFor(model => model.UserName) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @style = "width:200px;" } })</p>
-        <p>@Html.LabelFor(model => model.Password) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @style = "width:200px;" } })</p>
-        <p>@Html.LabelFor(model => model.Roll) : &nbsp; &nbsp; @Html.DropDownListFor(model => model.Roll, ViewBag.LROLL as SelectList, new { htmlAttributes = new { @style = "width:200px;" } })</p>
-        <p>@Html.LabelFor(model => model.Permission_Detail) &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; View @Html.CheckBoxFor(model => model.View) &nbsp; &nbsp; Add @Html.CheckBoxFor(model => model.Add) &nbsp; &nbsp; Edit @Html.CheckBoxFor(model => model.Edit) &nbsp; &nbsp; Delete @Html.CheckBoxFor(model => model.Delete)</p>
-        <p id="message"></p>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <button class="btn btn-sm btn-secondary" id="Submit" style="width:75px;margin-left:20%;" onclick="project()">Submit</button>
-            </div>
+    <p>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; @Html.LabelFor(model => model.DisplayName) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.DisplayName, new { htmlAttributes = new { @style = "width:200px;" } }) &nbsp; &nbsp; @Html.LabelFor(model => model.UserName) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @style = "width:200px;" } })
+        &nbsp; &nbsp; @Html.LabelFor(model => model.Password) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @style = "width:200px;" } }) &nbsp; &nbsp; @Html.LabelFor(model => model.Roll) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.DropDownListFor(model => model.Roll, ViewBag.LROLL as SelectList, new { htmlAttributes = new { } }) &nbsp; &nbsp; &nbsp; Select-all &nbsp; <input type="checkbox" id="select-all">
+    </p>
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <a href="@Url.Action("Signup","Login")"><i class="close float-left">&times;</i></a>
+            <p class="text-sm" style="text-align:center;"> Are you sure, you want to delete ?</p>
+            <p class="text-sm" style="text-align:center;"><button class="btn btn-sm btn-secondary" style="width:5%;" id="yes" onclick="delete_data()">Yes</button><a href="@Url.Action("Signup", "Login")"> <button class="btn btn-sm btn-secondary" style="width:5%;">No</button> </a> </p>
+            <p id="delete" style="text-align:center;"></p>
         </div>
     </div>
-    @Html.EditorFor(m => m.Id, new { htmlAttributes = new { @style = "display:none" } })
+    <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 600px;">
+        <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;text-align:center;">
+            <thead>
+                <tr>
+                    <th>Menu</th>
+                    <th>View</th>
+                    <th>Add</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                    <th>Disable_Enable</th>
+                    <th style="display:none">displayname</th>
+                    <th style="display:none">username</th>
+                    <th style="display:none">password</th>
+                    <th style="display:none">roll</th>
+                    <th style="display:none">view_val</th>
+                    <th style="display:none">add_val</th>
+                    <th style="display:none">edit_val</th>
+                    <th style="display:none">delete_val</th>
+                    <th style="display:none">disable_val</th>
+                    <th style="display:none">Id</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int i = 0; }
+                @foreach (System.Data.DataRow dr in ViewBag.PL.Rows)
+                {
+                    if (dr["View"].ToString() == "True")
+                    {
+                        Model.View = true;
+                    }
+                    else
+                    {
+                        Model.View = false;
+                    }
+                    if (dr["Add"].ToString() == "True")
+                    {
+                        Model.Add = true;
+                    }
+                    else
+                    {
+                        Model.Add = false;
+                    }
+                    if (dr["Edit"].ToString() == "True")
+                    {
+                        Model.Edit = true;
+                    }
+                    else
+                    {
+                        Model.Edit = false;
+                    }
+                    if (dr["Delete"].ToString() == "True")
+                    {
+                        Model.Delete = true;
+                    }
+                    else
+                    {
+                        Model.Delete = false;
+                    }
+                    if (dr["Disable_val"].ToString() == "True")
+                    {
+                        Model.Disable = true;
+                    }
+                    else
+                    {
+                        Model.Disable = false;
+                    }
+
+                    <tr id="data" style="font-size:13px;">
+                        <td class="row-data">@dr["Menu"].ToString()</td>
+                        <td class="row-data"> &nbsp; View @Html.CheckBoxFor(model => model.View, htmlAttributes: new { @id = "view+" + i }) &nbsp;</td>
+                        <td class="row-data"> &nbsp; Add @Html.CheckBoxFor(model => model.Add, htmlAttributes: new { @id = "add+" + i }) &nbsp;</td>
+                        <td class="row-data"> &nbsp; Edit @Html.CheckBoxFor(model => model.Edit, htmlAttributes: new { @id = "edit+" + i }) &nbsp;</td>
+                        <td class="row-data"> &nbsp; Delete @Html.CheckBoxFor(model => model.Delete, htmlAttributes: new { @id = "delete+" + i }) &nbsp;</td>
+                        <td class="row-data"> &nbsp; Disable @Html.CheckBoxFor(model => model.Disable, htmlAttributes: new { @id = "disable+" + i, onchange = "checkbox(" + i + ");" }) &nbsp;</td>
+                        <td class="row-data" style="display:none;" id="display"></td>
+                        <td class="row-data" style="display:none;" id="user"></td>
+                        <td class="row-data" style="display:none;" id="pass"></td>
+                        <td class="row-data" style="display:none;" id="roll"></td>
+                        <td class="row-data" style="display:none;" id="view_val+@i"></td>
+                        <td class="row-data" style="display:none;" id="add_val+@i"></td>
+                        <td class="row-data" style="display:none;" id="edit_val+@i"></td>
+                        <td class="row-data" style="display:none;" id="delete_val+@i"></td>
+                        <td class="row-data" style="display:none;" id="disable_val+@i"></td>
+                        <td class="row-data" style="display:none;" id="id"></td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    </div>
+    <br />
+    <p style="display:none;">@Html.EditorFor(model => model.Id)</p>
+    <button class="btn btn-sm btn-secondary" id="Submit" style="width:75px;margin-left:5%;" onclick="project()">Submit</button>
+    <p id="message"></p>
 </body>
 </html>
 <script>
@@ -42,7 +127,15 @@
         var UserName = document.getElementById("UserName").value;
         var Password = document.getElementById("Password").value;
         var Roll = document.getElementById("Roll").value;
-        var permission = document.getElementById("Permission_Detail").value;
+        var Id = document.getElementById("Id").value;
+
+        document.getElementById("message").innerHTML = "";
+
+        document.getElementById("display").innerHTML = DisplayName;
+        document.getElementById("user").innerHTML = UserName;
+        document.getElementById("pass").innerHTML = Password;
+        document.getElementById("id").innerHTML = Id;
+        document.getElementById("roll").innerHTML = Roll;
 
         if (DisplayName == "") {
             var qty_err = '<p style="color:red;">Field Display Name is required !!!<p/>';
@@ -60,27 +153,144 @@
             return;
         }
 
-        var model = new Object();
-        model.DisplayName = DisplayName;
-        model.UserName = UserName;
-        model.Password = Password;
-        model.Roll = Roll;
-        model.permission = permission;
-            $.ajax({
-                url: "@Url.Action("UpdateUser")",
-                data: JSON.stringify({ name: model }),
-                type: 'POST',
-                contentType: 'application/json;',
-                dataType: 'json',
-                success: function (result) {
-                        var qty_err = '<p style="color:red;">Submitted Successfully !!!<p/>';
-                        document.getElementById("message").innerHTML = qty_err;
-                        setTimeout(function () {
-                            window.location.reload(1);
-                        }, 3000);
-                    }
+        var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+        var l_row1 = last_row1 - 1;
+        var count = 1;
+        for (var i = 0; i <= l_row1; i++) {
+            var view = document.getElementById('view+' + i);
+            var add = document.getElementById('add+' + i);
+            var edit = document.getElementById('edit+' + i);
+            var del = document.getElementById('delete+' + i);
+            var disable = document.getElementById('disable+' + i);
+
+            if (view.checked == true) {
+                document.getElementById('view_val+' + i).innerHTML = 1;
+            }
+            else {
+                document.getElementById('view_val+' + i).innerHTML = 0;
+            }
+            if (add.checked == true) {
+                document.getElementById('add_val+' + i).innerHTML = 1;
+            }
+            else {
+                document.getElementById('add_val+' + i).innerHTML = 0;
+            }
+            if (edit.checked == true) {
+                document.getElementById('edit_val+' + i).innerHTML = 1;
+            }
+            else {
+                document.getElementById('edit_val+' + i).innerHTML = 0;
+            }
+            if (del.checked == true) {
+                document.getElementById('delete_val+' + i).innerHTML = 1;
+            }
+            else {
+                document.getElementById('delete_val+' + i).innerHTML = 0;
+            }
+            if (disable.checked == true) {
+                document.getElementById('disable_val+' + i).innerHTML = 1;
+            }
+            else {
+                document.getElementById('disable_val+' + i).innerHTML = 0;
+            }
+            count++;
+        }
+
+        var myRows = [];
+        var headersText = [];
+        var $headers = $("#selected_units th");
+        var $rows = $("#selected_units tbody #data").each(function (index) {
+            $cells = $(this).find("td");
+            myRows[index] = {};
+
+            $cells.each(function (cellIndex) {
+                if (headersText[cellIndex] === undefined) {
+                    headersText[cellIndex] = $($headers[cellIndex]).text();
+                }
+                myRows[index][headersText[cellIndex]] = $(this).text();
             });
+        });
+
+        var myObj = {
+            "myrows": myRows
+        };
+        $.ajax({
+            url: '/Login/UpdateUser',
+            data: JSON.stringify(myRows),
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (result) {
+                var submit = '<p style="color:red;">Submitted Successfully !!!<p/>';
+                document.getElementById("message").innerHTML = submit;
+                setTimeout(function () {
+                    window.location.href = "@Url.Action("Signup", "Login")";
+                }, 3000);
+            }
+        });
     }
+
+    function checkbox(i) {
+        var checkBox = document.getElementById('disable+' + i);
+
+        if (checkBox.checked == true) {
+            document.getElementById('view+' + i).disabled = true;
+            document.getElementById('add+' + i).disabled = true;
+            document.getElementById('edit+' + i).disabled = true;
+            document.getElementById('delete+' + i).disabled = true;
+            document.getElementById('view+' + i).checked = false;
+            document.getElementById('add+' + i).checked = false;
+            document.getElementById('edit+' + i).checked = false;
+            document.getElementById('delete+' + i).checked = false;
+        }
+        else {
+            document.getElementById('view+' + i).disabled = false;
+            document.getElementById('add+' + i).disabled = false;
+            document.getElementById('edit+' + i).disabled = false;
+            document.getElementById('delete+' + i).disabled = false;
+        }
+    }
+
+    function check() {
+        var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+        var l_row1 = last_row1 - 1;
+        var count = 1;
+        for (var i = 0; i <= l_row1; i++) {
+            var checkBox = document.getElementById('disable+' + i);
+
+            if (checkBox.checked == true) {
+                document.getElementById('view+' + i).disabled = true;
+                document.getElementById('add+' + i).disabled = true;
+                document.getElementById('edit+' + i).disabled = true;
+                document.getElementById('delete+' + i).disabled = true;
+            }
+            else {
+                document.getElementById('view+' + i).disabled = false;
+                document.getElementById('add+' + i).disabled = false;
+                document.getElementById('edit+' + i).disabled = false;
+                document.getElementById('delete+' + i).disabled = false;
+            }
+            count++;
+        }
+    }
+    $(document).ready(function () {
+        $('#select-all').click(function () {
+            var checked = this.checked;
+            $('input[name="View"]').each(function () {
+                this.checked = checked;
+            });
+            $('input[name="Add"]').each(function () {
+                this.checked = checked;
+            });
+            $('input[name="Edit"]').each(function () {
+                this.checked = checked;
+            });
+            $('input[name="Delete"]').each(function () {
+                this.checked = checked;
+            });
+
+        })
+    });
     var modal = document.getElementById("myModal");
 
     function hover() {
