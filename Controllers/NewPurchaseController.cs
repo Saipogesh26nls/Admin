@@ -364,7 +364,7 @@ namespace Admin.Controllers
             return Json(Purchase);
         }
 
-        //New Goods Receipt/Issue
+        //New Goods Receipt/Issu
         [HttpGet]
         public ActionResult Goods_Receipt_Issue() // Goods Issue View
         {
