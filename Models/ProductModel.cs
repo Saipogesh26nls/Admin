@@ -662,4 +662,30 @@ namespace Admin.Models
         public int Request_int { get; set; }
 
     }
+    public class Inventory
+    {
+        public string Project { get; set; }
+        public string Process { get; set; }
+        public string User { get; set; }
+        public string Product { get; set; }
+        public string Partno_letter { get; set; }
+        public string Package_letter { get; set; }
+        public string Value_letter { get; set; }
+        public string Descp_letter { get; set; }
+    }
+    public class Inventory_Table
+    {
+        public string VoucherNo { get; set; }
+        public string Date { get; set; }
+        public string PartNo { get; set; }
+        public string Description { get; set; }
+        public string GoodsReceipt { get; set; }
+        public string GoodsIssue { get; set; }
+        public string Project { get; set; }
+        public string Process { get; set; }
+        public string User { get; set; }
+        public string pcode { get;set; }
+        public int Quantity { get; set; }
+        public string VoucherType { get; set; }
+    }
 }

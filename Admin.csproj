@@ -2397,6 +2397,7 @@
     <Content Include="Views\Issue\StockIssue.cshtml" />
     <Content Include="Views\Issue\Indent_to_GoodsIssue.cshtml" />
     <Content Include="Views\Issue\IndentList.cshtml" />
+    <Content Include="Views\Price\Inventory_Flow.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

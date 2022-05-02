@@ -1,0 +1,274 @@
+﻿@model Admin.Models.Inventory
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/Content/Purchase.css" />
+    <style>
+        .modal-content {
+            width: 60%;
+        }
+        #list:hover {
+            background-color: aliceblue;
+        }
+    </style>
+</head>
+<body style="background-color: #f5f5f7;">
+    <p class="text-sm" style="margin-top:10px;text-align:center;">
+        Project : @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "margin-right:1%;", @class = " uppercase" } }) &nbsp;&nbsp;&nbsp;&nbsp; <button class="btn btn-sm btn-secondary" id="project_btn" style="width:40px;height:30px;margin-right:10%;" onclick="project()">Go</button>
+        Process : @Html.DropDownListFor(model => model.Process, ViewBag.Process as SelectList, new { htmlAttributes = new { @style = "margin-right:1%;", @class = " uppercase" } }) &nbsp;&nbsp;&nbsp;&nbsp; <button class="btn btn-sm btn-secondary" id="process_btn" style="width: 40px; height: 30px; margin-right: 10%; " onclick="process()">Go</button>
+        User : @Html.DropDownListFor(model => model.User, ViewBag.Employee as SelectList, new { htmlAttributes = new { @style = "margin-right:1%;", @class = " uppercase" } }) &nbsp;&nbsp;&nbsp;&nbsp; <button class="btn btn-sm btn-secondary" id="user_btn" style="width: 40px; height: 30px; margin-right: 10%; " onclick="user()">Go</button>
+        Product P/N : @Html.EditorFor(model => model.Product, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } }) <i class="fa fa-search" id="myBtn" ></i>&nbsp;&nbsp;&nbsp;&nbsp; <button class="btn btn-sm btn-secondary" id="product_btn" style="width: 40px; height: 30px; " onclick="product()">Go</button>
+    </p>
+    <p id="description" class="text-sm-center"></p>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <i class="close" id="close">&times;</i>
+            <p class="text-sm" style="margin-top:10px;text-align:center;"> Package : @Html.EditorFor(model => model.Package_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Value : @Html.EditorFor(model => model.Value_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Part No : @Html.EditorFor(model => model.Partno_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Description : @Html.EditorFor(model => model.Descp_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })</p>
+            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 650px;">
+                <table class="table text-sm" id="pm_list">
+                    <tbody>
+                        <tr>
+                            <th>
+                                Product Code
+                            </th>
+                            <th>
+                                Package
+                            </th>
+                            <th>
+                                Value
+                            </th>
+                            <th>
+                                Part No
+                            </th>
+                            <th>
+                                Description
+                            </th>
+                            <th></th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="process_list" style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 800px;">
+        <table class="table text-sm" id="pm_list">
+            <tbody>
+                <tr>
+                    <th>
+                        VoucherNo
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        PartNo
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        GoodsReceipt
+                    </th>
+                    <th>
+                        GoodsIssue
+                    </th>
+                    <th>
+                        Process
+                    </th>
+                    <th>
+                        Project
+                    </th>
+                    <th>
+                        User
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="product_list" style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 800px;display:none">
+        <table class="table text-sm" id="prod_list">
+            <tbody>
+                <tr>
+                    <th>
+                        VoucherNo
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        VoucherType
+                    </th>
+                    <th>
+                        Project
+                    </th>
+                    <th>
+                        Process
+                    </th>
+                    <th>
+                        User
+                    </th>
+                    <th>
+                        Quantity
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+<script>
+    function product() {
+        var prod = document.querySelector("#Product").value;
+        var model = new Object();
+        model.Product = prod;
+        model.Project = "";
+        model.Process = "";
+        model.User = "";
+        $.ajax({
+            url: '/Price/Project_update_list',
+            data: JSON.stringify({ name: model }),
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (result) {
+                document.getElementById("product_list").style.display = "block";
+                document.getElementById("process_list").style.display = "none";
+                $("#prod_list").find("tr:not(:first)").remove();
+                for (var i = 0; i <= result.length - 1; i++) {
+                    var newrow = '<tr id="list"><td>' + result[i].VoucherNo + '</td><td>' + result[i].Date + '</td><td>' + result[i].VoucherType + '</td><td>' + result[i].Project + '</td><td>' + result[i].Process + '</td><td>' + result[i].User + '</td><td>' + result[i].Quantity + '</td></tr>';
+                    $('#prod_list tr:last').after(newrow);
+                }
+            }
+        });
+    }
+    function project() {
+        var proj = document.querySelector("#Project").value;
+        var model = new Object();
+        model.Product = "";
+        model.Project = proj;
+        model.Process = "";
+        model.User = "";
+        $.ajax({
+            url: '/Price/Project_update_list',
+            data: JSON.stringify({ name: model }),
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (result) {
+                document.getElementById("product_list").style.display = "none";
+                document.getElementById("process_list").style.display = "block";
+                $("#process_list").find("tr:not(:first)").remove();
+                for (var i = 0; i <= result.length - 1; i++) {
+                    var newrow = '<tr id="list"><td>' + result[i].VoucherNo + '</td><td>' + result[i].Date + '</td><td>' + result[i].PartNo + '</td><td>' + result[i].Description + '</td><td>' + result[i].GoodsReceipt + '</td><td>' + result[i].GoodsIssue + '</td><td>' + result[i].Process + '</td><td>' + result[i].Project + '</td><td>' + result[i].User + '</td></tr>';
+                    $('#process_list tr:last').after(newrow);
+                }
+            }
+        });
+    }
+    function process() {
+        var proc = document.querySelector("#Process").value;
+        var model = new Object();
+        model.Product = "";
+        model.Project = "";
+        model.Process = proc;
+        model.User = "";
+        $.ajax({
+            url: '/Price/Project_update_list',
+            data: JSON.stringify({ name: model }),
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (result) {
+                document.getElementById("product_list").style.display = "none";
+                document.getElementById("process_list").style.display = "block";
+                $("#process_list").find("tr:not(:first)").remove();
+                for (var i = 0; i <= result.length - 1; i++) {
+                    var newrow = '<tr id="list"><td>' + result[i].VoucherNo + '</td><td>' + result[i].Date + '</td><td>' + result[i].PartNo + '</td><td>' + result[i].Description + '</td><td>' + result[i].GoodsReceipt + '</td><td>' + result[i].GoodsIssue + '</td><td>' + result[i].Process + '</td><td>' + result[i].Project + '</td><td>' + result[i].User + '</td></tr>';
+                    $('#process_list tr:last').after(newrow);
+                }
+            }
+        });
+    }
+    function user() {
+        var use = document.querySelector("#User").value;
+        var model = new Object();
+        model.Product = "";
+        model.Project = "";
+        model.Process = "";
+        model.User = use;
+        $.ajax({
+            url: '/Price/Project_update_list',
+            data: JSON.stringify({ name: model }),
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (result) {
+                document.getElementById("product_list").style.display = "none";
+                document.getElementById("process_list").style.display = "block";
+                $("#process_list").find("tr:not(:first)").remove();
+                for (var i = 0; i <= result.length - 1; i++) {
+                    var newrow = '<tr id="list"><td>' + result[i].VoucherNo + '</td><td>' + result[i].Date + '</td><td>' + result[i].PartNo + '</td><td>' + result[i].Description + '</td><td>' + result[i].GoodsReceipt + '</td><td>' + result[i].GoodsIssue + '</td><td>' + result[i].Process + '</td><td>' + result[i].Project + '</td><td>' + result[i].User + '</td></tr>';
+                    $('#process_list tr:last').after(newrow);
+                }
+            }
+        });
+    }
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("myBtn");
+    var span = document.getElementById("close");
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    btn.addEventListener("click", list);
+    span.removeEventListener("click", list);
+    window.removeEventListener("click", list);
+
+    function list() {
+        document.addEventListener("keyup", function (event) {
+            var package = document.querySelector("#Package_letter").value;
+            var value = document.querySelector("#Value_letter").value;
+            var partno = document.querySelector("#Partno_letter").value;
+            var descp = document.querySelector("#Descp_letter").value;
+            var model = new Object();
+            model.Package_letter = package;
+            model.Value_letter = value;
+            model.Partno_letter = partno;
+            model.Descp_letter = descp;
+            $.ajax({
+                url: '/NewPurchase/PM_List',
+                data: JSON.stringify({ name: model }),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+                    $("#pm_list").find("tr:not(:first)").remove();
+                    for (var i = 0; i <= result.length - 1; i++) {
+                        var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Package + '</td><td>' + result[i].Value + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td></tr>';
+                        $('#pm_list tr:last').after(newrow);
+                    }
+                }
+            });
+        })
+    }
+
+    function List_to_View() {
+        var table = document.getElementById('pm_list');
+        for (var i = 0; i < table.rows.length; i++) {
+            table.rows[i].addEventListener('click', function () {
+                var partno = this.cells[3].innerHTML;
+                var descp = this.cells[4].innerHTML;
+                document.getElementById("Product").value = partno;
+                document.getElementById("description").innerHTML = descp;
+                modal.style.display = "none";
+            });
+        }
+    }
+</script>
