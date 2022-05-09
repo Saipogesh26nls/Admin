@@ -2147,6 +2147,7 @@
     <Content Include="adminlte\plugins\uplot\uPlot.iife.js" />
     <Content Include="adminlte\plugins\uplot\uPlot.iife.min.js" />
     <Content Include="adminlte\plugins\uplot\uPlot.min.css" />
+    <Content Include="Assets\Gif\loading.gif" />
     <Content Include="Content\bootstrap-4.0.0.min.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -2400,6 +2401,8 @@
     <Content Include="Views\Price\Inventory_Flow.cshtml" />
     <Content Include="Views\Price\Stock_Statement.cshtml" />
     <Content Include="Views\NewPurchase\Purchase_Order_View.cshtml" />
+    <Content Include="Views\NewPurchase\PO_List.cshtml" />
+    <Content Include="Views\NewPurchase\PO_to_EditPurchase.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

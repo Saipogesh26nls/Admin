@@ -11,7 +11,6 @@
 </head>
 <body style="background-color: #f5f5f7;">
     <p class="text-sm" style="margin-top:10px;text-align:center;"> Package : @Html.EditorFor(model => model.Package_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } }) Value : @Html.EditorFor(model => model.Value_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } }) Part No : @Html.EditorFor(model => model.Partno_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } }) Description : @Html.EditorFor(model => model.Descp_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } })</p>
-
     <div id="myModal" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
@@ -119,7 +118,6 @@
             modal.style.display = "none";
         }
     }
-
     function Price_to_DB() {
         var partno = document.getElementById("Part_No").value;
         var cost = document.getElementById("P_Cost").value;

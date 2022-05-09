@@ -674,8 +674,8 @@ namespace Admin.Controllers
             
         }
 
-        // Purchase Order View
-        public ActionResult Purchase_Order_View()
+        // Purchase Order
+        public ActionResult Purchase_Order_View() // PO View
         {
             New_Purchase new_Purchase = new New_Purchase();
             new_Purchase.Purchase_Order_Date = DateTime.Today;
@@ -705,6 +705,92 @@ namespace Admin.Controllers
             ViewBag.Project = ToSelectList(_dt2, "Project_Id", "Project_Name");
             _con.Close();
             return View(new_Purchase);
+        }
+        public ActionResult Add_PO_to_DB(List<PurchaseTable> Purchase) // add PO to db
+        {
+            int project = int.Parse(Purchase[0].project);
+            int Quantity = Purchase[0].final_Qty;
+            double Total = Purchase[0].final_Sub_Total;
+            double Final_Total = Purchase[0].final_total;
+            NewPurchase_Insert purchase = new NewPurchase_Insert();
+            int v_no = purchase.Add_PO(Purchase, Quantity, Total, Final_Total, project);
+            return Json(v_no);
+        }
+
+        // Purchase Order List
+        public ActionResult PO_List() // PO list
+        {
+            NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
+            var PM_Data = newPurchase_Insert.PO_List();
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            for (int i = 0; i < PM_Data.Count; i++)
+            {
+                string cmd1 = "select A_Name from Account_Master where A_code = '" + PM_Data[i].acode + "'";
+                SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                SqlDataReader dr = SqlCmd1.ExecuteReader();
+                while (dr.Read())
+                {
+                    string Mfr = dr["A_Name"].ToString();
+                    PM_Data[i].Supplier = Mfr;
+                }
+                dr.Close();
+            }
+            ViewBag.PL = PM_Data;
+            Con.Close();
+            return View(PM_Data);
+        }
+
+        // Add PO to Purchase
+        public ActionResult PO_to_EditPurchase(int PO_No, DateTime PO_Date, string Ref_No, DateTime Ref_Date, string Supplier) // Add PO to Purchase View
+        {
+            New_Purchase newPurchase_Insert = new New_Purchase();
+            PurchaseTable mfr = new PurchaseTable();
+            DataSet PM_Data = newPurchase_Insert.Edit_PO_to_Purchase(PO_No);
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<0", Con);
+            DataTable _dt1 = new DataTable();
+            _da1.Fill(_dt1);
+            ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
+            SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", Con);
+            DataTable _dt4 = new DataTable();
+            _da4.Fill(_dt4);
+            ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
+            SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", Con);
+            DataTable _dt5 = new DataTable();
+            _da5.Fill(_dt5);
+            ViewBag.Mfd = ToSelectList(_dt5, "A_code", "A_Name");
+            SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Project_Master", Con);
+            DataTable _dt2 = new DataTable();
+            _da2.Fill(_dt2);
+            ViewBag.Project = ToSelectList(_dt2, "Project_Id", "Project_Name");
+            PM_Data.Tables[0].Columns.Add("P_Part_No");
+            PM_Data.Tables[0].Columns.Add("P_Description");
+            /*List<string> table_data = new List<string>();*/
+            for (int i = 0; i < PM_Data.Tables[0].Rows.Count; i++)
+            {
+                string Text = PM_Data.Tables[0].Rows[i]["P_code"].ToString();
+                NewPurchase_Insert dblogin = new NewPurchase_Insert();
+                var Descp = dblogin.Pcode_to_PartNo(Text);
+                PM_Data.Tables[0].Rows[i]["P_Part_No"] = Descp[0].P_Part_No;
+                PM_Data.Tables[0].Rows[i]["P_Description"] = Descp[0].P_Description;
+            }
+            newPurchase_Insert.Purchase_Order_No = PO_No;
+            newPurchase_Insert.Purchase_Order_Date = PO_Date;
+            newPurchase_Insert.Supplier = PM_Data.Tables[0].Rows[0]["A_code"].ToString();
+            newPurchase_Insert.Project = PM_Data.Tables[0].Rows[0]["Project"].ToString();
+
+            ViewBag.Project_data = PM_Data.Tables[0].Rows[0]["Project"].ToString();
+            ViewBag.PL = PM_Data.Tables[0];
+            ViewBag.ILedger = 1;
+            ViewBag.ALedger = 2;
+            ViewBag.Final_Total = PM_Data.Tables[0].Rows[0]["PO_Final_Total"].ToString();
+            ViewBag.Final_Discount = 0;
+            ViewBag.Final_Tax1 = 0;
+            ViewBag.Final_Tax2 = 0;
+            Con.Close();
+            return View(newPurchase_Insert);
         }
     }
 }

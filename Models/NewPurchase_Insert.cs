@@ -306,6 +306,95 @@ namespace Admin.Models
                 return null;
             }
         }
+        public int Add_PO(List<PurchaseTable> data, int Qty, double total, double final_total, int project)
+        {
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "Update Number_master Set PO_No = PO_No + 1 ";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlCmd1.ExecuteNonQuery();
+            string cmd2 = "Select PO_No from Number_master ";
+            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+            SqlDataReader dr = SqlCmd2.ExecuteReader();
+            dr.Read();
+            int PO_No = dr.GetInt32(0);
+            dr.Close();
+            Con.Close();
+
+            SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con1.Open();
+            int i = 0;
+            while (i < data.Count())
+            {
+                SqlCommand sql_cmnd = new SqlCommand("[dbo].[Add_PO]", Con1);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                sql_cmnd.Parameters.AddWithValue("@po_no", SqlDbType.NVarChar).Value = PO_No;
+                sql_cmnd.Parameters.AddWithValue("@po_date", data[i].PO_Date);
+                sql_cmnd.Parameters.AddWithValue("@invoice_no", SqlDbType.NVarChar).Value = data[i].Invoice_No;
+                sql_cmnd.Parameters.AddWithValue("@invoice_date", data[i].Invoice_Date);
+                sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = data[i].Part_No;
+                sql_cmnd.Parameters.AddWithValue("@p_qty", SqlDbType.Int).Value = data[i].Quantity;
+                sql_cmnd.Parameters.AddWithValue("@i_rate", SqlDbType.Money).Value = data[i].Price;
+                sql_cmnd.Parameters.AddWithValue("@i_subtotal", SqlDbType.Money).Value = data[i].SubTotal;
+                sql_cmnd.Parameters.AddWithValue("@i_total", SqlDbType.Money).Value = data[i].Total;
+                sql_cmnd.Parameters.AddWithValue("@Total_Qty", SqlDbType.Money).Value = Qty;
+                sql_cmnd.Parameters.AddWithValue("@Final_Total", SqlDbType.Money).Value = final_total;
+                sql_cmnd.Parameters.AddWithValue("@acc_name", SqlDbType.NVarChar).Value = data[i].supplier;
+                sql_cmnd.Parameters.AddWithValue("@project", SqlDbType.Int).Value = project;
+                sql_cmnd.ExecuteNonQuery();
+                if (i == data.Count() - 1)
+                {
+                    break;
+                }
+                i++;
+            }
+            Con1.Close();
+            return PO_No;
+        }
+        public List<PO_List> PO_List()
+        {
+            List<PO_List> ItemQm = new List<PO_List>();
+            List<int> vno = new List<int>();
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd2 = "SELECT PO_No FROM Purchase_Order GROUP BY PO_No HAVING COUNT(*)>0";
+            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+            SqlDataReader dr1 = SqlCmd2.ExecuteReader();
+            while (dr1.Read())
+            {
+                vno.Add(Convert.ToInt32(dr1["PO_No"]));
+            }
+            dr1.Close();
+            if (vno.Count == 0)
+            {
+                Con.Close();
+                return ItemQm;
+            }
+            else
+            {
+                for (int i = 0; i < vno.Count; i++)
+                {
+                    string cmd1 = "select Top 1 PO_No,PO_Date,Ref_No,Ref_Date,A_code from Purchase_Order where PO_No = '" + vno[i] + "' ORDER BY PO_No Asc;";
+                    SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                    SqlDataReader dr = SqlCmd1.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        ItemQm.Add(new PO_List
+                        {
+                            PO_No = (int)dr["PO_No"],
+                            PO_Date = dr["PO_Date"].ToString(),
+                            Ref_No = dr["Ref_No"].ToString(),
+                            Ref_Date = dr["Ref_Date"].ToString(),
+                            acode = dr["A_code"].ToString()
+                        }
+                        );
+                    }
+                    dr.Close();
+                }
+                Con.Close();
+                return ItemQm;
+            }
+        }
     }
     public class Goods_RI
     {
@@ -861,7 +950,7 @@ namespace Admin.Models
             }
 
         }
-        
+
     }
     
 }

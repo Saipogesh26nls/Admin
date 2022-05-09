@@ -377,6 +377,17 @@ namespace Admin.Models
             da.Fill(ds);
             return ds;
         }
+        public DataSet Edit_PO_to_Purchase(int id)
+        {
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "select * from Purchase_Order where PO_No = '" + id + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            DataSet ds = new DataSet();
+            SqlDataAdapter da = new SqlDataAdapter(SqlCmd1);
+            da.Fill(ds);
+            return ds;
+        }
         public DataSet GetAccount(string p_code, int v_no)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
@@ -402,7 +413,7 @@ namespace Admin.Models
         public double Add_SellPrice { get; set; }
         public string Project { get; set; }
         [DisplayName("Purchase Order No")]
-        public string Purchase_Order_No { get; set; }
+        public int Purchase_Order_No { get; set; }
         [DisplayName("Purchase Order Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
@@ -433,6 +444,8 @@ namespace Admin.Models
         public DateTime Invoice_Date { get; set; }
         public string Voucher_No { get; set; }
         public DateTime Voucher_Date { get; set; }
+        public DateTime PO_Date { get; set; }
+        public DateTime Ref_Date { get; set; }
         public string supplier { get; set; }
         public int ILedger { get; set; }
         public int ALedger { get; set; }
@@ -717,5 +730,14 @@ namespace Admin.Models
         public string package { get; set; }
         public string value { get; set; }   
         public string description { get; set; }
+    }
+    public class PO_List
+    {
+        public int PO_No { get; set; }
+        public string PO_Date { get; set; }
+        public string Ref_No { get; set; }
+        public string Ref_Date { get;set; }
+        public string acode { get; set; }
+        public string Supplier { get; set; }
     }
 }
