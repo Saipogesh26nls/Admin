@@ -25,7 +25,7 @@ namespace Admin.Controllers
                 return RedirectToAction("Err","Login");
             }
         }
-        public ActionResult List_Update(Price_List name)  // add DB dat to Price_List View
+        public ActionResult List_Update(Price_List name) // add DB dat to Price_List View
         {
             Goods_RI dblogin = new Goods_RI();
             var Descp = dblogin.PM_list(name.Package_letter, name.Value_letter, name.Partno_letter, name.Descp_letter);
@@ -34,7 +34,7 @@ namespace Admin.Controllers
         public ActionResult Price_Insert(Price_List name) // Adding Data to DB
         {
             Price_Updation price_Updation = new Price_Updation();
-            int data = price_Updation.AddPrice(name.Part_No, name.P_Cost, name.P_Price_USD, name.P_MRP, name.P_SP, name.Stock);
+            price_Updation.AddPrice(name.Part_No, name.P_Cost, name.P_Price_USD, name.P_MRP, name.P_SP, name.Stock);
             return Json(name);
         }
         public ActionResult Inventory_Flow() // Inventory Flow view
@@ -64,7 +64,7 @@ namespace Admin.Controllers
                 return RedirectToAction("Err", "Login");
             }
         }
-        public ActionResult Project_update_list(Inventory name)  // add DB data to List View
+        public ActionResult Project_update_list(Inventory name) // add DB data to List View
         {
             Price_Updation dblogin = new Price_Updation();
             var list = dblogin.Inventory_List(name.Product, name.Project, name.Process, name.User);
@@ -84,6 +84,38 @@ namespace Admin.Controllers
             }
             return new SelectList(list, "Value", "Text");
         }
-
+        public ActionResult Stock_Statement()
+        {
+            /*Price_Updation price_Updation = new Price_Updation();
+            var data = price_Updation.Get_stocks();
+            data.Tables[0].Columns.Add("Total");
+            for (int i = 0; i < data.Tables[0].Rows.Count; i++)
+            {
+                var qty = data.Tables[0].Rows[i]["P_Closing_Balance"];
+                var price = data.Tables[0].Rows[i]["P_Cost"];
+                data.Tables[0].Rows[i]["Total"] = (int)qty * Convert.ToDouble(price);
+            }
+            ViewBag.Stocks = data.Tables[0];*/
+            if (Session["userID"] != null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Err", "Login");
+            }
+        }
+        public ActionResult Data_Get(Value name) // add DB dat to Price_List View
+        {
+            Goods_RI dblogin = new Goods_RI();
+            var Descp = dblogin.PM_list(name.package, name.value, name.partno, name.description);
+            return Json(Descp);
+        }
+        public ActionResult Purchase_Data(Inventory name)
+        {
+            Price_Updation dblogin = new Price_Updation();
+            var list = dblogin.Receipt_Data(name.Product);
+            return Json(list);
+        }
     }
 }

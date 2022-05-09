@@ -38,7 +38,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 }
 
             </ul>
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ml-auto" style="text-align:center">
                 <li class="nav-item">
                     @Session["displayname"]
                 </li>
@@ -254,7 +254,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <a href="@Url.Action("BOM_List", "BOM")" class="nav-link">
                                                 <i class="nav-icon fas fa-list"></i>
                                                 <p>
-                                                    BOM List
+                                                    BOM Edit
                                                 </p>
                                             </a>
                                         </li>
@@ -364,6 +364,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <i class="nav-icon fas fa-network-wired"></i>
                                                 <p @*style="font-weight:bold"*@>
                                                     Inventory Flow
+                                                </p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("Stock_Statement","Price")" class="nav-link">
+                                                <i class="nav-icon fas fa-network-wired"></i>
+                                                <p @*style="font-weight:bold"*@>
+                                                    Stock Statement
                                                 </p>
                                             </a>
                                         </li>

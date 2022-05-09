@@ -8,8 +8,10 @@
     <link rel="stylesheet" href="~/Content/Purchase.css" />
 </head>
 <body style="background-color: #f5f5f7;">
+    <br />
+    <h5 style="text-align:center"><u>ACCOUNTS ENTRY</u></h5>
+    <br />
     <div class="form-horizontal" style="border: 1px solid #F0F3FF; box-sizing: border-box; box-shadow: 0px 10px 20px rgba(198, 198, 198, 0.15); border-radius: 12px; padding-left:100px; width: 50%; margin: 0% 0% 0% 25%;">
-        <br />
 
         <p>@Html.LabelFor(model => model.A_Account_Name) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.A_Account_Name, new { htmlAttributes = new { @class = "uppercase", @style = "width:200px;" } })</p>
         <p>@Html.LabelFor(model => model.A_Group) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; &nbsp; @Html.DropDownListFor(model => model.A_Group, ViewBag.ProductList as SelectList, new { @class = "uppercase" })</p>

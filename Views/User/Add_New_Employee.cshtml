@@ -10,10 +10,11 @@
 <body style="background-color: #f5f5f7;">
     <div class="form-horizontal" style="border: 1px solid #F0F3FF; box-sizing: border-box; box-shadow: 0px 10px 20px rgba(198, 198, 198, 0.15); border-radius: 12px;text-align:center;width:50%;margin:0% 0% 0% 25%;">
         <br />
-
+        <h5 style="text-align:center"><u>EMPLOYEE ENTRY</u></h5>
+        <br />
         <p>@Html.LabelFor(model => model.Employee_Name) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;    : &nbsp; &nbsp; @Html.EditorFor(model => model.Employee_Name, new { htmlAttributes = new { @class = "uppercase", @style = "width:200px;" } })</p>
         <p>@Html.LabelFor(model => model.Employee_Designation) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.Employee_Designation, new { htmlAttributes = new { @class = "uppercase", @style = "width:200px;" } })</p>
-        <p>@Html.LabelFor(model => model.Employee_Id) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.Employee_Id, new { htmlAttributes = new { @class = "uppercase", @style = "width:200px;", @Value="SDIPL" } })</p>
+        <p>@Html.LabelFor(model => model.Employee_Id) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.Employee_Id, new { htmlAttributes = new { @class = "uppercase", @style = "width:200px;", @Value = "SDIPL" } })</p>
         <p id="message"></p>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

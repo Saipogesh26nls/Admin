@@ -72,8 +72,8 @@
                                 Part_No:@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:1%" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:3%"></i> Quantity : @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:15%;margin-right:3%;" } }) <button class="btn btn-sm btn-secondary" id="add">Add</button><button class="btn btn-sm btn-secondary" onclick="ToAdd()" id="add_edit" style="display:none;">Add</button>
                             </p>
                             <p id="value1" class="text-sm" style="width:50%"></p>
-                            <button class="btn btn-sm btn-secondary float-right" id="Submit" style="width:8%;margin-left:2%;margin-top:30px;">Submit</button>
-                            <a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 30px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>
+                            <button class="btn btn-sm btn-secondary float-right" id="Submit" style="width: 7%; margin-left: 2%; margin-top: 10px; margin-bottom: 10px;">Submit</button>
+                            <a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 10px; margin-bottom: 10px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>
                             <div id="myModal" class="modal">
 
                                 <!-- Modal content -->
@@ -135,7 +135,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 400px;width:70%;">
+                            @*<div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 400px;width:70%;">*@
                                 <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
                                     <thead>
                                         <tr>
@@ -165,7 +165,7 @@
                                         }
                                     </tbody>
                                 </table>
-                            </div>
+                            @*</div>*@
                         </div>
                     </div>
                 </div>
@@ -203,43 +203,43 @@
         }
 
         var model = new Object();
-            model.Part_No = document.getElementById("Part_No").value;
+        model.Part_No = document.getElementById("Part_No").value;
 
-            jQuery.ajax({
-            type: "POST",
-            url: "@Url.Action("P_to_DQ")",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({ name: model }),
-                success: function (data) {
-                    if (qty > data[0].Quantity) {
-                        var qty_err = '<p style="color:red;">Out of Stock !!! Available Quantity is <b>' + data[0].Quantity + '</b><p/>';
-                        document.getElementById("value1").innerHTML = qty_err;
-                        return;
-                    }
-                    else if (partno == "" && d2 == "") {
-                        var qty_err = '<p style="color:red;">Enter Part No and Quantity !!!<p/>';
-                        document.getElementById("value1").innerHTML = qty_err;
-                        return;
-                    }
-                    else if (d2 == "") {
-                        var qty_err = '<p style="color:red;">Enter Quantity !!!<p/>';
-                        document.getElementById("value1").innerHTML = qty_err;
-                        return;
-                    }
-                    else if (partno == "") {
-                        var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
-                        document.getElementById("value1").innerHTML = qty_err;
-                        return;
-                    }
-                    var l_row = last_row - 1;
-                    var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td class="row-data">' + partno + '</td><td class="row-data">' + data[0].Description + '</td><td class="row-data">' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td style="display:none;">' + sp_partno + '</td><td style="display:none;">' + bomno + '</td><td style="display:none;">' + bomdate + '</td></tr>';
-                    $('#selected_units tr:last').after(newrow);
+        jQuery.ajax({
+        type: "POST",
+        url: "@Url.Action("P_to_DQ")",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({ name: model }),
+            success: function (data) {
+                @*if (qty > data[0].Quantity) {
+                    var qty_err = '<p style="color:red;">Out of Stock !!! Available Quantity is <b>' + data[0].Quantity + '</b><p/>';
+                    document.getElementById("value1").innerHTML = qty_err;
+                    return;
+                }*@
+                if (partno == "" && d2 == "") {
+                    var qty_err = '<p style="color:red;">Enter Part No and Quantity !!!<p/>';
+                    document.getElementById("value1").innerHTML = qty_err;
+                    return;
+                }
+                else if (d2 == "") {
+                    var qty_err = '<p style="color:red;">Enter Quantity !!!<p/>';
+                    document.getElementById("value1").innerHTML = qty_err;
+                    return;
+                }
+                else if (partno == "") {
+                    var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
+                    document.getElementById("value1").innerHTML = qty_err;
+                    return;
+                }
+                var l_row = last_row - 1;
+                var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td class="row-data">' + partno + '</td><td class="row-data">' + data[0].Description + '</td><td class="row-data">' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td style="display:none;">' + sp_partno + '</td><td style="display:none;">' + bomno + '</td><td style="display:none;">' + bomdate + '</td></tr>';
+                $('#selected_units tr:last').after(newrow);
             },
             failure: function (errMsg) {
                 alert(errMsg);
             }
-            });
+        });
 
         formClear();
     });
@@ -266,7 +266,6 @@
             var $rows = $("#selected_units tbody tr").each(function (index) {
                 $cells = $(this).find("td");
                 myRows[index] = {};
-
                 $cells.each(function (cellIndex) {
                     if (headersText[cellIndex] === undefined) {
                         headersText[cellIndex] = $($headers[cellIndex]).text();
@@ -274,7 +273,6 @@
                     myRows[index][headersText[cellIndex]] = $(this).text();
                 });
             });
-
             var myObj = {
                 "myrows": myRows
             };
@@ -300,7 +298,6 @@
 
     document.addEventListener('keydown', function (event) {
         if (event.keyCode === 9) {
-
             var model = new Object();
             model.Part_No = document.getElementById("Part_No").value;
             var partno_null = document.getElementById("Part_No").value;
@@ -475,25 +472,25 @@
         model.Add_Package = pkg;
         model.Add_Value = value;
         model.Add_SellPrice = SellPrice;
-            $.ajax({
-                url: "@Url.Action("Add_Product")",
-                data: JSON.stringify({ name: model }),
-                type: 'POST',
-                contentType: 'application/json;',
-                dataType: 'json',
-                success: function (result) {
-                    if (result != "") {
-                        var qty_err = '<p style="color:red;">Part No already exists !!!<p/>';
-                        document.getElementById("message").innerHTML = qty_err;
-                        return;
-                    }
-                    else {
-                        var qty_err = '<p style="color:red;">Submitted Successfully !!!<p/>';
-                        document.getElementById("message").innerHTML = qty_err;
-                        return;
-                    }
+        $.ajax({
+            url: "@Url.Action("Add_Product")",
+            data: JSON.stringify({ name: model }),
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (result) {
+                if (result != "") {
+                    var qty_err = '<p style="color:red;">Part No already exists !!!<p/>';
+                    document.getElementById("message").innerHTML = qty_err;
+                    return;
                 }
-            });
+                else {
+                    var qty_err = '<p style="color:red;">Submitted Successfully !!!<p/>';
+                    document.getElementById("message").innerHTML = qty_err;
+                    return;
+                }
+            }
+        });
     }
     function del_row(node) {
         a = node.parentNode.parentNode;
@@ -548,63 +545,63 @@
         var p_qty = document.getElementById("Quantity").value;
 
         var model = new Object();
-            model.Part_No = document.getElementById("Part_No").value;
+        model.Part_No = document.getElementById("Part_No").value;
 
-            jQuery.ajax({
-            type: "POST",
-            url: "@Url.Action("P_to_DQ")",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({ name: model }),
-                success: function (data1) {
-                    if (qty > data1[0].Quantity) {
-                        var qty_err = '<p style="color:red;">Out of Stock !!! Available Quantity is <b>' + data1[0].Quantity + '</b><p/>';
+        jQuery.ajax({
+        type: "POST",
+        url: "@Url.Action("P_to_DQ")",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({ name: model }),
+            success: function (data1) {
+                if (qty > data1[0].Quantity) {
+                    var qty_err = '<p style="color:red;">Out of Stock !!! Available Quantity is <b>' + data1[0].Quantity + '</b><p/>';
+                    document.getElementById("value1").innerHTML = qty_err;
+                    return;
+                }
+                else if (d2 == 0 ) {
+                    var qty_err = '<p style="color:red;">Quantity should not be less than 0 !!!<p/>';
+                    document.getElementById("value1").innerHTML = qty_err;
+                    return;
+                }
+                else if (d1 == "" && d2 == "") {
+                    var qty_err = '<p style="color:red;">Enter Part No and Quantity !!!<p/>';
+                    document.getElementById("value1").innerHTML = qty_err;
+                    return;
+                }
+                else if (d2 == "") {
+                    var qty_err = '<p style="color:red;">Enter Quantity !!!<p/>';
+                    document.getElementById("value1").innerHTML = qty_err;
+                    return;
+                }
+                else if (d1 == "") {
+                    var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
+                    document.getElementById("value1").innerHTML = qty_err;
+                    return;
+                }
+                var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+                var l_row1 = last_row1 - 1;
+                var count = 0;
+                for (var i = 0; i < l_row1; i++) {
+                    var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
+                    var e_partno = document.getElementById("Part_No").value;
+                    if (e_part_no == e_partno) {
+                        var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
                         document.getElementById("value1").innerHTML = qty_err;
                         return;
                     }
-                    else if (d2 == 0 ) {
-                        var qty_err = '<p style="color:red;">Quantity should not be less than 0 !!!<p/>';
-                        document.getElementById("value1").innerHTML = qty_err;
-                        return;
-                    }
-                    else if (d1 == "" && d2 == "") {
-                        var qty_err = '<p style="color:red;">Enter Part No and Quantity !!!<p/>';
-                        document.getElementById("value1").innerHTML = qty_err;
-                        return;
-                    }
-                    else if (d2 == "") {
-                        var qty_err = '<p style="color:red;">Enter Quantity !!!<p/>';
-                        document.getElementById("value1").innerHTML = qty_err;
-                        return;
-                    }
-                    else if (d1 == "") {
-                        var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
-                        document.getElementById("value1").innerHTML = qty_err;
-                        return;
-                    }
-                    var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
-                    var l_row1 = last_row1 - 1;
-                    var count = 0;
-                    for (var i = 0; i < l_row1; i++) {
-                        var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
-                        var e_partno = document.getElementById("Part_No").value;
-                        if (e_part_no == e_partno) {
-                            var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
-                            document.getElementById("value1").innerHTML = qty_err;
-                            return;
-                        }
-                        count++;
-                    }
-                    var rowId = row_id;
-                    var data = document.getElementById(rowId).querySelectorAll(".row-data");
-                    data[0].innerHTML = part_no;
-                    data[1].innerHTML = data1[0].Description;
-                    data[2].innerHTML = p_qty;
-            },
-            failure: function (errMsg) {
-                alert(errMsg);
-            }
-            });
+                    count++;
+                }
+                var rowId = row_id;
+                var data = document.getElementById(rowId).querySelectorAll(".row-data");
+                data[0].innerHTML = part_no;
+                data[1].innerHTML = data1[0].Description;
+                data[2].innerHTML = p_qty;
+        },
+        failure: function (errMsg) {
+            alert(errMsg);
+        }
+        });
         formClear();
     }
 </script>

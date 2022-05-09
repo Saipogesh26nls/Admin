@@ -401,6 +401,14 @@ namespace Admin.Models
         public double Add_MRP { get; set; }
         public double Add_SellPrice { get; set; }
         public string Project { get; set; }
+        [DisplayName("Purchase Order No")]
+        public string Purchase_Order_No { get; set; }
+        [DisplayName("Purchase Order Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime Purchase_Order_Date { get; set; }
+        public string Ref_No { get; set; }
+        public DateTime Ref_Date { get; set; }  
 
     }
     public class PurchaseTable
@@ -687,5 +695,27 @@ namespace Admin.Models
         public string pcode { get;set; }
         public int Quantity { get; set; }
         public string VoucherType { get; set; }
+    }
+    public class Stockstatement
+    {
+        public string PartNo { get; set; }
+        public string Package { get; set; }
+        public string Value { get; set; }
+        public string Description { get; set; }
+        public int Stock { get; set; }
+        public double Price { get; set; }
+        public double Total { get; set; }
+        public string ProductCode { get; set; }
+        public string Partno_letter { get; set; }
+        public string Package_letter { get; set; }
+        public string Value_letter { get; set; }
+        public string Descp_letter { get; set; }
+    }
+    public class Value
+    {
+        public string partno { get; set; }
+        public string package { get; set; }
+        public string value { get; set; }   
+        public string description { get; set; }
     }
 }

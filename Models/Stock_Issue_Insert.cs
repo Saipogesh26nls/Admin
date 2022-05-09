@@ -170,6 +170,7 @@ namespace Admin.Models
                     dr2.Close();
                 }
                 int i = 0;
+                DateTime now = DateTime.Now;
                 while (i < data.Count())
                 {
                     SqlCommand sql_cmnd = new SqlCommand("[dbo].[GoodsRI_Add]", Con1);
@@ -187,6 +188,7 @@ namespace Admin.Models
                     sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = data[i].Part_No;
                     sql_cmnd.Parameters.AddWithValue("@pcode", SqlDbType.NChar).Value = data[i].P_code;
                     sql_cmnd.Parameters.AddWithValue("@qty", SqlDbType.Int).Value = data[i].Quantity;
+                    sql_cmnd.Parameters.AddWithValue("@time", SqlDbType.Time).Value = now.ToLongTimeString();
                     sql_cmnd.ExecuteNonQuery();
                     SqlCommand sql_cmnd1 = new SqlCommand("[dbo].[StockIndent_Edit]", Con1);
                     sql_cmnd1.CommandType = CommandType.StoredProcedure;

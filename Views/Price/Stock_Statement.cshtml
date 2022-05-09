@@ -1,0 +1,181 @@
+﻿@model Admin.Models.Stockstatement
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/Content/Purchase.css" />
+    <style>
+        .modal-content {
+            width: 40%;
+        }
+        #list:hover {
+            background-color: aliceblue;
+        }
+    </style>
+</head>
+<body style="background-color: #f5f5f7;">
+    <p class="text-sm" style="margin-top:10px;text-align:center;"> Package : @Html.EditorFor(model => model.Package_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } }) Value : @Html.EditorFor(model => model.Value_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } }) Part No : @Html.EditorFor(model => model.Partno_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } }) Description : @Html.EditorFor(model => model.Descp_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } })</p>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <button class="btn btn-sm btn-secondary" style="width:75px;" id="myBtn">Close</button>
+            <br />
+            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 500px;">
+                <table class="table text-sm" id="prod_list">
+                    <tbody>
+                        <tr>
+                            <th>
+                                VoucherNo
+                            </th>
+                            <th>
+                                Date
+                            </th>
+                            <th>
+                                VoucherType
+                            </th>
+                            <th>
+                                Project
+                            </th>
+                            <th>
+                                Process
+                            </th>
+                            <th>
+                                User
+                            </th>
+                            <th>
+                                Quantity
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+   
+    <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 750px;">
+        <table class="table text-sm" id="pm_list">
+            <tbody>
+                <tr>
+                    <th>
+                        Product Code
+                    </th>
+                    <th>
+                        Package
+                    </th>
+                    <th>
+                        Value
+                    </th>
+                    <th>
+                        Part No
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Stock
+                    </th>
+                    <th>
+                        Cost
+                    </th>
+                    <th>
+                        Total
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <table id="total" class="table">
+        <thead>
+            <tr>
+                <th style="width:70%">
+                    Total
+                </th>
+                <th>
+                    Total Stock :
+                </th>
+                <th id="tot_stock">
+                </th>
+                <th>
+                    Total Price :
+                </th>
+                <th id="tot_price">
+                </th>
+            </tr>
+        </thead>
+    </table>
+</body>
+</html>
+<script>
+    document.addEventListener("keyup", function (event) {
+        var package = document.querySelector("#Package_letter").value;
+        var value = document.querySelector("#Value_letter").value;
+        var partno = document.querySelector("#Partno_letter").value;
+        var descp = document.querySelector("#Descp_letter").value;
+        var model = new Object();
+        model.package = package;
+        model.value = value;
+        model.partno = partno;
+        model.description = descp;
+        $.ajax({
+            url: '/Price/Data_Get',
+            data: JSON.stringify({name:model}),
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (result) {
+                $("#pm_list").find("tr:not(:first)").remove();
+                var totalstock = 0;
+                var totalprice = 0;
+                for (var i = 0; i <= result.length - 1; i++) {
+                    var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Package + '</td><td>' + result[i].Value + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td><td>' + result[i].Current_Stock + '</td><td style="text-align:right">' + result[i].P_Cost + '</td><td style="text-align:right">' + result[i].Current_Stock * result[i].P_Cost + '</td></tr>';
+                    $('#pm_list tr:last').after(newrow);
+                    totalstock = totalstock + result[i].Current_Stock;
+                    totalprice = totalprice + (result[i].Current_Stock * result[i].P_Cost)
+                }
+                document.getElementById("tot_stock").innerHTML = totalstock;
+                document.getElementById("tot_price").innerHTML = totalprice + "/-";
+            }
+        });
+    })
+    function List_to_View() {
+        var table = document.getElementById('pm_list');
+        modal.style.display = "block";
+        for (var i = 0; i < table.rows.length; i++) {
+            table.rows[i].addEventListener('click', function () {
+                var partno = this.cells[3].innerHTML;
+                var model = new Object();
+                model.Product = partno.toUpperCase();
+                $.ajax({
+                    url: '/Price/Purchase_Data',
+                    data: JSON.stringify({ name: model }),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (result) {
+                        $("#prod_list").find("tr:not(:first)").remove();
+                        for (var i = 0; i <= result.length - 1; i++) {
+                            var newrow = '<tr id="list"><td>' + result[i].VoucherNo + '</td><td>' + result[i].Date + '</td><td>' + result[i].VoucherType + '</td><td>' + result[i].Project + '</td><td>' + result[i].Process + '</td><td>' + result[i].User + '</td><td>' + result[i].Quantity + '</td></tr>';
+                            $('#prod_list tr:last').after(newrow);
+                        }
+                    }
+                });
+            });
+        }
+    }
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("myBtn");
+    var span = document.getElementById("close");
+    btn.onclick = function () {
+        $("#prod_list").find("tr:not(:first)").remove();
+        modal.style.display = "none";
+    }
+    span.onclick = function () {
+        $("#prod_list").find("tr:not(:first)").remove();
+        modal.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            $("#prod_list").find("tr:not(:first)").remove();
+            modal.style.display = "none";
+        }
+    }
+</script>

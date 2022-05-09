@@ -364,7 +364,7 @@ namespace Admin.Controllers
             return Json(Purchase);
         }
 
-        //New Goods Receipt/Issu
+        //New Goods Receipt/Issue
         [HttpGet]
         public ActionResult Goods_Receipt_Issue() // Goods Issue View
         {
@@ -672,6 +672,39 @@ namespace Admin.Controllers
                 return Json(ItemQm);
             }
             
+        }
+
+        // Purchase Order View
+        public ActionResult Purchase_Order_View()
+        {
+            New_Purchase new_Purchase = new New_Purchase();
+            new_Purchase.Purchase_Order_Date = DateTime.Today;
+            new_Purchase.Ref_Date = DateTime.Today;
+
+            SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            _con.Open();
+            /*SqlDataAdapter _da = new SqlDataAdapter("Select P_Description From Product_Master where P_Level<0", _con);
+            DataTable _dt = new DataTable();
+            _da.Fill(_dt);
+            ViewBag.ProductList = ToSelectList(_dt, "P_Description", "P_Description");*/
+            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<0", _con);
+            DataTable _dt1 = new DataTable();
+            _da1.Fill(_dt1);
+            ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
+            SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
+            DataTable _dt4 = new DataTable();
+            _da4.Fill(_dt4);
+            ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
+            SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", _con);
+            DataTable _dt5 = new DataTable();
+            _da5.Fill(_dt5);
+            ViewBag.Mfd = ToSelectList(_dt5, "A_code", "A_Name");
+            SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Project_Master", _con);
+            DataTable _dt2 = new DataTable();
+            _da2.Fill(_dt2);
+            ViewBag.Project = ToSelectList(_dt2, "Project_Id", "Project_Name");
+            _con.Close();
+            return View(new_Purchase);
         }
     }
 }
