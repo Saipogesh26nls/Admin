@@ -157,22 +157,11 @@
                                             <th style="padding-right:10px">Quantity</th>
                                             <th style="padding-right:10px">Price</th>
                                             <th style="padding-right:10px">SubTotal</th>
-                                            <th style="padding-right: 10px; display: none;">Dis_per</th>
-                                            <th style="padding-right: 10px; display: none;">Dis_Rs</th>
-                                            <th style="padding-right: 10px; display: none;">Tax1_per</th>
-                                            <th style="padding-right: 10px; display: none;">Tax1_Rs</th>
-                                            <th style="padding-right: 10px; display: none;">Tax2_per</th>
-                                            <th style="padding-right: 10px; display: none;">Tax2_Rs</th>
                                             <th style="padding-right:10px">Total</th>
                                             <th style="display: none;">Invoice_No</th>
                                             <th style="display: none;">Invoice_Date</th>
-                                            <th style="display: none;">ILedger</th>
-                                            <th style="display: none;">ALedger</th>
                                             <th style="display: none;">final_Qty</th>
                                             <th style="display: none;">final_Sub_Total</th>
-                                            <th style="display: none;">final_Discount</th>
-                                            <th style="display: none;">final_Tax1</th>
-                                            <th style="display: none;">final_Tax2</th>
                                             <th style="display: none;">final_total</th>
                                             <th style="display: none;">supplier</th>
                                             <th style="display: none;">project</th>
@@ -225,13 +214,8 @@
         var d1 = $('#Part_No').val();
         var d2 = parseInt(document.getElementById("Quantity").value);
         var d3 = $('#Purchase_Rate').val();
-        var d4 = $('#Discount').val();
-        var d5 = $('#Tax_1').val();
-        var d6 = $('#Tax_2').val();
         var mfr = $('#Supplier').val();
         var project = $('#Project').val();
-        var ILedger = 1;
-        var ALedger = 2;
         var Invoice_No = document.getElementById("Ref_No").value;
         var Invoice_Date = $('#Ref_Date').val();
         var PO_Date = $("#Purchase_Order_Date").val();
@@ -250,7 +234,7 @@
             count++;
         }
         var subtotal = d2 * d3;
-        if (d4 == "") {
+        @*if (d4 == "") {
             var discount = 0;
             var discount_per = 0;
         }
@@ -273,7 +257,7 @@
         else {
             var tax2 = (subtotal * d6) / 100;
             var tax2_per = (tax2 / subtotal) * 100;
-        }
+        }*@
 
         var qty_field = $('#Quantity').val();
         if (d1 == "" || d2 == "" || d3 == "" || Invoice_No == "") {
@@ -282,7 +266,7 @@
         }
         else {
             qty = qty + d2;
-            var Total = (subtotal - discount) + tax1 + tax2;
+            var Total = subtotal;
             total = total + Total;
             document.getElementById("Qty_display").innerHTML = qty;
             document.getElementById("total_display").innerHTML = total.toFixed(2);
@@ -319,7 +303,7 @@
                     }
                     else {
                         document.getElementById("value").innerHTML = val;
-                        var newrow = '<tr id="data" style="font-size:13px;"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal.toFixed(2) + '</td><td style="display:none;">' + discount_per + '</td><td style="display:none;">' + discount + '</td><td style="display:none;">' + tax1_per + '</td><td style="display:none;">' + tax1 + '</td><td style="display:none;">' + tax2_per + '</td><td style="display:none;">' + tax2 + '</td><td id="total' + i + '">' + Total.toFixed(2) + '</td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;">' + ILedger + '</td><td style="display:none;">' + ALedger + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td style="display:none;" class="row-data" id="final_Discount"></td><td style="display:none;" class="row-data" id="final_Tax1"></td><td style="display:none;" class="row-data" id="final_Tax2"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;">' + mfr + '</td><td style="display:none;">' + project + '</td><td style="display:none;">' + PO_Date + '</td></tr>';
+                        var newrow = '<tr id="data" style="font-size:13px;"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal.toFixed(2) + '</td><td id="total' + i + '">' + Total.toFixed(2) + '</td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;">' + mfr + '</td><td style="display:none;">' + project + '</td><td style="display:none;">' + PO_Date + '</td></tr>';
                         $('#selected_units tr:last').after(newrow);
                         i++;
                     }
@@ -379,15 +363,9 @@
         else {
             var f1 = document.getElementById("Qty_display").innerHTML;
             var f2 = document.getElementById("total_display").innerHTML;
-            var f3 = document.getElementById("Final_Discount").value;
-            var f4 = document.getElementById("Final_Tax1").value;
-            var f5 = document.getElementById("Final_Tax2").value;
             var f6 = document.getElementById("Final_Total").innerHTML;
             document.getElementById("final_qty").innerHTML = f1;
             document.getElementById("final_SubTotal").innerHTML = f2;
-            document.getElementById("final_Discount").innerHTML = f3;
-            document.getElementById("final_Tax1").innerHTML = f4;
-            document.getElementById("final_Tax2").innerHTML = f5;
             document.getElementById("final_Total").innerHTML = f6;
             var submit1 = "";
             document.getElementById("Enter_Inv_No").innerHTML = submit1;

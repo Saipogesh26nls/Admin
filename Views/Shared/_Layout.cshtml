@@ -328,18 +328,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             </a>
                                         </li>
                                         @*<li class="nav-item">
+            <a href="@Url.Action("New_Purchase","NewPurchase")" class="nav-link">
+                <i class="nav-icon fas fa-cart-plus"></i>
+                <p>
+                    Purchase
+                </p>
+            </a>
+        </li>*@
+                                        <li class="nav-item">
                                             <a href="@Url.Action("New_Purchase","NewPurchase")" class="nav-link">
-                                                <i class="nav-icon fas fa-cart-plus"></i>
-                                                <p>
+                                                <i class="nav-icon fas fa-list"></i>
+                                                <p @*style="font-weight:bold"*@>
                                                     Purchase
                                                 </p>
                                             </a>
-                                        </li>*@
+                                        </li>
                                         <li class="nav-item">
                                             <a href="@Url.Action("PurchaseList","NewPurchase")" class="nav-link">
                                                 <i class="nav-icon fas fa-list"></i>
                                                 <p @*style="font-weight:bold"*@>
-                                                    Purchased List
+                                                    Purchase List
                                                 </p>
                                             </a>
                                         </li>

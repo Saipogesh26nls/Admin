@@ -778,6 +778,7 @@ namespace Admin.Controllers
             }
             newPurchase_Insert.Purchase_Order_No = PO_No;
             newPurchase_Insert.Purchase_Order_Date = PO_Date;
+            newPurchase_Insert.Ref_Date = Ref_Date;
             newPurchase_Insert.Supplier = PM_Data.Tables[0].Rows[0]["A_code"].ToString();
             newPurchase_Insert.Project = PM_Data.Tables[0].Rows[0]["Project"].ToString();
 
@@ -786,9 +787,6 @@ namespace Admin.Controllers
             ViewBag.ILedger = 1;
             ViewBag.ALedger = 2;
             ViewBag.Final_Total = PM_Data.Tables[0].Rows[0]["PO_Final_Total"].ToString();
-            ViewBag.Final_Discount = 0;
-            ViewBag.Final_Tax1 = 0;
-            ViewBag.Final_Tax2 = 0;
             Con.Close();
             return View(newPurchase_Insert);
         }
