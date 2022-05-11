@@ -49,7 +49,7 @@
 }
 
 @media print {
-    #ToHide, #Submit, #insert {
+    #ToHide {
         display: none;
     }
 }

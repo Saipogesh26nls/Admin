@@ -559,7 +559,7 @@
         model.Voucher_No = $('#Voucher_No').val();
         model.Ref_No = $('#Ref_No').val();
         $.ajax({
-            url: '/NewPurchase/Goods_ED',
+            url: '/NewPurchase/Purchase_ED',
             data: JSON.stringify({ name: model }),
             type: 'POST',
             contentType: 'application/json;',
@@ -827,8 +827,7 @@
         document.getElementById("Add").style.display = "none";
 
         var rowId = row_id;
-        var data =
-            document.getElementById(rowId).querySelectorAll(".row-data");
+        var data = document.getElementById(rowId).querySelectorAll(".row-data");
 
         var part_no = document.getElementById("Part_No").value;
         var p_qty = document.getElementById("P_Qty").value;

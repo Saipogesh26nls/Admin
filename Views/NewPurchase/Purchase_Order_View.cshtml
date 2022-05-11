@@ -55,7 +55,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="vno()">
     <div class="container-fluid">
         <br />
         <div id="ui-view" data-select2-id="ui-view">
@@ -305,6 +305,8 @@
                         document.getElementById("value").innerHTML = val;
                         var newrow = '<tr id="data" style="font-size:13px;"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal.toFixed(2) + '</td><td id="total' + i + '">' + Total.toFixed(2) + '</td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;">' + mfr + '</td><td style="display:none;">' + project + '</td><td style="display:none;">' + PO_Date + '</td></tr>';
                         $('#selected_units tr:last').after(newrow);
+                        final_calculation();
+                        formClear();
                         i++;
                     }
                 },
@@ -312,10 +314,11 @@
                     alert(errMsg);
                 }
             });
-        final_calculation();
-        formClear();
     });
 
+    function vno() {
+        document.getElementById("Purchase_Order_No").value = "";
+    }
     function formClear() {
         $("#Part_No").val("");
         $("#Quantity").val("");

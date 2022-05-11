@@ -258,6 +258,12 @@ namespace Admin.Controllers
             purchase.Edit_and_Delete(Purchase, Final_Quantity, Final_SubTotal, Final_Discount, Final_Tax1, Final_Tax2, Final_Total);
             return Json(Purchase);
         }
+        public ActionResult Purchase_ED(GoodsRI name) // For Delete individual row from DB
+        {
+            NewPurchase_Insert dblogin = new NewPurchase_Insert();
+            dblogin.Update_Close_Bal_P(name.Part_No, name.Index_Type, name.Voucher_No);
+            return Json(name, JsonRequestBehavior.AllowGet);
+        }
 
         //Delete Purchase
         [HttpGet]
@@ -646,6 +652,51 @@ namespace Admin.Controllers
             return Json(data);
         }
 
+        // Print Goods
+        public ActionResult Print_Goods(string v_type, int gv_no, DateTime gv_date, string ref_no, DateTime ref_date, int GI, int process, int project, int employee, string note)
+        {
+            int vtype = 0;
+            if (v_type == "Goods Receipt")
+            {
+                vtype = 1;
+            }
+            else
+            {
+                vtype = 2;
+            }
+            SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            _con.Open();
+            GoodsRI goodsRI = new GoodsRI();
+            DataSet dataSet = goodsRI.EditGoods(vtype, gv_no);
+            dataSet.Tables[0].Columns.Add("P_Part_No");
+            dataSet.Tables[0].Columns.Add("P_Description");
+            for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
+            {
+                string Text = dataSet.Tables[0].Rows[i]["P_code"].ToString();
+                NewPurchase_Insert dblogin = new NewPurchase_Insert();
+                var Descp = dblogin.Pcode_to_PartNo(Text);
+                dataSet.Tables[0].Rows[i]["P_Part_No"] = Descp[0].P_Part_No;
+                dataSet.Tables[0].Rows[i]["P_Description"] = Descp[0].P_Description;
+            }
+            goodsRI.Index_Type = vtype;
+            goodsRI.Voucher_No = gv_no;
+            goodsRI.Voucher_Date = gv_date;
+            goodsRI.Ref_No = ref_no.ToString();
+            /*goodsRI.Ref_Date = ref_date;*/
+            goodsRI.GI_Tag = GI.ToString();
+            goodsRI.Process_Tag = process.ToString();
+            goodsRI.Project = project.ToString();
+            goodsRI.Employee = employee.ToString();
+            if (note != null)
+            {
+                goodsRI.Note = note.ToString();
+            }
+            ViewBag.Goods = dataSet.Tables[0];
+            string date = ref_date.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
+            ViewBag.date = date;
+            return View(goodsRI);
+        }
+
         // Add Product
         public ActionResult Add_Product(GoodsRI name) // add new products to db
         {
@@ -674,7 +725,7 @@ namespace Admin.Controllers
             
         }
 
-        // Purchase Order
+        // New Purchase Order
         public ActionResult Purchase_Order_View() // PO View
         {
             New_Purchase new_Purchase = new New_Purchase();
@@ -741,8 +792,77 @@ namespace Admin.Controllers
             return View(PM_Data);
         }
 
-        // Add PO to Purchase
+        // Edit Purchase Order
         public ActionResult PO_to_EditPurchase(int PO_No, DateTime PO_Date, string Ref_No, DateTime Ref_Date, string Supplier) // Add PO to Purchase View
+        {
+            New_Purchase newPurchase_Insert = new New_Purchase();
+            PurchaseTable mfr = new PurchaseTable();
+            DataSet PM_Data = newPurchase_Insert.Edit_PO_to_Purchase(PO_No);
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<0", Con);
+            DataTable _dt1 = new DataTable();
+            _da1.Fill(_dt1);
+            ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
+            SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", Con);
+            DataTable _dt4 = new DataTable();
+            _da4.Fill(_dt4);
+            ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
+            SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", Con);
+            DataTable _dt5 = new DataTable();
+            _da5.Fill(_dt5);
+            ViewBag.Mfd = ToSelectList(_dt5, "A_code", "A_Name");
+            SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Project_Master", Con);
+            DataTable _dt2 = new DataTable();
+            _da2.Fill(_dt2);
+            ViewBag.Project = ToSelectList(_dt2, "Project_Id", "Project_Name");
+            PM_Data.Tables[0].Columns.Add("P_Part_No");
+            PM_Data.Tables[0].Columns.Add("P_Description");
+            /*List<string> table_data = new List<string>();*/
+            for (int i = 0; i < PM_Data.Tables[0].Rows.Count; i++)
+            {
+                string Text = PM_Data.Tables[0].Rows[i]["P_code"].ToString();
+                NewPurchase_Insert dblogin = new NewPurchase_Insert();
+                var Descp = dblogin.Pcode_to_PartNo(Text);
+                PM_Data.Tables[0].Rows[i]["P_Part_No"] = Descp[0].P_Part_No;
+                PM_Data.Tables[0].Rows[i]["P_Description"] = Descp[0].P_Description;
+            }
+            string acode = PM_Data.Tables[0].Rows[0]["A_code"].ToString();
+            newPurchase_Insert.Purchase_Order_No = PO_No;
+            newPurchase_Insert.Purchase_Order_Date = PO_Date;
+            newPurchase_Insert.Ref_Date = Ref_Date;
+            newPurchase_Insert.Supplier = Supplier;
+            newPurchase_Insert.Project = PM_Data.Tables[0].Rows[0]["Project"].ToString();
+            newPurchase_Insert.sup_val = PM_Data.Tables[0].Rows[0]["A_code"].ToString();
+            ViewBag.Project_data = PM_Data.Tables[0].Rows[0]["Project"].ToString();
+            ViewBag.PL = PM_Data.Tables[0];
+            ViewBag.ILedger = 1;
+            ViewBag.ALedger = 2;
+            ViewBag.Final_Total = PM_Data.Tables[0].Rows[0]["PO_Final_Total"].ToString();
+            Con.Close();
+            return View(newPurchase_Insert);
+        }
+        public ActionResult PO_ED(GoodsRI name) // For Delete individual row from DB
+        {
+            NewPurchase_Insert dblogin = new NewPurchase_Insert();
+            dblogin.Update_Close_Bal_PO(name.Part_No, name.Index_Type, name.Voucher_No);
+            return Json(name, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Updated_PO_to_DB (List<PurchaseTable> Purchase)
+        {
+            int project = int.Parse(Purchase[0].project);
+            string supplier = Purchase[0].supplier;
+            int Quantity = Purchase[0].final_Qty;
+            double Total = Purchase[0].final_Sub_Total;
+            double Final_Total = Purchase[0].final_total;
+            string refno = Purchase[0].Invoice_No.ToUpper();
+            NewPurchase_Insert purchase = new NewPurchase_Insert();
+            purchase.Edit_PO(Purchase, Quantity, Total, Final_Total, project, supplier, refno);
+            return Json(Purchase);
+        }
+
+        // Delete Purchase Order
+        public ActionResult PO_Delete(int PO_No, DateTime PO_Date, string Ref_No, DateTime Ref_Date, string Supplier) // PO Delete View
         {
             New_Purchase newPurchase_Insert = new New_Purchase();
             PurchaseTable mfr = new PurchaseTable();
@@ -790,5 +910,17 @@ namespace Admin.Controllers
             Con.Close();
             return View(newPurchase_Insert);
         }
+        [HttpPost]
+        public ActionResult Add_Deleted_PO(List<PurchaseTable> data) // add deleted GoodsRI to DB
+        {
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "delete from Purchase_Order where PO_No = '"+data[0].PO_No+"'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlCmd1.ExecuteNonQuery();
+            Con.Close();
+            return Json(data);
+        }
+
     }
 }

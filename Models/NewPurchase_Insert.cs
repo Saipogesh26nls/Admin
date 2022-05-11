@@ -320,6 +320,8 @@ namespace Admin.Models
             int PO_No = dr.GetInt32(0);
             dr.Close();
             Con.Close();
+            string ref_date = data[0].Invoice_Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            string PO_date = data[0].PO_Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
             SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con1.Open();
@@ -329,9 +331,9 @@ namespace Admin.Models
                 SqlCommand sql_cmnd = new SqlCommand("[dbo].[Add_PO]", Con1);
                 sql_cmnd.CommandType = CommandType.StoredProcedure;
                 sql_cmnd.Parameters.AddWithValue("@po_no", SqlDbType.NVarChar).Value = PO_No;
-                sql_cmnd.Parameters.AddWithValue("@po_date", data[i].PO_Date);
-                sql_cmnd.Parameters.AddWithValue("@invoice_no", SqlDbType.NVarChar).Value = data[i].Invoice_No;
-                sql_cmnd.Parameters.AddWithValue("@invoice_date", data[i].Invoice_Date);
+                sql_cmnd.Parameters.AddWithValue("@po_date", PO_date);
+                sql_cmnd.Parameters.AddWithValue("@invoice_no", SqlDbType.NVarChar).Value = data[i].Invoice_No.ToUpper();
+                sql_cmnd.Parameters.AddWithValue("@invoice_date", ref_date);
                 sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = data[i].Part_No;
                 sql_cmnd.Parameters.AddWithValue("@p_qty", SqlDbType.Int).Value = data[i].Quantity;
                 sql_cmnd.Parameters.AddWithValue("@i_rate", SqlDbType.Money).Value = data[i].Price;
@@ -350,6 +352,45 @@ namespace Admin.Models
             }
             Con1.Close();
             return PO_No;
+        }
+        public void Edit_PO(List<PurchaseTable> data, int Qty, double total, double final_total, int project, string supplier, string refno)
+        {
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "delete from Purchase_Order where PO_No = '"+data[0].PO_No+"'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlCmd1.ExecuteNonQuery();
+            Con.Close();
+            string ref_date = data[0].Invoice_Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            string PO_date = data[0].PO_Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con1.Open();
+            int i = 0;
+            while (i < data.Count())
+            {
+                SqlCommand sql_cmnd = new SqlCommand("[dbo].[Add_PO]", Con1);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                sql_cmnd.Parameters.AddWithValue("@po_no", SqlDbType.NVarChar).Value = data[i].PO_No;
+                sql_cmnd.Parameters.AddWithValue("@po_date", PO_date);
+                sql_cmnd.Parameters.AddWithValue("@invoice_no", SqlDbType.NVarChar).Value = refno;
+                sql_cmnd.Parameters.AddWithValue("@invoice_date", ref_date);
+                sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = data[i].Part_No;
+                sql_cmnd.Parameters.AddWithValue("@p_qty", SqlDbType.Int).Value = data[i].Quantity;
+                sql_cmnd.Parameters.AddWithValue("@i_rate", SqlDbType.Money).Value = data[i].Price;
+                sql_cmnd.Parameters.AddWithValue("@i_subtotal", SqlDbType.Money).Value = data[i].SubTotal;
+                sql_cmnd.Parameters.AddWithValue("@i_total", SqlDbType.Money).Value = data[i].Total;
+                sql_cmnd.Parameters.AddWithValue("@Total_Qty", SqlDbType.Money).Value = Qty;
+                sql_cmnd.Parameters.AddWithValue("@Final_Total", SqlDbType.Money).Value = final_total;
+                sql_cmnd.Parameters.AddWithValue("@acc_name", SqlDbType.NVarChar).Value = supplier;
+                sql_cmnd.Parameters.AddWithValue("@project", SqlDbType.Int).Value = project;
+                sql_cmnd.ExecuteNonQuery();
+                if (i == data.Count() - 1)
+                {
+                    break;
+                }
+                i++;
+            }
+            Con1.Close();
         }
         public List<PO_List> PO_List()
         {
@@ -394,6 +435,71 @@ namespace Admin.Models
                 Con.Close();
                 return ItemQm;
             }
+        }
+        public void Update_Close_Bal_P(string Part_No, int vtype, int vno)
+        {
+            SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con1.Open();
+            List<GoodsList> ItemQm = new List<GoodsList>();
+            string cmd2 = "Select P_code from Product_Master where P_Part_No = '" + Part_No + "'";
+            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con1);
+            SqlDataReader dr = SqlCmd2.ExecuteReader();
+            while (dr.Read())
+            {
+                ItemQm.Add(new GoodsList
+                {
+                    P_code = dr["P_code"].ToString()
+                }
+                );
+            }
+            dr.Close();
+            string pcode = string.Join("", ItemQm.Select(m => m.P_code));
+
+            string cmd3 = "Select Purchase_Qty from I_Ledger where Voucher_Type = '" + vtype + "' and P_code = '" + pcode + "' and Voucher_No = '" + vno + "'";
+            SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con1);
+            SqlDataReader dr1 = SqlCmd3.ExecuteReader();
+            int qty = 0;
+            while (dr1.Read())
+            {
+                string i = dr1["Purchase_Qty"].ToString();
+                qty = int.Parse(i);
+            }
+            dr1.Close();
+
+            string cmd1 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance - '" + qty + "' where P_code = '" + pcode + "'";
+            string cmd5 = "delete from Purchase where P_code = '" + pcode + "' and Voucher_No = '" + vno + "'";
+            string cmd4 = "delete from I_Ledger where P_code = '" + pcode + "' and Voucher_No = '" + vno + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con1);
+            SqlCmd1.ExecuteNonQuery();
+            SqlCommand SqlCmd5 = new SqlCommand(cmd5, Con1);
+            SqlCmd5.ExecuteNonQuery();
+            SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con1);
+            SqlCmd4.ExecuteNonQuery();
+            Con1.Close();
+        }
+        public void Update_Close_Bal_PO(string Part_No, int vtype, int vno)
+        {
+            SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con1.Open();
+            List<GoodsList> ItemQm = new List<GoodsList>();
+            string cmd2 = "Select P_code from Product_Master where P_Part_No = '" + Part_No + "'";
+            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con1);
+            SqlDataReader dr = SqlCmd2.ExecuteReader();
+            while (dr.Read())
+            {
+                ItemQm.Add(new GoodsList
+                {
+                    P_code = dr["P_code"].ToString()
+                }
+                );
+            }
+            dr.Close();
+            string pcode = string.Join("", ItemQm.Select(m => m.P_code));
+
+            string cmd3 = "Delete from Purchase_Order where P_code = '" + pcode + "' and PO_No = '" + vno + "'";
+            SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con1);
+            SqlCmd3.ExecuteNonQuery();
+            Con1.Close();
         }
     }
     public class Goods_RI

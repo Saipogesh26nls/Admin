@@ -66,7 +66,8 @@
                             Purchase Order No:@Html.EditorFor(model => model.Purchase_Order_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;", @readonly = "readonly" } })    Purchase Order Date :  @Html.TextBoxFor(x => x.Purchase_Order_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
                             Reference No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:1%;width:15%;" } })    Reference Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
                         </p>
-                        <p class="text-sm"> &nbsp &nbsp Supplier : &nbsp &nbsp @Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } }) &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p>
+                        <p class="text-sm"> Supplier : &nbsp &nbsp @Html.DisplayFor(model => model.Supplier) &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p>
+                        <p id="sup_val">@Html.DisplayFor(model => model.sup_val)</p>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -167,6 +168,7 @@
                                     <th style="display: none;">supplier</th>
                                     <th style="display: none;">project</th>
                                     <th style="display: none;">PO_Date</th>
+                                    <th style="display: none;">PO_No</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -184,7 +186,7 @@
                                     <td class="row-data" style="margin-right:auto">
                                         <i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i>
                                     </td>
-                                    <td style="display:none;">
+                                    <td style="display:none;" id="ref_no">
                                         @dr["Ref_No"].ToString()
                                     </td>
                                     <td style="display:none;">
@@ -199,16 +201,18 @@
                                     <td style="display:none;" id="final_Total">
                                         @dr["PO_Final_Total"].ToString()
                                     </td>
-                                    <td style="display:none;">
-                                        @ViewBag.Mfr
+                                    <td style="display:none;" id="Mfr">
+                                        @Html.DisplayFor(model => model.sup_val)
                                     </td>
-                                    <td style="display:none;">
+                                    <td style="display:none;" id="Prj">
                                         @ViewBag.Project
                                     </td>
                                     <td style="display:none;">
                                         @dr["PO_date"]
                                     </td>
-
+                                    <td style="display:none;">
+                                        @dr["PO_No"]
+                                    </td>
                                 </tr>
                                 i++;
                             }
@@ -469,15 +473,14 @@
 
     function del_row(node) {
         r = node.parentNode.parentNode;
-        r1 = node.parentNode.parentNode.cells[1].innerHTML;
+        r1 = node.parentNode.parentNode.cells[0].innerHTML;
 
         var model = new Object();
         model.Part_No = r1;
-        model.Index_Type = "1";
-        model.Voucher_No = $('#Voucher_No').val();
+        model.Voucher_No = $('#Purchase_Order_No').val();
         model.Ref_No = $('#Ref_No').val();
         $.ajax({
-            url: '/NewPurchase/Goods_ED',
+            url: '/NewPurchase/PO_ED',
             data: JSON.stringify({ name: model }),
             type: 'POST',
             contentType: 'application/json;',
@@ -486,6 +489,7 @@
             }
         });
 
+        r.parentNode.removeChild(r);
         $("#Part_No").val("");
         $("#P_Qty").val("");
         $("#P_Rate").val("");
@@ -528,7 +532,6 @@
 
         var Total = T_subtotal;
         document.getElementById("Final_Total").innerHTML = Total.toFixed(2);
-        r.parentNode.removeChild(r);
     }
 
     function del_row1(node) {
@@ -583,7 +586,7 @@
         final_calculation();
         var Inv_No = $('#Ref_No').val();
         var part = document.getElementById("selected_units").tBodies[0].rows.length;
-        if (Inv_No == "" || part==1) {
+        if (Inv_No == "" || part==0) {
             document.getElementById("Enter_Inv_No").innerHTML = "Enter Reference No (or) Table is Empty !!!";
             return;
         }
@@ -591,9 +594,15 @@
             var f1 = document.getElementById("Qty_display").innerHTML;
             var f2 = document.getElementById("total_display").innerHTML;
             var f6 = document.getElementById("Final_Total").innerHTML;
+            var prj = document.getElementById("Project").value;
+            var refno = document.getElementById("Ref_No").value;
+            var supcode = document.getElementById("sup_val").innerHTML;
+            document.getElementById("Mfr").innerHTML = supcode;
             document.getElementById("final_qty").innerHTML = f1;
             document.getElementById("final_SubTotal").innerHTML = f2;
             document.getElementById("final_Total").innerHTML = f6;
+            document.getElementById("Prj").innerHTML = prj;
+            document.getElementById("ref_no").innerHTML = refno;
             var submit1 = "";
             document.getElementById("Enter_Inv_No").innerHTML = submit1;
             var myRows = [];
@@ -615,7 +624,7 @@
                 "myrows": myRows
             };
             $.ajax({
-                url: '/NewPurchase/Add_PO_to_DB',
+                url: '/NewPurchase/Updated_PO_to_DB',
                 data: JSON.stringify(myRows),
                 type: 'POST',
                 contentType: 'application/json;',
@@ -624,13 +633,10 @@
                     //alert(result.ItemList[0].Str);
                     var modal2 = document.getElementById("myModal2");
                     modal2.style.display = "block";
-                    var data = result;
-                    var vno = '<p style="background-color:yellow;width:20%">Your PO.No is ' + data + '<p/>';
-                    document.getElementById("voucher_view").innerHTML = "Your PO.No is " + data + "";
                     var submit = '<p style="color:red;">Submitted Successfully !!!<p/>';
                     document.getElementById("submit_view").innerHTML = submit;
                     setTimeout(function () {
-                        window.location.reload(1);
+                        window.location.href = "@Url.Action("PO_List", "NewPurchase")";
                     }, 3000);
                 }
             });

@@ -72,7 +72,7 @@
                     @Html.DisplayFor(modelItem => item.Note)
                 </th>
                 <td>
-                    @Html.ActionLink("Edit", "Goods_RI_Edit", new { v_type = item.Voucher_Type, gv_no = item.G_Voucher_No, gv_date = item.G_Voucher_Date, ref_no = item.Ref_No, ref_date = item.Ref_Date, GI = item.GI_Tag, process = item.Process, project = item.Project, employee = item.Employee, note = item.Note }) | @Html.ActionLink("Delete", "Delete_GoodsRI_View", new { v_type = item.Voucher_Type, gv_no = item.G_Voucher_No, gv_date = item.G_Voucher_Date, ref_no = item.Ref_No, ref_date = item.Ref_Date, GI = item.GI_Tag, process = item.Process, project = item.Project, employee = item.Employee, note = item.Note })
+                    @Html.ActionLink("Edit", "Goods_RI_Edit", new { v_type = item.Voucher_Type, gv_no = item.G_Voucher_No, gv_date = item.G_Voucher_Date, ref_no = item.Ref_No, ref_date = item.Ref_Date, GI = item.GI_Tag, process = item.Process, project = item.Project, employee = item.Employee, note = item.Note }) | @Html.ActionLink("Delete", "Delete_GoodsRI_View", new { v_type = item.Voucher_Type, gv_no = item.G_Voucher_No, gv_date = item.G_Voucher_Date, ref_no = item.Ref_No, ref_date = item.Ref_Date, GI = item.GI_Tag, process = item.Process, project = item.Project, employee = item.Employee, note = item.Note }) | @*@Html.ActionLink("Print", "Print_Goods", new { v_type = item.Voucher_Type, gv_no = item.G_Voucher_No, gv_date = item.G_Voucher_Date, ref_no = item.Ref_No, ref_date = item.Ref_Date, GI = item.GI_Tag, process = item.Process, project = item.Project, employee = item.Employee, note = item.Note })*@
                 </td>
             </tr>
         }

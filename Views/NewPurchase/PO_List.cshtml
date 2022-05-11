@@ -42,8 +42,8 @@
             @Html.DisplayFor(modelItem => item.Supplier)
         </td>
         <td>
-            @Html.ActionLink("Edit", "PO_to_EditPurchase", new { po_no = item.PO_No, po_date = item.PO_Date, ref_no = item.Ref_No, ref_date = item.Ref_Date, Supplier = item.Supplier }) @*|
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+            @Html.ActionLink("Edit", "PO_to_EditPurchase", new { po_no = item.PO_No, po_date = item.PO_Date, ref_no = item.Ref_No, ref_date = item.Ref_Date, Supplier = item.Supplier }) |
+            @Html.ActionLink("Delete", "PO_Delete", new { po_no = item.PO_No, po_date = item.PO_Date, ref_no = item.Ref_No, ref_date = item.Ref_Date, Supplier = item.Supplier })
         </td>
     </tr>
 }

@@ -420,6 +420,7 @@ namespace Admin.Models
         public DateTime Purchase_Order_Date { get; set; }
         public string Ref_No { get; set; }
         public DateTime Ref_Date { get; set; }  
+        public string sup_val { get; set; }
 
     }
     public class PurchaseTable
@@ -444,6 +445,7 @@ namespace Admin.Models
         public DateTime Invoice_Date { get; set; }
         public string Voucher_No { get; set; }
         public DateTime Voucher_Date { get; set; }
+        public int PO_No { get; set; }
         public DateTime PO_Date { get; set; }
         public DateTime Ref_Date { get; set; }
         public string supplier { get; set; }

@@ -1,0 +1,86 @@
+﻿@model Admin.Models.GoodsRI
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/Content/bootstrap-4.0.0.min.css">
+    <script src="~/Scripts/bootstrap-4.0.0.bundle.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="~/Content/Purchase.css" />
+    <style>
+        table {
+            page-break-inside: auto
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto
+        }
+
+        thead {
+            display: table-header-group
+        }
+
+        tfoot {
+            display: table-footer-group
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <br />
+        <div id="ui-view" data-select2-id="ui-view">
+            <div>
+                <div class="card">
+                    <div class="card-header">
+                        <p class="text-sm">Voucher Type : &nbsp &nbsp @Html.DisplayFor(model => model.Index_Type)</p>
+                        <p class="text-sm">
+                            Voucher No:@Html.DisplayFor(model => model.Voucher_No)  Voucher Date :  @Html.DisplayFor(x => x.Voucher_Date)
+                            Reference No:@Html.DisplayFor(model => model.Ref_No)    Reference Date :  @Html.DisplayFor(x => x.Ref_Date)
+                        </p>
+                        <p class="text-sm">
+                            &nbsp &nbsp &nbsp Reason: &nbsp &nbsp @Html.DisplayFor(model => model.GI_Tag)  &nbsp &nbsp  Reason for Process :  &nbsp &nbsp @Html.DisplayFor(model => model.Process_Tag)
+                            &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp Project : &nbsp &nbsp @Html.DisplayFor(model => model.Project)  &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  Requested By : &nbsp &nbsp  @Html.DisplayFor(model => model.Employee)
+                        </p>
+                        <p class="text-sm">
+                            &nbsp &nbsp &nbsp &nbsp Note :  &nbsp &nbsp @Html.DisplayFor(model => model.Note)
+                        </p>
+                    </div>
+                    <div class="card-body table-responsive">
+                        <div class="table-responsive">
+                            <table id="selected_units" class="table text-sm font-weight-normal">
+                                <thead>
+                                    <tr>
+                                        <th>Product Code</th>
+                                        <th style="padding-right:90px">Part No</th>
+                                        <th style="padding-right:450px">Description</th>
+                                        <th>Quantity</th>
+
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr><td>notes</td></tr>
+                                </tfoot>
+                                <tbody>
+                                    @foreach (System.Data.DataRow dr in ViewBag.Goods.Rows)
+                                    {
+                                        <tr style="font-size:13px;">
+                                            <td class="row-data">@dr["P_code"].ToString()</td>
+                                            <td class="row-data">@dr["P_Part_No"].ToString()</td>
+                                            <td class="row-data" style="width:550px;">@dr["P_Description"].ToString()</td>
+                                            <td class="row-data text-sm-left" style="width:50px;">@dr["Purchase_Qty"].ToString()</td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 30px;" href="#" onclick="javascript:window.print();"><i class="fa fa-print"></i> Print</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
