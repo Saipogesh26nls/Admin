@@ -148,7 +148,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @*<div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 300px;">*@
+                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 400px;">
                                 <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
                                     <tbody>
                                         <tr>
@@ -169,7 +169,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                            @*</div>*@
+                            </div>
                             <div>
                                 @Html.LabelFor(model => model.Quantity, new { htmlAttributes = new { id = "Qty_Label" } }) : <h6 id="Qty_display"></h6>
                             </div>
@@ -180,8 +180,8 @@
                                 <div style="display:none;">
                                     @Html.LabelFor(model => model.Final_Discount) : @Html.EditorFor(model => model.Final_Discount, new { htmlAttributes = new { @id = "Final_Discount" } })
                                 </div>
-                                <div style="display:none;">
-                                    @Html.LabelFor(model => model.Final_Tax1) : @Html.EditorFor(model => model.Final_Tax1, new { htmlAttributes = new { @style = "margin-left:11%;", @id = "Final_Tax1" } })
+                                <div>
+                                    @Html.LabelFor(model => model.Final_Tax1)@Html.EditorFor(model => model.Final_Tax1, new { htmlAttributes = new {@id = "Final_Tax1", style="width:25px;" } }) : <h6 id="total_tax"></h6>
                                 </div>
                                 <div style="display:none;">
                                     @Html.LabelFor(model => model.Final_Tax2) : @Html.EditorFor(model => model.Final_Tax2, new { htmlAttributes = new { @style = "margin-left:11%;", @id = "Final_Tax2" } })
@@ -344,6 +344,7 @@
         }
         else {
             var tax1_val = (sub_total * final_tax1) / 100;
+            document.getElementById("total_tax").innerHTML = tax1_val;
         }
         if (final_tax2 == "") {
             var tax2_val = 0;
@@ -352,7 +353,7 @@
             var tax2_val = (sub_total * final_tax2) / 100;
         }
         var Total = (sub_total - discount_val) + tax1_val + tax2_val;
-        document.getElementById("Final_Total").innerHTML = Total;
+        document.getElementById("Final_Total").innerHTML = Total.toFixed(2);
     }
 
     $('#Submit').click(function (e) {

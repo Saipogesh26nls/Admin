@@ -42,7 +42,7 @@
         @Html.DisplayFor(modelItem => item.Product_Name)
     </td>
     <td>
-        @Html.ActionLink("Edit", "BOM_Edit_Delete", new { bom_no = item.BOM_No, bomdate = item.BOM_Date, spcode = item.SP_code })@* | @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+        @Html.ActionLink("Edit", "BOM_Edit_Delete", new { bom_no = item.BOM_No, bomdate = item.BOM_Date, spcode = item.SP_code }) | @Html.ActionLink("Delete", "Delete_BOM_View", new { bom_no = item.BOM_No, bomdate = item.BOM_Date, spcode = item.SP_code })
     </td>
 </tr>
 }

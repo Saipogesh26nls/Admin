@@ -149,76 +149,76 @@
                                     </div>
                                 </div>
                             </div>
-                            @*<div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 300px;">*@
-                        <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
-                            <thead>
-                                <tr>
-                                    <th style="padding-right:50px">Part_No</th>
-                                    <th style="padding-right:50px">Description</th>
-                                    <th style="padding-right:10px">Quantity</th>
-                                    <th style="padding-right:10px">Price</th>
-                                    <th style="padding-right:10px">SubTotal</th>
-                                    <th style="padding-right:10px">Total</th>
-                                    <th style="padding-right: 30px">E/D</th>
-                                    <th style="display: none;">Invoice_No</th>
-                                    <th style="display: none;">Invoice_Date</th>
-                                    <th style="display: none;">final_Qty</th>
-                                    <th style="display: none;">final_Sub_Total</th>
-                                    <th style="display: none;">final_total</th>
-                                    <th style="display: none;">supplier</th>
-                                    <th style="display: none;">project</th>
-                                    <th style="display: none;">PO_Date</th>
-                                    <th style="display: none;">PO_No</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            @{ int i = 0; }
-                            @foreach (System.Data.DataRow dr in ViewBag.PL.Rows)
-                            {
+                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 400px;">
+                                <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
+                                    <thead>
+                                        <tr>
+                                            <th style="padding-right:50px">Part_No</th>
+                                            <th style="padding-right:50px">Description</th>
+                                            <th style="padding-right:10px">Quantity</th>
+                                            <th style="padding-right:10px">Price</th>
+                                            <th style="padding-right:10px">SubTotal</th>
+                                            <th style="padding-right:10px">Total</th>
+                                            <th style="padding-right: 30px">E/D</th>
+                                            <th style="display: none;">Invoice_No</th>
+                                            <th style="display: none;">Invoice_Date</th>
+                                            <th style="display: none;">final_Qty</th>
+                                            <th style="display: none;">final_Sub_Total</th>
+                                            <th style="display: none;">final_total</th>
+                                            <th style="display: none;">supplier</th>
+                                            <th style="display: none;">project</th>
+                                            <th style="display: none;">PO_Date</th>
+                                            <th style="display: none;">PO_No</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @{ int i = 0; }
+                                    @foreach (System.Data.DataRow dr in ViewBag.PL.Rows)
+                                    {
 
-                                <tr id="@i" style="font-size:13px;">
-                                    <td class="row-data">@dr["P_Part_No"].ToString()</td>
-                                    <td class="row-data text-sm-left">@dr["P_Description"].ToString()</td>
-                                    <td class="row-data">@dr["PO_Qty"].ToString()</td>
-                                    <td class="row-data">@dr["PO_Price"].ToString()</td>
-                                    <td class="row-data">@dr["PO_SubTotal"].ToString()</td>
-                                    <td class="row-data">@dr["PO_Total"].ToString()</td>
-                                    <td class="row-data" style="margin-right:auto">
-                                        <i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i>
-                                    </td>
-                                    <td style="display:none;" id="ref_no">
-                                        @dr["Ref_No"].ToString()
-                                    </td>
-                                    <td style="display:none;">
-                                        @dr["Ref_Date"].ToString()
-                                    </td>
-                                    <td style="display:none;" id="final_qty">
-                                        @dr["PO_Final_Qty"].ToString()
-                                    </td>
-                                    <td style="display:none;" id="final_SubTotal">
-                                        @dr["PO_Final_Total"].ToString()
-                                    </td>
-                                    <td style="display:none;" id="final_Total">
-                                        @dr["PO_Final_Total"].ToString()
-                                    </td>
-                                    <td style="display:none;" id="Mfr">
-                                        @Html.DisplayFor(model => model.sup_val)
-                                    </td>
-                                    <td style="display:none;" id="Prj">
-                                        @ViewBag.Project
-                                    </td>
-                                    <td style="display:none;">
-                                        @dr["PO_date"]
-                                    </td>
-                                    <td style="display:none;">
-                                        @dr["PO_No"]
-                                    </td>
-                                </tr>
-                                i++;
-                            }
-                            </tbody>
-                        </table>
-                            @*</div>*@
+                                        <tr id="@i" style="font-size:13px;">
+                                            <td class="row-data">@dr["P_Part_No"].ToString()</td>
+                                            <td class="row-data text-sm-left">@dr["P_Description"].ToString()</td>
+                                            <td class="row-data">@dr["PO_Qty"].ToString()</td>
+                                            <td class="row-data">@dr["PO_Price"].ToString()</td>
+                                            <td class="row-data">@dr["PO_SubTotal"].ToString()</td>
+                                            <td class="row-data">@dr["PO_Total"].ToString()</td>
+                                            <td class="row-data" style="margin-right:auto">
+                                                <i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i>
+                                            </td>
+                                            <td style="display:none;" id="ref_no">
+                                                @dr["Ref_No"].ToString()
+                                            </td>
+                                            <td style="display:none;">
+                                                @dr["Ref_Date"].ToString()
+                                            </td>
+                                            <td style="display:none;" id="final_qty">
+                                                @dr["PO_Final_Qty"].ToString()
+                                            </td>
+                                            <td style="display:none;" id="final_SubTotal">
+                                                @dr["PO_Final_Total"].ToString()
+                                            </td>
+                                            <td style="display:none;" id="final_Total">
+                                                @dr["PO_Final_Total"].ToString()
+                                            </td>
+                                            <td style="display:none;" id="Mfr">
+                                                @Html.DisplayFor(model => model.sup_val)
+                                            </td>
+                                            <td style="display:none;" id="Prj">
+                                                @ViewBag.Project
+                                            </td>
+                                            <td style="display:none;">
+                                                @dr["PO_date"]
+                                            </td>
+                                            <td style="display:none;">
+                                                @dr["PO_No"]
+                                            </td>
+                                        </tr>
+                                        i++;
+                                    }
+                                    </tbody>
+                                </table>
+                            </div>
                             <div>
                                 @Html.LabelFor(model => model.Quantity, new { htmlAttributes = new { id = "Qty_Label" } }) : <h6 id="Qty_display"></h6>
                             </div>
@@ -269,6 +269,7 @@
         var Invoice_No = document.getElementById("Ref_No").value;
         var Invoice_Date = $('#Ref_Date').val();
         var PO_Date = $("#Purchase_Order_Date").val();
+        var PONo = $("#Purchase_Order_No").val();
 
         var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
         var l_row1 = last_row1 - 1;
@@ -354,7 +355,7 @@
                     else {
                         document.getElementById("value").innerHTML = val;
                         var l_row = last_row - 1;
-                        var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal.toFixed(2) + '</td><td id="total' + i + '">' + Total.toFixed(2) + '</td><td class="row-data"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row1(this);"></i></td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;">' + mfr + '</td><td style="display:none;">' + project + '</td><td style="display:none;">' + PO_Date + '</td></tr>';
+                        var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal.toFixed(2) + '</td><td id="total' + i + '">' + Total.toFixed(2) + '</td><td class="row-data"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row1(this);"></i></td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;">' + mfr + '</td><td style="display:none;">' + project + '</td><td style="display:none;">' + PO_Date + '</td><td style="display:none;">' + PONo + '</td></tr>';
                         $('#selected_units tr:last').after(newrow);
                         total_cal();
                         i++;

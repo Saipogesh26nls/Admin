@@ -365,6 +365,7 @@ namespace Admin.Models
         public string Value_letter { get; set; }
         public string Descp_letter { get; set; }
         public string Supplier { get; set; }
+        public string PO_No { get; set; }
         public double P_Cost { get; set; }
         public DataSet EditPurchase(int id)
         {
@@ -449,6 +450,8 @@ namespace Admin.Models
         public DateTime PO_Date { get; set; }
         public DateTime Ref_Date { get; set; }
         public string supplier { get; set; }
+        public string sup_name { get; set; }
+        public string sup_code { get; set; }
         public int ILedger { get; set; }
         public int ALedger { get; set; }
         public int final_Qty { get; set; }

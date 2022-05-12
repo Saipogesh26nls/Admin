@@ -2405,6 +2405,7 @@
     <Content Include="Views\NewPurchase\PO_to_EditPurchase.cshtml" />
     <Content Include="Views\NewPurchase\Print_Goods.cshtml" />
     <Content Include="Views\NewPurchase\PO_Delete.cshtml" />
+    <Content Include="Views\BOM\Delete_BOM_View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

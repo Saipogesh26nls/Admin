@@ -14,7 +14,7 @@ namespace Admin.Controllers
 {
     public class BOMController : Controller
     {
-        // GET: BOM
+        // Add New BOM
         public ActionResult BOM_Add_Data(BOMFields data) // BOM Add Data View
         {
             if (Session["userID"] != null)
@@ -70,6 +70,8 @@ namespace Admin.Controllers
             var Descp = dblogin.Descp_Qty(name.Part_No);
             return Json(Descp, JsonRequestBehavior.AllowGet);
         }
+
+        // BOM List
         [HttpGet]
         public ActionResult BOM_List() // BOM List View
         {
@@ -135,6 +137,8 @@ namespace Admin.Controllers
                 return RedirectToAction("Err", "Login");
             }
         }
+
+        // Edit BOM
         [HttpGet]
         public ActionResult BOM_Edit_Delete(int BOM_No, DateTime bomdate, string spcode) // BOM Edit Delete View
         {
@@ -210,5 +214,63 @@ namespace Admin.Controllers
             int BOM = BOM_SP.EditOrder(name, bom_date);
             return Json(BOM);
         } 
+        public ActionResult Delete_BOM_row(BOMEdit name) // remove deleted row from db
+        {
+            BOM_Insert bOM_Insert = new BOM_Insert();
+            bOM_Insert.Update_BOM_Row(name.Part_No, name.BOM_No);
+            return Json(name);
+        }
+
+        // Delete BOM
+        public ActionResult Delete_BOM_View(int BOM_No, DateTime bomdate, string spcode)
+        {
+            if (Session["userID"] != null)
+            {
+                SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+                _con.Open();
+                SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
+                DataTable _dt4 = new DataTable();
+                _da4.Fill(_dt4);
+                ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
+                SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<0", _con);
+                DataTable _dt1 = new DataTable();
+                _da1.Fill(_dt1);
+                ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
+                _con.Close();
+                BOMFields bOMFields = new BOMFields();
+                DataSet ds = bOMFields.EditBOM(BOM_No, spcode);
+                ds.Tables[0].Columns.Add("P_Part_No");
+                ds.Tables[0].Columns.Add("P_Description");
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    string Text = ds.Tables[0].Rows[i]["SP_Code"].ToString();
+                    NewPurchase_Insert dblogin = new NewPurchase_Insert();
+                    var Descp = dblogin.Pcode_to_PartNo(Text);
+                    ds.Tables[0].Rows[i]["P_Part_No"] = Descp[0].P_Part_No;
+                    ds.Tables[0].Rows[i]["P_Description"] = Descp[0].P_Description;
+                }
+                NewPurchase_Insert dblogin1 = new NewPurchase_Insert();
+                var sp_partno = dblogin1.Pcode_to_PartNo(spcode);
+                bOMFields.BOM_No = BOM_No.ToString();
+                bOMFields.SP_Part_No = sp_partno[0].P_Part_No;
+                bOMFields.BOM_Date = bomdate;
+                ViewBag.Goods = ds.Tables[0];
+                return View(bOMFields);
+            }
+            else
+            {
+                return RedirectToAction("Err", "Login");
+            }
+        } // Delete BOM View
+        public ActionResult Remove_BOM(List<BOMEdit> data)
+        {
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "delete from BOM where BOM_No = '" + data[0].BOM_No + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlCmd1.ExecuteNonQuery();
+            Con.Close();
+            return Json(data);
+        }
     }
 }

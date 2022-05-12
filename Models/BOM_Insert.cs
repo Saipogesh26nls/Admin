@@ -154,6 +154,30 @@ namespace Admin.Models
             Con1.Close();
             return i;
         }
+        public void Update_BOM_Row(string Part_No, string bomno)
+        {
+            SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con1.Open();
+            List<GoodsList> ItemQm = new List<GoodsList>();
+            string cmd2 = "Select P_code from Product_Master where P_Part_No = '" + Part_No + "'";
+            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con1);
+            SqlDataReader dr = SqlCmd2.ExecuteReader();
+            while (dr.Read())
+            {
+                ItemQm.Add(new GoodsList
+                {
+                    P_code = dr["P_code"].ToString()
+                }
+                );
+            }
+            dr.Close();
+            string pcode = string.Join("", ItemQm.Select(m => m.P_code));
+            int bom_no = Convert.ToInt32(bomno);
+            string cmd3 = "Delete from BOM where SP_code = '" + pcode + "' and BOM_No = '" + bomno + "'";
+            SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con1);
+            SqlCmd3.ExecuteNonQuery();
+            Con1.Close();
+        }
 
     } 
 }

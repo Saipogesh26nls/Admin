@@ -43,6 +43,10 @@ namespace Admin.Controllers
                 DataTable _dt2 = new DataTable();
                 _da2.Fill(_dt2);
                 ViewBag.Project = ToSelectList(_dt2, "Project_Id", "Project_Name");
+                SqlDataAdapter _da3 = new SqlDataAdapter("SELECT PO_No FROM Purchase_Order GROUP BY PO_No HAVING COUNT(*)>0", _con);
+                DataTable _dt3 = new DataTable();
+                _da3.Fill(_dt3);
+                ViewBag.POno = ToSelectList(_dt3, "PO_No", "PO_No");
                 _con.Close();
                 return View(new_Purchase);
             }
@@ -96,6 +100,12 @@ namespace Admin.Controllers
             }
             
         } 
+        public ActionResult Add_PO_to_Purchase(New_Purchase name)
+        {
+            NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
+            var data = newPurchase_Insert.Add_PO_to_purchase(name.PO_No);
+            return Json(data);
+        }
 
         //Purchase List
         [HttpGet]
@@ -921,6 +931,5 @@ namespace Admin.Controllers
             Con.Close();
             return Json(data);
         }
-
     }
 }

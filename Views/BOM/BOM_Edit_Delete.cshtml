@@ -135,7 +135,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @*<div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 400px;width:70%;">*@
+                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 400px;width:70%;">
                                 <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
                                     <thead>
                                         <tr>
@@ -156,7 +156,7 @@
                                                 <td class="row-data">@dr["P_Part_No"].ToString()</td>
                                                 <td class="row-data" style="width:550px;">@dr["P_Description"].ToString()</td>
                                                 <td class="row-data text-sm-left" style="width:50px;">@dr["Quantity"].ToString()</td>
-                                                <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row1(this);"></i> </td>
+                                                <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i> </td>
                                                 <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.SP_Part_No)</td>
                                                 <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.BOM_No)</td>
                                                 <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.BOM_Date)</td>
@@ -165,7 +165,7 @@
                                         }
                                     </tbody>
                                 </table>
-                            @*</div>*@
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -254,7 +254,7 @@
     $('#Submit').click(function (e) {
         var part = document.getElementById("selected_units").tBodies[0].rows.length;
         var Null = "";
-        if (part == 1) {
+        if (part == 0) {
             document.getElementById("Enter_Inv_No").innerHTML = "Table is Empty !!!";
             return;
         }
@@ -497,11 +497,9 @@
         r = node.parentNode.parentNode.cells[0].innerHTML;
         var model = new Object();
         model.Part_No = r;
-        model.Index_Type = $('#Index_Type').val();
-        model.Voucher_No = $('#Voucher_No').val();
-        model.Ref_No = $('#Ref_No').val();
+        model.BOM_No = $('#BOM_No').val();
         $.ajax({
-            url: '/NewPurchase/Goods_ED',
+            url: '/BOM/Delete_BOM_row',
             data: JSON.stringify({ name: model }),
             type: 'POST',
             contentType: 'application/json;',

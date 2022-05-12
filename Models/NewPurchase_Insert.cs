@@ -68,6 +68,57 @@ namespace Admin.Models
             Con.Close();
             return ItemQm;
         }
+        public List<PurchaseTable> Add_PO_to_purchase(string po_no)
+        {
+            List<PurchaseTable> ItemQm = new List<PurchaseTable>();
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "SELECT * FROM Purchase_Order WHERE PO_No = " + Convert.ToInt32(po_no) + "";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlDataReader dr = SqlCmd1.ExecuteReader();
+            while (dr.Read())
+            {
+                ItemQm.Add(new PurchaseTable
+                {
+                    Pcode = dr["P_code"].ToString(),
+                    Quantity = (int)dr["PO_Qty"],
+                    Price = Convert.ToDouble(dr["PO_Price"]),
+                    SubTotal = Convert.ToDouble(dr["PO_Subtotal"]),
+                    Total = Convert.ToDouble(dr["PO_Total"]),
+                    ILedger = 1,
+                    ALedger = 2,
+                    final_Qty = (int)dr["PO_Final_Qty"],
+                    final_Sub_Total = Convert.ToDouble(dr["PO_Final_Total"]),
+                    final_total = Convert.ToDouble(dr["PO_Final_Total"]),
+                    sup_code = dr["A_code"].ToString(),
+                    project = dr["Project"].ToString()
+                }
+                ) ;
+            }
+            dr.Close();
+            for (int j = 0; j < ItemQm.Count(); j++)
+            {
+                string cmd2 = "select P_Part_No,P_Description from Product_Master where P_code = '" + ItemQm[j].Pcode + "'";
+                SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+                SqlDataReader dr2 = SqlCmd2.ExecuteReader();
+                while (dr2.Read())
+                {
+                    ItemQm[j].Part_No = dr2["P_Part_No"].ToString();
+                    ItemQm[j].Description = dr2["P_Description"].ToString();
+                }
+                dr2.Close();
+                string cmd3 = "select A_Name from Account_Master where A_code = '" + ItemQm[j].sup_code + "'";
+                SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
+                SqlDataReader dr3 = SqlCmd3.ExecuteReader();
+                while (dr3.Read())
+                {
+                    ItemQm[j].sup_name = dr3["A_Name"].ToString();
+                }
+                dr3.Close();
+            }
+            Con.Close();
+            return ItemQm;
+        }
         public int Add_Data(List<PurchaseTable> data, int Qty, double total, double final_total, double final_discount, double final_tax1, double final_tax2, int project)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);

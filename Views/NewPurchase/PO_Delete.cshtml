@@ -95,76 +95,76 @@
                                     <p id="delete" style="text-align:center;"></p>
                                 </div>
                             </div>
-                            @*<div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 300px;">*@
-                            <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
-                                <thead>
-                                    <tr>
-                                        <th style="padding-right:50px">Part_No</th>
-                                        <th style="padding-right:50px">Description</th>
-                                        <th style="padding-right:10px">Quantity</th>
-                                        <th style="padding-right:10px">Price</th>
-                                        <th style="padding-right:10px">SubTotal</th>
-                                        <th style="padding-right:10px">Total</th>
-                                        <th style="padding-right: 30px">E/D</th>
-                                        <th style="display: none;">Invoice_No</th>
-                                        <th style="display: none;">Invoice_Date</th>
-                                        <th style="display: none;">final_Qty</th>
-                                        <th style="display: none;">final_Sub_Total</th>
-                                        <th style="display: none;">final_total</th>
-                                        <th style="display: none;">supplier</th>
-                                        <th style="display: none;">project</th>
-                                        <th style="display: none;">PO_Date</th>
-                                        <th style="display: none;">PO_No</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @{ int i = 0; }
-                                    @foreach (System.Data.DataRow dr in ViewBag.PL.Rows)
-                                    {
+                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 400px;">
+                                <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
+                                    <thead>
+                                        <tr>
+                                            <th style="padding-right:50px">Part_No</th>
+                                            <th style="padding-right:50px">Description</th>
+                                            <th style="padding-right:10px">Quantity</th>
+                                            <th style="padding-right:10px">Price</th>
+                                            <th style="padding-right:10px">SubTotal</th>
+                                            <th style="padding-right:10px">Total</th>
+                                            <th style="padding-right: 30px">E/D</th>
+                                            <th style="display: none;">Invoice_No</th>
+                                            <th style="display: none;">Invoice_Date</th>
+                                            <th style="display: none;">final_Qty</th>
+                                            <th style="display: none;">final_Sub_Total</th>
+                                            <th style="display: none;">final_total</th>
+                                            <th style="display: none;">supplier</th>
+                                            <th style="display: none;">project</th>
+                                            <th style="display: none;">PO_Date</th>
+                                            <th style="display: none;">PO_No</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{ int i = 0; }
+                                        @foreach (System.Data.DataRow dr in ViewBag.PL.Rows)
+                                        {
 
-                                    <tr id="@i" style="font-size:13px;">
-                                        <td class="row-data">@dr["P_Part_No"].ToString()</td>
-                                        <td class="row-data text-sm-left">@dr["P_Description"].ToString()</td>
-                                        <td class="row-data">@dr["PO_Qty"].ToString()</td>
-                                        <td class="row-data">@dr["PO_Price"].ToString()</td>
-                                        <td class="row-data">@dr["PO_SubTotal"].ToString()</td>
-                                        <td class="row-data">@dr["PO_Total"].ToString()</td>
-                                        <td class="row-data" style="margin-right:auto">
-                                            <i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i>
-                                        </td>
-                                        <td style="display:none;">
-                                            @dr["Ref_No"].ToString()
-                                        </td>
-                                        <td style="display:none;">
-                                            @dr["Ref_Date"].ToString()
-                                        </td>
-                                        <td style="display:none;" id="final_qty">
-                                            @dr["PO_Final_Qty"].ToString()
-                                        </td>
-                                        <td style="display:none;" id="final_SubTotal">
-                                            @dr["PO_Final_Total"].ToString()
-                                        </td>
-                                        <td style="display:none;" id="final_Total">
-                                            @dr["PO_Final_Total"].ToString()
-                                        </td>
-                                        <td style="display:none;">
-                                            @ViewBag.Mfr
-                                        </td>
-                                        <td style="display:none;">
-                                            @ViewBag.Project
-                                        </td>
-                                        <td style="display:none;">
-                                            @dr["PO_date"]
-                                        </td>
-                                        <td style="display:none;">
-                                            @dr["PO_No"]
-                                        </td>
-                                    </tr>
-                                        i++;
-                                    }
-                                </tbody>
-                            </table>
-                            @*</div>*@
+                                        <tr id="@i" style="font-size:13px;">
+                                            <td class="row-data">@dr["P_Part_No"].ToString()</td>
+                                            <td class="row-data text-sm-left">@dr["P_Description"].ToString()</td>
+                                            <td class="row-data">@dr["PO_Qty"].ToString()</td>
+                                            <td class="row-data">@dr["PO_Price"].ToString()</td>
+                                            <td class="row-data">@dr["PO_SubTotal"].ToString()</td>
+                                            <td class="row-data">@dr["PO_Total"].ToString()</td>
+                                            <td class="row-data" style="margin-right:auto">
+                                                <i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i>
+                                            </td>
+                                            <td style="display:none;">
+                                                @dr["Ref_No"].ToString()
+                                            </td>
+                                            <td style="display:none;">
+                                                @dr["Ref_Date"].ToString()
+                                            </td>
+                                            <td style="display:none;" id="final_qty">
+                                                @dr["PO_Final_Qty"].ToString()
+                                            </td>
+                                            <td style="display:none;" id="final_SubTotal">
+                                                @dr["PO_Final_Total"].ToString()
+                                            </td>
+                                            <td style="display:none;" id="final_Total">
+                                                @dr["PO_Final_Total"].ToString()
+                                            </td>
+                                            <td style="display:none;">
+                                                @ViewBag.Mfr
+                                            </td>
+                                            <td style="display:none;">
+                                                @ViewBag.Project
+                                            </td>
+                                            <td style="display:none;">
+                                                @dr["PO_date"]
+                                            </td>
+                                            <td style="display:none;">
+                                                @dr["PO_No"]
+                                            </td>
+                                        </tr>
+                                            i++;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                             <div>
                                 @Html.LabelFor(model => model.Quantity, new { htmlAttributes = new { id = "Qty_Label" } }) : <h6 id="Qty_display"></h6>
                             </div>
@@ -294,10 +294,8 @@
             T_qty = T_qty + parseFloat(p_qty);
             T_subtotal = T_subtotal + parseFloat(p_total);
         }
-
         document.getElementById("total_display").innerHTML = T_subtotal.toFixed(2);
         document.getElementById("Qty_display").innerHTML = T_qty;
         document.getElementById("Final_Total").innerHTML = T_subtotal.toFixed(2);
-
     }
 </script>

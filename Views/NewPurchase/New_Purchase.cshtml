@@ -61,12 +61,18 @@
         <div id="ui-view" data-select2-id="ui-view">
             <div>
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header" style="height:55px;">
+                        <p class="text-sm">
+                            PurchaseOrder No : @Html.DropDownListFor(m => m.PO_No, ViewBag.POno as SelectList)
+                            &nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-secondary" id="PO_to_Purchase" onclick="add_PO()">Add</button>
+                        </p>
+                    </div>
+                    <div class="card-header" style="height:100px;">
                         <p class="text-sm">
                             Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;", @readonly = "readonly" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
                             Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:1%;width:15%;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
                         </p>
-                        <p class="text-sm"> &nbsp &nbsp Supplier : &nbsp &nbsp @Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } }) &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p>
+                        <p class="text-sm"> &nbsp &nbsp Supplier : &nbsp &nbsp @Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } }) &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })</p>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -148,7 +154,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 300px;">
+                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 250px;">
                                 <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
                                     <tbody>
                                         <tr>
@@ -180,10 +186,10 @@
                                     </tbody>
                                 </table>
                             </div>
-                                <div>
+                                <div class="text-sm">
                                     @Html.LabelFor(model => model.Quantity, new { htmlAttributes = new { id = "Qty_Label" } }) : <h6 id="Qty_display"></h6>
                                 </div>
-                                <div class="float-right">
+                                <div class="text-sm float-right">
                                     <div>
                                         @Html.LabelFor(model => model.Total, new { htmlAttributes = new { id = "total_Label" } }) : <h6 id="total_display"></h6>
                                     </div>
@@ -274,7 +280,49 @@
         var Invoice_No = $('#Invoice_No').val();
         var Invoice_Date = $('#Invoice_Date').val();
         var qty_field = $('#Quantity').val();
-        if (d1 == "" || d2 == "" || d3 == "" || Invoice_No == "") {
+        
+        var model = new Object();
+        model.Part_No = document.getElementById("Part_No").value;
+
+        jQuery.ajax({
+        type: "POST",
+        url: "@Url.Action("P_to_DQ")",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({ name: model }),
+            success: function (data) {
+                if (d1 == "") {
+                    var error = '<p style="color:red;">Enter Part No !!!<p/>';
+                    document.getElementById("value").innerHTML = error;
+                    return;
+                }
+                else if (qty_field == "" || qty_field == 0) {
+                    var error = '<p style="color:red;">Enter Quantity !!!<p/>';
+                    document.getElementById("value").innerHTML = error;
+                    return;
+                }
+                else if (d3 == "" || d3 == 0) {
+                    var error = '<p style="color:red;">Enter Price per unit !!!<p/>';
+                    document.getElementById("value").innerHTML = error;
+                    return;
+                }
+                else if (Invoice_No == "") {
+                    var error = '<p style="color:red;">Enter Invoice No !!!<p/>';
+                    document.getElementById("value").innerHTML = error;
+                    return;
+                }
+                else {
+                    document.getElementById("value").innerHTML = val;
+                    var newrow = '<tr id="data" style="font-size:13px;"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal.toFixed(2) + '</td><td>' + discount_per + '</td><td>' + discount + '</td><td>' + tax1_per + '</td><td>' + tax1 + '</td><td>' + tax2_per + '</td><td>' + tax2 + '</td><td id="total' + i + '">' + Total.toFixed(2) + '</td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;">' + ILedger + '</td><td style="display:none;">' + ALedger + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td style="display:none;" class="row-data" id="final_Discount"></td><td style="display:none;" class="row-data" id="final_Tax1"></td><td style="display:none;" class="row-data" id="final_Tax2"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;">' + mfr + '</td><td style="display:none;">' + project + '</td></tr>';
+                    $('#selected_units tr:last').after(newrow);
+                    i++;
+                }
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+        if (d1 == "" || d2 == "" || d3 == "" || Invoice_No == "" || d3 == 0) {
             document.getElementById("Qty_display").innerHTML = 0;
             document.getElementById("total_display").innerHTML = 0;
         }
@@ -285,47 +333,6 @@
             document.getElementById("Qty_display").innerHTML = qty;
             document.getElementById("total_display").innerHTML = total.toFixed(2);
         }
-        var model = new Object();
-            model.Part_No = document.getElementById("Part_No").value;
-
-            jQuery.ajax({
-            type: "POST",
-            url: "@Url.Action("P_to_DQ")",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({ name: model }),
-                success: function (data) {
-                    if (d1 == "") {
-                        var error = '<p style="color:red;">Enter Part No !!!<p/>';
-                        document.getElementById("value").innerHTML = error;
-                        return;
-                    }
-                    else if (qty_field == "" || qty_field == 0) {
-                        var error = '<p style="color:red;">Enter Quantity !!!<p/>';
-                        document.getElementById("value").innerHTML = error;
-                        return;
-                    }
-                    else if (d3 == "" || d3 == 0) {
-                        var error = '<p style="color:red;">Enter Price per unit !!!<p/>';
-                        document.getElementById("value").innerHTML = error;
-                        return;
-                    }
-                    else if (Invoice_No == "") {
-                        var error = '<p style="color:red;">Enter Invoice No !!!<p/>';
-                        document.getElementById("value").innerHTML = error;
-                        return;
-                    }
-                    else {
-                        document.getElementById("value").innerHTML = val;
-                        var newrow = '<tr id="data" style="font-size:13px;"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal.toFixed(2) + '</td><td>' + discount_per + '</td><td>' + discount + '</td><td>' + tax1_per + '</td><td>' + tax1 + '</td><td>' + tax2_per + '</td><td>' + tax2 + '</td><td id="total' + i + '">' + Total.toFixed(2) + '</td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;">' + ILedger + '</td><td style="display:none;">' + ALedger + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td style="display:none;" class="row-data" id="final_Discount"></td><td style="display:none;" class="row-data" id="final_Tax1"></td><td style="display:none;" class="row-data" id="final_Tax2"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;">' + mfr + '</td><td style="display:none;">' + project + '</td></tr>';
-                        $('#selected_units tr:last').after(newrow);
-                        i++;
-                    }
-                },
-                failure: function (errMsg) {
-                    alert(errMsg);
-                }
-            });
         final_calculation();
         formClear();
     });
@@ -432,6 +439,34 @@
 
         }
     });
+
+    function add_PO() {
+        var po_no = $("#PO_No").val();
+        var model = new Object();
+        model.PO_No = po_no;
+        $.ajax({
+            url: '/NewPurchase/Add_PO_to_Purchase',
+            data: JSON.stringify({ name: model }),
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                $("#selected_units").find("tr:not(:first)").remove();
+                for (var i = 0; i <= data.length - 1; i++) {
+                    var newrow = '<tr id="data" style="font-size:13px;"><td>' + data[i].Part_No + '</td><td>' + data[i].Description + '</td><td id="Qty' + i + '">' + data[i].Quantity + '</td><td>' + data[i].Price + '</td><td>' + data[i].SubTotal + '</td><td>' + 0 + '</td><td>' + 0 + '</td><td>' + 0 + '</td><td>' + 0 + '</td><td>' + 0 + '</td><td>' + 0 + '</td><td id="total' + i + '">' + data[i].Total + '</td><td style="display:none;">' + "" + '</td><td style="display:none;">' + "" + '</td><td style="display:none;">' + data[i].ILedger + '</td><td style="display:none;">' + data[i].ALedger + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td style="display:none;" class="row-data" id="final_Discount"></td><td style="display:none;" class="row-data" id="final_Tax1"></td><td style="display:none;" class="row-data" id="final_Tax2"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;">' + data[i].sup_code + '</td><td style="display:none;">' + data[i].project + '</td></tr>';
+                    $('#selected_units tr:last').after(newrow);
+                }
+                document.getElementById("Qty_display").innerHTML = data[0].final_Qty;
+                document.getElementById("total_display").innerHTML = data[0].final_Sub_Total;
+                document.getElementById("Final_Total").innerHTML = data[0].final_total;
+                document.getElementById("Supplier").value = data[0].sup_code;
+                document.getElementById("Project").value = data[0].project;
+                qty = data[0].final_Qty;
+                total = data[0].final_Sub_Total;
+                final_total = data[0].final_total;
+            }
+        });
+    }
 
     document.addEventListener('keydown', function (event) {
         if (event.keyCode === 9) {
