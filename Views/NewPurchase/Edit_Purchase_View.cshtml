@@ -225,10 +225,7 @@
                                                 <td class="row-data">
                                                     @dr["Purchase_Total"].ToString()
                                                 </td>
-                                                <td class="row-data" style="margin-right:auto">
-                                                    <i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i>@*@Html.ActionLink("Edit", "Edit_Purchase_Row", new { P_code = dr["P_code"].ToString() })*@
-                                                    @*@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
-                                                </td>
+                                                <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i></td>
                                                 <td style="display:none;">
                                                     @dr["Invoice_No"].ToString()
                                                 </td>

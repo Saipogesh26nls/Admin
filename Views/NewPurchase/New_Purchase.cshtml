@@ -89,7 +89,7 @@
                                     Discount : <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 8.5%; width: 15%;" placeholder="Discount">
                                     Tax1 : <input id="Tax_1" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 9.5%; width: 15%;" placeholder="Tax 1">
                                     Tax2 : <input id="Tax_2" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 8%; width: 15%;" placeholder="Tax 2">
-                                    <button class="btn btn-sm btn-secondary" id="Insert">Insert</button>
+                                    <button href="#" class="btn btn-sm btn-secondary" id="Insert">Insert</button><button class="btn btn-sm btn-secondary" style="display: none; margin-top: 10px;" id="Add" onclick="ToAdd()">Add</button>
                                 </p>
                             </div>
                             <!-- The Modal -->
@@ -170,6 +170,7 @@
                                             <th style="padding-right:10px">Tax2_per</th>
                                             <th style="padding-right:10px">Tax2_Rs</th>
                                             <th style="padding-right:10px">Total</th>
+                                            <th style="padding-right: 30px; display:none;" id="edit_delete">Edit</th>
                                             <th style="display:none;">Invoice_No</th>
                                             <th style="display: none;">Invoice_Date</th>
                                             <th style="display:none;">ILedger</th>
@@ -182,6 +183,7 @@
                                             <th style="display: none;">final_total</th>
                                             <th style="display: none;">supplier</th>
                                             <th style="display: none;">project</th>
+                                            <th style="display:none;">PO_No</th>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -226,6 +228,7 @@
     var final_total = 0;
     var i = 1;
     var val = "";
+    var last_row = document.getElementById("selected_units").rows.length;
     $('#Insert').click(function () {
         var d1 = $('#Part_No').val();
         var d2 = parseInt(document.getElementById("Quantity").value);
@@ -237,6 +240,7 @@
         var project = $('#Project').val();
         var ILedger = 1;
         var ALedger = 2;
+        var pono = $('#PO_No').val();
 
         var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
         var l_row1 = last_row1 - 1;
@@ -280,7 +284,7 @@
         var Invoice_No = $('#Invoice_No').val();
         var Invoice_Date = $('#Invoice_Date').val();
         var qty_field = $('#Quantity').val();
-        
+
         var model = new Object();
         model.Part_No = document.getElementById("Part_No").value;
 
@@ -313,7 +317,7 @@
                 }
                 else {
                     document.getElementById("value").innerHTML = val;
-                    var newrow = '<tr id="data" style="font-size:13px;"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal.toFixed(2) + '</td><td>' + discount_per + '</td><td>' + discount + '</td><td>' + tax1_per + '</td><td>' + tax1 + '</td><td>' + tax2_per + '</td><td>' + tax2 + '</td><td id="total' + i + '">' + Total.toFixed(2) + '</td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;">' + ILedger + '</td><td style="display:none;">' + ALedger + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td style="display:none;" class="row-data" id="final_Discount"></td><td style="display:none;" class="row-data" id="final_Tax1"></td><td style="display:none;" class="row-data" id="final_Tax2"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;">' + mfr + '</td><td style="display:none;">' + project + '</td></tr>';
+                    var newrow = '<tr id="data" name="data" style="font-size:13px;"><td class="row-data">' + d1 + '</td><td class="row-data">' + data[0].Description + '</td><td id="Qty' + i + '" class="row-data">' + d2 + '</td><td class="row-data">' + d3 + '</td><td class="row-data">' + subtotal.toFixed(2) + '</td><td class="row-data">' + discount_per + '</td><td class="row-data">' + discount + '</td><td class="row-data">' + tax1_per + '</td><td class="row-data">' + tax1 + '</td><td class="row-data">' + tax2_per + '</td><td class="row-data">' + tax2 + '</td><td id="total' + i + '" class="row-data">' + Total.toFixed(2) + '</td><td class="row-data" style="display:none;"><i class="fas fa-edit" onclick="Toshow()"></i></td><td style="display:none;" class="row-data">' + Invoice_No + '</td><td style="display:none;" class="row-data">' + Invoice_Date + '</td><td style="display:none;" class="row-data">' + ILedger + '</td><td style="display:none;" class="row-data">' + ALedger + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td style="display:none;" class="row-data" id="final_Discount"></td><td style="display:none;" class="row-data" id="final_Tax1"></td><td style="display:none;" class="row-data" id="final_Tax2"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;" class="row-data">' + mfr + '</td><td style="display:none;" class="row-data">' + project + '</td><td style="display:none;" class="row-data">' + pono + '</td></tr>';
                     $('#selected_units tr:last').after(newrow);
                     i++;
                 }
@@ -388,18 +392,22 @@
             var f4 = document.getElementById("Final_Tax1").value;
             var f5 = document.getElementById("Final_Tax2").value;
             var f6 = document.getElementById("Final_Total").innerHTML;
+            var ino = document.getElementById("Invoice_No").value;
+            var idate = document.getElementById("Invoice_Date").value;
             document.getElementById("final_qty").innerHTML = f1;
             document.getElementById("final_SubTotal").innerHTML = f2;
             document.getElementById("final_Discount").innerHTML = f3;
             document.getElementById("final_Tax1").innerHTML = f4;
             document.getElementById("final_Tax2").innerHTML = f5;
             document.getElementById("final_Total").innerHTML = f6;
+            document.getElementById("Ino").innerHTML = ino;
+            document.getElementById("Idate").innerHTML = idate;
             var submit1 = "";
             document.getElementById("Enter_Inv_No").innerHTML = submit1;
             var myRows = [];
             var headersText = [];
             var $headers = $("#selected_units th");
-            var $rows = $("#selected_units tbody #data").each(function (index) {
+            var $rows = $("#selected_units tbody [name='data']").each(function (index) {
                 $cells = $(this).find("td");
                 myRows[index] = {};
 
@@ -452,18 +460,36 @@
             dataType: 'json',
             success: function (data) {
                 $("#selected_units").find("tr:not(:first)").remove();
-                for (var i = 0; i <= data.length - 1; i++) {
-                    var newrow = '<tr id="data" style="font-size:13px;"><td>' + data[i].Part_No + '</td><td>' + data[i].Description + '</td><td id="Qty' + i + '">' + data[i].Quantity + '</td><td>' + data[i].Price + '</td><td>' + data[i].SubTotal + '</td><td>' + 0 + '</td><td>' + 0 + '</td><td>' + 0 + '</td><td>' + 0 + '</td><td>' + 0 + '</td><td>' + 0 + '</td><td id="total' + i + '">' + data[i].Total + '</td><td style="display:none;">' + "" + '</td><td style="display:none;">' + "" + '</td><td style="display:none;">' + data[i].ILedger + '</td><td style="display:none;">' + data[i].ALedger + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td style="display:none;" class="row-data" id="final_Discount"></td><td style="display:none;" class="row-data" id="final_Tax1"></td><td style="display:none;" class="row-data" id="final_Tax2"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;">' + data[i].sup_code + '</td><td style="display:none;">' + data[i].project + '</td></tr>';
-                    $('#selected_units tr:last').after(newrow);
+                if (data.PO_No == "0") {
+                    document.getElementById("Qty_display").innerHTML = "";
+                    document.getElementById("total_display").innerHTML = "";
+                    document.getElementById("Final_Total").innerHTML = "";
+                    document.getElementById("Supplier").value = "00102";
+                    document.getElementById("Project").value = 0;
+                    qty = 0;
+                    total = 0;
+                    final_total = 0;
+                    document.getElementById("edit_delete").style.display = "none";
+                    $('#Supplier').prop('disabled', false);
+                    $('#Project').prop('disabled', false);
                 }
-                document.getElementById("Qty_display").innerHTML = data[0].final_Qty;
-                document.getElementById("total_display").innerHTML = data[0].final_Sub_Total;
-                document.getElementById("Final_Total").innerHTML = data[0].final_total;
-                document.getElementById("Supplier").value = data[0].sup_code;
-                document.getElementById("Project").value = data[0].project;
-                qty = data[0].final_Qty;
-                total = data[0].final_Sub_Total;
-                final_total = data[0].final_total;
+                else {
+                    for (var i = 0; i <= data.length - 1; i++) {
+                        var newrow = '<tr id="' + i + '" name="data" style="font-size:13px;"><td class="row-data">' + data[i].Part_No + '</td><td class="row-data">' + data[i].Description + '</td><td id="Qty' + i + '" class="row-data">' + data[i].Quantity + '</td><td class="row-data">' + data[i].Price + '</td><td class="row-data">' + data[i].SubTotal + '</td><td class="row-data">' + 0 + '</td><td class="row-data">' + 0 + '</td><td class="row-data">' + 0 + '</td><td class="row-data">' + 0 + '</td><td class="row-data">' + 0 + '</td><td class="row-data">' + 0 + '</td><td id="total' + i + '" class="row-data">' + data[i].Total + '</td><td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i></td><td style="display:none;" class="row-data"  id="Ino">' + "" + '</td><td style="display:none;" class="row-data" id="Idate">' + "" + '</td><td style="display:none;" class="row-data">' + data[i].ILedger + '</td><td style="display:none;" class="row-data">' + data[i].ALedger + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td style="display:none;" class="row-data" id="final_Discount"></td><td style="display:none;" class="row-data" id="final_Tax1"></td><td style="display:none;" class="row-data" id="final_Tax2"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;" class="row-data">' + data[i].sup_code + '</td><td style="display:none;" class="row-data">' + data[i].project + '</td><td style="display:none;" class="row-data">' + data[i].PO_No + '</td></tr>';
+                        $('#selected_units tr:last').after(newrow);
+                    }
+                    document.getElementById("Qty_display").innerHTML = data[0].final_Qty;
+                    document.getElementById("total_display").innerHTML = data[0].final_Sub_Total;
+                    document.getElementById("Final_Total").innerHTML = data[0].final_total;
+                    document.getElementById("Supplier").value = data[0].sup_code;
+                    document.getElementById("Project").value = data[0].project;
+                    qty = data[0].final_Qty;
+                    total = data[0].final_Sub_Total;
+                    final_total = data[0].final_total;
+                    document.getElementById("edit_delete").style.display = "block";
+                    $('#Supplier').prop('disabled', true);
+                    $('#Project').prop('disabled', true);
+                }
             }
         });
     }
@@ -651,4 +677,170 @@
                 }
             });
     }
+
+    function Toshow() {
+        var rowId =
+            event.target.parentNode.parentNode.id;
+        row_id = rowId;
+        var data =
+            document.getElementById(rowId).querySelectorAll(".row-data");
+
+        var part_no = data[0].innerHTML;
+        var p_qty = data[2].innerHTML;
+        var p_rate = data[3].innerHTML;
+        var p_subtotal = data[4].innerHTML;
+        var p_discount = data[6].innerHTML;
+        var p_tax1 = data[8].innerHTML;
+        var p_tax2 = data[10].innerHTML;
+
+        @*var discount = (p_discount / p_subtotal) * 100;
+        var tax1 = (p_tax1 / p_subtotal) * 100;
+        var tax2 = (p_tax2 / p_subtotal) * 100;
+
+        var discount_l = Math.round(discount, 1);
+        var tax1_l = Math.round(tax1, 1);
+        var tax2_l = Math.round(tax2, 1);*@
+
+        document.getElementById("Part_No").value = part_no;
+        document.getElementById("Quantity").value = p_qty;
+        document.getElementById("Purchase_Rate").value = p_rate;
+        document.getElementById("Discount").value = p_discount;
+        document.getElementById("Tax_1").value = p_tax1;
+        document.getElementById("Tax_2").value = p_tax2;
+
+        document.getElementById("Insert").style.display = "none";
+        document.getElementById("Add").style.display = "block";
+        $('#Part_No').prop('disabled', true);
+    }
+
+    function ToAdd() {
+        document.getElementById("Insert").style.display = "block";
+        document.getElementById("Add").style.display = "none";
+
+        var rowId = row_id;
+        var data = document.getElementById(rowId).querySelectorAll(".row-data");
+
+        var part_no = document.getElementById("Part_No").value;
+        var p_qty = document.getElementById("Quantity").value;
+        var p_rate = document.getElementById("Purchase_Rate").value;
+        var p_discount = document.getElementById("Discount").value;
+        var p_tax1 = document.getElementById("Tax_1").value;
+        var p_tax2 = document.getElementById("Tax_2").value;
+
+        @*var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+        var l_row1 = last_row1 - 1;
+        var count = 0;
+        for (var i = 0; i < l_row1; i++) {
+            var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
+            var e_partno = document.getElementById("Part_No").value;
+            if (e_part_no == e_partno) {
+                var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
+                document.getElementById("value").innerHTML = qty_err;
+                return;
+            }
+            count++;
+        }*@
+        var subtotal = p_qty * p_rate;
+        var discount_l = (subtotal * p_discount) / 100;
+        var tax1_l = (subtotal * p_tax1) / 100;
+        var tax2_l = (subtotal * p_tax2) / 100;
+        var total = (subtotal - discount_l) + tax1_l + tax2_l;
+
+        data[0].innerHTML = part_no;
+        data[2].innerHTML = p_qty;
+        data[3].innerHTML = p_rate;
+        data[4].innerHTML = subtotal.toFixed(2);
+        data[5].innerHTML = p_discount;
+        data[7].innerHTML = p_tax1;
+        data[9].innerHTML = p_tax2;
+        data[6].innerHTML = discount_l;
+        data[8].innerHTML = tax1_l;
+        data[10].innerHTML = tax2_l;
+        data[11].innerHTML = total.toFixed(2);
+        $('#Part_No').prop('disabled', false);
+        total_cal();
+    }
+
+    function total_cal() {
+        $("#Part_No").val("");
+        $("#Quantity").val("");
+        $("#Purchase_Rate").val("");
+        $("#Discount").val("");
+        $("#Tax_1").val("");
+        $("#Tax_2").val("");
+        var table = document.getElementById("selected_units");
+        var tbodyRowCount = table.tBodies[0].rows.length;
+        var T_qty = 0;
+        var T_subtotal = 0;
+        for (i = 1; i <= tbodyRowCount - 1; i++) {
+            var p_qty = document.getElementById("selected_units").tBodies[0].rows[i].cells[2].innerHTML;
+            var p_total = document.getElementById("selected_units").tBodies[0].rows[i].cells[11].innerHTML;
+            T_qty = T_qty + parseFloat(p_qty);
+            T_subtotal = T_subtotal + parseFloat(p_total);
+
+            var p_subtotal = document.getElementById("selected_units").tBodies[0].rows[i].cells[4].innerHTML;
+            var p_discount = document.getElementById("selected_units").tBodies[0].rows[i].cells[6].innerHTML;
+            var p_tax1 = document.getElementById("selected_units").tBodies[0].rows[i].cells[8].innerHTML;
+            var p_tax2 = document.getElementById("selected_units").tBodies[0].rows[i].cells[10].innerHTML;
+
+            if (p_discount > 0) {
+                var discount = (p_discount / p_subtotal) * 100;
+            }
+            else {
+                var discount = 0;
+            }
+            if (p_tax1 > 0) {
+                var tax1 = (p_tax1 / p_subtotal) * 100;
+            }
+            else {
+                var tax1 = 0;
+            }
+            if (p_tax2 > 0) {
+                var tax2 = (p_tax2 / p_subtotal) * 100;
+            }
+            else {
+                var tax2 = 0;
+            }
+
+            var discount_l = Math.round(discount, 1);
+            var tax1_l = Math.round(tax1, 1);
+            var tax2_l = Math.round(tax2, 1);
+
+            document.getElementById("selected_units").tBodies[0].rows[i].cells[5].innerHTML = discount_l;
+            document.getElementById("selected_units").tBodies[0].rows[i].cells[7].innerHTML = tax1_l;
+            document.getElementById("selected_units").tBodies[0].rows[i].cells[9].innerHTML = tax2_l;
+        }
+
+        document.getElementById("total_display").innerHTML = T_subtotal.toFixed(2);
+        document.getElementById("Qty_display").innerHTML = T_qty;
+
+        var final_discount = $("#Final_Discount").val();
+        var final_tax1 = $("#Final_Tax1").val();
+        var final_tax2 = $("#Final_Tax2").val();
+        if (final_discount == "") {
+            var discount_val = 0;
+        }
+        else {
+            var discount_val = (T_subtotal * final_discount) / 100;
+        }
+        if (final_tax1 == "") {
+            var tax1_val = 0;
+        }
+        else {
+            var tax1_val = (T_subtotal * final_tax1) / 100;
+        }
+        if (final_tax2 == "") {
+            var tax2_val = 0;
+        }
+        else {
+            var tax2_val = (T_subtotal * final_tax2) / 100;
+        }
+        var Total = (T_subtotal - discount_val) + tax1_val + tax2_val;
+        document.getElementById("Final_Total").innerHTML = Total.toFixed(2);
+        document.getElementById("Final_Discount").value = discount_val.toFixed(2);
+        document.getElementById("Final_Tax1").value = tax1_val.toFixed(2);
+        document.getElementById("Final_Tax2").value = tax2_val.toFixed(2);
+
+    }
+
 </script>

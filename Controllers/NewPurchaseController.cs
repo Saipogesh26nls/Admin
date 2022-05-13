@@ -72,6 +72,9 @@ namespace Admin.Controllers
         [HttpPost]
         public ActionResult Table_Data(List<PurchaseTable> Purchase)  // For Adding Purchase Data to DB
         {
+            string Invno = Purchase[0].Invoice_No;
+            DateTime Invdate = Purchase[0].Invoice_Date;
+            int po_no = Purchase[0].PO_No;
             int project = int.Parse(Purchase[0].project);
             int Quantity = Purchase[0].final_Qty;
             double Total = Purchase[0].final_Sub_Total;
@@ -80,7 +83,7 @@ namespace Admin.Controllers
             double Final_Tax1 = Purchase[0].final_Tax1;
             double Final_Tax2 = Purchase[0].final_Tax2;
             NewPurchase_Insert purchase = new NewPurchase_Insert();
-            int v_no = purchase.Add_Data(Purchase, Quantity, Total, Final_Total, Final_Discount, Final_Tax1, Final_Tax2, project);
+            int v_no = purchase.Add_Data(Purchase, Quantity, Total, Final_Total, Final_Discount, Final_Tax1, Final_Tax2, project, po_no, Invno, Invdate);
             return Json(v_no);
         }
         public ActionResult Partno_to_Descp(BOMFields name) // conversion of part_no to description
@@ -102,9 +105,17 @@ namespace Admin.Controllers
         } 
         public ActionResult Add_PO_to_Purchase(New_Purchase name)
         {
-            NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
-            var data = newPurchase_Insert.Add_PO_to_purchase(name.PO_No);
-            return Json(data);
+            if(Convert.ToInt32(name.PO_No) > 0)
+            {
+                NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
+                var data = newPurchase_Insert.Add_PO_to_purchase(name.PO_No);
+                return Json(data);
+            }
+            else
+            {
+                return Json(name);
+            }
+            
         }
 
         //Purchase List

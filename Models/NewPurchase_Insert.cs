@@ -91,7 +91,8 @@ namespace Admin.Models
                     final_Sub_Total = Convert.ToDouble(dr["PO_Final_Total"]),
                     final_total = Convert.ToDouble(dr["PO_Final_Total"]),
                     sup_code = dr["A_code"].ToString(),
-                    project = dr["Project"].ToString()
+                    project = dr["Project"].ToString(),
+                    PO_No = (int)dr["PO_No"]
                 }
                 ) ;
             }
@@ -119,7 +120,7 @@ namespace Admin.Models
             Con.Close();
             return ItemQm;
         }
-        public int Add_Data(List<PurchaseTable> data, int Qty, double total, double final_total, double final_discount, double final_tax1, double final_tax2, int project)
+        public int Add_Data(List<PurchaseTable> data, int Qty, double total, double final_total, double final_discount, double final_tax1, double final_tax2, int project, int po_no, string invno, DateTime invdate)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
@@ -146,8 +147,8 @@ namespace Admin.Models
                 SqlCommand sql_cmnd = new SqlCommand("[dbo].[addPurchase]", Con1);
                 sql_cmnd.CommandType = CommandType.StoredProcedure;
                 sql_cmnd.Parameters.AddWithValue("@voucher_no", SqlDbType.NVarChar).Value = Voucher_No;
-                sql_cmnd.Parameters.AddWithValue("@invoice_no", SqlDbType.NVarChar).Value = data[i].Invoice_No;
-                sql_cmnd.Parameters.AddWithValue("@invoice_date", data[i].Invoice_Date);
+                sql_cmnd.Parameters.AddWithValue("@invoice_no", SqlDbType.NVarChar).Value = invno;
+                sql_cmnd.Parameters.AddWithValue("@invoice_date", invdate);
                 sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = data[i].Part_No;
                 sql_cmnd.Parameters.AddWithValue("@p_qty", SqlDbType.Int).Value = data[i].Quantity;
                 sql_cmnd.Parameters.AddWithValue("@iledger", SqlDbType.NVarChar).Value = data[i].ILedger;
@@ -180,6 +181,40 @@ namespace Admin.Models
                 }
                 i++;
                 j++;
+
+                if(po_no > 0)
+                {
+                    for (int k = 0; k < data.Count(); k++)
+                    {
+                        string cmd6 = "select P_code from Product_Master where P_Part_No = '"+data[k].Part_No+"'";
+                        SqlCommand SqlCmd6 = new SqlCommand(cmd6, Con1);
+                        SqlDataReader dr3 = SqlCmd6.ExecuteReader();
+                        string pcode = "";
+                        while (dr3.Read())
+                        {
+                            pcode = dr3["P_code"].ToString();
+                        }
+                        dr3.Close();
+                        string cmd3 = "Update Purchase_Order set PO_Qty = PO_Qty - " + data[k].Quantity + " where PO_No = '" + po_no + "' and P_code = '" + pcode + "' ";
+                        SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con1);
+                        SqlCmd3.ExecuteNonQuery();
+                        string cmd5 = "select PO_Qty from Purchase_Order where PO_No = '" + po_no + "' and P_code = '" + pcode + "'";
+                        SqlCommand SqlCmd5 = new SqlCommand(cmd5, Con1);
+                        SqlDataReader dr2 = SqlCmd5.ExecuteReader();
+                        int qty = 0;
+                        while (dr2.Read())
+                        {
+                            qty = (int)dr2["PO_Qty"];
+                        }
+                        dr2.Close();
+                        if (qty == 0)
+                        {
+                            string cmd4 = "Delete from Purchase_Order where PO_No = '" + po_no + "' and P_code = '" + pcode + "'";
+                            SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con1);
+                            SqlCmd4.ExecuteNonQuery();
+                        }
+                    }
+                }
             }
             Con1.Close();
             return Voucher_No;
