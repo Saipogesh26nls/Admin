@@ -717,6 +717,12 @@ namespace Admin.Controllers
             ViewBag.date = date;
             return View(goodsRI);
         }
+        public ActionResult Print_preview(GoodsRI name)
+        {
+            Goods_RI dblogin = new Goods_RI();
+            var Descp = dblogin.Preview_List(name.Index_Type, name.Voucher_No);
+            return Json(Descp);
+        }
 
         // Add Product
         public ActionResult Add_Product(GoodsRI name) // add new products to db

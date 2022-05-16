@@ -169,6 +169,7 @@ namespace Admin.Models
                 sql_cmnd.Parameters.AddWithValue("@goodsissue", SqlDbType.NVarChar).Value = null;
                 sql_cmnd.Parameters.AddWithValue("@ARefNo", SqlDbType.NVarChar).Value = ARefNo;
                 sql_cmnd.Parameters.AddWithValue("@project", SqlDbType.Int).Value = project;
+                sql_cmnd.Parameters.AddWithValue("@po_no", SqlDbType.Int).Value = po_no;
 
                 if (j == data.Count() - 1)
                 {
@@ -195,10 +196,10 @@ namespace Admin.Models
                             pcode = dr3["P_code"].ToString();
                         }
                         dr3.Close();
-                        string cmd3 = "Update Purchase_Order set PO_Qty = PO_Qty - " + data[k].Quantity + " where PO_No = '" + po_no + "' and P_code = '" + pcode + "' ";
+                        string cmd3 = "Update Purchase_Order set PO_Qty = PO_Qty - '" + data[k].Quantity + "', PO_Final_Qty = PO_Final_Qty - "+data[k].Quantity+", PO_Final_Total = PO_Final_Total - "+data[k].Quantity+", PO_Subtotal = "+data[k].SubTotal+", PO_Total = "+data[k].Total+" where PO_No = " + po_no + " and P_code = '" + pcode + "' ";
                         SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con1);
                         SqlCmd3.ExecuteNonQuery();
-                        string cmd5 = "select PO_Qty from Purchase_Order where PO_No = '" + po_no + "' and P_code = '" + pcode + "'";
+                        string cmd5 = "select PO_Qty from Purchase_Order where PO_No = " + po_no + " and P_code = '" + pcode + "'";
                         SqlCommand SqlCmd5 = new SqlCommand(cmd5, Con1);
                         SqlDataReader dr2 = SqlCmd5.ExecuteReader();
                         int qty = 0;
@@ -209,7 +210,7 @@ namespace Admin.Models
                         dr2.Close();
                         if (qty == 0)
                         {
-                            string cmd4 = "Delete from Purchase_Order where PO_No = '" + po_no + "' and P_code = '" + pcode + "'";
+                            string cmd4 = "Delete from Purchase_Order where PO_No = " + po_no + " and P_code = '" + pcode + "'";
                             SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con1);
                             SqlCmd4.ExecuteNonQuery();
                         }
@@ -581,12 +582,16 @@ namespace Admin.Models
             }
             dr.Close();
             string pcode = string.Join("", ItemQm.Select(m => m.P_code));
-
             string cmd3 = "Delete from Purchase_Order where P_code = '" + pcode + "' and PO_No = '" + vno + "'";
             SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con1);
             SqlCmd3.ExecuteNonQuery();
             Con1.Close();
         }
+        public void Update_PO_row()
+        {
+
+        }
+
     }
     public class Goods_RI
     {
@@ -1142,7 +1147,44 @@ namespace Admin.Models
             }
 
         }
+        public List<GoodsRI> Preview_List(int vtype, int vno)
+        {
+            List<GoodsRI> ItemQm = new List<GoodsRI>();
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "select P_code,Purchase_Qty from I_Ledger where Voucher_Type = " + vtype + " and Goods_Voucher_No = " + vno + "";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlDataReader dr = SqlCmd1.ExecuteReader();
+            while (dr.Read())
+            {
+                ItemQm.Add(new GoodsRI
+                {
+                    Quantity = (int)dr["P_Quantity"],
+                    P_code = dr["P_code"].ToString()
+                }
+                );
+            }
+            dr.Close();
+            for (int i = 0; i < ItemQm.Count; i++)
+            {
+                string cmd2 = "select * from Product_Master where P_code = '"+ItemQm[i].P_code+"'";
+                SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+                SqlDataReader dr1 = SqlCmd2.ExecuteReader();
+                while (dr1.Read())
+                {
+                    ItemQm.Add(new GoodsRI
+                    {
+                        Part_No = dr1["P_Part_No"].ToString(),
+                        Description = dr1["P_Description"].ToString()
 
+                    }
+                    );
+                }
+                dr1.Close();
+            }
+            Con.Close();
+            return ItemQm;
+        }
     }
     
 }
