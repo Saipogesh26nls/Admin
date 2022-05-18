@@ -422,6 +422,8 @@ namespace Admin.Models
         public string Ref_No { get; set; }
         public DateTime Ref_Date { get; set; }  
         public string sup_val { get; set; }
+        public string BillTo { get; set; }
+        public string billval { get; set; }
 
     }
     public class PurchaseTable
@@ -463,6 +465,9 @@ namespace Admin.Models
         public string Ref_No { get; set; }
         public int I_Qty { get; set; }
         public string project { get; set; }
+        public float Tax_Per { get; set; }
+        public double Tax_Total { get; set; }
+        public string BillTo { get; set; }
     }
     public class PurchaseList
     {
@@ -480,8 +485,8 @@ namespace Admin.Models
         [DisplayName("Total")]
         public double Purchase_Total { get; set; }
         public List<string> Ref_No { get; set; }
-
         public string project { get; set; }
+        public string PO_No { get; set; }
     }
     public class EditPurchase
     {
@@ -744,5 +749,7 @@ namespace Admin.Models
         public string Ref_Date { get;set; }
         public string acode { get; set; }
         public string Supplier { get; set; }
+        public string BillTo { get; set; }
+        public string billto_acode { get; set; }
     }
 }

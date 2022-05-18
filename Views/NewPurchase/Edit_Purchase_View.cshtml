@@ -68,10 +68,16 @@
         <div id="ui-view" data-select2-id="ui-view">
             <div>
                 <div class="card">
+                    <div class="card-header" style="height:55px;">
+                        <p class="text-sm">
+                            PurchaseOrder No : @Html.EditorFor(m => m.PO_No, new { htmlAttributes = new { @style = "width:10%;margin-left:0.5%;" } })
+                            @*&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-secondary" id="PO_to_Purchase" onclick="add_PO()">Add</button>*@
+                        </p>
+                    </div>
                     <div class="card-header">
                         <p class="text-sm">
-                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:0.25%;"})
-                            Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:15%;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
+                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:0.25%;" })
+                            Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:1%;width:15%;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
                         </p>
                         <p class="text-sm"> &nbsp &nbsp Supplier : &nbsp &nbsp @Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } }) &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p>
                     </div>
@@ -188,6 +194,7 @@
                                             <th style="display: none;">final_total</th>
                                             <th style="display: none;">Ref_No</th>
                                             <th style="display: none;">project</th>
+                                            <th style="display: none;">po_no</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -195,77 +202,80 @@
                                         @foreach (System.Data.DataRow dr in ViewBag.PL.Rows)
                                         {
 
-                                            <tr id="@i" style="font-size:13px;">
-                                                <td class="row-data">@dr["P_code"].ToString()</td>
-                                                <td class="row-data">@dr["P_Part_No"].ToString()</td>
-                                                <td class="row-data text-sm-left">@dr["P_Description"].ToString()</td>
-                                                <td class="row-data">@dr["Purchase_Qty"].ToString()</td>
-                                                <td class="row-data">@dr["Purchase_Rate"].ToString()</td>
-                                                <td class="row-data">
-                                                    @dr["Purchase_SubTotal"].ToString()
-                                                </td>
-                                                <td class="row-data">
-                                                    @dr["Discount(%)"].ToString()
-                                                </td>
-                                                <td class="row-data">
-                                                    @dr["Purchase_Discount"].ToString()
-                                                </td>
-                                                <td class="row-data">
-                                                    @dr["Tax1(%)"].ToString()
-                                                </td>
-                                                <td class="row-data">
-                                                    @dr["Purchase_Tax_1"].ToString()
-                                                </td>
-                                                <td class="row-data">
-                                                    @dr["Tax2(%)"].ToString()
-                                                </td>
-                                                <td class="row-data">
-                                                    @dr["Purchase_Tax_2"].ToString()
-                                                </td>
-                                                <td class="row-data">
-                                                    @dr["Purchase_Total"].ToString()
-                                                </td>
-                                                <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i></td>
-                                                <td style="display:none;">
-                                                    @dr["Invoice_No"].ToString()
-                                                </td>
-                                                <td style="display:none;">
-                                                    @dr["Invoice_Date"].ToString()
-                                                </td>
-                                                <td style="display:none;">
-                                                    @dr["Voucher_No"].ToString()
-                                                </td>
-                                                <td style="display:none;">
-                                                    @dr["Voucher_Date"].ToString()
-                                                </td>
-                                                <td style="display:none;">
-                                                    @ViewBag.Mfr
-                                                </td>
-                                                <td style="display:none;">
-                                                    @ViewBag.ILedger
-                                                </td>
-                                                <td style="display:none;">
-                                                    @ViewBag.ALedger
-                                                </td>
-                                                <td style="display:none;" id="final_qty">
-                                                </td>
-                                                <td style="display:none;" id="final_SubTotal">
-                                                </td>
-                                                <td style="display:none;" id="final_Discount">
-                                                </td>
-                                                <td style="display:none;" id="final_Tax1">
-                                                </td>
-                                                <td style="display:none;" id="final_Tax2">
-                                                </td>
-                                                <td style="display:none;" id="final_Total">
-                                                </td>
-                                                <td style="display:none;">
-                                                    @ViewBag.Ref_No
-                                                </td>
-                                                <td style="display:none;">
-                                                    @ViewBag.Project
-                                                </td>
-                                            </tr>
+                                        <tr id="@i" style="font-size:13px;">
+                                            <td class="row-data">@dr["P_code"].ToString()</td>
+                                            <td class="row-data">@dr["P_Part_No"].ToString()</td>
+                                            <td class="row-data text-sm-left">@dr["P_Description"].ToString()</td>
+                                            <td class="row-data">@dr["Purchase_Qty"].ToString()</td>
+                                            <td class="row-data">@dr["Purchase_Rate"].ToString()</td>
+                                            <td class="row-data">
+                                                @dr["Purchase_SubTotal"].ToString()
+                                            </td>
+                                            <td class="row-data">
+                                                @dr["Discount(%)"].ToString()
+                                            </td>
+                                            <td class="row-data">
+                                                @dr["Purchase_Discount"].ToString()
+                                            </td>
+                                            <td class="row-data">
+                                                @dr["Tax1(%)"].ToString()
+                                            </td>
+                                            <td class="row-data">
+                                                @dr["Purchase_Tax_1"].ToString()
+                                            </td>
+                                            <td class="row-data">
+                                                @dr["Tax2(%)"].ToString()
+                                            </td>
+                                            <td class="row-data">
+                                                @dr["Purchase_Tax_2"].ToString()
+                                            </td>
+                                            <td class="row-data">
+                                                @dr["Purchase_Total"].ToString()
+                                            </td>
+                                            <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i></td>
+                                            <td style="display:none;">
+                                                @dr["Invoice_No"].ToString()
+                                            </td>
+                                            <td style="display:none;">
+                                                @dr["Invoice_Date"].ToString()
+                                            </td>
+                                            <td style="display:none;">
+                                                @dr["Voucher_No"].ToString()
+                                            </td>
+                                            <td style="display:none;">
+                                                @dr["Voucher_Date"].ToString()
+                                            </td>
+                                            <td style="display:none;">
+                                                @ViewBag.Mfr
+                                            </td>
+                                            <td style="display:none;">
+                                                @ViewBag.ILedger
+                                            </td>
+                                            <td style="display:none;">
+                                                @ViewBag.ALedger
+                                            </td>
+                                            <td style="display:none;" id="final_qty">
+                                            </td>
+                                            <td style="display:none;" id="final_SubTotal">
+                                            </td>
+                                            <td style="display:none;" id="final_Discount">
+                                            </td>
+                                            <td style="display:none;" id="final_Tax1">
+                                            </td>
+                                            <td style="display:none;" id="final_Tax2">
+                                            </td>
+                                            <td style="display:none;" id="final_Total">
+                                            </td>
+                                            <td style="display:none;">
+                                                @ViewBag.Ref_No
+                                            </td>
+                                            <td style="display:none;" id="proj">
+                                                @ViewBag.Project_data
+                                            </td>
+                                            <td style="display:none;">
+                                                @ViewBag.PO_No
+                                            </td>
+                                        </tr>
                                             i++;
                                         }
                                     </tbody>
@@ -274,8 +284,8 @@
                             <div style="margin-right:5px;" class="text-sm">
                                 @Html.LabelFor(model => model.Quantity, new { htmlAttributes = new { id = "Qty_Label" } }) : <h6 id="Qty_display"></h6>
                                 @*Discount(%) : @Html.EditorFor(model => model.Final_Discount_per, new { htmlAttributes = new { } })
-            Tax1(%) : @Html.EditorFor(model => model.Final_Tax1_per, new { htmlAttributes = new { } })
-            Tax2(%) : @Html.EditorFor(model => model.Final_Tax2_per, new { htmlAttributes = new { } })*@
+                    Tax1(%) : @Html.EditorFor(model => model.Final_Tax1_per, new { htmlAttributes = new { } })
+                    Tax2(%) : @Html.EditorFor(model => model.Final_Tax2_per, new { htmlAttributes = new { } })*@
                             </div>
                             <button class="btn btn-sm btn-secondary" id="Submit" style="width:10%;margin-left:2%;margin-top:10%;">Submit</button>
                             <div class="float-right text-sm">
@@ -297,7 +307,7 @@
                             </div>
                             <p id="del"></p>
                         </div>
-                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -329,6 +339,7 @@
         var Voucher_No = $('#Voucher_No').val();
         var Voucher_Date = $('#Voucher_Date').val();
         var project = $('#Project').val();
+        var pono = $('#PO_No').val();
         var ILedger = 1;
         var ALedger = 2;
         var subtotal = d2 * d3;
@@ -419,7 +430,7 @@
                     }
                     else {
                         var l_row = last_row - 1;
-                        var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td class="row-data">' + data[0].P_code + '</td><td class="row-data">' + d1 + '</td><td class="row-data">' + data[0].Description + '</td><td class="row-data">' + d2 + '</td><td class="row-data">' + d3 + '</td><td class="row-data">' + subtotal.toFixed(2) + '</td><td class="row-data">' + discount_per + '</td><td class="row-data">' + discount + '</td><td class="row-data">' + tax1_per + '</td><td class="row-data">' + tax1 + '</td><td class="row-data">' + tax2_per + '</td><td class="row-data">' + tax2 + '</td><td class="row-data">' + Total.toFixed(2) + '</td><td class="row-data"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row1(this);"></i></td><td style="display:none;" class="row-data">' + Invoice_No + '</td><td style="display:none;" class="row-data">' + Invoice_Date + '</td><td style="display:none;" class="row-data">' + Voucher_No + '</td><td style="display:none;" class="row-data">' + Voucher_Date + '</td><td style="display:none;" class="row-data">' + mfr + '</td><td style="display:none;" class="row-data">' + ILedger + '</td><td style="display:none;" class="row-data">' + ALedger + '</td><td style="display:none;" class="row-data">' + final_Qty + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td style="display:none;" class="row-data" id="final_Discount"></td><td style="display:none;" class="row-data" id="final_Tax1"></td><td style="display:none;" class="row-data" id="final_Tax2"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;" class="row-data">' + @ViewBag.Ref_No + '</td><td style="display:none;" class="row-data">' + project + '</td></tr>';
+                        var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td class="row-data">' + data[0].P_code + '</td><td class="row-data">' + d1 + '</td><td class="row-data">' + data[0].Description + '</td><td class="row-data">' + d2 + '</td><td class="row-data">' + d3 + '</td><td class="row-data">' + subtotal.toFixed(2) + '</td><td class="row-data">' + discount_per + '</td><td class="row-data">' + discount + '</td><td class="row-data">' + tax1_per + '</td><td class="row-data">' + tax1 + '</td><td class="row-data">' + tax2_per + '</td><td class="row-data">' + tax2 + '</td><td class="row-data">' + Total.toFixed(2) + '</td><td class="row-data"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row1(this);"></i></td><td style="display:none;" class="row-data">' + Invoice_No + '</td><td style="display:none;" class="row-data">' + Invoice_Date + '</td><td style="display:none;" class="row-data">' + Voucher_No + '</td><td style="display:none;" class="row-data">' + Voucher_Date + '</td><td style="display:none;" class="row-data">' + mfr + '</td><td style="display:none;" class="row-data">' + ILedger + '</td><td style="display:none;" class="row-data">' + ALedger + '</td><td style="display:none;" class="row-data">' + final_Qty + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td style="display:none;" class="row-data" id="final_Discount"></td><td style="display:none;" class="row-data" id="final_Tax1"></td><td style="display:none;" class="row-data" id="final_Tax2"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;" class="row-data">' + @ViewBag.Ref_No + '</td><td style="display:none;" class="row-data">' + project + '</td><td style="display:none;" class="row-data">' + pono + '</td></tr>';
                         $('#selected_units tr:last').after(newrow);
                         total_cal();
                     }
@@ -469,7 +480,7 @@
     }
 
     $('#Submit').click(function (e) {
-
+        final_calculation();
         var Inv_No = $('#Invoice_No').val();
         if (Inv_No == "") {
             document.getElementById("Enter_Inv_No").innerHTML = "Enter the Invoice No !!!";
@@ -482,12 +493,14 @@
             var f4 = document.getElementById("Final_Tax1").value;
             var f5 = document.getElementById("Final_Tax2").value;
             var f6 = document.getElementById("Final_Total").innerHTML;
+            var proj = document.getElementById("Project").value;
             document.getElementById("final_qty").innerHTML = f1;
             document.getElementById("final_SubTotal").innerHTML = f2;
             document.getElementById("final_Discount").innerHTML = f3;
             document.getElementById("final_Tax1").innerHTML = f4;
             document.getElementById("final_Tax2").innerHTML = f5;
             document.getElementById("final_Total").innerHTML = f6;
+            document.getElementById("proj").innerHTML = proj;
 
             var v_no = $('#Voucher_No').val();
             var v_date = $('#Voucher_Date').val();
@@ -866,6 +879,12 @@
 
     function total_cal() {
         $('#Voucher_No').prop('disabled', true);
+        $('#PO_No').prop('disabled', true);
+        $('#Voucher_Date').prop('disabled', true);
+        $('#Invoice_No').prop('disabled', true);
+        $('#Invoice_Date').prop('disabled', true);
+        $('#Supplier').prop('disabled', true);
+        $('#Project').prop('disabled', true);
         $("#Part_No").val("");
         $("#P_Qty").val("");
         $("#P_Rate").val("");

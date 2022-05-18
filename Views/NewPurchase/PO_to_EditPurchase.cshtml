@@ -66,8 +66,8 @@
                             Purchase Order No:@Html.EditorFor(model => model.Purchase_Order_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;", @readonly = "readonly" } })    Purchase Order Date :  @Html.TextBoxFor(x => x.Purchase_Order_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
                             Reference No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:1%;width:15%;" } })    Reference Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
                         </p>
-                        <p class="text-sm"> Supplier : &nbsp &nbsp @Html.DisplayFor(model => model.Supplier) &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p>
-                        <p id="sup_val">@Html.DisplayFor(model => model.sup_val)</p>
+                        <p class="text-sm"> Supplier : &nbsp &nbsp @Html.DisplayFor(model => model.Supplier) &nbsp &nbsp &nbsp Bill To : &nbsp &nbsp @Html.DisplayFor(model => model.BillTo) &nbsp &nbsp &nbsp &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p>
+                        <p style="display:none">@Html.EditorFor(model => model.sup_val)</p><p style="display:none">@Html.EditorFor(model => model.billval)</p>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -169,6 +169,9 @@
                                             <th style="display: none;">project</th>
                                             <th style="display: none;">PO_Date</th>
                                             <th style="display: none;">PO_No</th>
+                                            <th style="display: none;">BillTo</th>
+                                            <th style="display: none;">Tax_Per</th>
+                                            <th style="display: none;">Tax_Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -202,7 +205,7 @@
                                                 @dr["PO_Final_Total"].ToString()
                                             </td>
                                             <td style="display:none;" id="Mfr">
-                                                @Html.DisplayFor(model => model.sup_val)
+                                                @dr["A_code"]
                                             </td>
                                             <td style="display:none;" id="Prj">
                                                 @ViewBag.Project
@@ -213,6 +216,11 @@
                                             <td style="display:none;">
                                                 @dr["PO_No"]
                                             </td>
+                                            <td style="display:none;" id="bill_v">
+                                                @dr["BillTo_Acode"]
+                                            </td>
+                                            <td id="taxper" style="display:none;"></td>
+                                            <td id="taxtot" style="display:none;"></td>
                                         </tr>
                                         i++;
                                     }
@@ -229,8 +237,8 @@
                                 <div style="display:none;">
                                     @Html.LabelFor(model => model.Final_Discount) : @Html.EditorFor(model => model.Final_Discount, new { htmlAttributes = new { @id = "Final_Discount" } })
                                 </div>
-                                <div style="display:none;">
-                                    @Html.LabelFor(model => model.Final_Tax1) : @Html.EditorFor(model => model.Final_Tax1, new { htmlAttributes = new { @style = "margin-left:11%;", @id = "Final_Tax1" } })
+                                <div>
+                                    @Html.LabelFor(model => model.Final_Tax1)@Html.EditorFor(model => model.Final_Tax1, new { htmlAttributes = new { @style = "margin-left:11%;width:25px;", @id = "Final_Tax1" } })% : <h6 id="total_tax"></h6>
                                 </div>
                                 <div style="display:none;">
                                     @Html.LabelFor(model => model.Final_Tax2) : @Html.EditorFor(model => model.Final_Tax2, new { htmlAttributes = new { @style = "margin-left:11%;", @id = "Final_Tax2" } })
@@ -264,12 +272,13 @@
         var d1 = $('#Part_No').val();
         var d2 = parseInt(document.getElementById("Quantity").value);
         var d3 = $('#Purchase_Rate').val();
-        var mfr = $('#Supplier').val();
+        var mfr = $('#sup_val').val();
         var project = $('#Project').val();
         var Invoice_No = document.getElementById("Ref_No").value;
         var Invoice_Date = $('#Ref_Date').val();
         var PO_Date = $("#Purchase_Order_Date").val();
         var PONo = $("#Purchase_Order_No").val();
+        var billval = $("#billval").val();
 
         var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
         var l_row1 = last_row1 - 1;
@@ -355,7 +364,7 @@
                     else {
                         document.getElementById("value").innerHTML = val;
                         var l_row = last_row - 1;
-                        var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal.toFixed(2) + '</td><td id="total' + i + '">' + Total.toFixed(2) + '</td><td class="row-data"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row1(this);"></i></td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;">' + mfr + '</td><td style="display:none;">' + project + '</td><td style="display:none;">' + PO_Date + '</td><td style="display:none;">' + PONo + '</td></tr>';
+                        var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal.toFixed(2) + '</td><td id="total' + i + '">' + Total.toFixed(2) + '</td><td class="row-data"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row1(this);"></i></td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;" id="Mfr">' + mfr + '</td><td style="display:none;">' + project + '</td><td style="display:none;">' + PO_Date + '</td><td style="display:none;">' + PONo + '</td><td style="display:none;" id="billval">' + billval + '</td></tr>';
                         $('#selected_units tr:last').after(newrow);
                         total_cal();
                         i++;
@@ -397,6 +406,7 @@
         var T_qty = 0;
         var T_subtotal = 0;
         var project = @ViewBag.Project_data;
+        var Total_tax = @ViewBag.Final_Tax;
         document.getElementById("Project").value = project;
         for (i = 0; i <= tbodyRowCount - 1; i++) {
             var p_qty = document.getElementById("selected_units").tBodies[0].rows[i].cells[2].innerHTML;
@@ -407,13 +417,24 @@
 
         document.getElementById("total_display").innerHTML = T_subtotal.toFixed(2);
         document.getElementById("Qty_display").innerHTML = T_qty;
-        document.getElementById("Final_Total").innerHTML = T_subtotal.toFixed(2);
+        document.getElementById("total_tax").innerHTML = Total_tax;
+        var finaltotal = T_subtotal + Total_tax;
+        document.getElementById("Final_Total").innerHTML = finaltotal.toFixed(2);
 
     }
 
     function final_calculation() {
         var sub_total = document.getElementById("total_display").innerHTML;
-        document.getElementById("Final_Total").innerHTML = sub_total;
+        var final_tax1 = $("#Final_Tax1").val();
+        if (final_tax1 == "") {
+            var tax1_val = 0;
+        }
+        else {
+            var tax1_val = (sub_total * final_tax1) / 100;
+            document.getElementById("total_tax").innerHTML = tax1_val.toFixed(2);
+        }
+        var Total = parseFloat(sub_total) + parseFloat(tax1_val);
+        document.getElementById("Final_Total").innerHTML = Total.toFixed(2);
     }
 
     function Toshow() {
@@ -529,7 +550,7 @@
         }
 
         document.getElementById("total_display").innerHTML = T_subtotal.toFixed(2);
-        document.getElementById("Qty_display").innerHTML = T_qty.toFixed(2);
+        document.getElementById("Qty_display").innerHTML = T_qty;
 
         var Total = T_subtotal;
         document.getElementById("Final_Total").innerHTML = Total.toFixed(2);
@@ -597,13 +618,19 @@
             var f6 = document.getElementById("Final_Total").innerHTML;
             var prj = document.getElementById("Project").value;
             var refno = document.getElementById("Ref_No").value;
-            var supcode = document.getElementById("sup_val").innerHTML;
+            var supcode = document.getElementById("sup_val").value;
+            var bill = document.getElementById("billval").value;
+            var taxper = document.getElementById("Final_Tax1").value;
+            var taxtot = document.getElementById("total_tax").innerHTML;
             document.getElementById("Mfr").innerHTML = supcode;
+            document.getElementById("bill_v").innerHTML = bill;
             document.getElementById("final_qty").innerHTML = f1;
             document.getElementById("final_SubTotal").innerHTML = f2;
             document.getElementById("final_Total").innerHTML = f6;
             document.getElementById("Prj").innerHTML = prj;
             document.getElementById("ref_no").innerHTML = refno;
+            document.getElementById("taxper").innerHTML = taxper;
+            document.getElementById("taxtot").innerHTML = taxtot;
             var submit1 = "";
             document.getElementById("Enter_Inv_No").innerHTML = submit1;
             var myRows = [];

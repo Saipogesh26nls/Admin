@@ -170,7 +170,7 @@
                                             <th style="padding-right:10px">Tax2_per</th>
                                             <th style="padding-right:10px">Tax2_Rs</th>
                                             <th style="padding-right:10px">Total</th>
-                                            <th style="padding-right: 30px; display:none;" id="edit_delete">Edit</th>
+                                            <th style="padding-right: 15px; display:none;" id="edit_delete">Edit</th>
                                             <th style="display:none;">Invoice_No</th>
                                             <th style="display: none;">Invoice_Date</th>
                                             <th style="display:none;">ILedger</th>
@@ -483,6 +483,7 @@
                     document.getElementById("Final_Total").innerHTML = data[0].final_total;
                     document.getElementById("Supplier").value = data[0].sup_code;
                     document.getElementById("Project").value = data[0].project;
+                    document.getElementById("Final_Tax1").value = data[0].Tax_Per;
                     qty = data[0].final_Qty;
                     total = data[0].final_Sub_Total;
                     final_total = data[0].final_total;

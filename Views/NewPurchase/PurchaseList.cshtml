@@ -34,6 +34,9 @@
             <th style="display:none">
                 @Html.DisplayNameFor(model => model.project)
             </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.PO_No)
+            </th>
         </tr>
 
         @foreach (var item in Model)
@@ -60,8 +63,11 @@
                 <td style="display:none">
                     @Html.DisplayFor(modelItem => item.project)
                 </td>
+                <th style="display:none">
+                    @Html.DisplayNameFor(model => model.PO_No)
+                </th>
                 <td>
-                    @Html.ActionLink("Edit", "Edit_Purchase_View", new { v_no = item.Voucher_No, v_date = item.Voucher_Date, inv_no = item.Invoice_No, inv_date = item.Invoice_Date, a_code = item.A_code, data = item.project }) | @Html.ActionLink("Delete", "Delete_Purchase_view", new { v_no = item.Voucher_No, v_date = item.Voucher_Date, inv_no = item.Invoice_No, inv_date = item.Invoice_Date, a_code = item.A_code })
+                    @Html.ActionLink("Edit", "Edit_Purchase_View", new { v_no = item.Voucher_No, v_date = item.Voucher_Date, inv_no = item.Invoice_No, inv_date = item.Invoice_Date, a_code = item.A_code, data = item.project, po_no = item.PO_No }) | @Html.ActionLink("Delete", "Delete_Purchase_view", new { v_no = item.Voucher_No, v_date = item.Voucher_Date, inv_no = item.Invoice_No, inv_date = item.Invoice_Date, a_code = item.A_code, po_no = item.PO_No })
                 </td>
             </tr>
         }

@@ -88,11 +88,13 @@ namespace Admin.Models
                     ILedger = 1,
                     ALedger = 2,
                     final_Qty = (int)dr["PO_Final_Qty"],
-                    final_Sub_Total = Convert.ToDouble(dr["PO_Final_Total"]),
+                    final_Sub_Total = Convert.ToDouble(dr["PO_Final_SubTotal"]),
                     final_total = Convert.ToDouble(dr["PO_Final_Total"]),
                     sup_code = dr["A_code"].ToString(),
                     project = dr["Project"].ToString(),
-                    PO_No = (int)dr["PO_No"]
+                    PO_No = (int)dr["PO_No"],
+                    Tax_Per = Convert.ToInt32(dr["PO_Tax_Per"]),
+                    Tax_Total = Convert.ToDouble(dr["PO_Tax_Total"])
                 }
                 ) ;
             }
@@ -183,7 +185,7 @@ namespace Admin.Models
                 i++;
                 j++;
 
-                if(po_no > 0)
+                /*if(po_no > 0)
                 {
                     for (int k = 0; k < data.Count(); k++)
                     {
@@ -215,7 +217,7 @@ namespace Admin.Models
                             SqlCmd4.ExecuteNonQuery();
                         }
                     }
-                }
+                }*/
             }
             Con1.Close();
             return Voucher_No;
@@ -243,7 +245,7 @@ namespace Admin.Models
             {
                 for (int i = 0; i < vno.Count; i++)
                 {
-                    string cmd1 = "select Top 1 Invoice_No,Invoice_Date,Voucher_No,Voucher_Date,A_code,Project from Purchase where Voucher_No = '" + vno[i] + "' ORDER BY Voucher_No Asc;";
+                    string cmd1 = "select Top 1 Invoice_No,Invoice_Date,Voucher_No,Voucher_Date,A_code,Project,PO_No from Purchase where Voucher_No = '" + vno[i] + "' ORDER BY Voucher_No Asc;";
                     SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
                     SqlDataReader dr = SqlCmd1.ExecuteReader();
                     while (dr.Read())
@@ -255,7 +257,8 @@ namespace Admin.Models
                             Voucher_No = dr["Voucher_No"].ToString(),
                             Voucher_Date = dr["Voucher_Date"].ToString(),
                             A_code = dr["A_code"].ToString(),
-                            project = dr["Project"].ToString()
+                            project = dr["Project"].ToString(),
+                            PO_No = dr["PO_No"].ToString()
                         }
                         ) ;
                     }
@@ -285,7 +288,7 @@ namespace Admin.Models
             Con.Close();
             return ItemQm;
         }
-        public void Edit_and_Delete(List<PurchaseTable> data, int final_Qty, double final_subtotal, double final_discount, double final_tax1, double final_tax2, double final_total)
+        public void Edit_and_Delete(List<PurchaseTable> data, int final_Qty, double final_subtotal, double final_discount, double final_tax1, double final_tax2, double final_total, int pono, int project)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
@@ -350,6 +353,8 @@ namespace Admin.Models
                 sql_cmnd.Parameters.AddWithValue("@acc_name", SqlDbType.NVarChar).Value = data[i].supplier;
                 sql_cmnd.Parameters.AddWithValue("@goodsissue", SqlDbType.NVarChar).Value = null;
                 sql_cmnd.Parameters.AddWithValue("@ARefNo", SqlDbType.NVarChar).Value = ARefNo;
+                sql_cmnd.Parameters.AddWithValue("@pono", SqlDbType.Int).Value = pono;
+                sql_cmnd.Parameters.AddWithValue("@project", SqlDbType.Int).Value = project;
 
                 if (j == data.Count() - 1)
                 {
@@ -393,7 +398,7 @@ namespace Admin.Models
                 return null;
             }
         }
-        public int Add_PO(List<PurchaseTable> data, int Qty, double total, double final_total, int project)
+        public int Add_PO(List<PurchaseTable> data, int Qty, double total, double final_total, int project, float taxper, double taxamt)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
@@ -430,6 +435,10 @@ namespace Admin.Models
                 sql_cmnd.Parameters.AddWithValue("@Final_Total", SqlDbType.Money).Value = final_total;
                 sql_cmnd.Parameters.AddWithValue("@acc_name", SqlDbType.NVarChar).Value = data[i].supplier;
                 sql_cmnd.Parameters.AddWithValue("@project", SqlDbType.Int).Value = project;
+                sql_cmnd.Parameters.AddWithValue("@taxper", SqlDbType.Float).Value = taxper;
+                sql_cmnd.Parameters.AddWithValue("@taxamt", SqlDbType.Money).Value = taxamt;
+                sql_cmnd.Parameters.AddWithValue("@final_subtotal", SqlDbType.Money).Value = total;
+                sql_cmnd.Parameters.AddWithValue("@billto", SqlDbType.NVarChar).Value = data[i].BillTo;
                 sql_cmnd.ExecuteNonQuery();
                 if (i == data.Count() - 1)
                 {
@@ -440,7 +449,7 @@ namespace Admin.Models
             Con1.Close();
             return PO_No;
         }
-        public void Edit_PO(List<PurchaseTable> data, int Qty, double total, double final_total, int project, string supplier, string refno)
+        public void Edit_PO(List<PurchaseTable> data, int Qty, double total, double final_total, int project, string supplier, string refno, string billto, float taxper, double taxamt)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
@@ -470,6 +479,10 @@ namespace Admin.Models
                 sql_cmnd.Parameters.AddWithValue("@Final_Total", SqlDbType.Money).Value = final_total;
                 sql_cmnd.Parameters.AddWithValue("@acc_name", SqlDbType.NVarChar).Value = supplier;
                 sql_cmnd.Parameters.AddWithValue("@project", SqlDbType.Int).Value = project;
+                sql_cmnd.Parameters.AddWithValue("@taxper", SqlDbType.Float).Value = taxper;
+                sql_cmnd.Parameters.AddWithValue("@taxamt", SqlDbType.Money).Value = taxamt;
+                sql_cmnd.Parameters.AddWithValue("@final_subtotal", SqlDbType.Money).Value = total;
+                sql_cmnd.Parameters.AddWithValue("@billto", SqlDbType.NVarChar).Value = billto;
                 sql_cmnd.ExecuteNonQuery();
                 if (i == data.Count() - 1)
                 {
@@ -485,7 +498,7 @@ namespace Admin.Models
             List<int> vno = new List<int>();
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd2 = "SELECT PO_No FROM Purchase_Order GROUP BY PO_No HAVING COUNT(*)>0";
+            string cmd2 = "SELECT PO_No FROM Purchase_Order where PO_No > 0 GROUP BY PO_No HAVING COUNT(*)>0";
             SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
             SqlDataReader dr1 = SqlCmd2.ExecuteReader();
             while (dr1.Read())
@@ -502,7 +515,7 @@ namespace Admin.Models
             {
                 for (int i = 0; i < vno.Count; i++)
                 {
-                    string cmd1 = "select Top 1 PO_No,PO_Date,Ref_No,Ref_Date,A_code from Purchase_Order where PO_No = '" + vno[i] + "' ORDER BY PO_No Asc;";
+                    string cmd1 = "select Top 1 PO_No,PO_Date,Ref_No,Ref_Date,A_code,BillTo_Acode from Purchase_Order where PO_No = '" + vno[i] + "' ORDER BY PO_No Asc;";
                     SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
                     SqlDataReader dr = SqlCmd1.ExecuteReader();
                     while (dr.Read())
@@ -513,7 +526,8 @@ namespace Admin.Models
                             PO_Date = dr["PO_Date"].ToString(),
                             Ref_No = dr["Ref_No"].ToString(),
                             Ref_Date = dr["Ref_Date"].ToString(),
-                            acode = dr["A_code"].ToString()
+                            acode = dr["A_code"].ToString(),
+                            billto_acode = dr["BillTo_Acode"].ToString()
                         }
                         );
                     }

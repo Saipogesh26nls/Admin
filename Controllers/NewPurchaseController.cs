@@ -46,14 +46,47 @@ namespace Admin.Controllers
                 SqlDataAdapter _da3 = new SqlDataAdapter("SELECT PO_No FROM Purchase_Order GROUP BY PO_No HAVING COUNT(*)>0", _con);
                 DataTable _dt3 = new DataTable();
                 _da3.Fill(_dt3);
-                ViewBag.POno = ToSelectList(_dt3, "PO_No", "PO_No");
                 _con.Close();
+                ViewBag.POno = ToPOList(_dt3, "PO_No", "PO_No");
                 return View(new_Purchase);
             }
             else
             {
                 return RedirectToAction("Err", "Login");
             }
+        }
+        [NonAction]
+        public SelectList ToPOList(DataTable table, string valueField, string textField) // For making Dropdown list
+        {
+            SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            _con.Open();
+            List<int> vno = new List<int>();
+            string cmd = "SELECT PO_No FROM Purchase GROUP BY PO_No HAVING COUNT(*)>0";
+            SqlCommand SqlCmd = new SqlCommand(cmd, _con);
+            SqlDataReader dr = SqlCmd.ExecuteReader();
+            while (dr.Read())
+            {
+                vno.Add((int)dr["PO_No"]);
+            }
+            dr.Close();
+            List<SelectListItem> list = new List<SelectListItem>();
+            foreach (DataRow row in table.Rows)
+            {
+                list.Add(new SelectListItem()
+                {
+                    Text = row[textField].ToString(),
+                    Value = row[valueField].ToString()
+                });
+            }
+            for(int i = 0; i < list.Count; i++)
+            {
+                if (vno.Contains(Convert.ToInt32(list[i].Value)))
+                {
+                    list.Remove(list[i]);
+                }
+            }
+            _con.Close();
+            return new SelectList(list, "Value", "Text");
         }
         [NonAction]
         public SelectList ToSelectList(DataTable table, string valueField, string textField) // For making Dropdown list
@@ -116,8 +149,8 @@ namespace Admin.Controllers
                 return Json(name);
             }
             
-        }
-
+        } // Add PO to Purchase view
+         
         //Purchase List
         [HttpGet]
         public ActionResult PurchaseList() // To show full purchase list view
@@ -164,7 +197,7 @@ namespace Admin.Controllers
 
         //Edit Purchase
         static int V_no = 0;
-        public ActionResult Edit_Purchase_View(int v_no, DateTime v_date, string inv_no, DateTime inv_date, string a_code, string data) // edit purchase view
+        public ActionResult Edit_Purchase_View(int v_no, DateTime v_date, string inv_no, DateTime inv_date, string a_code, string data, string po_no) // edit purchase view
         {
             if (Session["userID"] != null)
             {
@@ -242,8 +275,10 @@ namespace Admin.Controllers
                 newPurchase_Insert.Invoice_Date = inv_date;
                 newPurchase_Insert.Supplier = a_code;
                 newPurchase_Insert.Project = data;
+                newPurchase_Insert.PO_No = po_no;
 
                 ViewBag.Project_data = data;
+                ViewBag.PO_No = po_no;
                 ViewBag.PL = PM_Data.Tables[0];
                 V_no = v_no;
                 ViewBag.ILedger = 1;
@@ -258,7 +293,7 @@ namespace Admin.Controllers
             }
         } 
         [HttpPost]
-        public ActionResult Edited_Table_Data(List<PurchaseTable> Purchase)  // For Edit and Delete the purchase list in DB
+        public ActionResult Edited_Table_Data(List<PurchaseTable> Purchase) // For Edit and Delete the purchase list in DB
         {
             for(int i = 0;i< Purchase.Count; i++)
             {
@@ -275,8 +310,10 @@ namespace Admin.Controllers
             double Final_Tax1 = Purchase[0].final_Tax1;
             double Final_Tax2 = Purchase[0].final_Tax2;
             double Final_Total = Purchase[0].final_total;
+            int project = Convert.ToInt32(Purchase[0].project);
+            int pono = Purchase[0].PO_No;
             NewPurchase_Insert purchase = new NewPurchase_Insert();
-            purchase.Edit_and_Delete(Purchase, Final_Quantity, Final_SubTotal, Final_Discount, Final_Tax1, Final_Tax2, Final_Total);
+            purchase.Edit_and_Delete(Purchase, Final_Quantity, Final_SubTotal, Final_Discount, Final_Tax1, Final_Tax2, Final_Total, pono, project);
             return Json(Purchase);
         }
         public ActionResult Purchase_ED(GoodsRI name) // For Delete individual row from DB
@@ -758,6 +795,7 @@ namespace Admin.Controllers
             New_Purchase new_Purchase = new New_Purchase();
             new_Purchase.Purchase_Order_Date = DateTime.Today;
             new_Purchase.Ref_Date = DateTime.Today;
+            new_Purchase.Final_Tax1 = 18;
 
             SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             _con.Open();
@@ -786,12 +824,14 @@ namespace Admin.Controllers
         }
         public ActionResult Add_PO_to_DB(List<PurchaseTable> Purchase) // add PO to db
         {
+            float tax_per = Purchase[0].Tax_Per;
+            double tax_amt = Purchase[0].Tax_Total;
             int project = int.Parse(Purchase[0].project);
             int Quantity = Purchase[0].final_Qty;
             double Total = Purchase[0].final_Sub_Total;
             double Final_Total = Purchase[0].final_total;
             NewPurchase_Insert purchase = new NewPurchase_Insert();
-            int v_no = purchase.Add_PO(Purchase, Quantity, Total, Final_Total, project);
+            int v_no = purchase.Add_PO(Purchase, Quantity, Total, Final_Total, project, tax_per, tax_amt);
             return Json(v_no);
         }
 
@@ -813,6 +853,15 @@ namespace Admin.Controllers
                     PM_Data[i].Supplier = Mfr;
                 }
                 dr.Close();
+                string cmd2 = "select A_Name from Account_Master where A_code = '" + PM_Data[i].billto_acode + "'";
+                SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+                SqlDataReader dr1 = SqlCmd2.ExecuteReader();
+                while (dr1.Read())
+                {
+                    string Mfr = dr1["A_Name"].ToString();
+                    PM_Data[i].BillTo = Mfr;
+                }
+                dr1.Close();
             }
             ViewBag.PL = PM_Data;
             Con.Close();
@@ -820,7 +869,7 @@ namespace Admin.Controllers
         }
 
         // Edit Purchase Order
-        public ActionResult PO_to_EditPurchase(int PO_No, DateTime PO_Date, string Ref_No, DateTime Ref_Date, string Supplier) // Add PO to Purchase View
+        public ActionResult PO_to_EditPurchase(int PO_No, DateTime PO_Date, string Ref_No, DateTime Ref_Date, string Supplier, string Billto) // Add PO to Purchase View
         {
             New_Purchase newPurchase_Insert = new New_Purchase();
             PurchaseTable mfr = new PurchaseTable();
@@ -859,13 +908,17 @@ namespace Admin.Controllers
             newPurchase_Insert.Purchase_Order_Date = PO_Date;
             newPurchase_Insert.Ref_Date = Ref_Date;
             newPurchase_Insert.Supplier = Supplier;
+            newPurchase_Insert.BillTo = Billto;
+            newPurchase_Insert.Final_Tax1 = (double)PM_Data.Tables[0].Rows[0]["PO_Tax_Per"];
             newPurchase_Insert.Project = PM_Data.Tables[0].Rows[0]["Project"].ToString();
             newPurchase_Insert.sup_val = PM_Data.Tables[0].Rows[0]["A_code"].ToString();
+            newPurchase_Insert.billval = PM_Data.Tables[0].Rows[0]["BillTo_Acode"].ToString();
             ViewBag.Project_data = PM_Data.Tables[0].Rows[0]["Project"].ToString();
             ViewBag.PL = PM_Data.Tables[0];
             ViewBag.ILedger = 1;
             ViewBag.ALedger = 2;
             ViewBag.Final_Total = PM_Data.Tables[0].Rows[0]["PO_Final_Total"].ToString();
+            ViewBag.Final_Tax = PM_Data.Tables[0].Rows[0]["PO_Tax_Total"].ToString(); ;
             Con.Close();
             return View(newPurchase_Insert);
         }
@@ -878,15 +931,18 @@ namespace Admin.Controllers
         public ActionResult Updated_PO_to_DB (List<PurchaseTable> Purchase)
         {
             int project = int.Parse(Purchase[0].project);
+            float taxper = Purchase[0].Tax_Per;
+            double taxamt = Purchase[0].Tax_Total;
             string supplier = Purchase[0].supplier;
+            string billto = Purchase[0].BillTo;
             int Quantity = Purchase[0].final_Qty;
             double Total = Purchase[0].final_Sub_Total;
             double Final_Total = Purchase[0].final_total;
             string refno = Purchase[0].Invoice_No.ToUpper();
             NewPurchase_Insert purchase = new NewPurchase_Insert();
-            purchase.Edit_PO(Purchase, Quantity, Total, Final_Total, project, supplier, refno);
+            purchase.Edit_PO(Purchase, Quantity, Total, Final_Total, project, supplier, refno, billto, taxper, taxamt);
             return Json(Purchase);
-        }
+        } // update edited PO to db
 
         // Delete Purchase Order
         public ActionResult PO_Delete(int PO_No, DateTime PO_Date, string Ref_No, DateTime Ref_Date, string Supplier) // PO Delete View
