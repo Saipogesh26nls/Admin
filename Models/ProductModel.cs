@@ -420,11 +420,16 @@ namespace Admin.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Purchase_Order_Date { get; set; }
         public string Ref_No { get; set; }
-        public DateTime Ref_Date { get; set; }  
+        public DateTime Ref_Date { get; set; }
         public string sup_val { get; set; }
         public string BillTo { get; set; }
         public string billval { get; set; }
-
+        public double IGST { get; set; }
+        public double CGST { get; set; }
+        public double SGST { get; set; }
+        public double Total_IGST { get; set; }
+        public double Total_CGST { get; set; }
+        public double Total_SGST { get; set; }
     }
     public class PurchaseTable
     {

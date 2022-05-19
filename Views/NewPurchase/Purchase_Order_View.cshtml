@@ -74,16 +74,17 @@
                                 Part No : <input id="Part_No" type="text" style="border: 1px solid gray;margin-left:0.5%;margin-right: 1%;width:15%;" class="uppercase" placeholder="Part No"><i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:3%"></i>@Html.DisplayFor(model => model.Part_No)
                                 Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 6%; width: 10%;" placeholder="Quantity">
                                 Price Per Unit : <input id="Purchase_Rate" type="text" style="border: 1px solid gray; width: 10%; margin-right: 2%;" placeholder="Purchase Rate">
-                                <button class="btn btn-sm btn-secondary" id="Insert">Insert</button>
                             </p>
                             <div>
                                 <p id="value" style="width:50%" class="text-sm"></p>
                             </div>
                             <div>
-                                <p class="text-sm" style="display:none">
-                                    Discount : <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 8.5%; width: 15%;" placeholder="Discount">
-                                    Tax1 : <input id="Tax_1" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 9.5%; width: 15%;" placeholder="Tax 1">
-                                    Tax2 : <input id="Tax_2" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 8%; width: 15%;" placeholder="Tax 2">
+                                <p class="text-sm">
+                                    Discount(%) : <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 1.5%; width: 10%;" placeholder="Discount">
+                                    IGST(%) : <input id="IGST" name="IGST" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 1.5%; width: 10%;" placeholder="IGST">
+                                    CGST(%) : <input id="CGST" name="CGST" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 1.5%; width: 10%;" placeholder="CGST">
+                                    SGST(%) : <input id="SGST" name="SGST" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 4%; width: 10%;" placeholder="SGST">
+                                    <button class="btn btn-sm btn-secondary" id="Insert">Insert</button>
                                 </p>
                             </div>
                             <!-- The Modal -->
@@ -148,7 +149,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 400px;">
+                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 300px;">
                                 <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
                                     <tbody>
                                         <tr>
@@ -173,24 +174,27 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div>
-                                @Html.LabelFor(model => model.Quantity, new { htmlAttributes = new { id = "Qty_Label" } }) : <h6 id="Qty_display"></h6>
+                            <div style="font-weight:bold">
+                                Total Quantity : <h6 id="Qty_display" style="font-weight:bold"></h6>
                             </div>
-                            <div class="float-right">
+                            <div class="float-right" style="font-weight:bold">
                                 <div>
-                                    @Html.LabelFor(model => model.Total, new { htmlAttributes = new { id = "total_Label" } }) : <h6 id="total_display"></h6>
-                                </div>
-                                <div style="display:none;">
-                                    @Html.LabelFor(model => model.Final_Discount) : @Html.EditorFor(model => model.Final_Discount, new { htmlAttributes = new { @id = "Final_Discount" } })
+                                    Sub-Total &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; : &nbsp; <input id="total_display" style="width: 80px; border: none; font-weight: bold" />
                                 </div>
                                 <div>
-                                    @Html.LabelFor(model => model.Final_Tax1)@Html.EditorFor(model => model.Final_Tax1, new { htmlAttributes = new {@id = "Final_Tax1", style="width:25px;"} })% : <h6 id="total_tax"></h6>
-                                </div>
-                                <div style="display:none;">
-                                    @Html.LabelFor(model => model.Final_Tax2) : @Html.EditorFor(model => model.Final_Tax2, new { htmlAttributes = new { @style = "margin-left:11%;", @id = "Final_Tax2" } })
+                                    Discount(%)&nbsp; @Html.EditorFor(model => model.Final_Discount, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input id="total_discount" style="width: 80px; border: none; font-weight: bold" />
                                 </div>
                                 <div>
-                                    @Html.LabelFor(model => model.Final_Total, new { htmlAttributes = new { id = "final_total_Label" } }) : <h6 id="Final_Total" style="margin-left:11%;"></h6>
+                                    IGST(%) &nbsp; &nbsp; &nbsp; &nbsp; @Html.EditorFor(model => model.Total_IGST, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input id="total_igst" name="total_igst" style="width: 80px; border: none; font-weight: bold " />
+                                </div>
+                                <div>
+                                    CGST(%) &nbsp; &nbsp; &nbsp;&nbsp; @Html.EditorFor(model => model.Total_CGST, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input id="total_cgst" name="total_cgst" style="width: 80px; border: none; font-weight: bold " />
+                                </div>
+                                <div>
+                                    SGST(%) &nbsp; &nbsp; &nbsp;&nbsp; @Html.EditorFor(model => model.Total_SGST, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input id="total_sgst" name="total_sgst" style="width: 80px; border: none; font-weight: bold " />
+                                </div>
+                                <div>
+                                    Total &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; : &nbsp; <input id="Final_Total" style="width: 80px; border: none; font-weight: bold" />
                                 </div>
                             </div>
                             <p id="del"></p>
@@ -323,6 +327,7 @@
     function vno() {
         document.getElementById("Purchase_Order_No").value = "";
     }
+
     function formClear() {
         $("#Part_No").val("");
         $("#Quantity").val("");
@@ -607,4 +612,75 @@
                 }
             });
     }
+
+    $('input[name=IGST]').change(function () {
+        var igst = document.getElementById("IGST").value;
+        if (igst != "") {
+            $('#CGST').prop('disabled', true);
+            $('#SGST').prop('disabled', true);
+        }
+        else {
+            $('#CGST').prop('disabled', false);
+            $('#SGST').prop('disabled', false);
+        }
+    });
+    $('input[name=CGST]').change(function () {
+        var cgst = document.getElementById("CGST").value;
+        if (cgst != "") {
+            $('#IGST').prop('disabled', true);
+        }
+        else {
+            $('#IGST').prop('disabled', false);
+        }
+    });
+    $('input[name=SGST]').change(function () {
+        var sgst = document.getElementById("SGST").value;
+        if (sgst != "") {
+            $('#IGST').prop('disabled', true);
+        }
+        else {
+            $('#IGST').prop('disabled', false);
+        }
+    });
+    $('input[name=Total_IGST]').change(function () {
+        var igst = document.getElementById("Total_IGST").value;
+        if (igst > 0) {
+            $('#Total_CGST').prop('disabled', true);
+            $('#Total_SGST').prop('disabled', true);
+            document.getElementById("total_cgst").value = "";
+            document.getElementById("total_sgst").value = "";
+            $('#total_cgst').prop('disabled', true);
+            $('#total_sgst').prop('disabled', true);
+        }
+        else {
+            $('#Total_CGST').prop('disabled', false);
+            $('#Total_SGST').prop('disabled', false);
+            $('#total_cgst').prop('disabled', false);
+            $('#total_sgst').prop('disabled', false);
+        }
+    });
+    $('input[name=Total_CGST]').change(function () {
+        var cgst = document.getElementById("Total_CGST").value;
+        if (cgst > 0) {
+            $('#total_igst').prop('disabled', true);
+            document.getElementById("total_igst").value = "";
+            $('#Total_IGST').prop('disabled', true);
+        }
+        else {
+            $('#total_igst').prop('disabled', false);
+            $('#Total_IGST').prop('disabled', false);
+        }
+    });
+    $('input[name=Total_SGST]').change(function () {
+        var sgst = document.getElementById("Total_SGST").value;
+        if (sgst > 0) {
+            $('#total_igst').prop('disabled', true);
+            document.getElementById("total_igst").value = "";
+            $('#Total_IGST').prop('disabled', true);
+        }
+        else {
+            $('#total_igst').prop('disabled', false);
+            $('#Total_IGST').prop('disabled', false);
+        }
+    });
 </script>

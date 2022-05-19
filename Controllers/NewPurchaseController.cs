@@ -103,7 +103,7 @@ namespace Admin.Controllers
             return new SelectList(list, "Value", "Text");
         }
         [HttpPost]
-        public ActionResult Table_Data(List<PurchaseTable> Purchase)  // For Adding Purchase Data to DB
+        public ActionResult Table_Data(List<PurchaseTable> Purchase) // For Adding Purchase Data to DB
         {
             string Invno = Purchase[0].Invoice_No;
             DateTime Invdate = Purchase[0].Invoice_Date;
