@@ -15,8 +15,8 @@ namespace Admin.Controllers
         [HttpGet]
         public ActionResult New_Purchase(New_Purchase Purchase) // New Purchase Entry View
         {
-            if (Session["userID"] != null)
-            {
+            /*if (Session["userID"] != null)
+            {*/
                 New_Purchase new_Purchase = new New_Purchase();
                 new_Purchase.Voucher_Date = DateTime.Today;
                 new_Purchase.Invoice_Date = DateTime.Today;
@@ -49,11 +49,11 @@ namespace Admin.Controllers
                 _con.Close();
                 ViewBag.POno = ToPOList(_dt3, "PO_No", "PO_No");
                 return View(new_Purchase);
-            }
+            /*}
             else
             {
                 return RedirectToAction("Err", "Login");
-            }
+            }*/
         }
         [NonAction]
         public SelectList ToPOList(DataTable table, string valueField, string textField) // For making Dropdown list
@@ -155,8 +155,8 @@ namespace Admin.Controllers
         [HttpGet]
         public ActionResult PurchaseList() // To show full purchase list view
         {
-            if (Session["userID"] != null)
-            {
+            /*if (Session["userID"] != null)
+            {*/
                 NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
                 var PM_Data = newPurchase_Insert.Purchase_List();
                 SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
@@ -188,19 +188,19 @@ namespace Admin.Controllers
                 ViewBag.PL = PM_Data;
                 Con.Close();
                 return View(PM_Data);
-            }
+            /*}
             else
             {
                 return RedirectToAction("Err", "Login");
-            }
+            }*/
         }
 
         //Edit Purchase
         static int V_no = 0;
         public ActionResult Edit_Purchase_View(int v_no, DateTime v_date, string inv_no, DateTime inv_date, string a_code, string data, string po_no) // edit purchase view
         {
-            if (Session["userID"] != null)
-            {
+            /*if (Session["userID"] != null)
+            {*/
                 New_Purchase newPurchase_Insert = new New_Purchase();
                 PurchaseTable mfr = new PurchaseTable();
                 DataSet PM_Data = newPurchase_Insert.EditPurchase(v_no);
@@ -286,11 +286,11 @@ namespace Admin.Controllers
                 ViewBag.Ref_No = ref_no;
                 Con.Close();
                 return View(newPurchase_Insert);
-            }
+            /*}
             else
             {
                 return RedirectToAction("Err", "Login");
-            }
+            }*/
         } 
         [HttpPost]
         public ActionResult Edited_Table_Data(List<PurchaseTable> Purchase) // For Edit and Delete the purchase list in DB
@@ -327,9 +327,9 @@ namespace Admin.Controllers
         [HttpGet]
         public ActionResult Delete_Purchase_view(int v_no, DateTime v_date, string inv_no, DateTime inv_date, string a_code) // delete purchase view
         {
-            var roll = Convert.ToInt32(Session["roll"]);
+            /*var roll = Convert.ToInt32(Session["roll"]);
             if (Session["userID"] != null && roll == 1)
-            {
+            {*/
                 New_Purchase newPurchase_Insert = new New_Purchase();
                 PurchaseTable mfr = new PurchaseTable();
                 DataSet PM_Data = newPurchase_Insert.EditPurchase(v_no);
@@ -398,11 +398,11 @@ namespace Admin.Controllers
                 ViewBag.Ref_No = ref_no;
                 Con.Close();
                 return View(newPurchase_Insert);
-            }
+            /*}
             else
             {
                 return RedirectToAction("Err", "Login");
-            }
+            }*/
         }
         [HttpPost]
         public ActionResult Add_Deleted_Purchase(List<PurchaseTable> Purchase) // add deleted purchase to DB

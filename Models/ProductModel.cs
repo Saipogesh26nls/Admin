@@ -439,15 +439,6 @@ namespace Admin.Models
         public int Quantity { get; set; }
         public double Price { get; set; }
         public double SubTotal { get; set; }
-        [DisplayName("Discount(%)")]
-        public double Dis_per { get; set; }
-        public double Dis_Rs { get; set; }
-        [DisplayName("Tax1(%)")]
-        public double Tax1_per { get; set; }
-        public double Tax1_Rs { get; set; }
-        [DisplayName("Tax2(%)")]
-        public double Tax2_per { get; set; }
-        public double Tax2_Rs { get; set; }
         public double Total { get; set; }
         public string Invoice_No { get; set; }
         public DateTime Invoice_Date { get; set; }
@@ -461,18 +452,30 @@ namespace Admin.Models
         public string sup_code { get; set; }
         public int ILedger { get; set; }
         public int ALedger { get; set; }
-        public int final_Qty { get; set; }
-        public double final_Sub_Total { get; set; }
-        public double final_Discount { get; set; }
-        public double final_Tax1 { get; set; }
-        public double final_Tax2 { get; set; }
-        public double final_total { get; set; }
         public string Ref_No { get; set; }
         public int I_Qty { get; set; }
         public string project { get; set; }
-        public float Tax_Per { get; set; }
-        public double Tax_Total { get; set; }
         public string BillTo { get; set; }
+        public double Dis_per { get; set; }
+        public double Dis_Rs { get; set; }
+        public double Igst_per { get; set; }
+        public double Igst_Rs { get; set; }
+        public double Cgst_per { get; set; }
+        public double Cgst_Rs { get; set; }
+        public double Sgst_per { get; set; }
+        public double Sgst_Rs { get; set; }
+        public double Final_Dis_per { get; set; }
+        public double Final_Dis_Rs { get; set; }
+        public double Final_Igst_per { get; set; }
+        public double Final_Igst_Rs { get; set; }
+        public double Final_Cgst_per { get; set; }
+        public double Final_Cgst_Rs { get; set; }
+        public double Final_Sgst_per { get; set; }
+        public double Final_Sgst_Rs { get; set; }
+        public int Final_Qty { get; set; }
+        public double Final_Sub_Total { get; set; }
+        public double Final_total { get; set; }
+
     }
     public class PurchaseList
     {
