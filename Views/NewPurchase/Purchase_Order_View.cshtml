@@ -186,7 +186,7 @@
         </div>
         <p id="Enter_Inv_No"></p>
         <p id="vno" style="background-color:yellow;width:20%"></p>
-        <button class="btn btn-sm btn-secondary" id="Submit" style="width:8%;">Submit</button>
+        <button class="btn btn-sm btn-secondary" id="Submit" style="width:100px;">Submit</button>
         <pre id="json_op"></pre>
     </div>
 </body>
@@ -300,7 +300,6 @@
                         document.getElementById("value").innerHTML = val;
                         var newrow = '<tr id="data" style="font-size:13px;"><td>' + _partno + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + _qty + '</td><td>' + _price + '</td><td>' + _discount_per + '</td><td>' + _discount_val.toFixed(2) + '</td><td>' + _igst_per + '</td><td>' + _igst_val.toFixed(2) + '</td><td>' + _cgst_per + '</td><td>' + _cgst_val.toFixed(2) + '</td><td>' + _sgst_per + '</td><td>' + _sgst_val.toFixed(2) + '</td><td>' + _subtotal.toFixed(2) + '</td><td id="total' + i + '">' + _total.toFixed(2) + '</td><td style="display:none;">' + _RefNo + '</td><td style="display:none;">' + _RefDate + '</td><td style="display:none;" id="_final_qty"></td><td style="display:none;" id="_final_subtotal"></td><td style="display:none;" id="_final_total"></td><td style="display:none;" id="_final_dis_per"></td><td style="display:none;" id="_final_dis_val"></td><td style="display:none;" id="_final_igst_per"></td><td style="display:none;" id="_final_igst_val"></td><td style="display:none;" id="_final_cgst_per"></td><td style="display:none;" id="_final_cgst_val"></td><td style="display:none;" id="_final_sgst_per"></td><td style="display:none;" id="_final_sgst_val"></td><td style="display:none;">' + _supplier + '</td><td style="display:none;">' + _project + '</td><td style="display:none;">' + _PODate + '</td><td style="display:none;">' + _billto + '</td></tr>';
                         $('#selected_units tr:last').after(newrow);
-                        @*final_calculation();*@
                         formClear();
                         i++;
                     }
@@ -354,29 +353,35 @@
     }
 
     $('#Submit').click(function (e) {
-        @*final_calculation();*@
         var part = document.getElementById("selected_units").tBodies[0].rows.length;
         if (part==1) {
             document.getElementById("Enter_Inv_No").innerHTML = "Table is Empty !!!";
             return;
         }
         else {
-            var __final_qty = ;
-            var __final_subtotal = ;
-            var __final_total = ;
-            var __final_dis_per = ;
-            var __final_dis_val = ;
-            var __final_igst_per = ;
-            var __final_igst_val = ;
-            var __final_cgst_per = ;
-            var __final_cgst_val = ;
-            var __final_sgst_per = ;
-            var __final_sgst_val = ;
-            document.getElementById("tax_per").innerHTML = tax_per;
-            document.getElementById("tax_val").innerHTML = tax_val;
-            document.getElementById("final_qty").innerHTML = f1;
-            document.getElementById("final_SubTotal").innerHTML = f2;
-            document.getElementById("final_Total").innerHTML = f6;
+            var __final_qty = document.getElementById("final_Quantity").value;
+            var __final_subtotal = document.getElementById("final_SubTotal").value;
+            var __final_dis_per = document.getElementById("Final_Discount").value;
+            var __final_dis_val = document.getElementById("total_discount").value;
+            var __final_igst_per = document.getElementById("Total_IGST").value;
+            var __final_igst_val = document.getElementById("total_igst").value;
+            var __final_cgst_per = document.getElementById("Total_CGST").value;
+            var __final_cgst_val = document.getElementById("total_cgst").value;
+            var __final_sgst_per = document.getElementById("Total_SGST").value;
+            var __final_sgst_val = document.getElementById("total_sgst").value;
+            var __final_total = document.getElementById("Final_Total").value;
+            document.getElementById("_final_qty").innerHTML = __final_qty;
+            document.getElementById("_final_subtotal").innerHTML = __final_subtotal;
+            document.getElementById("_final_dis_per").innerHTML = __final_dis_per;
+            document.getElementById("_final_dis_val").innerHTML = __final_dis_val;
+            document.getElementById("_final_igst_per").innerHTML = __final_igst_per;
+            document.getElementById("_final_igst_val").innerHTML = __final_igst_val;
+            document.getElementById("_final_cgst_per").innerHTML = __final_cgst_per;
+            document.getElementById("_final_cgst_val").innerHTML = __final_cgst_val;
+            document.getElementById("_final_sgst_per").innerHTML = __final_sgst_per;
+            document.getElementById("_final_sgst_val").innerHTML = __final_sgst_val;
+            document.getElementById("_final_total").innerHTML = __final_total;
+
             var submit1 = "";
             document.getElementById("Enter_Inv_No").innerHTML = submit1;
             var myRows = [];
@@ -417,8 +422,6 @@
                     }, 3000);
                 }
             });
-            @*document.getElementById("json_op").innerHTML = JSON.stringify(myRows, undefined, 2);*@
-
         }
     });
 

@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Collections.Generic;
 
 namespace Admin.Controllers
 {
@@ -109,14 +110,15 @@ namespace Admin.Controllers
             DateTime Invdate = Purchase[0].Invoice_Date;
             int po_no = Purchase[0].PO_No;
             int project = int.Parse(Purchase[0].project);
-            int Quantity = Purchase[0].final_Qty;
+            /*int Quantity = Purchase[0].final_Qty;
             double Total = Purchase[0].final_Sub_Total;
             double Final_Total = Purchase[0].final_total;
             double Final_Discount = Purchase[0].final_Discount;
             double Final_Tax1 = Purchase[0].final_Tax1;
             double Final_Tax2 = Purchase[0].final_Tax2;
             NewPurchase_Insert purchase = new NewPurchase_Insert();
-            int v_no = purchase.Add_Data(Purchase, Quantity, Total, Final_Total, Final_Discount, Final_Tax1, Final_Tax2, project, po_no, Invno, Invdate);
+            int v_no = purchase.Add_Data(Purchase, Quantity, Total, Final_Total, Final_Discount, Final_Tax1, Final_Tax2, project, po_no, Invno, Invdate);*/
+            int v_no = 0;
             return Json(v_no);
         }
         public ActionResult Partno_to_Descp(BOMFields name) // conversion of part_no to description
@@ -304,7 +306,7 @@ namespace Admin.Controllers
                 Purchase[i].Voucher_No = b;
                 Purchase[i].supplier = c;
             }
-            int Final_Quantity = Purchase[0].final_Qty;
+            /*int Final_Quantity = Purchase[0].final_Qty;
             double Final_SubTotal = Purchase[0].final_Sub_Total;
             double Final_Discount = Purchase[0].final_Discount;
             double Final_Tax1 = Purchase[0].final_Tax1;
@@ -313,7 +315,7 @@ namespace Admin.Controllers
             int project = Convert.ToInt32(Purchase[0].project);
             int pono = Purchase[0].PO_No;
             NewPurchase_Insert purchase = new NewPurchase_Insert();
-            purchase.Edit_and_Delete(Purchase, Final_Quantity, Final_SubTotal, Final_Discount, Final_Tax1, Final_Tax2, Final_Total, pono, project);
+            purchase.Edit_and_Delete(Purchase, Final_Quantity, Final_SubTotal, Final_Discount, Final_Tax1, Final_Tax2, Final_Total, pono, project);*/
             return Json(Purchase);
         }
         public ActionResult Purchase_ED(GoodsRI name) // For Delete individual row from DB
@@ -824,14 +826,8 @@ namespace Admin.Controllers
         }
         public ActionResult Add_PO_to_DB(List<PurchaseTable> Purchase) // add PO to db
         {
-            float tax_per = Purchase[0].Tax_Per;
-            double tax_amt = Purchase[0].Tax_Total;
-            int project = int.Parse(Purchase[0].project);
-            int Quantity = Purchase[0].final_Qty;
-            double Total = Purchase[0].final_Sub_Total;
-            double Final_Total = Purchase[0].final_total;
             NewPurchase_Insert purchase = new NewPurchase_Insert();
-            int v_no = purchase.Add_PO(Purchase, Quantity, Total, Final_Total, project, tax_per, tax_amt);
+            int v_no = purchase.Add_PO(Purchase);
             return Json(v_no);
         }
 
@@ -892,18 +888,8 @@ namespace Admin.Controllers
             DataTable _dt2 = new DataTable();
             _da2.Fill(_dt2);
             ViewBag.Project = ToSelectList(_dt2, "Project_Id", "Project_Name");
-            PM_Data.Tables[0].Columns.Add("P_Part_No");
-            PM_Data.Tables[0].Columns.Add("P_Description");
-            /*List<string> table_data = new List<string>();*/
-            for (int i = 0; i < PM_Data.Tables[0].Rows.Count; i++)
-            {
-                string Text = PM_Data.Tables[0].Rows[i]["P_code"].ToString();
-                NewPurchase_Insert dblogin = new NewPurchase_Insert();
-                var Descp = dblogin.Pcode_to_PartNo(Text);
-                PM_Data.Tables[0].Rows[i]["P_Part_No"] = Descp[0].P_Part_No;
-                PM_Data.Tables[0].Rows[i]["P_Description"] = Descp[0].P_Description;
-            }
-            string acode = PM_Data.Tables[0].Rows[0]["A_code"].ToString();
+            ViewBag.PL = PM_Data.Tables[0];
+            /*string acode = PM_Data.Tables[0].Rows[0]["A_code"].ToString();
             newPurchase_Insert.Purchase_Order_No = PO_No;
             newPurchase_Insert.Purchase_Order_Date = PO_Date;
             newPurchase_Insert.Ref_Date = Ref_Date;
@@ -914,11 +900,8 @@ namespace Admin.Controllers
             newPurchase_Insert.sup_val = PM_Data.Tables[0].Rows[0]["A_code"].ToString();
             newPurchase_Insert.billval = PM_Data.Tables[0].Rows[0]["BillTo_Acode"].ToString();
             ViewBag.Project_data = PM_Data.Tables[0].Rows[0]["Project"].ToString();
-            ViewBag.PL = PM_Data.Tables[0];
-            ViewBag.ILedger = 1;
-            ViewBag.ALedger = 2;
             ViewBag.Final_Total = PM_Data.Tables[0].Rows[0]["PO_Final_Total"].ToString();
-            ViewBag.Final_Tax = PM_Data.Tables[0].Rows[0]["PO_Tax_Total"].ToString(); ;
+            ViewBag.Final_Tax = PM_Data.Tables[0].Rows[0]["PO_Tax_Total"].ToString();*/
             Con.Close();
             return View(newPurchase_Insert);
         }
@@ -931,7 +914,7 @@ namespace Admin.Controllers
         public ActionResult Updated_PO_to_DB (List<PurchaseTable> Purchase)
         {
             int project = int.Parse(Purchase[0].project);
-            float taxper = Purchase[0].Tax_Per;
+            /*float taxper = Purchase[0].Tax_Per;
             double taxamt = Purchase[0].Tax_Total;
             string supplier = Purchase[0].supplier;
             string billto = Purchase[0].BillTo;
@@ -940,7 +923,7 @@ namespace Admin.Controllers
             double Final_Total = Purchase[0].final_total;
             string refno = Purchase[0].Invoice_No.ToUpper();
             NewPurchase_Insert purchase = new NewPurchase_Insert();
-            purchase.Edit_PO(Purchase, Quantity, Total, Final_Total, project, supplier, refno, billto, taxper, taxamt);
+            purchase.Edit_PO(Purchase, Quantity, Total, Final_Total, project, supplier, refno, billto, taxper, taxamt);*/
             return Json(Purchase);
         } // update edited PO to db
 

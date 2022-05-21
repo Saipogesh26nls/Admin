@@ -75,16 +75,17 @@
                                 Part No : <input id="Part_No" type="text" style="border: 1px solid gray;margin-left:0.5%;margin-right: 1%;width:15%;" class="uppercase" placeholder="Part No"><i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:3%"></i>@Html.DisplayFor(model => model.Part_No)
                                 Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 6%; width: 10%;" placeholder="Quantity">
                                 Price Per Unit : <input id="Purchase_Rate" type="text" style="border: 1px solid gray; width: 10%; margin-right: 2%;" placeholder="Purchase Rate">
-                                <button class="btn btn-sm btn-secondary" id="Insert">Insert</button><button class="btn btn-sm btn-secondary" style="display: none; margin-top: 10px;" id="Add" onclick="ToAdd()">Add</button>
                             </p>
                             <div>
                                 <p id="value" style="width:50%" class="text-sm"></p>
                             </div>
                             <div>
-                                <p class="text-sm" style="display:none">
-                                    Discount : <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 8.5%; width: 15%;" placeholder="Discount">
-                                    Tax1 : <input id="Tax_1" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 9.5%; width: 15%;" placeholder="Tax 1">
-                                    Tax2 : <input id="Tax_2" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 8%; width: 15%;" placeholder="Tax 2">
+                                <p class="text-sm">
+                                    Discount(%) : <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 1.5%; width: 10%;" placeholder="Discount">
+                                    IGST(%) : <input id="IGST" name="IGST" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 1.5%; width: 10%;" placeholder="IGST">
+                                    CGST(%) : <input id="CGST" name="CGST" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 1.5%; width: 10%;" placeholder="CGST">
+                                    SGST(%) : <input id="SGST" name="SGST" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 4%; width: 10%;" placeholder="SGST">
+                                    <button class="btn btn-sm btn-secondary" id="Insert">Insert</button><button class="btn btn-sm btn-secondary" style="display: none; margin-top: 10px;" id="Add" onclick="ToAdd()">Add</button>
                                 </p>
                             </div>
                             <!-- The Modal -->
@@ -157,73 +158,80 @@
                                             <th style="padding-right:50px">Description</th>
                                             <th style="padding-right:10px">Quantity</th>
                                             <th style="padding-right:10px">Price</th>
+                                            <th style="padding-right:10px">Dis_per</th>
+                                            <th style="padding-right:10px">Dis_Rs</th>
+                                            <th style="padding-right:10px">Igst_per</th>
+                                            <th style="padding-right:10px">Igst_Rs</th>
+                                            <th style="padding-right:10px">Cgst_per</th>
+                                            <th style="padding-right:10px">Cgst_Rs</th>
+                                            <th style="padding-right:10px">Sgst_per</th>
+                                            <th style="padding-right:10px">Sgst_Rs</th>
                                             <th style="padding-right:10px">SubTotal</th>
                                             <th style="padding-right:10px">Total</th>
-                                            <th style="padding-right: 30px">E/D</th>
                                             <th style="display: none;">Invoice_No</th>
                                             <th style="display: none;">Invoice_Date</th>
-                                            <th style="display: none;">final_Qty</th>
-                                            <th style="display: none;">final_Sub_Total</th>
-                                            <th style="display: none;">final_total</th>
+                                            <th style="display: none;">Final_Qty</th>
+                                            <th style="display: none;">Final_Sub_Total</th>
+                                            <th style="display: none;">Final_total</th>
+                                            <th style="display: none;">Final_Dis_per</th>
+                                            <th style="display: none;">Final_Dis_Rs</th>
+                                            <th style="display: none;">Final_Igst_per</th>
+                                            <th style="display: none;">Final_Igst_Rs</th>
+                                            <th style="display: none;">Final_Cgst_per</th>
+                                            <th style="display: none;">Final_Cgst_Rs</th>
+                                            <th style="display: none;">Final_Sgst_per</th>
+                                            <th style="display: none;">Final_Sgst_Rs</th>
                                             <th style="display: none;">supplier</th>
                                             <th style="display: none;">project</th>
                                             <th style="display: none;">PO_Date</th>
                                             <th style="display: none;">PO_No</th>
                                             <th style="display: none;">BillTo</th>
-                                            <th style="display: none;">Tax_Per</th>
-                                            <th style="display: none;">Tax_Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    @{ int i = 0; }
-                                    @foreach (System.Data.DataRow dr in ViewBag.PL.Rows)
-                                    {
+                                        @{ int i = 0; }
+                                        @foreach (System.Data.DataRow dr in ViewBag.PL.Rows)
+                                        {
 
                                         <tr id="@i" style="font-size:13px;">
-                                            <td class="row-data">@dr["P_Part_No"].ToString()</td>
-                                            <td class="row-data text-sm-left">@dr["P_Description"].ToString()</td>
+                                            <td class="row-data">@dr["Part_No"].ToString()</td>
+                                            <td class="row-data text-sm-left">@dr["Description"].ToString()</td>
                                             <td class="row-data">@dr["PO_Qty"].ToString()</td>
                                             <td class="row-data">@dr["PO_Price"].ToString()</td>
+                                            <td class="row-data">@dr["PO_Dis_Per"].ToString()</td>
+                                            <td class="row-data">@dr["PO_Dis_val"].ToString()</td>
+                                            <td class="row-data">@dr["PO_Igst_Per"].ToString()</td>
+                                            <td class="row-data">@dr["PO_Igst_val"].ToString()</td>
+                                            <td class="row-data">@dr["PO_Cgst_Per"].ToString()</td>
+                                            <td class="row-data">@dr["PO_Cgst_val"].ToString()</td>
+                                            <td class="row-data">@dr["PO_Sgst_Per"].ToString()</td>
+                                            <td class="row-data">@dr["PO_Sgst_val"].ToString()</td>
                                             <td class="row-data">@dr["PO_SubTotal"].ToString()</td>
                                             <td class="row-data">@dr["PO_Total"].ToString()</td>
-                                            <td class="row-data" style="margin-right:auto">
+                                            <td class="row-data" style="margin-right:auto;width:65px;">
                                                 <i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i>
                                             </td>
-                                            <td style="display:none;" id="ref_no">
-                                                @dr["Ref_No"].ToString()
-                                            </td>
-                                            <td style="display:none;">
-                                                @dr["Ref_Date"].ToString()
-                                            </td>
-                                            <td style="display:none;" id="final_qty">
-                                                @dr["PO_Final_Qty"].ToString()
-                                            </td>
-                                            <td style="display:none;" id="final_SubTotal">
-                                                @dr["PO_Final_Total"].ToString()
-                                            </td>
-                                            <td style="display:none;" id="final_Total">
-                                                @dr["PO_Final_Total"].ToString()
-                                            </td>
-                                            <td style="display:none;" id="Mfr">
-                                                @dr["A_code"]
-                                            </td>
-                                            <td style="display:none;" id="Prj">
-                                                @ViewBag.Project
-                                            </td>
-                                            <td style="display:none;">
-                                                @dr["PO_date"]
-                                            </td>
-                                            <td style="display:none;">
-                                                @dr["PO_No"]
-                                            </td>
-                                            <td style="display:none;" id="bill_v">
-                                                @dr["BillTo_Acode"]
-                                            </td>
-                                            <td id="taxper" style="display:none;"></td>
-                                            <td id="taxtot" style="display:none;"></td>
+                                            <td style="display:none;" id="ref_no"> @dr["Ref_No"].ToString()</td>
+                                            <td style="display:none;">@dr["Ref_Date"].ToString()</td>
+                                            <td style="display:none;" id="_final_qty"></td>
+                                            <td style="display:none;" id="_final_subtotal"></td>
+                                            <td style="display:none;" id="_final_total"></td>
+                                            <td style="display:none;" id="_final_dis_per"></td>
+                                            <td style="display:none;" id="_final_dis_val"></td>
+                                            <td style="display:none;" id="_final_igst_per"></td>
+                                            <td style="display:none;" id="_final_igst_val"></td>
+                                            <td style="display:none;" id="_final_cgst_per"></td>
+                                            <td style="display:none;" id="_final_cgst_val"></td>
+                                            <td style="display:none;" id="_final_sgst_per"></td>
+                                            <td style="display:none;" id="_final_sgst_val"></td>
+                                            <td style="display:none;">@dr["Supplier_Acode"]</td>
+                                            <td style="display:none;">@dr["Project"]</td>
+                                            <td style="display:none;">@dr["PO_date"]</td>
+                                            <td style="display:none;">@dr["PO_No"]</td>
+                                            <td style="display:none;" id="bill_v">@dr["BillTo_Acode"]</td>
                                         </tr>
-                                        i++;
-                                    }
+                                            i++;
+                                        }
                                     </tbody>
                                 </table>
                             </div>

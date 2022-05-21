@@ -87,14 +87,14 @@ namespace Admin.Models
                     Total = Convert.ToDouble(dr["PO_Total"]),
                     ILedger = 1,
                     ALedger = 2,
-                    final_Qty = (int)dr["PO_Final_Qty"],
+                    /*final_Qty = (int)dr["PO_Final_Qty"],
                     final_Sub_Total = Convert.ToDouble(dr["PO_Final_SubTotal"]),
                     final_total = Convert.ToDouble(dr["PO_Final_Total"]),
                     sup_code = dr["A_code"].ToString(),
                     project = dr["Project"].ToString(),
                     PO_No = (int)dr["PO_No"],
                     Tax_Per = Convert.ToInt32(dr["PO_Tax_Per"]),
-                    Tax_Total = Convert.ToDouble(dr["PO_Tax_Total"])
+                    Tax_Total = Convert.ToDouble(dr["PO_Tax_Total"])*/
                 }
                 ) ;
             }
@@ -158,8 +158,8 @@ namespace Admin.Models
                 sql_cmnd.Parameters.AddWithValue("@i_rate", SqlDbType.Money).Value = data[i].Price;
                 sql_cmnd.Parameters.AddWithValue("@i_subtotal", SqlDbType.Money).Value = data[i].SubTotal;
                 sql_cmnd.Parameters.AddWithValue("@i_discount", SqlDbType.Decimal).Value = data[i].Dis_Rs;
-                sql_cmnd.Parameters.AddWithValue("@i_tax1", SqlDbType.Money).Value = data[i].Tax1_Rs;
-                sql_cmnd.Parameters.AddWithValue("@i_tax2", SqlDbType.Money).Value = data[i].Tax2_Rs;
+                /*sql_cmnd.Parameters.AddWithValue("@i_tax1", SqlDbType.Money).Value = data[i].Tax1_Rs;
+                sql_cmnd.Parameters.AddWithValue("@i_tax2", SqlDbType.Money).Value = data[i].Tax2_Rs;*/
                 sql_cmnd.Parameters.AddWithValue("@i_total", SqlDbType.Money).Value = data[i].Total;
                 sql_cmnd.Parameters.AddWithValue("@Total", SqlDbType.Money).Value = total;
                 sql_cmnd.Parameters.AddWithValue("@Total_Qty", SqlDbType.Money).Value = Qty;
@@ -335,8 +335,8 @@ namespace Admin.Models
                 sql_cmnd.Parameters.AddWithValue("@i_rate", SqlDbType.Money).Value = data[i].Price;
                 sql_cmnd.Parameters.AddWithValue("@i_subtotal", SqlDbType.Money).Value = data[i].SubTotal;
                 sql_cmnd.Parameters.AddWithValue("@i_discount", SqlDbType.Decimal).Value = data[i].Dis_Rs;
-                sql_cmnd.Parameters.AddWithValue("@i_tax1", SqlDbType.Money).Value = data[i].Tax1_Rs;
-                sql_cmnd.Parameters.AddWithValue("@i_tax2", SqlDbType.Money).Value = data[i].Tax2_Rs;
+                /*sql_cmnd.Parameters.AddWithValue("@i_tax1", SqlDbType.Money).Value = data[i].Tax1_Rs;
+                sql_cmnd.Parameters.AddWithValue("@i_tax2", SqlDbType.Money).Value = data[i].Tax2_Rs;*/
                 sql_cmnd.Parameters.AddWithValue("@i_total", SqlDbType.Money).Value = data[i].Total;
                 sql_cmnd.Parameters.AddWithValue("@invoice_no", SqlDbType.NVarChar).Value = data[i].Invoice_No;
                 sql_cmnd.Parameters.AddWithValue("@invoice_date", data[i].Invoice_Date);
@@ -398,7 +398,7 @@ namespace Admin.Models
                 return null;
             }
         }
-        public int Add_PO(List<PurchaseTable> data, int Qty, double total, double final_total, int project, float taxper, double taxamt)
+        public int Add_PO(List<PurchaseTable> data)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
@@ -418,33 +418,55 @@ namespace Admin.Models
             SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con1.Open();
             int i = 0;
+            int j = 0;
+            int key = 1;
             while (i < data.Count())
             {
                 SqlCommand sql_cmnd = new SqlCommand("[dbo].[Add_PO]", Con1);
                 sql_cmnd.CommandType = CommandType.StoredProcedure;
-                sql_cmnd.Parameters.AddWithValue("@po_no", SqlDbType.NVarChar).Value = PO_No;
+                sql_cmnd.Parameters.AddWithValue("@po_no", SqlDbType.Int).Value = PO_No;
                 sql_cmnd.Parameters.AddWithValue("@po_date", PO_date);
-                sql_cmnd.Parameters.AddWithValue("@invoice_no", SqlDbType.NVarChar).Value = data[i].Invoice_No.ToUpper();
-                sql_cmnd.Parameters.AddWithValue("@invoice_date", ref_date);
+                sql_cmnd.Parameters.AddWithValue("@ref_no", SqlDbType.NVarChar).Value = data[i].Invoice_No;
+                sql_cmnd.Parameters.AddWithValue("@ref_date", ref_date);
                 sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = data[i].Part_No;
-                sql_cmnd.Parameters.AddWithValue("@p_qty", SqlDbType.Int).Value = data[i].Quantity;
-                sql_cmnd.Parameters.AddWithValue("@i_rate", SqlDbType.Money).Value = data[i].Price;
-                sql_cmnd.Parameters.AddWithValue("@i_subtotal", SqlDbType.Money).Value = data[i].SubTotal;
-                sql_cmnd.Parameters.AddWithValue("@i_total", SqlDbType.Money).Value = data[i].Total;
-                sql_cmnd.Parameters.AddWithValue("@Total_Qty", SqlDbType.Money).Value = Qty;
-                sql_cmnd.Parameters.AddWithValue("@Final_Total", SqlDbType.Money).Value = final_total;
-                sql_cmnd.Parameters.AddWithValue("@acc_name", SqlDbType.NVarChar).Value = data[i].supplier;
-                sql_cmnd.Parameters.AddWithValue("@project", SqlDbType.Int).Value = project;
-                sql_cmnd.Parameters.AddWithValue("@taxper", SqlDbType.Float).Value = taxper;
-                sql_cmnd.Parameters.AddWithValue("@taxamt", SqlDbType.Money).Value = taxamt;
-                sql_cmnd.Parameters.AddWithValue("@final_subtotal", SqlDbType.Money).Value = total;
-                sql_cmnd.Parameters.AddWithValue("@billto", SqlDbType.NVarChar).Value = data[i].BillTo;
+                sql_cmnd.Parameters.AddWithValue("@qty", SqlDbType.Int).Value = data[i].Quantity;
+                sql_cmnd.Parameters.AddWithValue("@price", SqlDbType.Money).Value = data[i].Price;
+                sql_cmnd.Parameters.AddWithValue("@Dis_per", SqlDbType.Float).Value = data[i].Dis_per;
+                sql_cmnd.Parameters.AddWithValue("@Dis_val", SqlDbType.Money).Value = data[i].Dis_Rs;
+                sql_cmnd.Parameters.AddWithValue("@Igst_per", SqlDbType.Float).Value = data[i].Igst_per;
+                sql_cmnd.Parameters.AddWithValue("@Igst_val", SqlDbType.Money).Value = data[i].Igst_Rs;
+                sql_cmnd.Parameters.AddWithValue("@Cgst_per", SqlDbType.Float).Value = data[i].Cgst_per;
+                sql_cmnd.Parameters.AddWithValue("@Cgst_val", SqlDbType.Money).Value = data[i].Cgst_Rs;
+                sql_cmnd.Parameters.AddWithValue("@Sgst_per", SqlDbType.Float).Value = data[i].Sgst_per;
+                sql_cmnd.Parameters.AddWithValue("@Sgst_val", SqlDbType.Money).Value = data[i].Sgst_Rs;
+                sql_cmnd.Parameters.AddWithValue("@subtotal", SqlDbType.Money).Value = data[i].SubTotal;
+                sql_cmnd.Parameters.AddWithValue("@total", SqlDbType.Money).Value = data[i].Total;
+                sql_cmnd.Parameters.AddWithValue("@final_Dis_per", SqlDbType.Float).Value = data[0].Final_Dis_per;
+                sql_cmnd.Parameters.AddWithValue("@final_Dis_val", SqlDbType.Money).Value = data[0].Final_Dis_Rs;
+                sql_cmnd.Parameters.AddWithValue("@final_Igst_per", SqlDbType.Float).Value = data[0].Final_Igst_per;
+                sql_cmnd.Parameters.AddWithValue("@final_Igst_val", SqlDbType.Money).Value = data[0].Final_Igst_Rs;
+                sql_cmnd.Parameters.AddWithValue("@final_Cgst_per", SqlDbType.Float).Value = data[0].Final_Cgst_per;
+                sql_cmnd.Parameters.AddWithValue("@final_Cgst_val", SqlDbType.Money).Value = data[0].Final_Cgst_Rs;
+                sql_cmnd.Parameters.AddWithValue("@final_Sgst_per", SqlDbType.Float).Value = data[0].Final_Sgst_per;
+                sql_cmnd.Parameters.AddWithValue("@final_Sgst_val", SqlDbType.Money).Value = data[0].Final_Sgst_Rs;
+                sql_cmnd.Parameters.AddWithValue("@final_Qty", SqlDbType.Int).Value = data[0].Final_Qty;
+                sql_cmnd.Parameters.AddWithValue("@final_Subtotal", SqlDbType.Money).Value = data[0].Final_Sub_Total;
+                sql_cmnd.Parameters.AddWithValue("@final_total", SqlDbType.Money).Value = data[0].Final_total;
+                sql_cmnd.Parameters.AddWithValue("@Supplier_Acode", SqlDbType.NVarChar).Value = data[i].supplier;
+                sql_cmnd.Parameters.AddWithValue("@project", SqlDbType.Int).Value = data[i].project;
+                sql_cmnd.Parameters.AddWithValue("@Billto_Acode", SqlDbType.NVarChar).Value = data[i].BillTo;
+                if (j == data.Count() - 1)
+                {
+                    sql_cmnd.Parameters.AddWithValue("@key", SqlDbType.Int).Value = key;
+                }
                 sql_cmnd.ExecuteNonQuery();
+                
                 if (i == data.Count() - 1)
                 {
                     break;
                 }
                 i++;
+                j++;
             }
             Con1.Close();
             return PO_No;
@@ -515,7 +537,7 @@ namespace Admin.Models
             {
                 for (int i = 0; i < vno.Count; i++)
                 {
-                    string cmd1 = "select Top 1 PO_No,PO_Date,Ref_No,Ref_Date,A_code,BillTo_Acode from Purchase_Order where PO_No = '" + vno[i] + "' ORDER BY PO_No Asc;";
+                    string cmd1 = "select Top 1 PO_No,PO_Date,Ref_No,Ref_Date,Supplier_Acode,BillTo_Acode from Purchase_Order where PO_No = '" + vno[i] + "' ORDER BY PO_No Asc;";
                     SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
                     SqlDataReader dr = SqlCmd1.ExecuteReader();
                     while (dr.Read())
@@ -526,7 +548,7 @@ namespace Admin.Models
                             PO_Date = dr["PO_Date"].ToString(),
                             Ref_No = dr["Ref_No"].ToString(),
                             Ref_Date = dr["Ref_Date"].ToString(),
-                            acode = dr["A_code"].ToString(),
+                            acode = dr["Supplier_Acode"].ToString(),
                             billto_acode = dr["BillTo_Acode"].ToString()
                         }
                         );
