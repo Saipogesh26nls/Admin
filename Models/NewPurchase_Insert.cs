@@ -537,7 +537,7 @@ namespace Admin.Models
             {
                 for (int i = 0; i < vno.Count; i++)
                 {
-                    string cmd1 = "select Top 1 PO_No,PO_Date,Ref_No,Ref_Date,Supplier_Acode,BillTo_Acode from Purchase_Order where PO_No = '" + vno[i] + "' ORDER BY PO_No Asc;";
+                    string cmd1 = "select Top 1 PO_No,PO_Date,Ref_No,Ref_Date,Supplier_Acode,BillTo_Acode,Project from Purchase_Order where PO_No = '" + vno[i] + "' ORDER BY PO_No Asc;";
                     SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
                     SqlDataReader dr = SqlCmd1.ExecuteReader();
                     while (dr.Read())
@@ -549,7 +549,8 @@ namespace Admin.Models
                             Ref_No = dr["Ref_No"].ToString(),
                             Ref_Date = dr["Ref_Date"].ToString(),
                             acode = dr["Supplier_Acode"].ToString(),
-                            billto_acode = dr["BillTo_Acode"].ToString()
+                            billto_acode = dr["BillTo_Acode"].ToString(),
+                            project_val = (int)dr["Project"]
                         }
                         );
                     }

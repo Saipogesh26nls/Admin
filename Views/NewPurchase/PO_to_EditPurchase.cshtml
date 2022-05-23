@@ -63,11 +63,11 @@
                 <div class="card">
                     <div class="card-header">
                         <p class="text-sm">
-                            Purchase Order No:@Html.EditorFor(model => model.Purchase_Order_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;", @readonly = "readonly" } })    Purchase Order Date :  @Html.TextBoxFor(x => x.Purchase_Order_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
+                            Purchase Order No:@Html.EditorFor(model => model.Purchase_Order_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;"} })    Purchase Order Date :  @Html.TextBoxFor(x => x.Purchase_Order_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
                             Reference No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:1%;width:15%;" } })    Reference Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
                         </p>
-                        <p class="text-sm"> Supplier : &nbsp &nbsp @Html.DisplayFor(model => model.Supplier) &nbsp &nbsp &nbsp Bill To : &nbsp &nbsp @Html.DisplayFor(model => model.BillTo) &nbsp &nbsp &nbsp &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p>
-                        <p style="display:none">@Html.EditorFor(model => model.sup_val)</p><p style="display:none">@Html.EditorFor(model => model.billval)</p>
+                        <p class="text-sm"> Supplier : &nbsp &nbsp @Html.DisplayFor(model => model.Supplier) &nbsp &nbsp &nbsp Bill To : &nbsp &nbsp @Html.DisplayFor(model => model.BillTo) &nbsp &nbsp &nbsp &nbsp &nbsp Project : &nbsp &nbsp @Html.DisplayFor(model => model.Project)<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p>
+                        <p style="display:none">@Html.EditorFor(model => model.sup_val)</p><p style="display:none">@Html.EditorFor(model => model.billval)</p><p style="display:none">@Html.EditorFor(model => model.project_val)</p>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -150,7 +150,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 400px;">
+                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 300px;">
                                 <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
                                     <thead>
                                         <tr>
@@ -192,67 +192,69 @@
                                         @{ int i = 0; }
                                         @foreach (System.Data.DataRow dr in ViewBag.PL.Rows)
                                         {
-
-                                        <tr id="@i" style="font-size:13px;">
-                                            <td class="row-data">@dr["Part_No"].ToString()</td>
-                                            <td class="row-data text-sm-left">@dr["Description"].ToString()</td>
-                                            <td class="row-data">@dr["PO_Qty"].ToString()</td>
-                                            <td class="row-data">@dr["PO_Price"].ToString()</td>
-                                            <td class="row-data">@dr["PO_Dis_Per"].ToString()</td>
-                                            <td class="row-data">@dr["PO_Dis_val"].ToString()</td>
-                                            <td class="row-data">@dr["PO_Igst_Per"].ToString()</td>
-                                            <td class="row-data">@dr["PO_Igst_val"].ToString()</td>
-                                            <td class="row-data">@dr["PO_Cgst_Per"].ToString()</td>
-                                            <td class="row-data">@dr["PO_Cgst_val"].ToString()</td>
-                                            <td class="row-data">@dr["PO_Sgst_Per"].ToString()</td>
-                                            <td class="row-data">@dr["PO_Sgst_val"].ToString()</td>
-                                            <td class="row-data">@dr["PO_SubTotal"].ToString()</td>
-                                            <td class="row-data">@dr["PO_Total"].ToString()</td>
-                                            <td class="row-data" style="margin-right:auto;width:65px;">
-                                                <i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i>
-                                            </td>
-                                            <td style="display:none;" id="ref_no"> @dr["Ref_No"].ToString()</td>
-                                            <td style="display:none;">@dr["Ref_Date"].ToString()</td>
-                                            <td style="display:none;" id="_final_qty"></td>
-                                            <td style="display:none;" id="_final_subtotal"></td>
-                                            <td style="display:none;" id="_final_total"></td>
-                                            <td style="display:none;" id="_final_dis_per"></td>
-                                            <td style="display:none;" id="_final_dis_val"></td>
-                                            <td style="display:none;" id="_final_igst_per"></td>
-                                            <td style="display:none;" id="_final_igst_val"></td>
-                                            <td style="display:none;" id="_final_cgst_per"></td>
-                                            <td style="display:none;" id="_final_cgst_val"></td>
-                                            <td style="display:none;" id="_final_sgst_per"></td>
-                                            <td style="display:none;" id="_final_sgst_val"></td>
-                                            <td style="display:none;">@dr["Supplier_Acode"]</td>
-                                            <td style="display:none;">@dr["Project"]</td>
-                                            <td style="display:none;">@dr["PO_date"]</td>
-                                            <td style="display:none;">@dr["PO_No"]</td>
-                                            <td style="display:none;" id="bill_v">@dr["BillTo_Acode"]</td>
-                                        </tr>
+                                            <tr id="@i" style="font-size:13px;">
+                                                <td class="row-data">@dr["Part_No"].ToString()</td>
+                                                <td class="row-data text-sm-left">@dr["Description"].ToString()</td>
+                                                <td class="row-data">@dr["PO_Qty"].ToString()</td>
+                                                <td class="row-data">@dr["PO_Price"].ToString()</td>
+                                                <td class="row-data">@dr["PO_Dis_Per"].ToString()</td>
+                                                <td class="row-data">@dr["PO_Dis_val"].ToString()</td>
+                                                <td class="row-data">@dr["PO_Igst_Per"].ToString()</td>
+                                                <td class="row-data">@dr["PO_Igst_val"].ToString()</td>
+                                                <td class="row-data">@dr["PO_Cgst_Per"].ToString()</td>
+                                                <td class="row-data">@dr["PO_Cgst_val"].ToString()</td>
+                                                <td class="row-data">@dr["PO_Sgst_Per"].ToString()</td>
+                                                <td class="row-data">@dr["PO_Sgst_val"].ToString()</td>
+                                                <td class="row-data">@dr["PO_SubTotal"].ToString()</td>
+                                                <td class="row-data">@dr["PO_Total"].ToString()</td>
+                                                <td class="row-data" style="margin-right:auto;width:65px;">
+                                                    <i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i>
+                                                </td>
+                                                <td style="display:none;" id="ref_no"> @dr["Ref_No"].ToString()</td>
+                                                <td style="display:none;">@dr["Ref_Date"].ToString()</td>
+                                                <td style="display:none;" id="_final_qty"></td>
+                                                <td style="display:none;" id="_final_subtotal"></td>
+                                                <td style="display:none;" id="_final_total"></td>
+                                                <td style="display:none;" id="_final_dis_per"></td>
+                                                <td style="display:none;" id="_final_dis_val"></td>
+                                                <td style="display:none;" id="_final_igst_per"></td>
+                                                <td style="display:none;" id="_final_igst_val"></td>
+                                                <td style="display:none;" id="_final_cgst_per"></td>
+                                                <td style="display:none;" id="_final_cgst_val"></td>
+                                                <td style="display:none;" id="_final_sgst_per"></td>
+                                                <td style="display:none;" id="_final_sgst_val"></td>
+                                                <td style="display:none;">@dr["Supplier_Acode"]</td>
+                                                <td style="display:none;">@dr["Project"]</td>
+                                                <td style="display:none;">@dr["PO_date"]</td>
+                                                <td style="display:none;">@dr["PO_No"]</td>
+                                                <td style="display:none;" id="bill_v">@dr["BillTo_Acode"]</td>
+                                            </tr>
                                             i++;
                                         }
                                     </tbody>
                                 </table>
                             </div>
-                            <div>
-                                @Html.LabelFor(model => model.Quantity, new { htmlAttributes = new { id = "Qty_Label" } }) : <h6 id="Qty_display"></h6>
+                            <div style="font-weight:bold">
+                                Total Quantity : <input id="final_Quantity" style="font-weight: bold; width: 100px; border: none;" />
                             </div>
-                            <div class="float-right">
+                            <div class="float-right" style="font-weight:bold">
                                 <div>
-                                    @Html.LabelFor(model => model.Total, new { htmlAttributes = new { id = "total_Label" } }) : <h6 id="total_display"></h6>
-                                </div>
-                                <div style="display:none;">
-                                    @Html.LabelFor(model => model.Final_Discount) : @Html.EditorFor(model => model.Final_Discount, new { htmlAttributes = new { @id = "Final_Discount" } })
+                                    Sub-Total &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; : &nbsp; <input readonly id="final_SubTotal" value="0.00" style="width: 100px; border: none; font-weight: bold;" />
                                 </div>
                                 <div>
-                                    @Html.LabelFor(model => model.Final_Tax1)@Html.EditorFor(model => model.Final_Tax1, new { htmlAttributes = new { @style = "margin-left:11%;width:25px;", @id = "Final_Tax1" } })% : <h6 id="total_tax"></h6>
-                                </div>
-                                <div style="display:none;">
-                                    @Html.LabelFor(model => model.Final_Tax2) : @Html.EditorFor(model => model.Final_Tax2, new { htmlAttributes = new { @style = "margin-left:11%;", @id = "Final_Tax2" } })
+                                    Discount(%)&nbsp; @Html.EditorFor(model => model.Final_Discount, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_discount" value="0.00" style="width: 100px; border: none; font-weight: bold" />
                                 </div>
                                 <div>
-                                    @Html.LabelFor(model => model.Final_Total, new { htmlAttributes = new { id = "final_total_Label" } }) : <h6 id="Final_Total" style="margin-left:11%;"></h6>
+                                    IGST(%) &nbsp; &nbsp; &nbsp; &nbsp; @Html.EditorFor(model => model.Total_IGST, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_igst" value="0.00" name="total_igst" style="width: 100px; border: none; font-weight: bold " />
+                                </div>
+                                <div>
+                                    CGST(%) &nbsp; &nbsp; &nbsp;&nbsp; @Html.EditorFor(model => model.Total_CGST, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_cgst" value="0.00" name="total_cgst" style="width: 100px; border: none; font-weight: bold " />
+                                </div>
+                                <div>
+                                    SGST(%) &nbsp; &nbsp; &nbsp;&nbsp; @Html.EditorFor(model => model.Total_SGST, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_sgst" value="0.00" name="total_sgst" style="width: 100px; border: none; font-weight: bold " />
+                                </div>
+                                <div>
+                                    Total &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; : &nbsp; <input readonly id="Final_Total" value="0.00" style="width: 100px; border: none; font-weight: bold" />
                                 </div>
                             </div>
                             <p id="del"></p>
@@ -277,16 +279,20 @@
     var val = "";
     var last_row = document.getElementById("selected_units").rows.length;
     $('#Insert').click(function () {
-        var d1 = $('#Part_No').val();
-        var d2 = parseInt(document.getElementById("Quantity").value);
-        var d3 = $('#Purchase_Rate').val();
-        var mfr = $('#sup_val').val();
-        var project = $('#Project').val();
-        var Invoice_No = document.getElementById("Ref_No").value;
-        var Invoice_Date = $('#Ref_Date').val();
-        var PO_Date = $("#Purchase_Order_Date").val();
-        var PONo = $("#Purchase_Order_No").val();
-        var billval = $("#billval").val();
+        var _PODate = $('#Purchase_Order_Date').val();
+        var _POno = $('#Purchase_Order_No').val();
+        var _RefNo = $('#Ref_No').val();
+        var _RefDate = $('#Ref_Date').val();
+        var _supplier = $('#sup_val').val();
+        var _billto = $('#billval').val();
+        var _project = $('#project_val').val();
+        var _partno = $('#Part_No').val();
+        var _qty = parseInt(document.getElementById("Quantity").value);
+        var _price = $('#Purchase_Rate').val();
+        var _discount_per = $('#Discount').val();
+        var _igst_per = $('#IGST').val();
+        var _cgst_per = $('#CGST').val();
+        var _sgst_per = $('#SGST').val();
 
         var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
         var l_row1 = last_row1 - 1;
@@ -301,89 +307,91 @@
             }
             count++;
         }
-        var subtotal = d2 * d3;
-        @*if (d4 == "") {
-            var discount = 0;
-            var discount_per = 0;
+        var _subtotal = _qty * _price;
+        var _discount_val;
+        var _igst_val;
+        var _cgst_val;
+        var _sgst_val;
+        switch (true) {
+            case _discount_per == "":
+                _discount_val = 0;
+                _discount_per = 0;
+                break;
+            default:
+                _discount_val = (_subtotal * _discount_per) / 100;
         }
-        else {
-            var discount = (subtotal * d4) / 100;
-            var discount_per = (discount / subtotal) * 100;
+        switch (true) {
+            case _igst_per == "":
+                _igst_val = 0;
+                _igst_per = 0;
+                break;
+            default:
+                _igst_val = (_subtotal * _igst_per) / 100;
         }
-        if (d5 == "") {
-            var tax1 = 0;
-            var tax1_per = 0;
+        switch (true) {
+            case _cgst_per == "":
+                _cgst_val = 0;
+                _cgst_per = 0;
+                break;
+            default:
+                _cgst_val = (_subtotal * _cgst_per) / 100;
         }
-        else {
-            var tax1 = (subtotal * d5) / 100;
-            var tax1_per = (tax1 / subtotal) * 100;
+        switch (true) {
+            case _sgst_per == "":
+                _sgst_val = 0;
+                _sgst_per = 0;
+                break;
+            default:
+                _sgst_val = (_subtotal * _sgst_per) / 100;
         }
-        if (d6 == "") {
-            var tax2 = 0;
-            var tax2_per = 0;
-        }
-        else {
-            var tax2 = (subtotal * d6) / 100;
-            var tax2_per = (tax2 / subtotal) * 100;
-        }*@
 
-        var qty_field = $('#Quantity').val();
-        if (d1 == "" || d2 == "" || d3 == "" || Invoice_No == "") {
-            document.getElementById("Qty_display").innerHTML = 0;
-            document.getElementById("total_display").innerHTML = 0;
+        var _total = (_subtotal - _discount_val) + _igst_val + _cgst_val + _sgst_val;
+
+        if (_partno == "" || _qty == "" || _price == "") {
+            document.getElementById("final_Quantity").value = 0;
+            document.getElementById("final_SubTotal").value = "0.00";
         }
         else {
-            qty = qty + d2;
-            var Total = subtotal;
+            qty = qty + _qty;
+            var Total = _total;
             total = total + Total;
-            document.getElementById("Qty_display").innerHTML = qty;
-            document.getElementById("total_display").innerHTML = total.toFixed(2);
+            document.getElementById("final_Quantity").value = qty;
+            document.getElementById("final_SubTotal").value = total.toFixed(2);
         }
         var model = new Object();
-            model.Part_No = document.getElementById("Part_No").value;
+        model.Part_No = document.getElementById("Part_No").value;
 
-            jQuery.ajax({
-            type: "POST",
-            url: "@Url.Action("P_to_DQ")",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({ name: model }),
-                success: function (data) {
-                    if (d1 == "") {
-                        var error = '<p style="color:red;">Enter Part No !!!<p/>';
-                        document.getElementById("value").innerHTML = error;
-                        return;
-                    }
-                    else if (qty_field == "" || qty_field == 0) {
-                        var error = '<p style="color:red;">Enter Quantity !!!<p/>';
-                        document.getElementById("value").innerHTML = error;
-                        return;
-                    }
-                    @*else if (d3 == "" || d3 == 0) {
-                        var error = '<p style="color:red;">Enter Price per unit !!!<p/>';
-                        document.getElementById("value").innerHTML = error;
-                        return;
-                    }*@
-                    else if (Invoice_No == "") {
-                        var error = '<p style="color:red;">Enter Reference No !!!<p/>';
-                        document.getElementById("value").innerHTML = error;
-                        return;
-                    }
-                    else {
-                        document.getElementById("value").innerHTML = val;
-                        var l_row = last_row - 1;
-                        var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + d2 + '</td><td>' + d3 + '</td><td>' + subtotal.toFixed(2) + '</td><td id="total' + i + '">' + Total.toFixed(2) + '</td><td class="row-data"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row1(this);"></i></td><td style="display:none;">' + Invoice_No + '</td><td style="display:none;">' + Invoice_Date + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;" id="Mfr">' + mfr + '</td><td style="display:none;">' + project + '</td><td style="display:none;">' + PO_Date + '</td><td style="display:none;">' + PONo + '</td><td style="display:none;" id="billval">' + billval + '</td></tr>';
-                        $('#selected_units tr:last').after(newrow);
-                        total_cal();
-                        i++;
-                    }
-                },
-                failure: function (errMsg) {
-                    alert(errMsg);
+        jQuery.ajax({
+        type: "POST",
+        url: "@Url.Action("P_to_DQ")",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({ name: model }),
+            success: function (data) {
+                if (_partno == "") {
+                    var error = '<p style="color:red;">Enter Part No !!!<p/>';
+                    document.getElementById("value").innerHTML = error;
+                    return;
                 }
-            });
-        final_calculation();
-        formClear();
+                else if (_qty == "" || _qty == 0) {
+                    var error = '<p style="color:red;">Enter Quantity !!!<p/>';
+                    document.getElementById("value").innerHTML = error;
+                    return;
+                }
+                else {
+                    document.getElementById("value").innerHTML = val;
+                    var l_row = last_row - 1;
+                    var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td class="row-data">' + _partno + '</td><td class="row-data">' + data[0].Description + '</td><td id="Qty' + i + '" class="row-data">' + _qty + '</td><td class="row-data">' + _price + '</td><td class="row-data">' + _discount_per + '</td><td class="row-data">' + _discount_val.toFixed(2) + '</td><td class="row-data">' + _igst_per + '</td><td class="row-data">' + _igst_val.toFixed(2) + '</td><td class="row-data">' + _cgst_per + '</td><td class="row-data">' + _cgst_val.toFixed(2) + '</td><td class="row-data">' + _sgst_per + '</td><td class="row-data">' + _sgst_val.toFixed(2) + '</td><td class="row-data">' + _subtotal.toFixed(2) + '</td><td id="total' + i + '" class="row-data">' + _total.toFixed(2) + '</td><td class="row-data"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row1(this);"></i></td><td style="display:none;">' + _RefNo + '</td><td style="display:none;">' + _RefDate + '</td><td style="display:none;" id="_final_qty"></td><td style="display:none;" id="_final_subtotal"></td><td style="display:none;" id="_final_total"></td><td style="display:none;" id="_final_dis_per"></td><td style="display:none;" id="_final_dis_val"></td><td style="display:none;" id="_final_igst_per"></td><td style="display:none;" id="_final_igst_val"></td><td style="display:none;" id="_final_cgst_per"></td><td style="display:none;" id="_final_cgst_val"></td><td style="display:none;" id="_final_sgst_per"></td><td style="display:none;" id="_final_sgst_val"></td><td style="display:none;">' + _supplier + '</td><td style="display:none;">' + _project + '</td><td style="display:none;">' + _PODate + '</td><td style="display:none;">' + _POno + '</td><td style="display:none;">' + _billto + '</td></tr>';
+                    $('#selected_units tr:last').after(newrow);
+                    final_calculation();
+                    formClear();
+                    i++;
+                }
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
     });
 
     function formClear() {
@@ -391,8 +399,9 @@
         $("#Quantity").val("");
         $("#Purchase_Rate").val("");
         $("#Discount").val("");
-        $("#Tax_1").val("");
-        $("#Tax_2").val("");
+        $("#IGST").val("");
+        $("#CGST").val("");
+        $("#SGST").val("");
     }
 
     function total_cal() {
@@ -400,65 +409,112 @@
         $('#Purchase_Order_Date').prop('disabled', true);
         $('#Ref_No').prop('disabled', true);
         $('#Ref_Date').prop('disabled', true);
-        $('#Supplier').prop('disabled', true);
-        $('#Project').prop('disabled', true);
-        $("#Part_No").val("");
-        $("#Quantity").val("");
-        $("#Purchase_Rate").val("");
-        $("#P_Discount").val("");
-        $("#P_Tax1").val("");
-        $("#P_Tax2").val("");
-        var table = document.getElementById("selected_units");
-        var tbodyRowCount = table.tBodies[0].rows.length;
-        var total_from_db = @ViewBag.Final_Total;
-        var T_qty = 0;
-        var T_subtotal = 0;
-        var project = @ViewBag.Project_data;
-        var Total_tax = @ViewBag.Final_Tax;
-        document.getElementById("Project").value = project;
-        for (i = 0; i <= tbodyRowCount - 1; i++) {
-            var p_qty = document.getElementById("selected_units").tBodies[0].rows[i].cells[2].innerHTML;
-            var p_total = document.getElementById("selected_units").tBodies[0].rows[i].cells[5].innerHTML;
-            T_qty = T_qty + parseFloat(p_qty);
-            T_subtotal = T_subtotal + parseFloat(p_total);
+        document.getElementById("final_Quantity").value = @ViewBag.Final_Qty;
+        document.getElementById("final_SubTotal").value = @ViewBag.Final_Subtotal;
+        document.getElementById("Final_Discount").value = @ViewBag.Dis_Per;
+        document.getElementById("total_discount").value = @ViewBag.Dis_val;
+        document.getElementById("Total_IGST").value = @ViewBag.Igst_Per;
+        document.getElementById("total_igst").value = @ViewBag.Igst_val;
+        document.getElementById("Total_CGST").value = @ViewBag.Cgst_Per;
+        document.getElementById("total_cgst").value = @ViewBag.Cgst_val;
+        document.getElementById("Total_SGST").value = @ViewBag.Sgst_Per;
+        document.getElementById("total_sgst").value = @ViewBag.Sgst_val;
+        document.getElementById("Final_Total").value = @ViewBag.Final_Total;
+        if (document.getElementById("Total_CGST").value != 0) {
+            $('#Total_IGST').prop('disabled', true);
         }
-
-        document.getElementById("total_display").innerHTML = T_subtotal.toFixed(2);
-        document.getElementById("Qty_display").innerHTML = T_qty;
-        document.getElementById("total_tax").innerHTML = Total_tax;
-        var finaltotal = T_subtotal + Total_tax;
-        document.getElementById("Final_Total").innerHTML = finaltotal.toFixed(2);
-
+        if (document.getElementById("Total_SGST").value != 0) {
+            $('#Total_IGST').prop('disabled', true);
+        }
+        if (document.getElementById("Total_IGST").value != 0) {
+            $('#Total_CGST').prop('disabled', true);
+            $('#Total_SGST').prop('disabled', true);
+        }
     }
 
     function final_calculation() {
-        var sub_total = document.getElementById("total_display").innerHTML;
-        var final_tax1 = $("#Final_Tax1").val();
-        if (final_tax1 == "") {
-            var tax1_val = 0;
+        var table = document.getElementById("selected_units");
+        var tbodyRowCount = table.tBodies[0].rows.length;
+        var T_qty = 0;
+        var T_subtotal = 0;
+        for (i = 0; i <= tbodyRowCount - 1; i++) {
+            var p_qty = document.getElementById("selected_units").tBodies[0].rows[i].cells[2].innerHTML;
+            var p_total = document.getElementById("selected_units").tBodies[0].rows[i].cells[13].innerHTML;
+            T_qty = T_qty + parseFloat(p_qty);
+            T_subtotal = T_subtotal + parseFloat(p_total);
         }
-        else {
-            var tax1_val = (sub_total * final_tax1) / 100;
-            document.getElementById("total_tax").innerHTML = tax1_val.toFixed(2);
+        var _discount_per = $('#Final_Discount').val();
+        var _igst_per = $('#Total_IGST').val();
+        var _cgst_per = $('#Total_CGST').val();
+        var _sgst_per = $('#Total_SGST').val();
+
+        var _discount_val;
+        var _igst_val;
+        var _cgst_val;
+        var _sgst_val;
+        switch (true) {
+            case _discount_per == "":
+                _discount_val = 0;
+                _discount_per = 0;
+                break;
+            default:
+                _discount_val = (T_subtotal * _discount_per) / 100;
         }
-        var Total = parseFloat(sub_total) + parseFloat(tax1_val);
-        document.getElementById("Final_Total").innerHTML = Total.toFixed(2);
+        switch (true) {
+            case _igst_per == "":
+                _igst_val = 0;
+                _igst_per = 0;
+                break;
+            default:
+                _igst_val = (T_subtotal * _igst_per) / 100;
+        }
+        switch (true) {
+            case _cgst_per == "":
+                _cgst_val = 0;
+                _cgst_per = 0;
+                break;
+            default:
+                _cgst_val = (T_subtotal * _cgst_per) / 100;
+        }
+        switch (true) {
+            case _sgst_per == "":
+                _sgst_val = 0;
+                _sgst_per = 0;
+                break;
+            default:
+                _sgst_val = (T_subtotal * _sgst_per) / 100;
+        }
+
+        var _total = (T_subtotal - _discount_val) + _igst_val + _cgst_val + _sgst_val;
+        document.getElementById("final_Quantity").value = T_qty;
+        document.getElementById("final_SubTotal").value = T_subtotal.toFixed(2);
+        document.getElementById("total_discount").value = _discount_val.toFixed(2);
+        document.getElementById("total_igst").value = _igst_val.toFixed(2);
+        document.getElementById("total_cgst").value = _cgst_val.toFixed(2);
+        document.getElementById("total_sgst").value = _sgst_val.toFixed(2);
+        document.getElementById("Final_Total").value = _total.toFixed(2);
     }
 
     function Toshow() {
-        var rowId =
-            event.target.parentNode.parentNode.id;
+        var rowId = event.target.parentNode.parentNode.id;
         row_id = rowId;
-        var data =
-            document.getElementById(rowId).querySelectorAll(".row-data");
+        var data = document.getElementById(rowId).querySelectorAll(".row-data");
 
         var part_no = data[0].innerHTML;
         var p_qty = data[2].innerHTML;
         var p_rate = data[3].innerHTML;
+        var dis_per = data[4].innerHTML;
+        var igst_per = data[6].innerHTML;
+        var cgst_per = data[8].innerHTML;
+        var sgst_per = data[10].innerHTML;
 
         document.getElementById("Part_No").value = part_no;
         document.getElementById("Quantity").value = p_qty;
         document.getElementById("Purchase_Rate").value = p_rate;
+        document.getElementById("Discount").value = dis_per;
+        document.getElementById("IGST").value = igst_per;
+        document.getElementById("CGST").value = cgst_per;
+        document.getElementById("SGST").value = sgst_per;
 
         document.getElementById("Insert").style.display = "none";
         document.getElementById("Add").style.display = "block";
@@ -469,12 +525,15 @@
         document.getElementById("Add").style.display = "none";
 
         var rowId = row_id;
-        var data =
-            document.getElementById(rowId).querySelectorAll(".row-data");
+        var data = document.getElementById(rowId).querySelectorAll(".row-data");
 
         var part_no = document.getElementById("Part_No").value;
-        var p_qty = document.getElementById("Quantity").value;
-        var p_rate = document.getElementById("Purchase_Rate").value;
+        var _qty = parseInt(document.getElementById("Quantity").value);
+        var _price = $('#Purchase_Rate').val();
+        var _discount_per = $('#Discount').val();
+        var _igst_per = $('#IGST').val();
+        var _cgst_per = $('#CGST').val();
+        var _sgst_per = $('#SGST').val();
 
         @*var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
         var l_row1 = last_row1 - 1;
@@ -489,16 +548,62 @@
             }
             count++;
         }*@
-        var subtotal = p_qty * p_rate;
-        var total = subtotal;
+        var _subtotal = _qty * _price;
+        var _discount_val;
+        var _igst_val;
+        var _cgst_val;
+        var _sgst_val;
+        switch (true) {
+            case _discount_per == "":
+                _discount_val = 0;
+                _discount_per = 0;
+                break;
+            default:
+                _discount_val = (_subtotal * _discount_per) / 100;
+        }
+        switch (true) {
+            case _igst_per == "":
+                _igst_val = 0;
+                _igst_per = 0;
+                break;
+            default:
+                _igst_val = (_subtotal * _igst_per) / 100;
+        }
+        switch (true) {
+            case _cgst_per == "":
+                _cgst_val = 0;
+                _cgst_per = 0;
+                break;
+            default:
+                _cgst_val = (_subtotal * _cgst_per) / 100;
+        }
+        switch (true) {
+            case _sgst_per == "":
+                _sgst_val = 0;
+                _sgst_per = 0;
+                break;
+            default:
+                _sgst_val = (_subtotal * _sgst_per) / 100;
+        }
+
+        var _total = (_subtotal - _discount_val) + _igst_val + _cgst_val + _sgst_val;
 
         data[0].innerHTML = part_no;
-        data[2].innerHTML = p_qty;
-        data[3].innerHTML = p_rate;
-        data[4].innerHTML = subtotal;
-        data[5].innerHTML = total;
+        data[2].innerHTML = _qty;
+        data[3].innerHTML = _price;
+        data[4].innerHTML = _discount_per;
+        data[5].innerHTML = _discount_val;
+        data[6].innerHTML = _igst_per;
+        data[7].innerHTML = _igst_val;
+        data[8].innerHTML = _cgst_per;
+        data[9].innerHTML = _cgst_val;
+        data[10].innerHTML = _sgst_per;
+        data[11].innerHTML = _sgst_val;
+        data[12].innerHTML = _subtotal;
+        data[13].innerHTML = _total;
 
-        total_cal();
+        final_calculation();
+        formClear();
     }
 
     function del_row(node) {
@@ -528,7 +633,7 @@
         $("#P_Tax2").val("");
         var table = document.getElementById("selected_units");
         var tbodyRowCount = table.tBodies[0].rows.length;
-        var total_from_db = @ViewBag.Final_Total;
+        @*var total_from_db = @ViewBag.Final_Total;*@
         var T_qty = 0;
         var T_subtotal = 0;
         for (i = 0; i < tbodyRowCount; i++) {
@@ -576,7 +681,7 @@
         $("#P_Tax2").val("");
         var table = document.getElementById("selected_units");
         var tbodyRowCount = table.tBodies[0].rows.length;
-        var total_from_db = @ViewBag.Final_Total;
+        @*var total_from_db = @ViewBag.Final_Total;*@
         var T_qty = 0;
         var T_subtotal = 0;
         for (i = 0; i < tbodyRowCount; i++) {
@@ -864,4 +969,141 @@
                 }
             });
     }
+
+    $('input[name=IGST]').change(function () {
+        var igst = document.getElementById("IGST").value;
+        if (igst != "") {
+            $('#CGST').prop('disabled', true);
+            $('#SGST').prop('disabled', true);
+        }
+        else {
+            $('#CGST').prop('disabled', false);
+            $('#SGST').prop('disabled', false);
+        }
+    });
+    $('input[name=CGST]').change(function () {
+        var cgst = document.getElementById("CGST").value;
+        if (cgst != "") {
+            $('#IGST').prop('disabled', true);
+        }
+        else {
+            $('#IGST').prop('disabled', false);
+        }
+    });
+    $('input[name=SGST]').change(function () {
+        var sgst = document.getElementById("SGST").value;
+        if (sgst != "") {
+            $('#IGST').prop('disabled', true);
+        }
+        else {
+            $('#IGST').prop('disabled', false);
+        }
+    });
+    $('input[name=Final_Discount]').change(function () {
+        var subtotal = parseFloat(document.getElementById("final_SubTotal").value);
+        var Discount = parseFloat(document.getElementById("total_discount").value);
+        var IGST = parseFloat(document.getElementById("total_igst").value);
+        var CGST = parseFloat(document.getElementById("total_cgst").value);
+        var SGST = parseFloat(document.getElementById("total_sgst").value);
+        var discount = document.getElementById("Final_Discount").value;
+        if (discount > 0) {
+            var final_discount = (subtotal * discount) / 100;
+            var final_total = (subtotal - final_discount) + IGST + CGST + SGST;
+            document.getElementById("total_discount").value = final_discount.toFixed(2);
+            document.getElementById("Final_Total").value = final_total.toFixed(2);
+        }
+        else {
+            var _discount = document.getElementById("total_discount").value;
+            var final_total = document.getElementById("Final_Total").value;
+            document.getElementById("Final_Total").value = (final_total + _discount).toFixed(2);
+            document.getElementById("total_discount").value = "0.00";
+        }
+    });
+    $('input[name=Total_IGST]').change(function () {
+        var subtotal = parseFloat(document.getElementById("final_SubTotal").value);
+        var Discount = parseFloat(document.getElementById("total_discount").value);
+        var IGST = parseFloat(document.getElementById("total_igst").value);
+        var CGST = parseFloat(document.getElementById("total_cgst").value);
+        var SGST = parseFloat(document.getElementById("total_sgst").value);
+        var igst = document.getElementById("Total_IGST").value;
+        if (igst > 0) {
+            $('#Total_CGST').prop('disabled', true);
+            $('#Total_SGST').prop('disabled', true);
+            document.getElementById("total_cgst").value = "0.00";
+            document.getElementById("total_sgst").value = "0.00";
+            if (subtotal == 0) {
+                document.getElementById("total_igst").value = "0.00";
+            }
+            else {
+                var final_igst = (subtotal * igst) / 100;
+                var final_total = (subtotal - Discount) + final_igst + CGST + SGST;
+                document.getElementById("total_igst").value = final_igst.toFixed(2);
+                document.getElementById("Final_Total").value = final_total.toFixed(2);
+            }
+        }
+        else {
+            $('#Total_CGST').prop('disabled', false);
+            $('#Total_SGST').prop('disabled', false);
+            var _igst = document.getElementById("total_igst").value;
+            var final_total = document.getElementById("Final_Total").value;
+            document.getElementById("Final_Total").value = (final_total - _igst).toFixed(2);
+            document.getElementById("total_igst").value = "0.00";
+        }
+    });
+    $('input[name=Total_CGST]').change(function () {
+        var subtotal = parseFloat(document.getElementById("final_SubTotal").value);
+        var Discount = parseFloat(document.getElementById("total_discount").value);
+        var IGST = parseFloat(document.getElementById("total_igst").value);
+        var CGST = parseFloat(document.getElementById("total_cgst").value);
+        var SGST = parseFloat(document.getElementById("total_sgst").value);
+        var cgst = document.getElementById("Total_CGST").value;
+        if (cgst > 0) {
+            document.getElementById("total_igst").value = "0.00";
+            $('#Total_IGST').prop('disabled', true);
+            if (subtotal == 0) {
+                document.getElementById("total_cgst").value = "0.00";
+            }
+            else {
+                var final_cgst = (subtotal * cgst) / 100;
+                var final_total = (subtotal - Discount) + IGST + final_cgst + SGST;
+                document.getElementById("total_cgst").value = final_cgst.toFixed(2);
+                document.getElementById("Final_Total").value = final_total.toFixed(2);
+            }
+        }
+        else {
+            $('#Total_IGST').prop('disabled', false);
+            var _cgst = document.getElementById("total_cgst").value;
+            var final_total = document.getElementById("Final_Total").value;
+            document.getElementById("Final_Total").value = (final_total - _cgst).toFixed(2);
+            document.getElementById("total_cgst").value = "0.00";
+        }
+    });
+    $('input[name=Total_SGST]').change(function () {
+        var subtotal = parseFloat(document.getElementById("final_SubTotal").value);
+        var Discount = parseFloat(document.getElementById("total_discount").value);
+        var IGST = parseFloat(document.getElementById("total_igst").value);
+        var CGST = parseFloat(document.getElementById("total_cgst").value);
+        var SGST = parseFloat(document.getElementById("total_sgst").value);
+        var sgst = document.getElementById("Total_SGST").value;
+        if (sgst > 0) {
+            document.getElementById("total_igst").value = "0.00";
+            $('#Total_IGST').prop('disabled', true);
+            if (subtotal == 0) {
+                document.getElementById("total_sgst").value = "0.00";
+            }
+            else {
+                var final_sgst = (subtotal * sgst) / 100;
+                var final_total = (subtotal - Discount) + IGST + CGST + final_sgst;
+                document.getElementById("total_sgst").value = final_sgst.toFixed(2);
+                document.getElementById("Final_Total").value = final_total.toFixed(2);
+            }
+        }
+        else {
+            $('#Total_IGST').prop('disabled', false);
+            var _sgst = document.getElementById("total_sgst").value;
+            var final_total = document.getElementById("Final_Total").value;
+            document.getElementById("Final_Total").value = (final_total - _sgst).toFixed(2);
+            document.getElementById("total_sgst").value = "0.00";
+        }
+    });
 </script>

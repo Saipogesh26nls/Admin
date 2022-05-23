@@ -6,7 +6,6 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.Collections.Generic;
 
 namespace Admin.Controllers
 {
@@ -858,6 +857,15 @@ namespace Admin.Controllers
                     PM_Data[i].BillTo = Mfr;
                 }
                 dr1.Close();
+                string cmd3 = "select Project_Name from Project_Master where Project_Id = '" + PM_Data[i].project_val + "'";
+                SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
+                SqlDataReader dr2 = SqlCmd3.ExecuteReader();
+                while (dr2.Read())
+                {
+                    string Mfr = dr2["Project_Name"].ToString();
+                    PM_Data[i].Project = Mfr;
+                }
+                dr2.Close();
             }
             ViewBag.PL = PM_Data;
             Con.Close();
@@ -865,7 +873,7 @@ namespace Admin.Controllers
         }
 
         // Edit Purchase Order
-        public ActionResult PO_to_EditPurchase(int PO_No, DateTime PO_Date, string Ref_No, DateTime Ref_Date, string Supplier, string Billto) // Add PO to Purchase View
+        public ActionResult PO_to_EditPurchase(int PO_No, DateTime PO_Date, string Ref_No, DateTime Ref_Date, string Supplier, string Billto, string project) // Add PO to Purchase View
         {
             New_Purchase newPurchase_Insert = new New_Purchase();
             PurchaseTable mfr = new PurchaseTable();
@@ -889,19 +897,34 @@ namespace Admin.Controllers
             _da2.Fill(_dt2);
             ViewBag.Project = ToSelectList(_dt2, "Project_Id", "Project_Name");
             ViewBag.PL = PM_Data.Tables[0];
-            /*string acode = PM_Data.Tables[0].Rows[0]["A_code"].ToString();
             newPurchase_Insert.Purchase_Order_No = PO_No;
             newPurchase_Insert.Purchase_Order_Date = PO_Date;
+            newPurchase_Insert.Ref_No = Ref_No;
             newPurchase_Insert.Ref_Date = Ref_Date;
             newPurchase_Insert.Supplier = Supplier;
             newPurchase_Insert.BillTo = Billto;
-            newPurchase_Insert.Final_Tax1 = (double)PM_Data.Tables[0].Rows[0]["PO_Tax_Per"];
-            newPurchase_Insert.Project = PM_Data.Tables[0].Rows[0]["Project"].ToString();
-            newPurchase_Insert.sup_val = PM_Data.Tables[0].Rows[0]["A_code"].ToString();
+            newPurchase_Insert.Project = project;
+            newPurchase_Insert.project_val = (int)PM_Data.Tables[0].Rows[0]["Project"];
+            newPurchase_Insert.sup_val = PM_Data.Tables[0].Rows[0]["Supplier_Acode"].ToString();
             newPurchase_Insert.billval = PM_Data.Tables[0].Rows[0]["BillTo_Acode"].ToString();
-            ViewBag.Project_data = PM_Data.Tables[0].Rows[0]["Project"].ToString();
-            ViewBag.Final_Total = PM_Data.Tables[0].Rows[0]["PO_Final_Total"].ToString();
-            ViewBag.Final_Tax = PM_Data.Tables[0].Rows[0]["PO_Tax_Total"].ToString();*/
+            string cmd1 = "select * from PO_A_Ledger where PO_No = '" + PO_No + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlDataReader dr = SqlCmd1.ExecuteReader();
+            while (dr.Read())
+            {
+                ViewBag.Dis_Per = dr["Final_Dis_Per"].ToString();
+                ViewBag.Dis_val = dr["Final_Dis_Rs"].ToString();
+                ViewBag.Igst_Per = dr["Final_Igst_Per"].ToString();
+                ViewBag.Igst_val = dr["Final_Igst_Rs"].ToString();
+                ViewBag.Cgst_Per = dr["Final_Cgst_Per"].ToString();
+                ViewBag.Cgst_val = dr["Final_Cgst_Rs"].ToString();
+                ViewBag.Sgst_Per = dr["Final_Sgst_Per"].ToString();
+                ViewBag.Sgst_val = dr["Final_Sgst_Rs"].ToString();
+                ViewBag.Final_Qty = dr["Final_Qty"].ToString();
+                ViewBag.Final_Subtotal = dr["Final_Subtotal"].ToString();
+                ViewBag.Final_Total = dr["Final_Total"].ToString();
+            }
+            dr.Close();
             Con.Close();
             return View(newPurchase_Insert);
         }

@@ -430,6 +430,7 @@ namespace Admin.Models
         public double Total_IGST { get; set; }
         public double Total_CGST { get; set; }
         public double Total_SGST { get; set; }
+        public int project_val { get; set; }
     }
     public class PurchaseTable
     {
@@ -759,5 +760,7 @@ namespace Admin.Models
         public string Supplier { get; set; }
         public string BillTo { get; set; }
         public string billto_acode { get; set; }
+        public int project_val { get; set; }
+        public string Project { get; set; }
     }
 }
