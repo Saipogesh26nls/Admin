@@ -67,29 +67,30 @@
                             &nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-secondary" id="PO_to_Purchase" onclick="add_PO()">Add</button>
                         </p>
                     </div>
-                    <div class="card-header" style="height:100px;">
+                    <div class="card-header">
                         <p class="text-sm">
                             Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;", @readonly = "readonly" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
                             Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:1%;width:15%;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
                         </p>
-                        <p class="text-sm"> &nbsp &nbsp Supplier : &nbsp &nbsp @Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } }) &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })</p>
+                        <p class="text-sm"> &nbsp &nbsp Supplier : &nbsp &nbsp @Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } }) &nbsp &nbsp Bill To : &nbsp &nbsp @Html.DropDownListFor(model => model.BillTo, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } }) &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <p class="text-sm">
                                 Part No : <input id="Part_No" type="text" style="border: 1px solid gray;margin-left:0.5%;margin-right: 1%;width:15%;" class="uppercase" placeholder="Part No"><i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:3%"></i>@Html.DisplayFor(model => model.Part_No)
-                                Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 6%; width: 15%;" placeholder="Quantity">
-                                Price Per Unit : <input id="Purchase_Rate" type="text" style="border: 1px solid gray; width: 15%;" placeholder="Purchase Rate">
+                                Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 6%; width: 10%;" placeholder="Quantity">
+                                Price Per Unit : <input id="Purchase_Rate" type="text" style="border: 1px solid gray; width: 10%; margin-right: 2%;" placeholder="Purchase Rate">
                             </p>
                             <div>
                                 <p id="value" style="width:50%" class="text-sm"></p>
                             </div>
                             <div>
                                 <p class="text-sm">
-                                    Discount : <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 8.5%; width: 15%;" placeholder="Discount">
-                                    Tax1 : <input id="Tax_1" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 9.5%; width: 15%;" placeholder="Tax 1">
-                                    Tax2 : <input id="Tax_2" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 8%; width: 15%;" placeholder="Tax 2">
-                                    <button href="#" class="btn btn-sm btn-secondary" id="Insert">Insert</button><button class="btn btn-sm btn-secondary" style="display: none; margin-top: 10px;" id="Add" onclick="ToAdd()">Add</button>
+                                    Discount(%) : <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 1.5%; width: 10%;" placeholder="Discount">
+                                    IGST(%) : <input id="IGST" name="IGST" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 1.5%; width: 10%;" placeholder="IGST">
+                                    CGST(%) : <input id="CGST" name="CGST" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 1.5%; width: 10%;" placeholder="CGST">
+                                    SGST(%) : <input id="SGST" name="SGST" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 4%; width: 10%;" placeholder="SGST">
+                                    <button class="btn btn-sm btn-secondary" id="Insert">Insert</button><button class="btn btn-sm btn-secondary" style="display: none; margin-top: 10px;" id="Add" onclick="ToAdd()">Add</button>
                                 </p>
                             </div>
                             <!-- The Modal -->
@@ -162,54 +163,66 @@
                                             <th style="padding-right:50px">Description</th>
                                             <th style="padding-right:10px">Quantity</th>
                                             <th style="padding-right:10px">Price</th>
-                                            <th style="padding-right:10px">SubTotal</th>
                                             <th style="padding-right:10px">Dis_per</th>
                                             <th style="padding-right:10px">Dis_Rs</th>
-                                            <th style="padding-right:10px">Tax1_per</th>
-                                            <th style="padding-right:10px">Tax1_Rs</th>
-                                            <th style="padding-right:10px">Tax2_per</th>
-                                            <th style="padding-right:10px">Tax2_Rs</th>
+                                            <th style="padding-right:10px">Igst_per</th>
+                                            <th style="padding-right:10px">Igst_Rs</th>
+                                            <th style="padding-right:10px">Cgst_per</th>
+                                            <th style="padding-right:10px">Cgst_Rs</th>
+                                            <th style="padding-right:10px">Sgst_per</th>
+                                            <th style="padding-right:10px">Sgst_Rs</th>
+                                            <th style="padding-right:10px">SubTotal</th>
                                             <th style="padding-right:10px">Total</th>
                                             <th style="padding-right: 15px; display:none;" id="edit_delete">Edit</th>
-                                            <th style="display:none;">Invoice_No</th>
+                                            <th style="display: none;">Invoice_No</th>
                                             <th style="display: none;">Invoice_Date</th>
-                                            <th style="display:none;">ILedger</th>
+                                            <th style="display: none;">Voucher_Date</th>
+                                            <th style="display: none;">ILedger</th>
                                             <th style="display: none;">ALedger</th>
-                                            <th style="display: none;">final_Qty</th>
-                                            <th style="display: none;">final_Sub_Total</th>
-                                            <th style="display: none;">final_Discount</th>
-                                            <th style="display: none;">final_Tax1</th>
-                                            <th style="display: none;">final_Tax2</th>
-                                            <th style="display: none;">final_total</th>
+                                            <th style="display: none;">Final_Qty</th>
+                                            <th style="display: none;">Final_Sub_Total</th>
+                                            <th style="display: none;">Final_total</th>
+                                            <th style="display: none;">Final_Dis_per</th>
+                                            <th style="display: none;">Final_Dis_Rs</th>
+                                            <th style="display: none;">Final_Igst_per</th>
+                                            <th style="display: none;">Final_Igst_Rs</th>
+                                            <th style="display: none;">Final_Cgst_per</th>
+                                            <th style="display: none;">Final_Cgst_Rs</th>
+                                            <th style="display: none;">Final_Sgst_per</th>
+                                            <th style="display: none;">Final_Sgst_Rs</th>
                                             <th style="display: none;">supplier</th>
                                             <th style="display: none;">project</th>
-                                            <th style="display:none;">PO_No</th>
+                                            <th style="display: none;">BillTo</th>
+                                            <th style="display: none;">PO_No</th>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                                <div class="text-sm">
-                                    @Html.LabelFor(model => model.Quantity, new { htmlAttributes = new { id = "Qty_Label" } }) : <h6 id="Qty_display"></h6>
+                            <div style="font-weight:bold">
+                                Total Quantity : <input id="final_Quantity" style="font-weight: bold; width: 100px; border: none;" />
+                            </div>
+                            <div class="float-right" style="font-weight:bold">
+                                <div>
+                                    Sub-Total &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; : &nbsp; <input readonly id="final_SubTotal" value="0.00" style="width: 100px; border: none; font-weight: bold;" />
                                 </div>
-                                <div class="text-sm float-right">
-                                    <div>
-                                        @Html.LabelFor(model => model.Total, new { htmlAttributes = new { id = "total_Label" } }) : <h6 id="total_display"></h6>
-                                    </div>
-                                    <div>
-                                        @Html.LabelFor(model => model.Final_Discount) : @Html.EditorFor(model => model.Final_Discount, new { htmlAttributes = new { @id = "Final_Discount" } })
-                                    </div>
-                                    <div>
-                                        @Html.LabelFor(model => model.Final_Tax1) : @Html.EditorFor(model => model.Final_Tax1, new { htmlAttributes = new { @style = "margin-left:11%;", @id = "Final_Tax1" } })
-                                    </div>
-                                    <div>
-                                        @Html.LabelFor(model => model.Final_Tax2) : @Html.EditorFor(model => model.Final_Tax2, new { htmlAttributes = new { @style = "margin-left:11%;", @id = "Final_Tax2" } })
-                                    </div>
-                                    <div>
-                                        @Html.LabelFor(model => model.Final_Total, new { htmlAttributes = new { id = "final_total_Label" } }) : <h6 id="Final_Total" style="margin-left:11%;"></h6>
-                                    </div>
+                                <div>
+                                    Discount(%)&nbsp; @Html.EditorFor(model => model.Final_Discount, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_discount" value="0.00" style="width: 100px; border: none; font-weight: bold" />
                                 </div>
-                                <p id="del"></p>
-                           
+                                <div>
+                                    IGST(%) &nbsp; &nbsp; &nbsp; &nbsp; @Html.EditorFor(model => model.Total_IGST, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_igst" value="0.00" name="total_igst" style="width: 100px; border: none; font-weight: bold " />
+                                </div>
+                                <div>
+                                    CGST(%) &nbsp; &nbsp; &nbsp;&nbsp; @Html.EditorFor(model => model.Total_CGST, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_cgst" value="0.00" name="total_cgst" style="width: 100px; border: none; font-weight: bold " />
+                                </div>
+                                <div>
+                                    SGST(%) &nbsp; &nbsp; &nbsp;&nbsp; @Html.EditorFor(model => model.Total_SGST, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_sgst" value="0.00" name="total_sgst" style="width: 100px; border: none; font-weight: bold " />
+                                </div>
+                                <div>
+                                    Total &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; : &nbsp; <input readonly id="Final_Total" value="0.00" style="width: 100px; border: none; font-weight: bold" />
+                                </div>
+                            </div>
+                            <p id="del"></p>
+
                         </div>
                     </div>
                 </div>
@@ -217,7 +230,7 @@
         </div>
         <p id="Enter_Inv_No"></p>
         <p id="vno" style="background-color:yellow;width:20%"></p>
-        @*<a href="@Url.Action("PurchaseList", "NewPurchase")"><button class="btn btn-sm btn-secondary" style="width:8%;" id="Edit">Edit</button></a>*@<button class="btn btn-sm btn-secondary" id="Submit" style="width:8%;">Submit</button>
+        <button class="btn btn-sm btn-secondary" id="Submit" style="width:8%;">Submit</button>
         <pre id="json_op"></pre>
     </div>
 </body>
@@ -230,17 +243,22 @@
     var val = "";
     var last_row = document.getElementById("selected_units").rows.length;
     $('#Insert').click(function () {
-        var d1 = $('#Part_No').val();
-        var d2 = parseInt(document.getElementById("Quantity").value);
-        var d3 = $('#Purchase_Rate').val();
-        var d4 = $('#Discount').val();
-        var d5 = $('#Tax_1').val();
-        var d6 = $('#Tax_2').val();
-        var mfr = $('#Supplier').val();
-        var project = $('#Project').val();
-        var ILedger = 1;
-        var ALedger = 2;
-        var pono = $('#PO_No').val();
+        var _VDate = $('#Voucher_Date').val();
+        var _InvNo = $('#Invoice_No').val();
+        var _InvDate = $('#Invoice_Date').val();
+        var _supplier = $('#Supplier').val();
+        var _billto = $('#BillTo').val();
+        var _project = $('#Project').val();
+        var _partno = $('#Part_No').val();
+        var _qty = parseInt(document.getElementById("Quantity").value);
+        var _price = $('#Purchase_Rate').val();
+        var _discount_per = $('#Discount').val();
+        var _igst_per = $('#IGST').val();
+        var _cgst_per = $('#CGST').val();
+        var _sgst_per = $('#SGST').val();
+        var _ILedger = 1;
+        var _ALedger = 2;
+        var _PO_No = $("#PO_No").val();
 
         var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
         var l_row1 = last_row1 - 1;
@@ -255,36 +273,57 @@
             }
             count++;
         }
-        var subtotal = d2 * d3;
-        if (d4 == "") {
-            var discount = 0;
-            var discount_per = 0;
+        var _subtotal = _qty * _price;
+        var _discount_val;
+        var _igst_val;
+        var _cgst_val;
+        var _sgst_val;
+        switch (true) {
+            case _discount_per == "":
+                _discount_val = 0;
+                _discount_per = 0;
+                break;
+            default:
+                _discount_val = (_subtotal * _discount_per) / 100;
         }
-        else {
-            var discount = (subtotal * d4) / 100;
-            var discount_per = (discount / subtotal) * 100;
+        switch (true) {
+            case _igst_per == "":
+                _igst_val = 0;
+                _igst_per = 0;
+                break;
+            default:
+                _igst_val = (_subtotal * _igst_per) / 100;
         }
-        if (d5 == "") {
-            var tax1 = 0;
-            var tax1_per = 0;
+        switch (true) {
+            case _cgst_per == "":
+                _cgst_val = 0;
+                _cgst_per = 0;
+                break;
+            default:
+                _cgst_val = (_subtotal * _cgst_per) / 100;
         }
-        else {
-            var tax1 = (subtotal * d5) / 100;
-            var tax1_per = (tax1 / subtotal) * 100;
-        }
-        if (d6 == "") {
-            var tax2 = 0;
-            var tax2_per = 0;
-        }
-        else {
-            var tax2 = (subtotal * d6) / 100;
-            var tax2_per = (tax2 / subtotal) * 100;
+        switch (true) {
+            case _sgst_per == "":
+                _sgst_val = 0;
+                _sgst_per = 0;
+                break;
+            default:
+                _sgst_val = (_subtotal * _sgst_per) / 100;
         }
 
-        var Invoice_No = $('#Invoice_No').val();
-        var Invoice_Date = $('#Invoice_Date').val();
-        var qty_field = $('#Quantity').val();
+        var _total = (_subtotal - _discount_val) + _igst_val + _cgst_val + _sgst_val;
 
+        if (_partno == "" || _qty == "" || _price == "") {
+            document.getElementById("final_Quantity").value = 0;
+            document.getElementById("final_SubTotal").value = "0.00";
+        }
+        else {
+            qty = qty + _qty;
+            var Total = _total;
+            total = total + Total;
+            document.getElementById("final_Quantity").value = qty;
+            document.getElementById("final_SubTotal").value = total.toFixed(2);
+        }
         var model = new Object();
         model.Part_No = document.getElementById("Part_No").value;
 
@@ -295,30 +334,21 @@
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({ name: model }),
             success: function (data) {
-                if (d1 == "") {
+                if (_partno == "") {
                     var error = '<p style="color:red;">Enter Part No !!!<p/>';
                     document.getElementById("value").innerHTML = error;
                     return;
                 }
-                else if (qty_field == "" || qty_field == 0) {
+                else if (_qty == "" || _qty == 0) {
                     var error = '<p style="color:red;">Enter Quantity !!!<p/>';
-                    document.getElementById("value").innerHTML = error;
-                    return;
-                }
-                else if (d3 == "" || d3 == 0) {
-                    var error = '<p style="color:red;">Enter Price per unit !!!<p/>';
-                    document.getElementById("value").innerHTML = error;
-                    return;
-                }
-                else if (Invoice_No == "") {
-                    var error = '<p style="color:red;">Enter Invoice No !!!<p/>';
                     document.getElementById("value").innerHTML = error;
                     return;
                 }
                 else {
                     document.getElementById("value").innerHTML = val;
-                    var newrow = '<tr id="data" name="data" style="font-size:13px;"><td class="row-data">' + d1 + '</td><td class="row-data">' + data[0].Description + '</td><td id="Qty' + i + '" class="row-data">' + d2 + '</td><td class="row-data">' + d3 + '</td><td class="row-data">' + subtotal.toFixed(2) + '</td><td class="row-data">' + discount_per + '</td><td class="row-data">' + discount + '</td><td class="row-data">' + tax1_per + '</td><td class="row-data">' + tax1 + '</td><td class="row-data">' + tax2_per + '</td><td class="row-data">' + tax2 + '</td><td id="total' + i + '" class="row-data">' + Total.toFixed(2) + '</td><td class="row-data" style="display:none;"><i class="fas fa-edit" onclick="Toshow()"></i></td><td style="display:none;" class="row-data">' + Invoice_No + '</td><td style="display:none;" class="row-data">' + Invoice_Date + '</td><td style="display:none;" class="row-data">' + ILedger + '</td><td style="display:none;" class="row-data">' + ALedger + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td style="display:none;" class="row-data" id="final_Discount"></td><td style="display:none;" class="row-data" id="final_Tax1"></td><td style="display:none;" class="row-data" id="final_Tax2"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;" class="row-data">' + mfr + '</td><td style="display:none;" class="row-data">' + project + '</td><td style="display:none;" class="row-data">' + pono + '</td></tr>';
+                    var newrow = '<tr id="data" name="data" style="font-size:13px;"><td>' + _partno + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + _qty + '</td><td>' + _price + '</td><td>' + _discount_per + '</td><td>' + _discount_val.toFixed(2) + '</td><td>' + _igst_per + '</td><td>' + _igst_val.toFixed(2) + '</td><td>' + _cgst_per + '</td><td>' + _cgst_val.toFixed(2) + '</td><td>' + _sgst_per + '</td><td>' + _sgst_val.toFixed(2) + '</td><td>' + _subtotal.toFixed(2) + '</td><td id="total' + i + '">' + _total.toFixed(2) + '</td><td class="row-data" style="display:none;"><i class="fas fa-edit" onclick="Toshow()"></i></td><td style="display:none;" id="Ino">' + _InvNo + '</td><td style="display:none;" id="Idate">' + _InvDate + '</td><td style="display:none;" id="Vdate">' + _VDate + '</td><td style="display:none;">' + _ILedger + '</td><td style="display:none;">' + _ALedger + '</td><td style="display:none;" id="_final_qty"></td><td style="display:none;" id="_final_subtotal"></td><td style="display:none;" id="_final_total"></td><td style="display:none;" id="_final_dis_per"></td><td style="display:none;" id="_final_dis_val"></td><td style="display:none;" id="_final_igst_per"></td><td style="display:none;" id="_final_igst_val"></td><td style="display:none;" id="_final_cgst_per"></td><td style="display:none;" id="_final_cgst_val"></td><td style="display:none;" id="_final_sgst_per"></td><td style="display:none;" id="_final_sgst_val"></td><td style="display:none;">' + _supplier + '</td><td style="display:none;">' + _project + '</td><td style="display:none;">' + _billto + '</td><td style="display:none;">' + _PO_No + '</td></tr>';
                     $('#selected_units tr:last').after(newrow);
+                    formClear();
                     i++;
                 }
             },
@@ -326,19 +356,6 @@
                 alert(errMsg);
             }
         });
-        if (d1 == "" || d2 == "" || d3 == "" || Invoice_No == "" || d3 == 0) {
-            document.getElementById("Qty_display").innerHTML = 0;
-            document.getElementById("total_display").innerHTML = 0;
-        }
-        else {
-            qty = qty + d2;
-            var Total = (subtotal - discount) + tax1 + tax2;
-            total = total + Total;
-            document.getElementById("Qty_display").innerHTML = qty;
-            document.getElementById("total_display").innerHTML = total.toFixed(2);
-        }
-        final_calculation();
-        formClear();
     });
 
     function formClear() {
@@ -346,8 +363,9 @@
         $("#Quantity").val("");
         $("#Purchase_Rate").val("");
         $("#Discount").val("");
-        $("#Tax_1").val("");
-        $("#Tax_2").val("");
+        $("#IGST").val("");
+        $("#CGST").val("");
+        $("#SGST").val("");
     }
 
     function final_calculation() {
@@ -378,30 +396,41 @@
     }
 
     $('#Submit').click(function (e) {
-        final_calculation();
-        var Inv_No = $('#Invoice_No').val();
         var part = document.getElementById("selected_units").tBodies[0].rows.length;
-        if (Inv_No == "" || part==1) {
-            document.getElementById("Enter_Inv_No").innerHTML = "Enter Invoice No (or) Table is Empty !!!";
+        if (part==1) {
+            document.getElementById("Enter_Inv_No").innerHTML = "Table is Empty !!!";
             return;
         }
         else {
-            var f1 = document.getElementById("Qty_display").innerHTML;
-            var f2 = document.getElementById("total_display").innerHTML;
-            var f3 = document.getElementById("Final_Discount").value;
-            var f4 = document.getElementById("Final_Tax1").value;
-            var f5 = document.getElementById("Final_Tax2").value;
-            var f6 = document.getElementById("Final_Total").innerHTML;
-            var ino = document.getElementById("Invoice_No").value;
-            var idate = document.getElementById("Invoice_Date").value;
-            document.getElementById("final_qty").innerHTML = f1;
-            document.getElementById("final_SubTotal").innerHTML = f2;
-            document.getElementById("final_Discount").innerHTML = f3;
-            document.getElementById("final_Tax1").innerHTML = f4;
-            document.getElementById("final_Tax2").innerHTML = f5;
-            document.getElementById("final_Total").innerHTML = f6;
-            document.getElementById("Ino").innerHTML = ino;
-            document.getElementById("Idate").innerHTML = idate;
+            var _VDate = $('#Voucher_Date').val();
+            var _InvNo = $('#Invoice_No').val();
+            var _InvDate = $('#Invoice_Date').val();
+            var __final_qty = document.getElementById("final_Quantity").value;
+            var __final_subtotal = document.getElementById("final_SubTotal").value;
+            var __final_dis_per = document.getElementById("Final_Discount").value;
+            var __final_dis_val = document.getElementById("total_discount").value;
+            var __final_igst_per = document.getElementById("Total_IGST").value;
+            var __final_igst_val = document.getElementById("total_igst").value;
+            var __final_cgst_per = document.getElementById("Total_CGST").value;
+            var __final_cgst_val = document.getElementById("total_cgst").value;
+            var __final_sgst_per = document.getElementById("Total_SGST").value;
+            var __final_sgst_val = document.getElementById("total_sgst").value;
+            var __final_total = document.getElementById("Final_Total").value;
+            document.getElementById("_final_qty").innerHTML = __final_qty;
+            document.getElementById("_final_subtotal").innerHTML = __final_subtotal;
+            document.getElementById("_final_dis_per").innerHTML = __final_dis_per;
+            document.getElementById("_final_dis_val").innerHTML = __final_dis_val;
+            document.getElementById("_final_igst_per").innerHTML = __final_igst_per;
+            document.getElementById("_final_igst_val").innerHTML = __final_igst_val;
+            document.getElementById("_final_cgst_per").innerHTML = __final_cgst_per;
+            document.getElementById("_final_cgst_val").innerHTML = __final_cgst_val;
+            document.getElementById("_final_sgst_per").innerHTML = __final_sgst_per;
+            document.getElementById("_final_sgst_val").innerHTML = __final_sgst_val;
+            document.getElementById("_final_total").innerHTML = __final_total;
+            document.getElementById("Ino").innerHTML = _InvNo;
+            document.getElementById("Idate").innerHTML = _InvDate;
+            document.getElementById("Vdate").innerHTML = _VDate;
+
             var submit1 = "";
             document.getElementById("Enter_Inv_No").innerHTML = submit1;
             var myRows = [];
@@ -461,39 +490,192 @@
             success: function (data) {
                 $("#selected_units").find("tr:not(:first)").remove();
                 if (data.PO_No == "0") {
-                    document.getElementById("Qty_display").innerHTML = "";
-                    document.getElementById("total_display").innerHTML = "";
-                    document.getElementById("Final_Total").innerHTML = "";
+                    document.getElementById("final_Quantity").value = 0;
+                    document.getElementById("final_SubTotal").value = "0.00";
+                    document.getElementById("Final_Discount").value = 0;
+                    document.getElementById("total_discount").value = "0.00";
+                    document.getElementById("Total_IGST").value = 0;
+                    document.getElementById("total_igst").value = "0.00";
+                    document.getElementById("Total_CGST").value = 0;
+                    document.getElementById("total_cgst").value = "0.00";
+                    document.getElementById("Total_SGST").value = 0;
+                    document.getElementById("total_sgst").value = "0.00";
+                    document.getElementById("Final_Total").value = "0.00";
                     document.getElementById("Supplier").value = "00102";
+                    document.getElementById("BillTo").value = "00102";
                     document.getElementById("Project").value = 0;
                     qty = 0;
                     total = 0;
                     final_total = 0;
                     document.getElementById("edit_delete").style.display = "none";
                     $('#Supplier').prop('disabled', false);
+                    $('#BillTo').prop('disabled', false);
                     $('#Project').prop('disabled', false);
                 }
                 else {
                     for (var i = 0; i <= data.length - 1; i++) {
-                        var newrow = '<tr id="' + i + '" name="data" style="font-size:13px;"><td class="row-data">' + data[i].Part_No + '</td><td class="row-data">' + data[i].Description + '</td><td id="Qty' + i + '" class="row-data">' + data[i].Quantity + '</td><td class="row-data">' + data[i].Price + '</td><td class="row-data">' + data[i].SubTotal + '</td><td class="row-data">' + 0 + '</td><td class="row-data">' + 0 + '</td><td class="row-data">' + 0 + '</td><td class="row-data">' + 0 + '</td><td class="row-data">' + 0 + '</td><td class="row-data">' + 0 + '</td><td id="total' + i + '" class="row-data">' + data[i].Total + '</td><td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i></td><td style="display:none;" class="row-data"  id="Ino">' + "" + '</td><td style="display:none;" class="row-data" id="Idate">' + "" + '</td><td style="display:none;" class="row-data">' + data[i].ILedger + '</td><td style="display:none;" class="row-data">' + data[i].ALedger + '</td><td style="display:none;" class="row-data" id="final_qty"></td><td style="display:none;" class="row-data" id="final_SubTotal"></td><td style="display:none;" class="row-data" id="final_Discount"></td><td style="display:none;" class="row-data" id="final_Tax1"></td><td style="display:none;" class="row-data" id="final_Tax2"></td><td id="final_Total" style="display:none;" class="row-data"></td><td style="display:none;" class="row-data">' + data[i].sup_code + '</td><td style="display:none;" class="row-data">' + data[i].project + '</td><td style="display:none;" class="row-data">' + data[i].PO_No + '</td></tr>';
+                        var newrow = '<tr id="' + i + '" name="data" style="font-size:13px;"><td class="row-data">' + data[i].Part_No + '</td><td class="row-data">' + data[i].Description + '</td><td id="Qty' + i + '" class="row-data">' + data[i].Quantity + '</td><td class="row-data">' + data[i].Price + '</td><td class="row-data">' + data[i].Dis_per + '</td><td class="row-data">' + data[i].Dis_Rs + '</td><td class="row-data">' + data[i].Igst_per + '</td><td class="row-data">' + data[i].Igst_Rs + '</td><td class="row-data">' + data[i].Cgst_per + '</td><td class="row-data">' + data[i].Cgst_Rs + '</td><td class="row-data">' + data[i].Sgst_per + '</td><td class="row-data">' + data[i].Sgst_Rs + '</td><td class="row-data">' + data[i].SubTotal + '</td><td id="total' + i + '" class="row-data">' + data[i].Total + '</td><td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i></td><td style="display:none;" class="row-data"  id="Ino">' + "" + '</td><td style="display:none;" class="row-data" id="Idate">' + "" + '</td><td style="display:none;" class="row-data" id="Vdate">' + "" + '</td><td style="display:none;" class="row-data">' + data[i].ILedger + '</td><td style="display:none;" class="row-data">' + data[i].ALedger + '</td><td style="display:none;" class="row-data" id="_final_qty"></td><td style="display:none;" class="row-data" id="_final_subtotal"></td><td id="_final_total" style="display:none;" class="row-data"></td><td style="display:none;" class="row-data" id="_final_dis_per"></td><td style="display:none;" class="row-data" id="_final_dis_val"></td><td style="display:none;" class="row-data" id="_final_igst_per"></td><td style="display:none;" class="row-data" id="_final_igst_val"></td><td style="display:none;" class="row-data" id="_final_cgst_per"></td><td style="display:none;" class="row-data" id="_final_cgst_val"></td><td style="display:none;" class="row-data" id="_final_sgst_per"></td><td style="display:none;" class="row-data" id="_final_sgst_val"></td><td style="display:none;" class="row-data">' + data[i].supplier + '</td><td style="display:none;" class="row-data">' + data[i].project + '</td><td style="display:none;" class="row-data">' + data[i].BillTo + '</td><td style="display:none;" class="row-data">' + data[i].PO_No + '</td></tr>';
                         $('#selected_units tr:last').after(newrow);
                     }
-                    document.getElementById("Qty_display").innerHTML = data[0].final_Qty;
-                    document.getElementById("total_display").innerHTML = data[0].final_Sub_Total;
-                    document.getElementById("Final_Total").innerHTML = data[0].final_total;
-                    document.getElementById("Supplier").value = data[0].sup_code;
+                    document.getElementById("final_Quantity").value = data[0].Final_Qty;
+                    document.getElementById("final_SubTotal").value = data[0].Final_Sub_Total.toFixed(2);
+                    document.getElementById("Final_Discount").value = data[0].Final_Dis_per;
+                    document.getElementById("total_discount").value = data[0].Final_Dis_Rs.toFixed(2);
+                    document.getElementById("Total_IGST").value = data[0].Final_Igst_per;
+                    document.getElementById("total_igst").value = data[0].Final_Igst_Rs.toFixed(2);
+                    document.getElementById("Total_CGST").value = data[0].Final_Cgst_per;
+                    document.getElementById("total_cgst").value = data[0].Final_Cgst_Rs.toFixed(2);
+                    document.getElementById("Total_SGST").value = data[0].Final_Sgst_per;
+                    document.getElementById("total_sgst").value = data[0].Final_Sgst_Rs.toFixed(2);
+                    document.getElementById("Final_Total").value = data[0].Final_total.toFixed(2);
+                    document.getElementById("Supplier").value = data[0].supplier;
+                    document.getElementById("BillTo").value = data[0].BillTo;
                     document.getElementById("Project").value = data[0].project;
-                    document.getElementById("Final_Tax1").value = data[0].Tax_Per;
-                    qty = data[0].final_Qty;
-                    total = data[0].final_Sub_Total;
-                    final_total = data[0].final_total;
                     document.getElementById("edit_delete").style.display = "block";
                     $('#Supplier').prop('disabled', true);
+                    $('#BillTo').prop('disabled', true);
                     $('#Project').prop('disabled', true);
                 }
             }
         });
     }
+
+    $('input[name=IGST]').change(function () {
+        var igst = document.getElementById("IGST").value;
+        if (igst != "") {
+            $('#CGST').prop('disabled', true);
+            $('#SGST').prop('disabled', true);
+        }
+        else {
+            $('#CGST').prop('disabled', false);
+            $('#SGST').prop('disabled', false);
+        }
+    });
+    $('input[name=CGST]').change(function () {
+        var cgst = document.getElementById("CGST").value;
+        if (cgst != "") {
+            $('#IGST').prop('disabled', true);
+        }
+        else {
+            $('#IGST').prop('disabled', false);
+        }
+    });
+    $('input[name=SGST]').change(function () {
+        var sgst = document.getElementById("SGST").value;
+        if (sgst != "") {
+            $('#IGST').prop('disabled', true);
+        }
+        else {
+            $('#IGST').prop('disabled', false);
+        }
+    });
+    $('input[name=Final_Discount]').change(function () {
+        var subtotal = parseFloat(document.getElementById("final_SubTotal").value);
+        var Discount = parseFloat(document.getElementById("total_discount").value);
+        var IGST = parseFloat(document.getElementById("total_igst").value);
+        var CGST = parseFloat(document.getElementById("total_cgst").value);
+        var SGST = parseFloat(document.getElementById("total_sgst").value);
+        var discount = document.getElementById("Final_Discount").value;
+        if (discount > 0) {
+            var final_discount = (subtotal * discount) / 100;
+            var final_total = (subtotal - final_discount) + IGST + CGST + SGST;
+            document.getElementById("total_discount").value = final_discount.toFixed(2);
+            document.getElementById("Final_Total").value = final_total.toFixed(2);
+        }
+        else {
+            var _discount = document.getElementById("total_discount").value;
+            var final_total = document.getElementById("Final_Total").value;
+            document.getElementById("Final_Total").value = (final_total + _discount).toFixed(2);
+            document.getElementById("total_discount").value = "0.00";
+        }
+    });
+    $('input[name=Total_IGST]').change(function () {
+        var subtotal = parseFloat(document.getElementById("final_SubTotal").value);
+        var Discount = parseFloat(document.getElementById("total_discount").value);
+        var IGST = parseFloat(document.getElementById("total_igst").value);
+        var CGST = parseFloat(document.getElementById("total_cgst").value);
+        var SGST = parseFloat(document.getElementById("total_sgst").value);
+        var igst = document.getElementById("Total_IGST").value;
+        if (igst > 0) {
+            $('#Total_CGST').prop('disabled', true);
+            $('#Total_SGST').prop('disabled', true);
+            document.getElementById("total_cgst").value = "0.00";
+            document.getElementById("total_sgst").value = "0.00";
+            if (subtotal == 0) {
+                document.getElementById("total_igst").value = "0.00";
+            }
+            else {
+                var final_igst = (subtotal * igst) / 100;
+                var final_total = (subtotal - Discount) + final_igst + CGST + SGST;
+                document.getElementById("total_igst").value = final_igst.toFixed(2);
+                document.getElementById("Final_Total").value = final_total.toFixed(2);
+            }
+        }
+        else {
+            $('#Total_CGST').prop('disabled', false);
+            $('#Total_SGST').prop('disabled', false);
+            var _igst = document.getElementById("total_igst").value;
+            var final_total = document.getElementById("Final_Total").value;
+            document.getElementById("Final_Total").value = (final_total - _igst).toFixed(2);
+            document.getElementById("total_igst").value = "0.00";
+        }
+    });
+    $('input[name=Total_CGST]').change(function () {
+        var subtotal = parseFloat(document.getElementById("final_SubTotal").value);
+        var Discount = parseFloat(document.getElementById("total_discount").value);
+        var IGST = parseFloat(document.getElementById("total_igst").value);
+        var CGST = parseFloat(document.getElementById("total_cgst").value);
+        var SGST = parseFloat(document.getElementById("total_sgst").value);
+        var cgst = document.getElementById("Total_CGST").value;
+        if (cgst > 0) {
+            document.getElementById("total_igst").value = "0.00";
+            $('#Total_IGST').prop('disabled', true);
+            if (subtotal == 0) {
+                document.getElementById("total_cgst").value = "0.00";
+            }
+            else {
+                var final_cgst = (subtotal * cgst) / 100;
+                var final_total = (subtotal - Discount) + IGST + final_cgst + SGST;
+                document.getElementById("total_cgst").value = final_cgst.toFixed(2);
+                document.getElementById("Final_Total").value = final_total.toFixed(2);
+            }
+        }
+        else {
+            $('#Total_IGST').prop('disabled', false);
+            var _cgst = document.getElementById("total_cgst").value;
+            var final_total = document.getElementById("Final_Total").value;
+            document.getElementById("Final_Total").value = (final_total - _cgst).toFixed(2);
+            document.getElementById("total_cgst").value = "0.00";
+        }
+    });
+    $('input[name=Total_SGST]').change(function () {
+        var subtotal = parseFloat(document.getElementById("final_SubTotal").value);
+        var Discount = parseFloat(document.getElementById("total_discount").value);
+        var IGST = parseFloat(document.getElementById("total_igst").value);
+        var CGST = parseFloat(document.getElementById("total_cgst").value);
+        var SGST = parseFloat(document.getElementById("total_sgst").value);
+        var sgst = document.getElementById("Total_SGST").value;
+        if (sgst > 0) {
+            document.getElementById("total_igst").value = "0.00";
+            $('#Total_IGST').prop('disabled', true);
+            if (subtotal == 0) {
+                document.getElementById("total_sgst").value = "0.00";
+            }
+            else {
+                var final_sgst = (subtotal * sgst) / 100;
+                var final_total = (subtotal - Discount) + IGST + CGST + final_sgst;
+                document.getElementById("total_sgst").value = final_sgst.toFixed(2);
+                document.getElementById("Final_Total").value = final_total.toFixed(2);
+            }
+        }
+        else {
+            $('#Total_IGST').prop('disabled', false);
+            var _sgst = document.getElementById("total_sgst").value;
+            var final_total = document.getElementById("Final_Total").value;
+            document.getElementById("Final_Total").value = (final_total - _sgst).toFixed(2);
+            document.getElementById("total_sgst").value = "0.00";
+        }
+    });
 
     document.addEventListener('keydown', function (event) {
         if (event.keyCode === 9) {
@@ -680,34 +862,25 @@
     }
 
     function Toshow() {
-        var rowId =
-            event.target.parentNode.parentNode.id;
+        var rowId = event.target.parentNode.parentNode.id;
         row_id = rowId;
-        var data =
-            document.getElementById(rowId).querySelectorAll(".row-data");
+        var data = document.getElementById(rowId).querySelectorAll(".row-data");
 
         var part_no = data[0].innerHTML;
         var p_qty = data[2].innerHTML;
         var p_rate = data[3].innerHTML;
-        var p_subtotal = data[4].innerHTML;
-        var p_discount = data[6].innerHTML;
-        var p_tax1 = data[8].innerHTML;
-        var p_tax2 = data[10].innerHTML;
-
-        @*var discount = (p_discount / p_subtotal) * 100;
-        var tax1 = (p_tax1 / p_subtotal) * 100;
-        var tax2 = (p_tax2 / p_subtotal) * 100;
-
-        var discount_l = Math.round(discount, 1);
-        var tax1_l = Math.round(tax1, 1);
-        var tax2_l = Math.round(tax2, 1);*@
+        var dis_per = data[4].innerHTML;
+        var igst_per = data[6].innerHTML;
+        var cgst_per = data[8].innerHTML;
+        var sgst_per = data[10].innerHTML;
 
         document.getElementById("Part_No").value = part_no;
         document.getElementById("Quantity").value = p_qty;
         document.getElementById("Purchase_Rate").value = p_rate;
-        document.getElementById("Discount").value = p_discount;
-        document.getElementById("Tax_1").value = p_tax1;
-        document.getElementById("Tax_2").value = p_tax2;
+        document.getElementById("Discount").value = dis_per;
+        document.getElementById("IGST").value = igst_per;
+        document.getElementById("CGST").value = cgst_per;
+        document.getElementById("SGST").value = sgst_per;
 
         document.getElementById("Insert").style.display = "none";
         document.getElementById("Add").style.display = "block";
@@ -717,131 +890,136 @@
     function ToAdd() {
         document.getElementById("Insert").style.display = "block";
         document.getElementById("Add").style.display = "none";
-
         var rowId = row_id;
         var data = document.getElementById(rowId).querySelectorAll(".row-data");
 
         var part_no = document.getElementById("Part_No").value;
-        var p_qty = document.getElementById("Quantity").value;
-        var p_rate = document.getElementById("Purchase_Rate").value;
-        var p_discount = document.getElementById("Discount").value;
-        var p_tax1 = document.getElementById("Tax_1").value;
-        var p_tax2 = document.getElementById("Tax_2").value;
+        var _qty = parseInt(document.getElementById("Quantity").value);
+        var _price = $('#Purchase_Rate').val();
+        var _discount_per = $('#Discount').val();
+        var _igst_per = $('#IGST').val();
+        var _cgst_per = $('#CGST').val();
+        var _sgst_per = $('#SGST').val();
 
-        @*var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
-        var l_row1 = last_row1 - 1;
-        var count = 0;
-        for (var i = 0; i < l_row1; i++) {
-            var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
-            var e_partno = document.getElementById("Part_No").value;
-            if (e_part_no == e_partno) {
-                var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
-                document.getElementById("value").innerHTML = qty_err;
-                return;
-            }
-            count++;
-        }*@
-        var subtotal = p_qty * p_rate;
-        var discount_l = (subtotal * p_discount) / 100;
-        var tax1_l = (subtotal * p_tax1) / 100;
-        var tax2_l = (subtotal * p_tax2) / 100;
-        var total = (subtotal - discount_l) + tax1_l + tax2_l;
+        var _subtotal = _qty * _price;
+        var _discount_val;
+        var _igst_val;
+        var _cgst_val;
+        var _sgst_val;
+        switch (true) {
+            case _discount_per == "":
+                _discount_val = 0;
+                _discount_per = 0;
+                break;
+            default:
+                _discount_val = (_subtotal * _discount_per) / 100;
+        }
+        switch (true) {
+            case _igst_per == "":
+                _igst_val = 0;
+                _igst_per = 0;
+                break;
+            default:
+                _igst_val = (_subtotal * _igst_per) / 100;
+        }
+        switch (true) {
+            case _cgst_per == "":
+                _cgst_val = 0;
+                _cgst_per = 0;
+                break;
+            default:
+                _cgst_val = (_subtotal * _cgst_per) / 100;
+        }
+        switch (true) {
+            case _sgst_per == "":
+                _sgst_val = 0;
+                _sgst_per = 0;
+                break;
+            default:
+                _sgst_val = (_subtotal * _sgst_per) / 100;
+        }
+
+        var _total = (_subtotal - _discount_val) + _igst_val + _cgst_val + _sgst_val;
 
         data[0].innerHTML = part_no;
-        data[2].innerHTML = p_qty;
-        data[3].innerHTML = p_rate;
-        data[4].innerHTML = subtotal.toFixed(2);
-        data[5].innerHTML = p_discount;
-        data[7].innerHTML = p_tax1;
-        data[9].innerHTML = p_tax2;
-        data[6].innerHTML = discount_l;
-        data[8].innerHTML = tax1_l;
-        data[10].innerHTML = tax2_l;
-        data[11].innerHTML = total.toFixed(2);
-        $('#Part_No').prop('disabled', false);
-        total_cal();
+        data[2].innerHTML = _qty;
+        data[3].innerHTML = _price;
+        data[4].innerHTML = _discount_per;
+        data[5].innerHTML = _discount_val;
+        data[6].innerHTML = _igst_per;
+        data[7].innerHTML = _igst_val;
+        data[8].innerHTML = _cgst_per;
+        data[9].innerHTML = _cgst_val;
+        data[10].innerHTML = _sgst_per;
+        data[11].innerHTML = _sgst_val;
+        data[12].innerHTML = _subtotal;
+        data[13].innerHTML = _total;
+
+        total_cal_PO();
+        formClear();
     }
 
-    function total_cal() {
-        $("#Part_No").val("");
-        $("#Quantity").val("");
-        $("#Purchase_Rate").val("");
-        $("#Discount").val("");
-        $("#Tax_1").val("");
-        $("#Tax_2").val("");
+    function total_cal_PO() {
         var table = document.getElementById("selected_units");
         var tbodyRowCount = table.tBodies[0].rows.length;
         var T_qty = 0;
         var T_subtotal = 0;
         for (i = 1; i <= tbodyRowCount - 1; i++) {
             var p_qty = document.getElementById("selected_units").tBodies[0].rows[i].cells[2].innerHTML;
-            var p_total = document.getElementById("selected_units").tBodies[0].rows[i].cells[11].innerHTML;
+            var p_total = document.getElementById("selected_units").tBodies[0].rows[i].cells[13].innerHTML;
             T_qty = T_qty + parseFloat(p_qty);
             T_subtotal = T_subtotal + parseFloat(p_total);
+        }
+        var _discount_per = $('#Final_Discount').val();
+        var _igst_per = $('#Total_IGST').val();
+        var _cgst_per = $('#Total_CGST').val();
+        var _sgst_per = $('#Total_SGST').val();
 
-            var p_subtotal = document.getElementById("selected_units").tBodies[0].rows[i].cells[4].innerHTML;
-            var p_discount = document.getElementById("selected_units").tBodies[0].rows[i].cells[6].innerHTML;
-            var p_tax1 = document.getElementById("selected_units").tBodies[0].rows[i].cells[8].innerHTML;
-            var p_tax2 = document.getElementById("selected_units").tBodies[0].rows[i].cells[10].innerHTML;
-
-            if (p_discount > 0) {
-                var discount = (p_discount / p_subtotal) * 100;
-            }
-            else {
-                var discount = 0;
-            }
-            if (p_tax1 > 0) {
-                var tax1 = (p_tax1 / p_subtotal) * 100;
-            }
-            else {
-                var tax1 = 0;
-            }
-            if (p_tax2 > 0) {
-                var tax2 = (p_tax2 / p_subtotal) * 100;
-            }
-            else {
-                var tax2 = 0;
-            }
-
-            var discount_l = Math.round(discount, 1);
-            var tax1_l = Math.round(tax1, 1);
-            var tax2_l = Math.round(tax2, 1);
-
-            document.getElementById("selected_units").tBodies[0].rows[i].cells[5].innerHTML = discount_l;
-            document.getElementById("selected_units").tBodies[0].rows[i].cells[7].innerHTML = tax1_l;
-            document.getElementById("selected_units").tBodies[0].rows[i].cells[9].innerHTML = tax2_l;
+        var _discount_val;
+        var _igst_val;
+        var _cgst_val;
+        var _sgst_val;
+        switch (true) {
+            case _discount_per == "":
+                _discount_val = 0;
+                _discount_per = 0;
+                break;
+            default:
+                _discount_val = (T_subtotal * _discount_per) / 100;
+        }
+        switch (true) {
+            case _igst_per == "":
+                _igst_val = 0;
+                _igst_per = 0;
+                break;
+            default:
+                _igst_val = (T_subtotal * _igst_per) / 100;
+        }
+        switch (true) {
+            case _cgst_per == "":
+                _cgst_val = 0;
+                _cgst_per = 0;
+                break;
+            default:
+                _cgst_val = (T_subtotal * _cgst_per) / 100;
+        }
+        switch (true) {
+            case _sgst_per == "":
+                _sgst_val = 0;
+                _sgst_per = 0;
+                break;
+            default:
+                _sgst_val = (T_subtotal * _sgst_per) / 100;
         }
 
-        document.getElementById("total_display").innerHTML = T_subtotal.toFixed(2);
-        document.getElementById("Qty_display").innerHTML = T_qty;
-
-        var final_discount = $("#Final_Discount").val();
-        var final_tax1 = $("#Final_Tax1").val();
-        var final_tax2 = $("#Final_Tax2").val();
-        if (final_discount == "") {
-            var discount_val = 0;
-        }
-        else {
-            var discount_val = (T_subtotal * final_discount) / 100;
-        }
-        if (final_tax1 == "") {
-            var tax1_val = 0;
-        }
-        else {
-            var tax1_val = (T_subtotal * final_tax1) / 100;
-        }
-        if (final_tax2 == "") {
-            var tax2_val = 0;
-        }
-        else {
-            var tax2_val = (T_subtotal * final_tax2) / 100;
-        }
-        var Total = (T_subtotal - discount_val) + tax1_val + tax2_val;
-        document.getElementById("Final_Total").innerHTML = Total.toFixed(2);
-        document.getElementById("Final_Discount").value = discount_val.toFixed(2);
-        document.getElementById("Final_Tax1").value = tax1_val.toFixed(2);
-        document.getElementById("Final_Tax2").value = tax2_val.toFixed(2);
-
+        var _total = (T_subtotal - _discount_val) + _igst_val + _cgst_val + _sgst_val;
+        document.getElementById("final_Quantity").value = T_qty;
+        document.getElementById("final_SubTotal").value = T_subtotal.toFixed(2);
+        document.getElementById("total_discount").value = _discount_val.toFixed(2);
+        document.getElementById("total_igst").value = _igst_val.toFixed(2);
+        document.getElementById("total_cgst").value = _cgst_val.toFixed(2);
+        document.getElementById("total_sgst").value = _sgst_val.toFixed(2);
+        document.getElementById("Final_Total").value = _total.toFixed(2);
     }
 
 </script>

@@ -80,49 +80,56 @@ namespace Admin.Models
             {
                 ItemQm.Add(new PurchaseTable
                 {
+                    PO_No = (int)dr["PO_No"],
+                    supplier = dr["Supplier_Acode"].ToString(),
+                    BillTo = dr["BillTo_Acode"].ToString(),
                     Pcode = dr["P_code"].ToString(),
+                    Part_No = dr["Part_No"].ToString(),
+                    Description = dr["Description"].ToString(),
+                    project = dr["Project"].ToString(),
                     Quantity = (int)dr["PO_Qty"],
                     Price = Convert.ToDouble(dr["PO_Price"]),
+                    Dis_per = Convert.ToDouble(dr["PO_Dis_Per"]),
+                    Dis_Rs = Convert.ToDouble(dr["PO_Dis_val"]),
+                    Igst_per = Convert.ToDouble(dr["PO_Igst_Per"]),
+                    Igst_Rs = Convert.ToDouble(dr["PO_Igst_val"]),
+                    Cgst_per = Convert.ToDouble(dr["PO_Cgst_Per"]),
+                    Cgst_Rs = Convert.ToDouble(dr["PO_Cgst_val"]),
+                    Sgst_per = Convert.ToDouble(dr["PO_Sgst_Per"]),
+                    Sgst_Rs = Convert.ToDouble(dr["PO_Sgst_val"]),
                     SubTotal = Convert.ToDouble(dr["PO_Subtotal"]),
                     Total = Convert.ToDouble(dr["PO_Total"]),
                     ILedger = 1,
-                    ALedger = 2,
-                    /*final_Qty = (int)dr["PO_Final_Qty"],
-                    final_Sub_Total = Convert.ToDouble(dr["PO_Final_SubTotal"]),
-                    final_total = Convert.ToDouble(dr["PO_Final_Total"]),
-                    sup_code = dr["A_code"].ToString(),
-                    project = dr["Project"].ToString(),
-                    PO_No = (int)dr["PO_No"],
-                    Tax_Per = Convert.ToInt32(dr["PO_Tax_Per"]),
-                    Tax_Total = Convert.ToDouble(dr["PO_Tax_Total"])*/
+                    ALedger = 2
                 }
-                ) ;
+                );
             }
             dr.Close();
             for (int j = 0; j < ItemQm.Count(); j++)
             {
-                string cmd2 = "select P_Part_No,P_Description from Product_Master where P_code = '" + ItemQm[j].Pcode + "'";
-                SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
-                SqlDataReader dr2 = SqlCmd2.ExecuteReader();
-                while (dr2.Read())
-                {
-                    ItemQm[j].Part_No = dr2["P_Part_No"].ToString();
-                    ItemQm[j].Description = dr2["P_Description"].ToString();
-                }
-                dr2.Close();
-                string cmd3 = "select A_Name from Account_Master where A_code = '" + ItemQm[j].sup_code + "'";
+                string cmd3 = "select * from PO_A_Ledger where PO_No = " + Convert.ToInt32(po_no) + "";
                 SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
                 SqlDataReader dr3 = SqlCmd3.ExecuteReader();
                 while (dr3.Read())
                 {
-                    ItemQm[j].sup_name = dr3["A_Name"].ToString();
+                    ItemQm[j].Final_Dis_per = Convert.ToDouble(dr3["Final_Dis_Per"]);
+                    ItemQm[j].Final_Dis_Rs = Convert.ToDouble(dr3["Final_Dis_Rs"]);
+                    ItemQm[j].Final_Igst_per = Convert.ToDouble(dr3["Final_Igst_Per"]);
+                    ItemQm[j].Final_Igst_Rs = Convert.ToDouble(dr3["Final_Igst_Rs"]);
+                    ItemQm[j].Final_Cgst_per = Convert.ToDouble(dr3["Final_Cgst_Per"]);
+                    ItemQm[j].Final_Cgst_Rs = Convert.ToDouble(dr3["Final_Cgst_Rs"]);
+                    ItemQm[j].Final_Sgst_per = Convert.ToDouble(dr3["Final_Sgst_Per"]);
+                    ItemQm[j].Final_Sgst_Rs = Convert.ToDouble(dr3["Final_Sgst_Rs"]);
+                    ItemQm[j].Final_Qty = (int)dr3["Final_Qty"];
+                    ItemQm[j].Final_Sub_Total = Convert.ToDouble(dr3["Final_Subtotal"]);
+                    ItemQm[j].Final_total = Convert.ToDouble(dr3["Final_Total"]);
                 }
                 dr3.Close();
             }
             Con.Close();
             return ItemQm;
         }
-        public int Add_Data(List<PurchaseTable> data, int Qty, double total, double final_total, double final_discount, double final_tax1, double final_tax2, int project, int po_no, string invno, DateTime invdate)
+        public int Add_Data(List<PurchaseTable> data)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
@@ -144,34 +151,47 @@ namespace Admin.Models
             int ARefNo = 3;
             int j = 0;
             int i = 0;
+            DateTime now = DateTime.Now;
             while (i < data.Count())
             {
                 SqlCommand sql_cmnd = new SqlCommand("[dbo].[addPurchase]", Con1);
                 sql_cmnd.CommandType = CommandType.StoredProcedure;
                 sql_cmnd.Parameters.AddWithValue("@voucher_no", SqlDbType.NVarChar).Value = Voucher_No;
-                sql_cmnd.Parameters.AddWithValue("@invoice_no", SqlDbType.NVarChar).Value = invno;
-                sql_cmnd.Parameters.AddWithValue("@invoice_date", invdate);
+                sql_cmnd.Parameters.AddWithValue("@invoice_no", SqlDbType.NVarChar).Value = data[0].Invoice_No;
+                sql_cmnd.Parameters.AddWithValue("@invoice_date", data[0].Invoice_Date);
                 sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = data[i].Part_No;
-                sql_cmnd.Parameters.AddWithValue("@p_qty", SqlDbType.Int).Value = data[i].Quantity;
-                sql_cmnd.Parameters.AddWithValue("@iledger", SqlDbType.NVarChar).Value = data[i].ILedger;
-                sql_cmnd.Parameters.AddWithValue("@aledger", SqlDbType.NVarChar).Value = data[i].ALedger;
-                sql_cmnd.Parameters.AddWithValue("@i_rate", SqlDbType.Money).Value = data[i].Price;
-                sql_cmnd.Parameters.AddWithValue("@i_subtotal", SqlDbType.Money).Value = data[i].SubTotal;
-                sql_cmnd.Parameters.AddWithValue("@i_discount", SqlDbType.Decimal).Value = data[i].Dis_Rs;
-                /*sql_cmnd.Parameters.AddWithValue("@i_tax1", SqlDbType.Money).Value = data[i].Tax1_Rs;
-                sql_cmnd.Parameters.AddWithValue("@i_tax2", SqlDbType.Money).Value = data[i].Tax2_Rs;*/
-                sql_cmnd.Parameters.AddWithValue("@i_total", SqlDbType.Money).Value = data[i].Total;
-                sql_cmnd.Parameters.AddWithValue("@Total", SqlDbType.Money).Value = total;
-                sql_cmnd.Parameters.AddWithValue("@Total_Qty", SqlDbType.Money).Value = Qty;
-                sql_cmnd.Parameters.AddWithValue("@Final_Total", SqlDbType.Money).Value = final_total;
-                sql_cmnd.Parameters.AddWithValue("@Final_Discount", SqlDbType.Money).Value = final_discount;
-                sql_cmnd.Parameters.AddWithValue("@Final_Tax1", SqlDbType.Money).Value = final_tax1;
-                sql_cmnd.Parameters.AddWithValue("@Final_Tax2", SqlDbType.Money).Value = final_tax2;
-                sql_cmnd.Parameters.AddWithValue("@acc_name", SqlDbType.NVarChar).Value = data[i].supplier;
-                sql_cmnd.Parameters.AddWithValue("@goodsissue", SqlDbType.NVarChar).Value = null;
+                sql_cmnd.Parameters.AddWithValue("@qty", SqlDbType.Int).Value = data[i].Quantity;
+                sql_cmnd.Parameters.AddWithValue("@price", SqlDbType.Money).Value = data[i].Price;
+                sql_cmnd.Parameters.AddWithValue("@Dis_per", SqlDbType.Float).Value = data[i].Dis_per;
+                sql_cmnd.Parameters.AddWithValue("@Dis_val", SqlDbType.Money).Value = data[i].Dis_Rs;
+                sql_cmnd.Parameters.AddWithValue("@Igst_per", SqlDbType.Float).Value = data[i].Igst_per;
+                sql_cmnd.Parameters.AddWithValue("@Igst_val", SqlDbType.Money).Value = data[i].Igst_Rs;
+                sql_cmnd.Parameters.AddWithValue("@Cgst_per", SqlDbType.Float).Value = data[i].Cgst_per;
+                sql_cmnd.Parameters.AddWithValue("@Cgst_val", SqlDbType.Money).Value = data[i].Cgst_Rs;
+                sql_cmnd.Parameters.AddWithValue("@Sgst_per", SqlDbType.Float).Value = data[i].Sgst_per;
+                sql_cmnd.Parameters.AddWithValue("@Sgst_val", SqlDbType.Money).Value = data[i].Sgst_Rs;
+                sql_cmnd.Parameters.AddWithValue("@subtotal", SqlDbType.Money).Value = data[i].SubTotal;
+                sql_cmnd.Parameters.AddWithValue("@total", SqlDbType.Money).Value = data[i].Total;
+                sql_cmnd.Parameters.AddWithValue("@final_Dis_per", SqlDbType.Float).Value = data[0].Final_Dis_per;
+                sql_cmnd.Parameters.AddWithValue("@final_Dis_val", SqlDbType.Money).Value = data[0].Final_Dis_Rs;
+                sql_cmnd.Parameters.AddWithValue("@final_Igst_per", SqlDbType.Float).Value = data[0].Final_Igst_per;
+                sql_cmnd.Parameters.AddWithValue("@final_Igst_val", SqlDbType.Money).Value = data[0].Final_Igst_Rs;
+                sql_cmnd.Parameters.AddWithValue("@final_Cgst_per", SqlDbType.Float).Value = data[0].Final_Cgst_per;
+                sql_cmnd.Parameters.AddWithValue("@final_Cgst_val", SqlDbType.Money).Value = data[0].Final_Cgst_Rs;
+                sql_cmnd.Parameters.AddWithValue("@final_Sgst_per", SqlDbType.Float).Value = data[0].Final_Sgst_per;
+                sql_cmnd.Parameters.AddWithValue("@final_Sgst_val", SqlDbType.Money).Value = data[0].Final_Sgst_Rs;
+                sql_cmnd.Parameters.AddWithValue("@final_Qty", SqlDbType.Int).Value = data[0].Final_Qty;
+                sql_cmnd.Parameters.AddWithValue("@final_Subtotal", SqlDbType.Money).Value = data[0].Final_Sub_Total;
+                sql_cmnd.Parameters.AddWithValue("@final_total", SqlDbType.Money).Value = data[0].Final_total;
+                sql_cmnd.Parameters.AddWithValue("@Supplier_Acode", SqlDbType.NVarChar).Value = data[i].supplier;
+                sql_cmnd.Parameters.AddWithValue("@project", SqlDbType.Int).Value = data[i].project;
+                sql_cmnd.Parameters.AddWithValue("@Billto_Acode", SqlDbType.NVarChar).Value = data[i].BillTo;
                 sql_cmnd.Parameters.AddWithValue("@ARefNo", SqlDbType.NVarChar).Value = ARefNo;
-                sql_cmnd.Parameters.AddWithValue("@project", SqlDbType.Int).Value = project;
-                sql_cmnd.Parameters.AddWithValue("@po_no", SqlDbType.Int).Value = po_no;
+                sql_cmnd.Parameters.AddWithValue("@po_no", SqlDbType.Int).Value = data[i].PO_No;
+                sql_cmnd.Parameters.AddWithValue("@iledger", SqlDbType.Int).Value = data[i].ILedger;
+                sql_cmnd.Parameters.AddWithValue("@aledger", SqlDbType.Int).Value = data[i].ALedger;
+                sql_cmnd.Parameters.AddWithValue("@goodsissue", SqlDbType.NVarChar).Value = null;
+                sql_cmnd.Parameters.AddWithValue("@time", SqlDbType.Time).Value = now.ToLongTimeString();
 
                 if (j == data.Count() - 1)
                 {
@@ -184,40 +204,6 @@ namespace Admin.Models
                 }
                 i++;
                 j++;
-
-                /*if(po_no > 0)
-                {
-                    for (int k = 0; k < data.Count(); k++)
-                    {
-                        string cmd6 = "select P_code from Product_Master where P_Part_No = '"+data[k].Part_No+"'";
-                        SqlCommand SqlCmd6 = new SqlCommand(cmd6, Con1);
-                        SqlDataReader dr3 = SqlCmd6.ExecuteReader();
-                        string pcode = "";
-                        while (dr3.Read())
-                        {
-                            pcode = dr3["P_code"].ToString();
-                        }
-                        dr3.Close();
-                        string cmd3 = "Update Purchase_Order set PO_Qty = PO_Qty - '" + data[k].Quantity + "', PO_Final_Qty = PO_Final_Qty - "+data[k].Quantity+", PO_Final_Total = PO_Final_Total - "+data[k].Quantity+", PO_Subtotal = "+data[k].SubTotal+", PO_Total = "+data[k].Total+" where PO_No = " + po_no + " and P_code = '" + pcode + "' ";
-                        SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con1);
-                        SqlCmd3.ExecuteNonQuery();
-                        string cmd5 = "select PO_Qty from Purchase_Order where PO_No = " + po_no + " and P_code = '" + pcode + "'";
-                        SqlCommand SqlCmd5 = new SqlCommand(cmd5, Con1);
-                        SqlDataReader dr2 = SqlCmd5.ExecuteReader();
-                        int qty = 0;
-                        while (dr2.Read())
-                        {
-                            qty = (int)dr2["PO_Qty"];
-                        }
-                        dr2.Close();
-                        if (qty == 0)
-                        {
-                            string cmd4 = "Delete from Purchase_Order where PO_No = " + po_no + " and P_code = '" + pcode + "'";
-                            SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con1);
-                            SqlCmd4.ExecuteNonQuery();
-                        }
-                    }
-                }*/
             }
             Con1.Close();
             return Voucher_No;
@@ -471,46 +457,71 @@ namespace Admin.Models
             Con1.Close();
             return PO_No;
         }
-        public void Edit_PO(List<PurchaseTable> data, int Qty, double total, double final_total, int project, string supplier, string refno, string billto, float taxper, double taxamt)
+        public void Edit_PO(List<PurchaseTable> data)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
             string cmd1 = "delete from Purchase_Order where PO_No = '"+data[0].PO_No+"'";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
             SqlCmd1.ExecuteNonQuery();
+            string cmd2 = "delete from PO_A_Ledger where PO_No = '" + data[0].PO_No + "'";
+            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+            SqlCmd2.ExecuteNonQuery();
             Con.Close();
             string ref_date = data[0].Invoice_Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
             string PO_date = data[0].PO_Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
             SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con1.Open();
             int i = 0;
+            int j = 0;
+            int key = 1;
             while (i < data.Count())
             {
                 SqlCommand sql_cmnd = new SqlCommand("[dbo].[Add_PO]", Con1);
                 sql_cmnd.CommandType = CommandType.StoredProcedure;
-                sql_cmnd.Parameters.AddWithValue("@po_no", SqlDbType.NVarChar).Value = data[i].PO_No;
+                sql_cmnd.Parameters.AddWithValue("@po_no", SqlDbType.Int).Value = data[i].PO_No;
                 sql_cmnd.Parameters.AddWithValue("@po_date", PO_date);
-                sql_cmnd.Parameters.AddWithValue("@invoice_no", SqlDbType.NVarChar).Value = refno;
-                sql_cmnd.Parameters.AddWithValue("@invoice_date", ref_date);
+                sql_cmnd.Parameters.AddWithValue("@ref_no", SqlDbType.NVarChar).Value = data[i].Invoice_No;
+                sql_cmnd.Parameters.AddWithValue("@ref_date", ref_date);
                 sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = data[i].Part_No;
-                sql_cmnd.Parameters.AddWithValue("@p_qty", SqlDbType.Int).Value = data[i].Quantity;
-                sql_cmnd.Parameters.AddWithValue("@i_rate", SqlDbType.Money).Value = data[i].Price;
-                sql_cmnd.Parameters.AddWithValue("@i_subtotal", SqlDbType.Money).Value = data[i].SubTotal;
-                sql_cmnd.Parameters.AddWithValue("@i_total", SqlDbType.Money).Value = data[i].Total;
-                sql_cmnd.Parameters.AddWithValue("@Total_Qty", SqlDbType.Money).Value = Qty;
-                sql_cmnd.Parameters.AddWithValue("@Final_Total", SqlDbType.Money).Value = final_total;
-                sql_cmnd.Parameters.AddWithValue("@acc_name", SqlDbType.NVarChar).Value = supplier;
-                sql_cmnd.Parameters.AddWithValue("@project", SqlDbType.Int).Value = project;
-                sql_cmnd.Parameters.AddWithValue("@taxper", SqlDbType.Float).Value = taxper;
-                sql_cmnd.Parameters.AddWithValue("@taxamt", SqlDbType.Money).Value = taxamt;
-                sql_cmnd.Parameters.AddWithValue("@final_subtotal", SqlDbType.Money).Value = total;
-                sql_cmnd.Parameters.AddWithValue("@billto", SqlDbType.NVarChar).Value = billto;
+                sql_cmnd.Parameters.AddWithValue("@qty", SqlDbType.Int).Value = data[i].Quantity;
+                sql_cmnd.Parameters.AddWithValue("@price", SqlDbType.Money).Value = data[i].Price;
+                sql_cmnd.Parameters.AddWithValue("@Dis_per", SqlDbType.Float).Value = data[i].Dis_per;
+                sql_cmnd.Parameters.AddWithValue("@Dis_val", SqlDbType.Money).Value = data[i].Dis_Rs;
+                sql_cmnd.Parameters.AddWithValue("@Igst_per", SqlDbType.Float).Value = data[i].Igst_per;
+                sql_cmnd.Parameters.AddWithValue("@Igst_val", SqlDbType.Money).Value = data[i].Igst_Rs;
+                sql_cmnd.Parameters.AddWithValue("@Cgst_per", SqlDbType.Float).Value = data[i].Cgst_per;
+                sql_cmnd.Parameters.AddWithValue("@Cgst_val", SqlDbType.Money).Value = data[i].Cgst_Rs;
+                sql_cmnd.Parameters.AddWithValue("@Sgst_per", SqlDbType.Float).Value = data[i].Sgst_per;
+                sql_cmnd.Parameters.AddWithValue("@Sgst_val", SqlDbType.Money).Value = data[i].Sgst_Rs;
+                sql_cmnd.Parameters.AddWithValue("@subtotal", SqlDbType.Money).Value = data[i].SubTotal;
+                sql_cmnd.Parameters.AddWithValue("@total", SqlDbType.Money).Value = data[i].Total;
+                sql_cmnd.Parameters.AddWithValue("@final_Dis_per", SqlDbType.Float).Value = data[0].Final_Dis_per;
+                sql_cmnd.Parameters.AddWithValue("@final_Dis_val", SqlDbType.Money).Value = data[0].Final_Dis_Rs;
+                sql_cmnd.Parameters.AddWithValue("@final_Igst_per", SqlDbType.Float).Value = data[0].Final_Igst_per;
+                sql_cmnd.Parameters.AddWithValue("@final_Igst_val", SqlDbType.Money).Value = data[0].Final_Igst_Rs;
+                sql_cmnd.Parameters.AddWithValue("@final_Cgst_per", SqlDbType.Float).Value = data[0].Final_Cgst_per;
+                sql_cmnd.Parameters.AddWithValue("@final_Cgst_val", SqlDbType.Money).Value = data[0].Final_Cgst_Rs;
+                sql_cmnd.Parameters.AddWithValue("@final_Sgst_per", SqlDbType.Float).Value = data[0].Final_Sgst_per;
+                sql_cmnd.Parameters.AddWithValue("@final_Sgst_val", SqlDbType.Money).Value = data[0].Final_Sgst_Rs;
+                sql_cmnd.Parameters.AddWithValue("@final_Qty", SqlDbType.Int).Value = data[0].Final_Qty;
+                sql_cmnd.Parameters.AddWithValue("@final_Subtotal", SqlDbType.Money).Value = data[0].Final_Sub_Total;
+                sql_cmnd.Parameters.AddWithValue("@final_total", SqlDbType.Money).Value = data[0].Final_total;
+                sql_cmnd.Parameters.AddWithValue("@Supplier_Acode", SqlDbType.NVarChar).Value = data[i].supplier;
+                sql_cmnd.Parameters.AddWithValue("@project", SqlDbType.Int).Value = data[i].project;
+                sql_cmnd.Parameters.AddWithValue("@Billto_Acode", SqlDbType.NVarChar).Value = data[i].BillTo;
+                if (j == data.Count() - 1)
+                {
+                    sql_cmnd.Parameters.AddWithValue("@key", SqlDbType.Int).Value = key;
+                }
                 sql_cmnd.ExecuteNonQuery();
+
                 if (i == data.Count() - 1)
                 {
                     break;
                 }
                 i++;
+                j++;
             }
             Con1.Close();
         }
@@ -605,21 +616,7 @@ namespace Admin.Models
         {
             SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con1.Open();
-            List<GoodsList> ItemQm = new List<GoodsList>();
-            string cmd2 = "Select P_code from Product_Master where P_Part_No = '" + Part_No + "'";
-            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con1);
-            SqlDataReader dr = SqlCmd2.ExecuteReader();
-            while (dr.Read())
-            {
-                ItemQm.Add(new GoodsList
-                {
-                    P_code = dr["P_code"].ToString()
-                }
-                );
-            }
-            dr.Close();
-            string pcode = string.Join("", ItemQm.Select(m => m.P_code));
-            string cmd3 = "Delete from Purchase_Order where P_code = '" + pcode + "' and PO_No = '" + vno + "'";
+            string cmd3 = "Delete from Purchase_Order where Part_No = '" + Part_No + "' and PO_No = '" + vno + "'";
             SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con1);
             SqlCmd3.ExecuteNonQuery();
             Con1.Close();

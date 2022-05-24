@@ -299,7 +299,6 @@ namespace Admin.Models
     }
     public class New_Purchase
     {
-
         [DisplayName("Invoice No")]
         public string Invoice_No { get; set; }
         [DisplayName("Invoice Date")]
@@ -476,7 +475,6 @@ namespace Admin.Models
         public int Final_Qty { get; set; }
         public double Final_Sub_Total { get; set; }
         public double Final_total { get; set; }
-
     }
     public class PurchaseList
     {
