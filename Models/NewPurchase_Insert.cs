@@ -231,7 +231,7 @@ namespace Admin.Models
             {
                 for (int i = 0; i < vno.Count; i++)
                 {
-                    string cmd1 = "select Top 1 Invoice_No,Invoice_Date,Voucher_No,Voucher_Date,A_code,Project,PO_No from Purchase where Voucher_No = '" + vno[i] + "' ORDER BY Voucher_No Asc;";
+                    string cmd1 = "select Top 1 Invoice_No,Invoice_Date,Voucher_No,Voucher_Date,Supplier_Acode,Project,PO_No from Purchase where Voucher_No = '" + vno[i] + "' ORDER BY Voucher_No Asc;";
                     SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
                     SqlDataReader dr = SqlCmd1.ExecuteReader();
                     while (dr.Read())
@@ -242,7 +242,7 @@ namespace Admin.Models
                             Invoice_Date = dr["Invoice_Date"].ToString(),
                             Voucher_No = dr["Voucher_No"].ToString(),
                             Voucher_Date = dr["Voucher_Date"].ToString(),
-                            A_code = dr["A_code"].ToString(),
+                            A_code = dr["Supplier_Acode"].ToString(),
                             project = dr["Project"].ToString(),
                             PO_No = dr["PO_No"].ToString()
                         }

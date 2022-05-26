@@ -61,7 +61,7 @@ namespace Admin.Controllers
             SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             _con.Open();
             List<int> vno = new List<int>();
-            string cmd = "SELECT PO_No FROM Purchase GROUP BY PO_No HAVING COUNT(*)>0";
+            string cmd = "SELECT PO_No FROM Purchase where PO_No >0 GROUP BY PO_No HAVING COUNT(*)>0";
             SqlCommand SqlCmd = new SqlCommand(cmd, _con);
             SqlDataReader dr = SqlCmd.ExecuteReader();
             while (dr.Read())
@@ -165,13 +165,24 @@ namespace Admin.Controllers
                 }
                 for (int i = 0; i < PM_Data.Count; i++)
                 {
-                    string cmd1 = "select Amount from A_Ledger where Voucher_No = '" + PM_Data[i].Voucher_No + "'";
+                    string cmd1 = "select Final_Total from A_Ledger where Voucher_No = '" + PM_Data[i].Voucher_No + "'";
                     SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
                     SqlDataReader dr = SqlCmd1.ExecuteReader();
                     while (dr.Read())
                     {
-                        string Total_Amt = dr["Amount"].ToString();
+                        string Total_Amt = dr["Final_Total"].ToString();
                         PM_Data[i].Purchase_Total = double.Parse(Total_Amt);
+                    }
+                    dr.Close();
+                }
+                for (int i = 0; i < PM_Data.Count; i++)
+                {
+                    string cmd1 = "select Project_Name from Project_Master where Project_Id = " + PM_Data[i].project + "";
+                    SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                    SqlDataReader dr = SqlCmd1.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        PM_Data[i].Project = dr["Project_Name"].ToString();
                     }
                     dr.Close();
                 }
@@ -208,7 +219,6 @@ namespace Admin.Controllers
                 DataTable _dt5 = new DataTable();
                 _da5.Fill(_dt5);
                 ViewBag.Mfd = ToSelectList(_dt5, "A_code", "A_Name");
-                ViewBag.Mfr = a_code;
                 SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Project_Master", Con);
                 DataTable _dt2 = new DataTable();
                 _da2.Fill(_dt2);

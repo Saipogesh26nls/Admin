@@ -370,7 +370,7 @@ namespace Admin.Models
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd1 = "select Voucher_No, Voucher_Date, Invoice_No, Invoice_Date, P_code, Purchase_Qty, Purchase_Rate, Purchase_Discount, Purchase_Tax_1, Purchase_Tax_2, Purchase_SubTotal, Purchase_Total, Project from Purchase where Voucher_No = '" + id + "'";
+            string cmd1 = "select * from Purchase where Voucher_No = '" + id + "'";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
             DataSet ds = new DataSet();
             SqlDataAdapter da = new SqlDataAdapter(SqlCmd1);
@@ -493,7 +493,9 @@ namespace Admin.Models
         public double Purchase_Total { get; set; }
         public List<string> Ref_No { get; set; }
         public string project { get; set; }
+        [DisplayName("PO No")]
         public string PO_No { get; set; }
+        public string Project { get; set; }
     }
     public class EditPurchase
     {
