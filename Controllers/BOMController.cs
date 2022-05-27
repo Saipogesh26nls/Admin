@@ -71,7 +71,7 @@ namespace Admin.Controllers
             return Json(Descp, JsonRequestBehavior.AllowGet);
         }
 
-        // BOM List
+        //  BOM List
         [HttpGet]
         public ActionResult BOM_List() // BOM List View
         {
