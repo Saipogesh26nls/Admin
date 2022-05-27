@@ -15,8 +15,8 @@ namespace Admin.Controllers
         [HttpGet]
         public ActionResult New_Purchase(New_Purchase Purchase) // New Purchase Entry View
         {
-            /*if (Session["userID"] != null)
-            {*/
+            if (Session["userID"] != null)
+            {
                 New_Purchase new_Purchase = new New_Purchase();
                 new_Purchase.Voucher_Date = DateTime.Today;
                 new_Purchase.Invoice_Date = DateTime.Today;
@@ -49,11 +49,11 @@ namespace Admin.Controllers
                 _con.Close();
                 ViewBag.POno = ToPOList(_dt3, "PO_No", "PO_No");
                 return View(new_Purchase);
-            /*}
+            }
             else
             {
                 return RedirectToAction("Err", "Login");
-            }*/
+            }
         }
         [NonAction]
         public SelectList ToPOList(DataTable table, string valueField, string textField) // For making Dropdown list
@@ -145,8 +145,8 @@ namespace Admin.Controllers
         [HttpGet]
         public ActionResult PurchaseList() // To show full purchase list view
         {
-            /*if (Session["userID"] != null)
-            {*/
+            if (Session["userID"] != null)
+            {
                 NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
                 var PM_Data = newPurchase_Insert.Purchase_List();
                 SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
@@ -189,19 +189,19 @@ namespace Admin.Controllers
                 ViewBag.PL = PM_Data;
                 Con.Close();
                 return View(PM_Data);
-            /*}
+            }
             else
             {
                 return RedirectToAction("Err", "Login");
-            }*/
+            }
         }
 
         //Edit Purchase
         static int V_no = 0;
         public ActionResult Edit_Purchase_View(int v_no, DateTime v_date, string inv_no, DateTime inv_date, string a_code, string data, string po_no) // edit purchase view
         {
-            /*if (Session["userID"] != null)
-            {*/
+            if (Session["userID"] != null)
+            {
                 New_Purchase newPurchase_Insert = new New_Purchase();
                 PurchaseTable mfr = new PurchaseTable();
                 DataSet PM_Data = newPurchase_Insert.EditPurchase(v_no);
@@ -223,43 +223,24 @@ namespace Admin.Controllers
                 DataTable _dt2 = new DataTable();
                 _da2.Fill(_dt2);
                 ViewBag.Project = ToSelectList(_dt2, "Project_Id", "Project_Name");
-                string cmd2 = "select Final_Discount, Final_Tax1, Final_Tax2, Amount from A_Ledger where Voucher_No = '" + v_no + "'";
+                string cmd2 = "select * from A_Ledger where Voucher_No = '" + v_no + "'";
                 SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
                 SqlDataReader dr1 = SqlCmd2.ExecuteReader();
                 while (dr1.Read())
                 {
-                    string a1 = dr1["Amount"].ToString();
-                    string a2 = dr1["Final_Discount"].ToString();
-                    string a3 = dr1["Final_Tax1"].ToString();
-                    string a4 = dr1["Final_Tax2"].ToString();
-                    ViewBag.Final_Total = double.Parse(a1);
-                    ViewBag.Final_Discount = double.Parse(a2);
-                    ViewBag.Final_Tax1 = double.Parse(a3);
-                    ViewBag.Final_Tax2 = double.Parse(a4);
+                    ViewBag.Final_Dis_Per = dr1["Final_Discount_per"].ToString();
+                    ViewBag.Final_Dis_Rs = dr1["Final_Discount_val"].ToString();
+                    ViewBag.Final_Igst_Per = dr1["Final_Igst_per"].ToString();
+                    ViewBag.Final_Igst_Rs = dr1["Final_Igst_val"].ToString();
+                    ViewBag.Final_Cgst_Per = dr1["Final_Cgst_per"].ToString();
+                    ViewBag.Final_Cgst_Rs = dr1["Final_Cgst_val"].ToString();
+                    ViewBag.Final_Sgst_Per = dr1["Final_Sgst_per"].ToString();
+                    ViewBag.Final_Sgst_Rs = dr1["Final_Sgst_val"].ToString();
+                    ViewBag.Final_Qty = dr1["Final_Qty"].ToString();
+                    ViewBag.Final_Subtotal = dr1["Final_Subtotal"].ToString();
+                    ViewBag.Final_Total = dr1["Final_Total"].ToString();
                 }
                 dr1.Close();
-                PM_Data.Tables[0].Columns.Add("P_Part_No");
-                PM_Data.Tables[0].Columns.Add("P_Description");
-                PM_Data.Tables[0].Columns.Add("Discount(%)");
-                PM_Data.Tables[0].Columns.Add("Tax1(%)");
-                PM_Data.Tables[0].Columns.Add("Tax2(%)");
-                PM_Data.Tables[0].Columns.Add("Ref_No");
-                /*List<string> table_data = new List<string>();*/
-                for (int i = 0; i < PM_Data.Tables[0].Rows.Count; i++)
-                {
-                    string Text = PM_Data.Tables[0].Rows[i]["P_code"].ToString();
-                    NewPurchase_Insert dblogin = new NewPurchase_Insert();
-                    var Descp = dblogin.Pcode_to_PartNo(Text);
-                    /*string cmd3 = "select Ref_No from I_Ledger where Voucher_No = '" + v_no + "'";
-                    SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
-                    SqlDataReader dr2 = SqlCmd3.ExecuteReader();
-                    dr2.Read();
-                    int Ref_No = dr2.GetInt32(0);*/
-                    /*table_data.Add(Descp[0].P_Part_No);
-                    table_data.Add(Descp[0].P_Description);*/
-                    PM_Data.Tables[0].Rows[i]["P_Part_No"] = Descp[0].P_Part_No;
-                    PM_Data.Tables[0].Rows[i]["P_Description"] = Descp[0].P_Description;
-                }
                 string cmd3 = "select top 1 Ref_No from I_Ledger where Voucher_NO = '" + v_no + "'";
                 SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
                 SqlDataReader dr2 = SqlCmd3.ExecuteReader();
@@ -276,44 +257,20 @@ namespace Admin.Controllers
                 newPurchase_Insert.Supplier = a_code;
                 newPurchase_Insert.Project = data;
                 newPurchase_Insert.PO_No = po_no;
-
-                ViewBag.Project_data = data;
-                ViewBag.PO_No = po_no;
                 ViewBag.PL = PM_Data.Tables[0];
-                V_no = v_no;
-                ViewBag.ILedger = 1;
-                ViewBag.ALedger = 2;
-                ViewBag.Ref_No = ref_no;
                 Con.Close();
                 return View(newPurchase_Insert);
-            /*}
+            }
             else
             {
                 return RedirectToAction("Err", "Login");
-            }*/
+            }
         } 
         [HttpPost]
         public ActionResult Edited_Table_Data(List<PurchaseTable> Purchase) // For Edit and Delete the purchase list in DB
         {
-            for(int i = 0;i< Purchase.Count; i++)
-            {
-                string a = Purchase[i].Invoice_No.Replace("\n","").Replace(" ","");
-                string b = Purchase[i].Voucher_No.Replace("\n", "").Replace(" ", "");
-                string c = Purchase[i].supplier.Replace("\n", "").Replace(" ", "");
-                Purchase[i].Invoice_No = a;
-                Purchase[i].Voucher_No = b;
-                Purchase[i].supplier = c;
-            }
-            /*int Final_Quantity = Purchase[0].final_Qty;
-            double Final_SubTotal = Purchase[0].final_Sub_Total;
-            double Final_Discount = Purchase[0].final_Discount;
-            double Final_Tax1 = Purchase[0].final_Tax1;
-            double Final_Tax2 = Purchase[0].final_Tax2;
-            double Final_Total = Purchase[0].final_total;
-            int project = Convert.ToInt32(Purchase[0].project);
-            int pono = Purchase[0].PO_No;
             NewPurchase_Insert purchase = new NewPurchase_Insert();
-            purchase.Edit_and_Delete(Purchase, Final_Quantity, Final_SubTotal, Final_Discount, Final_Tax1, Final_Tax2, Final_Total, pono, project);*/
+            purchase.Edit_and_Delete(Purchase);
             return Json(Purchase);
         }
         public ActionResult Purchase_ED(GoodsRI name) // For Delete individual row from DB
@@ -325,84 +282,74 @@ namespace Admin.Controllers
 
         //Delete Purchase
         [HttpGet]
-        public ActionResult Delete_Purchase_view(int v_no, DateTime v_date, string inv_no, DateTime inv_date, string a_code) // delete purchase view
+        public ActionResult Delete_Purchase_view(int v_no, DateTime v_date, string inv_no, DateTime inv_date, string a_code, string data, string po_no) // delete purchase view
         {
-            /*var roll = Convert.ToInt32(Session["roll"]);
+            var roll = Convert.ToInt32(Session["roll"]);
             if (Session["userID"] != null && roll == 1)
-            {*/
-                New_Purchase newPurchase_Insert = new New_Purchase();
-                PurchaseTable mfr = new PurchaseTable();
-                DataSet PM_Data = newPurchase_Insert.EditPurchase(v_no);
-                SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
-                Con.Open();
-                SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<0", Con);
-                DataTable _dt1 = new DataTable();
-                _da1.Fill(_dt1);
-                ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
-                ViewBag.Mfr = a_code;
-                string cmd2 = "select Final_Discount, Final_Tax1, Final_Tax2, Amount from A_Ledger where Voucher_No = '" + v_no + "'";
-                SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
-                SqlDataReader dr1 = SqlCmd2.ExecuteReader();
-                while (dr1.Read())
-                {
-                    string a1 = dr1["Amount"].ToString();
-                    string a2 = dr1["Final_Discount"].ToString();
-                    string a3 = dr1["Final_Tax1"].ToString();
-                    string a4 = dr1["Final_Tax2"].ToString();
-                    ViewBag.Final_Total = double.Parse(a1);
-                    ViewBag.Final_Discount = double.Parse(a2);
-                    ViewBag.Final_Tax1 = double.Parse(a3);
-                    ViewBag.Final_Tax2 = double.Parse(a4);
-                }
-                dr1.Close();
-                PM_Data.Tables[0].Columns.Add("P_Part_No");
-                PM_Data.Tables[0].Columns.Add("P_Description");
-                PM_Data.Tables[0].Columns.Add("Discount(%)");
-                PM_Data.Tables[0].Columns.Add("Tax1(%)");
-                PM_Data.Tables[0].Columns.Add("Tax2(%)");
-                PM_Data.Tables[0].Columns.Add("Ref_No");
-                /*List<string> table_data = new List<string>();*/
-                for (int i = 0; i < PM_Data.Tables[0].Rows.Count; i++)
-                {
-                    string Text = PM_Data.Tables[0].Rows[i]["P_code"].ToString();
-                    NewPurchase_Insert dblogin = new NewPurchase_Insert();
-                    var Descp = dblogin.Pcode_to_PartNo(Text);
-                    /*string cmd3 = "select Ref_No from I_Ledger where Voucher_No = '" + v_no + "'";
-                    SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
-                    SqlDataReader dr2 = SqlCmd3.ExecuteReader();
-                    dr2.Read();
-                    int Ref_No = dr2.GetInt32(0);*/
-                    /*table_data.Add(Descp[0].P_Part_No);
-                    table_data.Add(Descp[0].P_Description);*/
-                    PM_Data.Tables[0].Rows[i]["P_Part_No"] = Descp[0].P_Part_No;
-                    PM_Data.Tables[0].Rows[i]["P_Description"] = Descp[0].P_Description;
-                }
-                string cmd3 = "select top 1 Ref_No from I_Ledger where Voucher_NO = '" + v_no + "'";
-                SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
-                SqlDataReader dr2 = SqlCmd3.ExecuteReader();
-                string ref_no = "";
-                while (dr2.Read())
-                {
-                    ref_no = dr2["Ref_No"].ToString();
-                }
-                dr2.Close();
-                newPurchase_Insert.Voucher_No = v_no.ToString();
-                newPurchase_Insert.Voucher_Date = v_date;
-                newPurchase_Insert.Invoice_No = inv_no;
-                newPurchase_Insert.Invoice_Date = inv_date;
-
-                ViewBag.PL = PM_Data.Tables[0];
-                V_no = v_no;
-                ViewBag.ILedger = 1;
-                ViewBag.ALedger = 2;
-                ViewBag.Ref_No = ref_no;
-                Con.Close();
-                return View(newPurchase_Insert);
-            /*}
+            {
+            New_Purchase newPurchase_Insert = new New_Purchase();
+            PurchaseTable mfr = new PurchaseTable();
+            DataSet PM_Data = newPurchase_Insert.EditPurchase(v_no);
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<0", Con);
+            DataTable _dt1 = new DataTable();
+            _da1.Fill(_dt1);
+            ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
+            SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", Con);
+            DataTable _dt4 = new DataTable();
+            _da4.Fill(_dt4);
+            ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
+            SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", Con);
+            DataTable _dt5 = new DataTable();
+            _da5.Fill(_dt5);
+            ViewBag.Mfd = ToSelectList(_dt5, "A_code", "A_Name");
+            SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Project_Master", Con);
+            DataTable _dt2 = new DataTable();
+            _da2.Fill(_dt2);
+            ViewBag.Project = ToSelectList(_dt2, "Project_Id", "Project_Name");
+            string cmd2 = "select * from A_Ledger where Voucher_No = '" + v_no + "'";
+            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+            SqlDataReader dr1 = SqlCmd2.ExecuteReader();
+            while (dr1.Read())
+            {
+                ViewBag.Final_Dis_Per = dr1["Final_Discount_per"].ToString();
+                ViewBag.Final_Dis_Rs = dr1["Final_Discount_val"].ToString();
+                ViewBag.Final_Igst_Per = dr1["Final_Igst_per"].ToString();
+                ViewBag.Final_Igst_Rs = dr1["Final_Igst_val"].ToString();
+                ViewBag.Final_Cgst_Per = dr1["Final_Cgst_per"].ToString();
+                ViewBag.Final_Cgst_Rs = dr1["Final_Cgst_val"].ToString();
+                ViewBag.Final_Sgst_Per = dr1["Final_Sgst_per"].ToString();
+                ViewBag.Final_Sgst_Rs = dr1["Final_Sgst_val"].ToString();
+                ViewBag.Final_Qty = dr1["Final_Qty"].ToString();
+                ViewBag.Final_Subtotal = dr1["Final_Subtotal"].ToString();
+                ViewBag.Final_Total = dr1["Final_Total"].ToString();
+            }
+            dr1.Close();
+            string cmd3 = "select top 1 Ref_No from I_Ledger where Voucher_NO = '" + v_no + "'";
+            SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
+            SqlDataReader dr2 = SqlCmd3.ExecuteReader();
+            string ref_no = "";
+            while (dr2.Read())
+            {
+                ref_no = dr2["Ref_No"].ToString();
+            }
+            dr2.Close();
+            newPurchase_Insert.Voucher_No = v_no.ToString();
+            newPurchase_Insert.Voucher_Date = v_date;
+            newPurchase_Insert.Invoice_No = inv_no;
+            newPurchase_Insert.Invoice_Date = inv_date;
+            newPurchase_Insert.Supplier = a_code;
+            newPurchase_Insert.Project = data;
+            newPurchase_Insert.PO_No = po_no;
+            ViewBag.PL = PM_Data.Tables[0];
+            Con.Close();
+            return View(newPurchase_Insert);
+            }
             else
             {
                 return RedirectToAction("Err", "Login");
-            }*/
+            }
         }
         [HttpPost]
         public ActionResult Add_Deleted_Purchase(List<PurchaseTable> Purchase) // add deleted purchase to DB
@@ -420,7 +367,7 @@ namespace Admin.Controllers
             SqlCmd3.ExecuteNonQuery();
             for (int i = 0;i<= Purchase.Count - 1; i++)
             {
-                string cmd4 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance - '"+Purchase[i].Quantity+"' where P_code ='" + Purchase[i].Pcode + "'";
+                string cmd4 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance - '"+Purchase[i].Quantity+"' where P_Part_No ='" + Purchase[i].Part_No + "'";
                 SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con);
                 SqlCmd4.ExecuteNonQuery();
             }
@@ -516,75 +463,82 @@ namespace Admin.Controllers
         [HttpGet]
         public ActionResult Goods_RI_Edit(string v_type, int gv_no, DateTime gv_date, string ref_no, DateTime ref_date, int GI, int process, int project, int employee, string note) // Goods RI Edit View
         {
-            int vtype = 0;
-            if(v_type == "Goods Receipt")
+            if (Session["userID"] != null)
             {
-                vtype = 1;
+                int vtype = 0;
+                if(v_type == "Goods Receipt")
+                {
+                    vtype = 1;
+                }
+                else
+                {
+                    vtype = 2;
+                }
+                SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+                _con.Open();
+                SqlDataAdapter _da = new SqlDataAdapter("Select * From Project_Master", _con);
+                DataTable _dt = new DataTable();
+                _da.Fill(_dt);
+                ViewBag.Project = ToSelectList(_dt, "Project_Id", "Project_Name");
+                SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Process_Tag", _con);
+                DataTable _dt1 = new DataTable();
+                _da1.Fill(_dt1);
+                ViewBag.Process = ToSelectList(_dt1, "Process_Id", "Process_Name");
+                SqlDataAdapter _da2 = new SqlDataAdapter("Select * From GI_Tag", _con);
+                DataTable _dt2 = new DataTable();
+                _da2.Fill(_dt2);
+                ViewBag.GI = ToSelectList(_dt2, "GI_Id", "TagName");
+                SqlDataAdapter _da3 = new SqlDataAdapter("Select * From Employee_Master", _con);
+                DataTable _dt3 = new DataTable();
+                _da3.Fill(_dt3);
+                ViewBag.Employee = ToSelectList(_dt3, "Id", "Employee_Name");
+                List<SelectListItem> Index = new List<SelectListItem>();
+                Index.Add(new SelectListItem { Text = "Goods-Receipt", Value = "1" });
+                Index.Add(new SelectListItem { Text = "Goods-Issue", Value = "2" });
+                ViewBag.Index = new SelectList(Index, "Value", "Text");
+                SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
+                DataTable _dt4 = new DataTable();
+                _da4.Fill(_dt4);
+                ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
+                SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", _con);
+                DataTable _dt5 = new DataTable();
+                _da5.Fill(_dt5);
+                ViewBag.MfdList = ToSelectList(_dt5, "A_code", "A_Name");
+                _con.Close();
+                GoodsRI goodsRI = new GoodsRI();
+                DataSet dataSet = goodsRI.EditGoods(vtype, gv_no);
+                dataSet.Tables[0].Columns.Add("P_Part_No");
+                dataSet.Tables[0].Columns.Add("P_Description");
+                for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
+                {
+                    string Text = dataSet.Tables[0].Rows[i]["P_code"].ToString();
+                    NewPurchase_Insert dblogin = new NewPurchase_Insert();
+                    var Descp = dblogin.Pcode_to_PartNo(Text);
+                    dataSet.Tables[0].Rows[i]["P_Part_No"] = Descp[0].P_Part_No;
+                    dataSet.Tables[0].Rows[i]["P_Description"] = Descp[0].P_Description;
+                }
+                goodsRI.Index_Type = vtype;
+                goodsRI.Voucher_No = gv_no;
+                goodsRI.Voucher_Date = gv_date;
+                goodsRI.Ref_No = ref_no.ToString();
+                /*goodsRI.Ref_Date = ref_date;*/
+                goodsRI.GI_Tag = GI.ToString();
+                goodsRI.Process_Tag = process.ToString();
+                goodsRI.Project = project.ToString();
+                goodsRI.Employee = employee.ToString(); 
+                if(note != null)
+                {
+                    goodsRI.Note = note.ToString();
+                }
+                ViewBag.Goods = dataSet.Tables[0];
+                string date = ref_date.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
+                ViewBag.date = date;
+                return View(goodsRI);
             }
             else
             {
-                vtype = 2;
+                return RedirectToAction("Err", "Login");
             }
-            SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
-            _con.Open();
-            SqlDataAdapter _da = new SqlDataAdapter("Select * From Project_Master", _con);
-            DataTable _dt = new DataTable();
-            _da.Fill(_dt);
-            ViewBag.Project = ToSelectList(_dt, "Project_Id", "Project_Name");
-            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Process_Tag", _con);
-            DataTable _dt1 = new DataTable();
-            _da1.Fill(_dt1);
-            ViewBag.Process = ToSelectList(_dt1, "Process_Id", "Process_Name");
-            SqlDataAdapter _da2 = new SqlDataAdapter("Select * From GI_Tag", _con);
-            DataTable _dt2 = new DataTable();
-            _da2.Fill(_dt2);
-            ViewBag.GI = ToSelectList(_dt2, "GI_Id", "TagName");
-            SqlDataAdapter _da3 = new SqlDataAdapter("Select * From Employee_Master", _con);
-            DataTable _dt3 = new DataTable();
-            _da3.Fill(_dt3);
-            ViewBag.Employee = ToSelectList(_dt3, "Id", "Employee_Name");
-            List<SelectListItem> Index = new List<SelectListItem>();
-            Index.Add(new SelectListItem { Text = "Goods-Receipt", Value = "1" });
-            Index.Add(new SelectListItem { Text = "Goods-Issue", Value = "2" });
-            ViewBag.Index = new SelectList(Index, "Value", "Text");
-            SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
-            DataTable _dt4 = new DataTable();
-            _da4.Fill(_dt4);
-            ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
-            SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", _con);
-            DataTable _dt5 = new DataTable();
-            _da5.Fill(_dt5);
-            ViewBag.MfdList = ToSelectList(_dt5, "A_code", "A_Name");
-            _con.Close();
-            GoodsRI goodsRI = new GoodsRI();
-            DataSet dataSet = goodsRI.EditGoods(vtype, gv_no);
-            dataSet.Tables[0].Columns.Add("P_Part_No");
-            dataSet.Tables[0].Columns.Add("P_Description");
-            for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
-            {
-                string Text = dataSet.Tables[0].Rows[i]["P_code"].ToString();
-                NewPurchase_Insert dblogin = new NewPurchase_Insert();
-                var Descp = dblogin.Pcode_to_PartNo(Text);
-                dataSet.Tables[0].Rows[i]["P_Part_No"] = Descp[0].P_Part_No;
-                dataSet.Tables[0].Rows[i]["P_Description"] = Descp[0].P_Description;
-            }
-            goodsRI.Index_Type = vtype;
-            goodsRI.Voucher_No = gv_no;
-            goodsRI.Voucher_Date = gv_date;
-            goodsRI.Ref_No = ref_no.ToString();
-            /*goodsRI.Ref_Date = ref_date;*/
-            goodsRI.GI_Tag = GI.ToString();
-            goodsRI.Process_Tag = process.ToString();
-            goodsRI.Project = project.ToString();
-            goodsRI.Employee = employee.ToString(); 
-            if(note != null)
-            {
-                goodsRI.Note = note.ToString();
-            }
-            ViewBag.Goods = dataSet.Tables[0];
-            string date = ref_date.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
-            ViewBag.date = date;
-            return View(goodsRI);
         }
         [HttpPost]
         public ActionResult Edited_Goods_RI(List<GoodsRI> data) // Adding Edited Goods RI to DB
@@ -792,35 +746,42 @@ namespace Admin.Controllers
         // New Purchase Order
         public ActionResult Purchase_Order_View() // PO View
         {
-            New_Purchase new_Purchase = new New_Purchase();
-            new_Purchase.Purchase_Order_Date = DateTime.Today;
-            new_Purchase.Ref_Date = DateTime.Today;
-            new_Purchase.Final_Tax1 = 18;
+            if (Session["userID"] != null)
+            {
+                New_Purchase new_Purchase = new New_Purchase();
+                new_Purchase.Purchase_Order_Date = DateTime.Today;
+                new_Purchase.Ref_Date = DateTime.Today;
+                new_Purchase.Final_Tax1 = 18;
 
-            SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
-            _con.Open();
-            /*SqlDataAdapter _da = new SqlDataAdapter("Select P_Description From Product_Master where P_Level<0", _con);
-            DataTable _dt = new DataTable();
-            _da.Fill(_dt);
-            ViewBag.ProductList = ToSelectList(_dt, "P_Description", "P_Description");*/
-            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<0", _con);
-            DataTable _dt1 = new DataTable();
-            _da1.Fill(_dt1);
-            ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
-            SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
-            DataTable _dt4 = new DataTable();
-            _da4.Fill(_dt4);
-            ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
-            SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", _con);
-            DataTable _dt5 = new DataTable();
-            _da5.Fill(_dt5);
-            ViewBag.Mfd = ToSelectList(_dt5, "A_code", "A_Name");
-            SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Project_Master", _con);
-            DataTable _dt2 = new DataTable();
-            _da2.Fill(_dt2);
-            ViewBag.Project = ToSelectList(_dt2, "Project_Id", "Project_Name");
-            _con.Close();
-            return View(new_Purchase);
+                SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+                _con.Open();
+                /*SqlDataAdapter _da = new SqlDataAdapter("Select P_Description From Product_Master where P_Level<0", _con);
+                DataTable _dt = new DataTable();
+                _da.Fill(_dt);
+                ViewBag.ProductList = ToSelectList(_dt, "P_Description", "P_Description");*/
+                SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<0", _con);
+                DataTable _dt1 = new DataTable();
+                _da1.Fill(_dt1);
+                ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
+                SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
+                DataTable _dt4 = new DataTable();
+                _da4.Fill(_dt4);
+                ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
+                SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", _con);
+                DataTable _dt5 = new DataTable();
+                _da5.Fill(_dt5);
+                ViewBag.Mfd = ToSelectList(_dt5, "A_code", "A_Name");
+                SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Project_Master", _con);
+                DataTable _dt2 = new DataTable();
+                _da2.Fill(_dt2);
+                ViewBag.Project = ToSelectList(_dt2, "Project_Id", "Project_Name");
+                _con.Close();
+                return View(new_Purchase);
+            }
+            else
+            {
+                return RedirectToAction("Err", "Login");
+            }
         }
         public ActionResult Add_PO_to_DB(List<PurchaseTable> Purchase) // add PO to db
         {
@@ -832,100 +793,114 @@ namespace Admin.Controllers
         // Purchase Order List
         public ActionResult PO_List() // PO list
         {
-            NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
-            var PM_Data = newPurchase_Insert.PO_List();
-            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
-            Con.Open();
-            for (int i = 0; i < PM_Data.Count; i++)
+            if (Session["userID"] != null)
             {
-                string cmd1 = "select A_Name from Account_Master where A_code = '" + PM_Data[i].acode + "'";
-                SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
-                SqlDataReader dr = SqlCmd1.ExecuteReader();
-                while (dr.Read())
+                NewPurchase_Insert newPurchase_Insert = new NewPurchase_Insert();
+                var PM_Data = newPurchase_Insert.PO_List();
+                SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+                Con.Open();
+                for (int i = 0; i < PM_Data.Count; i++)
                 {
-                    string Mfr = dr["A_Name"].ToString();
-                    PM_Data[i].Supplier = Mfr;
+                    string cmd1 = "select A_Name from Account_Master where A_code = '" + PM_Data[i].acode + "'";
+                    SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                    SqlDataReader dr = SqlCmd1.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        string Mfr = dr["A_Name"].ToString();
+                        PM_Data[i].Supplier = Mfr;
+                    }
+                    dr.Close();
+                    string cmd2 = "select A_Name from Account_Master where A_code = '" + PM_Data[i].billto_acode + "'";
+                    SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+                    SqlDataReader dr1 = SqlCmd2.ExecuteReader();
+                    while (dr1.Read())
+                    {
+                        string Mfr = dr1["A_Name"].ToString();
+                        PM_Data[i].BillTo = Mfr;
+                    }
+                    dr1.Close();
+                    string cmd3 = "select Project_Name from Project_Master where Project_Id = '" + PM_Data[i].project_val + "'";
+                    SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
+                    SqlDataReader dr2 = SqlCmd3.ExecuteReader();
+                    while (dr2.Read())
+                    {
+                        string Mfr = dr2["Project_Name"].ToString();
+                        PM_Data[i].Project = Mfr;
+                    }
+                    dr2.Close();
                 }
-                dr.Close();
-                string cmd2 = "select A_Name from Account_Master where A_code = '" + PM_Data[i].billto_acode + "'";
-                SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
-                SqlDataReader dr1 = SqlCmd2.ExecuteReader();
-                while (dr1.Read())
-                {
-                    string Mfr = dr1["A_Name"].ToString();
-                    PM_Data[i].BillTo = Mfr;
-                }
-                dr1.Close();
-                string cmd3 = "select Project_Name from Project_Master where Project_Id = '" + PM_Data[i].project_val + "'";
-                SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
-                SqlDataReader dr2 = SqlCmd3.ExecuteReader();
-                while (dr2.Read())
-                {
-                    string Mfr = dr2["Project_Name"].ToString();
-                    PM_Data[i].Project = Mfr;
-                }
-                dr2.Close();
+                ViewBag.PL = PM_Data;
+                Con.Close();
+                return View(PM_Data);
             }
-            ViewBag.PL = PM_Data;
-            Con.Close();
-            return View(PM_Data);
+            else
+            {
+                return RedirectToAction("Err", "Login");
+            }
         }
 
         // Edit Purchase Order
         public ActionResult PO_to_EditPurchase(int PO_No, DateTime PO_Date, string Ref_No, DateTime Ref_Date, string Supplier, string Billto, string project) // Add PO to Purchase View
         {
-            New_Purchase newPurchase_Insert = new New_Purchase();
-            PurchaseTable mfr = new PurchaseTable();
-            DataSet PM_Data = newPurchase_Insert.Edit_PO_to_Purchase(PO_No);
-            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
-            Con.Open();
-            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<0", Con);
-            DataTable _dt1 = new DataTable();
-            _da1.Fill(_dt1);
-            ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
-            SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", Con);
-            DataTable _dt4 = new DataTable();
-            _da4.Fill(_dt4);
-            ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
-            SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", Con);
-            DataTable _dt5 = new DataTable();
-            _da5.Fill(_dt5);
-            ViewBag.Mfd = ToSelectList(_dt5, "A_code", "A_Name");
-            SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Project_Master", Con);
-            DataTable _dt2 = new DataTable();
-            _da2.Fill(_dt2);
-            ViewBag.Project = ToSelectList(_dt2, "Project_Id", "Project_Name");
-            ViewBag.PL = PM_Data.Tables[0];
-            newPurchase_Insert.Purchase_Order_No = PO_No;
-            newPurchase_Insert.Purchase_Order_Date = PO_Date;
-            newPurchase_Insert.Ref_No = Ref_No;
-            newPurchase_Insert.Ref_Date = Ref_Date;
-            newPurchase_Insert.Supplier = Supplier;
-            newPurchase_Insert.BillTo = Billto;
-            newPurchase_Insert.Project = project;
-            newPurchase_Insert.project_val = (int)PM_Data.Tables[0].Rows[0]["Project"];
-            newPurchase_Insert.sup_val = PM_Data.Tables[0].Rows[0]["Supplier_Acode"].ToString();
-            newPurchase_Insert.billval = PM_Data.Tables[0].Rows[0]["BillTo_Acode"].ToString();
-            string cmd1 = "select * from PO_A_Ledger where PO_No = '" + PO_No + "'";
-            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
-            SqlDataReader dr = SqlCmd1.ExecuteReader();
-            while (dr.Read())
+            if (Session["userID"] != null)
             {
-                ViewBag.Dis_Per = dr["Final_Dis_Per"].ToString();
-                ViewBag.Dis_val = dr["Final_Dis_Rs"].ToString();
-                ViewBag.Igst_Per = dr["Final_Igst_Per"].ToString();
-                ViewBag.Igst_val = dr["Final_Igst_Rs"].ToString();
-                ViewBag.Cgst_Per = dr["Final_Cgst_Per"].ToString();
-                ViewBag.Cgst_val = dr["Final_Cgst_Rs"].ToString();
-                ViewBag.Sgst_Per = dr["Final_Sgst_Per"].ToString();
-                ViewBag.Sgst_val = dr["Final_Sgst_Rs"].ToString();
-                ViewBag.Final_Qty = dr["Final_Qty"].ToString();
-                ViewBag.Final_Subtotal = dr["Final_Subtotal"].ToString();
-                ViewBag.Final_Total = dr["Final_Total"].ToString();
+                New_Purchase newPurchase_Insert = new New_Purchase();
+                PurchaseTable mfr = new PurchaseTable();
+                DataSet PM_Data = newPurchase_Insert.Edit_PO_to_Purchase(PO_No);
+                SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+                Con.Open();
+                SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<0", Con);
+                DataTable _dt1 = new DataTable();
+                _da1.Fill(_dt1);
+                ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
+                SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", Con);
+                DataTable _dt4 = new DataTable();
+                _da4.Fill(_dt4);
+                ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
+                SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", Con);
+                DataTable _dt5 = new DataTable();
+                _da5.Fill(_dt5);
+                ViewBag.Mfd = ToSelectList(_dt5, "A_code", "A_Name");
+                SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Project_Master", Con);
+                DataTable _dt2 = new DataTable();
+                _da2.Fill(_dt2);
+                ViewBag.Project = ToSelectList(_dt2, "Project_Id", "Project_Name");
+                ViewBag.PL = PM_Data.Tables[0];
+                newPurchase_Insert.Purchase_Order_No = PO_No;
+                newPurchase_Insert.Purchase_Order_Date = PO_Date;
+                newPurchase_Insert.Ref_No = Ref_No;
+                newPurchase_Insert.Ref_Date = Ref_Date;
+                newPurchase_Insert.Supplier = Supplier;
+                newPurchase_Insert.BillTo = Billto;
+                newPurchase_Insert.Project = project;
+                newPurchase_Insert.project_val = (int)PM_Data.Tables[0].Rows[0]["Project"];
+                newPurchase_Insert.sup_val = PM_Data.Tables[0].Rows[0]["Supplier_Acode"].ToString();
+                newPurchase_Insert.billval = PM_Data.Tables[0].Rows[0]["BillTo_Acode"].ToString();
+                string cmd1 = "select * from PO_A_Ledger where PO_No = '" + PO_No + "'";
+                SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                SqlDataReader dr = SqlCmd1.ExecuteReader();
+                while (dr.Read())
+                {
+                    ViewBag.Dis_Per = dr["Final_Dis_Per"].ToString();
+                    ViewBag.Dis_val = dr["Final_Dis_Rs"].ToString();
+                    ViewBag.Igst_Per = dr["Final_Igst_Per"].ToString();
+                    ViewBag.Igst_val = dr["Final_Igst_Rs"].ToString();
+                    ViewBag.Cgst_Per = dr["Final_Cgst_Per"].ToString();
+                    ViewBag.Cgst_val = dr["Final_Cgst_Rs"].ToString();
+                    ViewBag.Sgst_Per = dr["Final_Sgst_Per"].ToString();
+                    ViewBag.Sgst_val = dr["Final_Sgst_Rs"].ToString();
+                    ViewBag.Final_Qty = dr["Final_Qty"].ToString();
+                    ViewBag.Final_Subtotal = dr["Final_Subtotal"].ToString();
+                    ViewBag.Final_Total = dr["Final_Total"].ToString();
+                }
+                dr.Close();
+                Con.Close();
+                return View(newPurchase_Insert);
             }
-            dr.Close();
-            Con.Close();
-            return View(newPurchase_Insert);
+            else
+            {
+                return RedirectToAction("Err", "Login");
+            }
         }
         public ActionResult PO_ED(GoodsRI name) // For Delete individual row from DB
         {
@@ -943,58 +918,66 @@ namespace Admin.Controllers
         // Delete Purchase Order
         public ActionResult PO_Delete(int PO_No, DateTime PO_Date, string Ref_No, DateTime Ref_Date, string Supplier, string Billto, string project) // PO Delete View
         {
-            New_Purchase newPurchase_Insert = new New_Purchase();
-            PurchaseTable mfr = new PurchaseTable();
-            DataSet PM_Data = newPurchase_Insert.Edit_PO_to_Purchase(PO_No);
-            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
-            Con.Open();
-            SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<0", Con);
-            DataTable _dt1 = new DataTable();
-            _da1.Fill(_dt1);
-            ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
-            SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", Con);
-            DataTable _dt4 = new DataTable();
-            _da4.Fill(_dt4);
-            ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
-            SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", Con);
-            DataTable _dt5 = new DataTable();
-            _da5.Fill(_dt5);
-            ViewBag.Mfd = ToSelectList(_dt5, "A_code", "A_Name");
-            SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Project_Master", Con);
-            DataTable _dt2 = new DataTable();
-            _da2.Fill(_dt2);
-            ViewBag.Project = ToSelectList(_dt2, "Project_Id", "Project_Name");
-            ViewBag.PL = PM_Data.Tables[0];
-            newPurchase_Insert.Purchase_Order_No = PO_No;
-            newPurchase_Insert.Purchase_Order_Date = PO_Date;
-            newPurchase_Insert.Ref_No = Ref_No;
-            newPurchase_Insert.Ref_Date = Ref_Date;
-            newPurchase_Insert.Supplier = Supplier;
-            newPurchase_Insert.BillTo = Billto;
-            newPurchase_Insert.Project = project;
-            newPurchase_Insert.project_val = (int)PM_Data.Tables[0].Rows[0]["Project"];
-            newPurchase_Insert.sup_val = PM_Data.Tables[0].Rows[0]["Supplier_Acode"].ToString();
-            newPurchase_Insert.billval = PM_Data.Tables[0].Rows[0]["BillTo_Acode"].ToString();
-            string cmd1 = "select * from PO_A_Ledger where PO_No = '" + PO_No + "'";
-            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
-            SqlDataReader dr = SqlCmd1.ExecuteReader();
-            while (dr.Read())
+            var roll = Convert.ToInt32(Session["roll"]);
+            if (Session["userID"] != null && roll == 1)
             {
-                ViewBag.Dis_Per = dr["Final_Dis_Per"].ToString();
-                ViewBag.Dis_val = dr["Final_Dis_Rs"].ToString();
-                ViewBag.Igst_Per = dr["Final_Igst_Per"].ToString();
-                ViewBag.Igst_val = dr["Final_Igst_Rs"].ToString();
-                ViewBag.Cgst_Per = dr["Final_Cgst_Per"].ToString();
-                ViewBag.Cgst_val = dr["Final_Cgst_Rs"].ToString();
-                ViewBag.Sgst_Per = dr["Final_Sgst_Per"].ToString();
-                ViewBag.Sgst_val = dr["Final_Sgst_Rs"].ToString();
-                ViewBag.Final_Qty = dr["Final_Qty"].ToString();
-                ViewBag.Final_Subtotal = dr["Final_Subtotal"].ToString();
-                ViewBag.Final_Total = dr["Final_Total"].ToString();
+                New_Purchase newPurchase_Insert = new New_Purchase();
+                PurchaseTable mfr = new PurchaseTable();
+                DataSet PM_Data = newPurchase_Insert.Edit_PO_to_Purchase(PO_No);
+                SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+                Con.Open();
+                SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Account_Master where A_Level<0", Con);
+                DataTable _dt1 = new DataTable();
+                _da1.Fill(_dt1);
+                ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
+                SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", Con);
+                DataTable _dt4 = new DataTable();
+                _da4.Fill(_dt4);
+                ViewBag.ProductList = ToSelectList(_dt4, "P_code", "P_Name");
+                SqlDataAdapter _da5 = new SqlDataAdapter("Select * From Account_Master where A_Level<1", Con);
+                DataTable _dt5 = new DataTable();
+                _da5.Fill(_dt5);
+                ViewBag.Mfd = ToSelectList(_dt5, "A_code", "A_Name");
+                SqlDataAdapter _da2 = new SqlDataAdapter("Select * From Project_Master", Con);
+                DataTable _dt2 = new DataTable();
+                _da2.Fill(_dt2);
+                ViewBag.Project = ToSelectList(_dt2, "Project_Id", "Project_Name");
+                ViewBag.PL = PM_Data.Tables[0];
+                newPurchase_Insert.Purchase_Order_No = PO_No;
+                newPurchase_Insert.Purchase_Order_Date = PO_Date;
+                newPurchase_Insert.Ref_No = Ref_No;
+                newPurchase_Insert.Ref_Date = Ref_Date;
+                newPurchase_Insert.Supplier = Supplier;
+                newPurchase_Insert.BillTo = Billto;
+                newPurchase_Insert.Project = project;
+                newPurchase_Insert.project_val = (int)PM_Data.Tables[0].Rows[0]["Project"];
+                newPurchase_Insert.sup_val = PM_Data.Tables[0].Rows[0]["Supplier_Acode"].ToString();
+                newPurchase_Insert.billval = PM_Data.Tables[0].Rows[0]["BillTo_Acode"].ToString();
+                string cmd1 = "select * from PO_A_Ledger where PO_No = '" + PO_No + "'";
+                SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                SqlDataReader dr = SqlCmd1.ExecuteReader();
+                while (dr.Read())
+                {
+                    ViewBag.Dis_Per = dr["Final_Dis_Per"].ToString();
+                    ViewBag.Dis_val = dr["Final_Dis_Rs"].ToString();
+                    ViewBag.Igst_Per = dr["Final_Igst_Per"].ToString();
+                    ViewBag.Igst_val = dr["Final_Igst_Rs"].ToString();
+                    ViewBag.Cgst_Per = dr["Final_Cgst_Per"].ToString();
+                    ViewBag.Cgst_val = dr["Final_Cgst_Rs"].ToString();
+                    ViewBag.Sgst_Per = dr["Final_Sgst_Per"].ToString();
+                    ViewBag.Sgst_val = dr["Final_Sgst_Rs"].ToString();
+                    ViewBag.Final_Qty = dr["Final_Qty"].ToString();
+                    ViewBag.Final_Subtotal = dr["Final_Subtotal"].ToString();
+                    ViewBag.Final_Total = dr["Final_Total"].ToString();
+                }
+                dr.Close();
+                Con.Close();
+                return View(newPurchase_Insert);
             }
-            dr.Close();
-            Con.Close();
-            return View(newPurchase_Insert);
+            else
+            {
+                return RedirectToAction("Err", "Login");
+            }
         }
         [HttpPost]
         public ActionResult Add_Deleted_PO(List<PurchaseTable> data) // add deleted GoodsRI to DB

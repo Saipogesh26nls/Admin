@@ -56,33 +56,41 @@
 </head>
 <body onload="total_cal(); hover();">
     <div class="container-fluid">
-        <br />
+        <h5 style="text-align:center"><u>PURCHASE ENTRY</u></h5>
         <div id="ui-view" data-select2-id="ui-view">
             <div>
                 <div class="card">
+                    <div class="card-header" style="height:55px;">
+                        <p class="text-sm">
+                            PurchaseOrder No : @Html.EditorFor(m => m.PO_No, new { htmlAttributes = new { @style = "width:10%;margin-left:0.5%;" } })
+                            @*&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-secondary" id="PO_to_Purchase" onclick="add_PO()">Add</button>*@
+                        </p>
+                    </div>
                     <div class="card-header">
                         <p class="text-sm">
-                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:0.25%;" })
-                            Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:2%;width:15%;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:1%;" })
+                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:0.25%;" })
+                            Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:1%;width:15%;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
                         </p>
-                        <p class="text-sm"> &nbsp &nbsp Supplier : &nbsp &nbsp @Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a></p></p>
+                        <p class="text-sm"> &nbsp &nbsp Supplier : &nbsp &nbsp @Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } }) &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })@*<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>*@</p>
                     </div>
 
                     <div class="card-body">
                         <div class="table-responsive">
                             <p class="text-sm">
-                                Part No : @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%; margin-top: 10px; margin-right: 1%;margin-left:0.5%;", @placeholder = "Part No", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:3%"></i> @Html.DisplayFor(model => model.Part_No)
-                                Quantity : @Html.EditorFor(model => model.P_Qty, new { htmlAttributes = new { @style = "width:15%; margin-right: 5%;", @placeholder = "Quantity" } })
-                                Price Per Unit : @Html.EditorFor(model => model.P_Rate, new { htmlAttributes = new { @style = "width:15%; margin-right: 10%;", @placeholder = "Price Per Unit" } })
+                                Part No : <input id="Part_No" type="text" style="border: 1px solid gray;margin-left:0.5%;margin-right: 1%;width:15%;" class="uppercase" placeholder="Part No"><i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:3%"></i>@Html.DisplayFor(model => model.Part_No)
+                                Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 6%; width: 10%;" placeholder="Quantity">
+                                Price Per Unit : <input id="Purchase_Rate" type="text" style="border: 1px solid gray; width: 10%; margin-right: 2%;" placeholder="Purchase Rate">
                             </p>
-
-                            <div><p id="value" style="width:50%" class="text-sm"></p></div>
+                            <div>
+                                <p id="value" style="width:50%" class="text-sm"></p>
+                            </div>
                             <div>
                                 <p class="text-sm">
-                                    Discount : @Html.EditorFor(model => model.P_Discount, new { htmlAttributes = new { @style = "width:15%; margin-top: 10px; margin-right: 6.5%;", @placeholder = "Discount" } })
-                                    Tax1 : @Html.EditorFor(model => model.P_Tax1, new { htmlAttributes = new { @style = "width:15%; margin-top: 10px; margin-right: 8.5%;", @placeholder = "Tax1" } })
-                                    Tax2 : @Html.EditorFor(model => model.P_Tax2, new { htmlAttributes = new { @style = "width:15%; margin-top: 10px; margin-right: 4%;", @placeholder = "Tax2" } })
-                                    <button href="#" class="btn btn-sm btn-secondary" id="Insert">Insert</button><button class="btn btn-sm btn-secondary" style="display: none; margin-top: 10px;" id="Add" onclick="ToAdd()">Add</button>
+                                    Discount(%) : <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 1.5%; width: 10%;" placeholder="Discount">
+                                    IGST(%) : <input id="IGST" name="IGST" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 1.5%; width: 10%;" placeholder="IGST">
+                                    CGST(%) : <input id="CGST" name="CGST" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 1.5%; width: 10%;" placeholder="CGST">
+                                    SGST(%) : <input id="SGST" name="SGST" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 4%; width: 10%;" placeholder="SGST">
+                                    <button class="btn btn-sm btn-secondary" id="Insert">Insert</button><button class="btn btn-sm btn-secondary" style="display: none; margin-top: 10px;" id="Add" onclick="ToAdd()">Add</button>
                                 </p>
                             </div>
                             <!-- The Modal -->
@@ -99,144 +107,115 @@
                                 <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
                                     <thead>
                                         <tr>
-                                            <th>Pcode</th>
-                                            <th style="padding-right:95px">Part_No</th>
-                                            <th style="padding-right:300px">Description</th>
-                                            <th>Quantity</th>
-                                            <th>Price</th>
-                                            <th>SubTotal</th>
-                                            <th>Dis_per</th>
-                                            <th>Dis_Rs</th>
-                                            <th>Tax1_per</th>
-                                            <th>Tax1_Rs</th>
-                                            <th>Tax2_per</th>
-                                            <th>Tax2_Rs</th>
-                                            <th>Total</th>
-                                            <th style="padding-right: 30px">E/D</th>
-                                            <th style="display:none;">Invoice_No</th>
+                                            <th style="padding-right:50px">Part_No</th>
+                                            <th style="padding-right:50px">Description</th>
+                                            <th style="padding-right:10px">Quantity</th>
+                                            <th style="padding-right:10px">Price</th>
+                                            <th style="padding-right:10px">Dis_per</th>
+                                            <th style="padding-right:10px">Dis_Rs</th>
+                                            <th style="padding-right:10px">Igst_per</th>
+                                            <th style="padding-right:10px">Igst_Rs</th>
+                                            <th style="padding-right:10px">Cgst_per</th>
+                                            <th style="padding-right:10px">Cgst_Rs</th>
+                                            <th style="padding-right:10px">Sgst_per</th>
+                                            <th style="padding-right:10px">Sgst_Rs</th>
+                                            <th style="padding-right:10px">SubTotal</th>
+                                            <th style="padding-right:10px">Total</th>
+                                            <th></th>
+                                            <th style="display: none;">Invoice_No</th>
                                             <th style="display: none;">Invoice_Date</th>
+                                            <th style="display: none;">Final_Qty</th>
+                                            <th style="display: none;">Final_Sub_Total</th>
+                                            <th style="display: none;">Final_total</th>
+                                            <th style="display: none;">Final_Dis_per</th>
+                                            <th style="display: none;">Final_Dis_Rs</th>
+                                            <th style="display: none;">Final_Igst_per</th>
+                                            <th style="display: none;">Final_Igst_Rs</th>
+                                            <th style="display: none;">Final_Cgst_per</th>
+                                            <th style="display: none;">Final_Cgst_Rs</th>
+                                            <th style="display: none;">Final_Sgst_per</th>
+                                            <th style="display: none;">Final_Sgst_Rs</th>
+                                            <th style="display: none;">supplier</th>
+                                            <th style="display: none;">project</th>
+                                            <th style="display: none;">PO_No</th>
+                                            <th style="display: none;">BillTo</th>
                                             <th style="display: none;">Voucher_No</th>
                                             <th style="display: none;">Voucher_Date</th>
-                                            <th style="display: none;">supplier</th>
-                                            <th style="display:none;">ILedger</th>
-                                            <th style="display: none;">ALedger</th>
-                                            <th style="display: none;">final_Qty</th>
-                                            <th style="display: none;">final_Sub_Total</th>
-                                            <th style="display: none;">final_Discount</th>
-                                            <th style="display: none;">final_Tax1</th>
-                                            <th style="display: none;">final_Tax2</th>
-                                            <th style="display: none;">final_total</th>
-                                            <th style="display: none;">Ref_No</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @{ int i = 0; }
                                         @foreach (System.Data.DataRow dr in ViewBag.PL.Rows)
                                         {
-
                                             <tr id="@i" style="font-size:13px;">
-                                                <td class="row-data">@dr["P_code"].ToString()</td>
-                                                <td class="row-data">@dr["P_Part_No"].ToString()</td>
-                                                <td class="row-data text-sm-left" style="width:550px;">@dr["P_Description"].ToString()</td>
+                                                <td class="row-data">@dr["Part_No"].ToString()</td>
+                                                <td class="row-data text-sm-left">@dr["Description"].ToString()</td>
                                                 <td class="row-data">@dr["Purchase_Qty"].ToString()</td>
                                                 <td class="row-data">@dr["Purchase_Rate"].ToString()</td>
-                                                <td class="row-data">
-                                                    @dr["Purchase_SubTotal"].ToString()
-                                                </td>
-                                                <td class="row-data">
-                                                    @dr["Discount(%)"].ToString()
-                                                </td>
-                                                <td class="row-data">
-                                                    @dr["Purchase_Discount"].ToString()
-                                                </td>
-                                                <td class="row-data">
-                                                    @dr["Tax1(%)"].ToString()
-                                                </td>
-                                                <td class="row-data">
-                                                    @dr["Purchase_Tax_1"].ToString()
-                                                </td>
-                                                <td class="row-data">
-                                                    @dr["Tax2(%)"].ToString()
-                                                </td>
-                                                <td class="row-data">
-                                                    @dr["Purchase_Tax_2"].ToString()
-                                                </td>
-                                                <td class="row-data">
-                                                    @dr["Purchase_Total"].ToString()
-                                                </td>
-                                                <td class="row-data" style="margin-right:auto">
-                                                    <i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i>@*@Html.ActionLink("Edit", "Edit_Purchase_Row", new { P_code = dr["P_code"].ToString() })*@
-                                                    @*@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
-                                                </td>
-                                                <td style="display:none;">
-                                                    @dr["Invoice_No"].ToString()
-                                                </td>
-                                                <td style="display:none;">
-                                                    @dr["Invoice_Date"].ToString()
-                                                </td>
-                                                <td style="display:none;">
-                                                    @dr["Voucher_No"].ToString()
-                                                </td>
-                                                <td style="display:none;">
-                                                    @dr["Voucher_Date"].ToString()
-                                                </td>
-                                                <td style="display:none;">
-                                                    @ViewBag.Mfr
-                                                </td>
-                                                <td style="display:none;">
-                                                    @ViewBag.ILedger
-                                                </td>
-                                                <td style="display:none;">
-                                                    @ViewBag.ALedger
-                                                </td>
-                                                <td style="display:none;" id="final_qty">
-                                                </td>
-                                                <td style="display:none;" id="final_SubTotal">
-                                                </td>
-                                                <td style="display:none;" id="final_Discount">
-                                                </td>
-                                                <td style="display:none;" id="final_Tax1">
-                                                </td>
-                                                <td style="display:none;" id="final_Tax2">
-                                                </td>
-                                                <td style="display:none;" id="final_Total">
-                                                </td>
-                                                <td style="display:none;">
-                                                    @ViewBag.Ref_No
-                                                </td>
+                                                <td class="row-data">@dr["Purchase_Discount_per"].ToString()</td>
+                                                <td class="row-data">@dr["Purchase_Discount_val"].ToString()</td>
+                                                <td class="row-data">@dr["Purchase_Igst_per"].ToString()</td>
+                                                <td class="row-data">@dr["Purchase_Igst_val"].ToString()</td>
+                                                <td class="row-data">@dr["Purchase_Cgst_per"].ToString()</td>
+                                                <td class="row-data">@dr["Purchase_Cgst_val"].ToString()</td>
+                                                <td class="row-data">@dr["Purchase_Sgst_per"].ToString()</td>
+                                                <td class="row-data">@dr["Purchase_Sgst_val"].ToString()</td>
+                                                <td class="row-data">@dr["Purchase_SubTotal"].ToString()</td>
+                                                <td class="row-data">@dr["Purchase_Total"].ToString()</td>
+                                                <td class="row-data" style="margin-right:auto;width:65px;"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i></td>
+                                                <td style="display:none;" id="ref_no"> @dr["Invoice_No"].ToString()</td>
+                                                <td style="display:none;">@dr["Invoice_Date"].ToString()</td>
+                                                <td style="display:none;" id="_final_qty"></td>
+                                                <td style="display:none;" id="_final_subtotal"></td>
+                                                <td style="display:none;" id="_final_total"></td>
+                                                <td style="display:none;" id="_final_dis_per"></td>
+                                                <td style="display:none;" id="_final_dis_val"></td>
+                                                <td style="display:none;" id="_final_igst_per"></td>
+                                                <td style="display:none;" id="_final_igst_val"></td>
+                                                <td style="display:none;" id="_final_cgst_per"></td>
+                                                <td style="display:none;" id="_final_cgst_val"></td>
+                                                <td style="display:none;" id="_final_sgst_per"></td>
+                                                <td style="display:none;" id="_final_sgst_val"></td>
+                                                <td style="display:none;">@dr["Supplier_Acode"]</td>
+                                                <td style="display:none;">@dr["Project"]</td>
+                                                <td style="display:none;">@dr["PO_No"]</td>
+                                                <td style="display:none;" id="bill_v">@dr["BillTo_Acode"]</td>
+                                                <td style="display:none;">@dr["Voucher_No"]</td>
+                                                <td style="display:none;">@dr["Voucher_Date"]</td>
                                             </tr>
                                             i++;
                                         }
                                     </tbody>
                                 </table>
                             </div>
-                                <div style="margin-right:5px;" class="text-sm">
-                                    @Html.LabelFor(model => model.Quantity, new { htmlAttributes = new { id = "Qty_Label" } }) : <h6 id="Qty_display"></h6>
-                                    @*Discount(%) : @Html.EditorFor(model => model.Final_Discount_per, new { htmlAttributes = new { } })
-                Tax1(%) : @Html.EditorFor(model => model.Final_Tax1_per, new { htmlAttributes = new { } })
-                Tax2(%) : @Html.EditorFor(model => model.Final_Tax2_per, new { htmlAttributes = new { } })*@
-                                </div>
-                                <button class="btn btn-sm btn-secondary" id="Submit" style="width:10%;margin-left:2%;margin-top:10%;">Submit</button>
-                                <div class="float-right text-sm">
-                                    <div>
-                                        @Html.LabelFor(model => model.Total, new { htmlAttributes = new { id = "total_Label" } }) : <h6 id="total_display"></h6>
-                                    </div>
-                                    <div>
-                                        @Html.LabelFor(model => model.Final_Discount) : @Html.EditorFor(model => model.Final_Discount, new { htmlAttributes = new { @id = "Final_Discount" } })
-                                    </div>
-                                    <div>
-                                        @Html.LabelFor(model => model.Final_Tax1) : @Html.EditorFor(model => model.Final_Tax1, new { htmlAttributes = new { @style = "margin-left:11%;", @id = "Final_Tax1" } })
-                                    </div>
-                                    <div>
-                                        @Html.LabelFor(model => model.Final_Tax2) : @Html.EditorFor(model => model.Final_Tax2, new { htmlAttributes = new { @style = "margin-left:11%;", @id = "Final_Tax2" } })
-                                    </div>
-                                    <div>
-                                        @Html.LabelFor(model => model.Final_Total, new { htmlAttributes = new { id = "final_total_Label" } }) : <h6 id="Final_Total" style="margin-left:11%;"></h6>
-                                    </div>
-                                </div>
-                                <p id="del"></p>
+                            <div style="font-weight:bold">
+                                Total Quantity : <input id="final_Quantity" style="font-weight: bold; width: 100px; border: none;" />
                             </div>
+                            <button class="btn btn-sm btn-secondary" id="Submit" style="width:115px;margin-left:2%;margin-top:10%;">Submit</button>
+                            <div class="float-right" style="font-weight:bold">
+                                <div>
+                                    Sub-Total &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; : &nbsp; <input readonly id="final_SubTotal" value="0.00" style="width: 100px; border: none; font-weight: bold;" />
+                                </div>
+                                <div>
+                                    Discount(%)&nbsp; @Html.EditorFor(model => model.Final_Discount, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_discount" value="0.00" style="width: 100px; border: none; font-weight: bold" />
+                                </div>
+                                <div>
+                                    IGST(%) &nbsp; &nbsp; &nbsp; &nbsp; @Html.EditorFor(model => model.Total_IGST, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_igst" value="0.00" name="total_igst" style="width: 100px; border: none; font-weight: bold " />
+                                </div>
+                                <div>
+                                    CGST(%) &nbsp; &nbsp; &nbsp;&nbsp; @Html.EditorFor(model => model.Total_CGST, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_cgst" value="0.00" name="total_cgst" style="width: 100px; border: none; font-weight: bold " />
+                                </div>
+                                <div>
+                                    SGST(%) &nbsp; &nbsp; &nbsp;&nbsp; @Html.EditorFor(model => model.Total_SGST, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_sgst" value="0.00" name="total_sgst" style="width: 100px; border: none; font-weight: bold " />
+                                </div>
+                                <div>
+                                    Total &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; : &nbsp; <input readonly id="Final_Total" value="0.00" style="width: 100px; border: none; font-weight: bold" />
+                                </div>
+                            </div>
+                            <p id="del"></p>
                         </div>
+                        <p id="del"></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -258,45 +237,37 @@
     var str = "Please Enter Valid Part No !!!";
     var last_row = document.getElementById("selected_units").rows.length;
     $('#yes').click(function (e) {
-
-        var Inv_No = $('#Invoice_No').val();
-        if (Inv_No == "") {
-            document.getElementById("Enter_Inv_No").innerHTML = "Enter the Invoice No !!!";
+        var part = document.getElementById("selected_units").tBodies[0].rows.length;
+        if (part == 1) {
+            document.getElementById("Enter_Inv_No").innerHTML = "Table is Empty !!!";
             return;
         }
         else {
-            var f1 = document.getElementById("Qty_display").innerHTML;
-            var f2 = document.getElementById("total_display").innerHTML;
-            var f3 = document.getElementById("Final_Discount").value;
-            var f4 = document.getElementById("Final_Tax1").value;
-            var f5 = document.getElementById("Final_Tax2").value;
-            var f6 = document.getElementById("Final_Total").innerHTML;
-            document.getElementById("final_qty").innerHTML = f1;
-            document.getElementById("final_SubTotal").innerHTML = f2;
-            document.getElementById("final_Discount").innerHTML = f3;
-            document.getElementById("final_Tax1").innerHTML = f4;
-            document.getElementById("final_Tax2").innerHTML = f5;
-            document.getElementById("final_Total").innerHTML = f6;
+            var __final_qty = document.getElementById("final_Quantity").value;
+            var __final_subtotal = document.getElementById("final_SubTotal").value;
+            var __final_dis_per = document.getElementById("Final_Discount").value;
+            var __final_dis_val = document.getElementById("total_discount").value;
+            var __final_igst_per = document.getElementById("Total_IGST").value;
+            var __final_igst_val = document.getElementById("total_igst").value;
+            var __final_cgst_per = document.getElementById("Total_CGST").value;
+            var __final_cgst_val = document.getElementById("total_cgst").value;
+            var __final_sgst_per = document.getElementById("Total_SGST").value;
+            var __final_sgst_val = document.getElementById("total_sgst").value;
+            var __final_total = document.getElementById("Final_Total").value;
+            document.getElementById("_final_qty").innerHTML = __final_qty;
+            document.getElementById("_final_subtotal").innerHTML = __final_subtotal;
+            document.getElementById("_final_dis_per").innerHTML = __final_dis_per;
+            document.getElementById("_final_dis_val").innerHTML = __final_dis_val;
+            document.getElementById("_final_igst_per").innerHTML = __final_igst_per;
+            document.getElementById("_final_igst_val").innerHTML = __final_igst_val;
+            document.getElementById("_final_cgst_per").innerHTML = __final_cgst_per;
+            document.getElementById("_final_cgst_val").innerHTML = __final_cgst_val;
+            document.getElementById("_final_sgst_per").innerHTML = __final_sgst_per;
+            document.getElementById("_final_sgst_val").innerHTML = __final_sgst_val;
+            document.getElementById("_final_total").innerHTML = __final_total;
 
-            var v_no = $('#Voucher_No').val();
-            var v_date = $('#Voucher_Date').val();
-            var inv_no = $('#Invoice_No').val();
-            var inv_date = $('#Invoic_Date').val();
-            var supplier = $('#Supplier').val();
-
-            var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
-            var l_row1 = last_row1 - 1;
-            var count = 0;
-            for (var i = 0; i <= l_row1; i++) {
-                var table = document.getElementById("selected_units").tBodies[0].rows[count];
-                table.cells[14].innerHTML = inv_no;
-                table.cells[15].innerHTML = inv_date;
-                table.cells[16].innerHTML = v_no;
-                table.cells[17].innerHTML = v_date;
-                table.cells[18].innerHTML = supplier;
-                count++;
-            }
-
+            var submit1 = "";
+            document.getElementById("Enter_Inv_No").innerHTML = submit1;
             var myRows = [];
             var headersText = [];
             var $headers = $("#selected_units th");
@@ -335,82 +306,38 @@
 
     function total_cal() {
         $('#Voucher_No').prop('disabled', true);
-        $("#Part_No").val("");
-        $("#P_Qty").val("");
-        $("#P_Rate").val("");
-        $("#P_Discount").val("");
-        $("#P_Tax1").val("");
-        $("#P_Tax2").val("");
-        var table = document.getElementById("selected_units");
-        var tbodyRowCount = table.tBodies[0].rows.length;
-        var total_from_db = @ViewBag.Final_Total;
-        var discount_from_db = @ViewBag.Final_Discount;
-        var tax1_from_db = @ViewBag.Final_Tax1;
-        var tax2_from_db = @ViewBag.Final_Tax2;
-        var T_qty = 0;
-        var T_subtotal = 0;
-        for (i = 0; i < tbodyRowCount; i++) {
-            var p_qty = document.getElementById("selected_units").tBodies[0].rows[i].cells[3].innerHTML;
-            var p_total = document.getElementById("selected_units").tBodies[0].rows[i].cells[12].innerHTML;
-            T_qty = T_qty + parseFloat(p_qty);
-            T_subtotal = T_subtotal + parseFloat(p_total);
-
-            var p_subtotal = document.getElementById("selected_units").tBodies[0].rows[i].cells[5].innerHTML;
-            var p_discount = document.getElementById("selected_units").tBodies[0].rows[i].cells[7].innerHTML;
-            var p_tax1 = document.getElementById("selected_units").tBodies[0].rows[i].cells[9].innerHTML;
-            var p_tax2 = document.getElementById("selected_units").tBodies[0].rows[i].cells[11].innerHTML;
-
-            var discount = (p_discount / p_subtotal) * 100;
-            var tax1 = (p_tax1 / p_subtotal) * 100;
-            var tax2 = (p_tax2 / p_subtotal) * 100;
-
-            var discount_l = Math.round(discount, 1);
-            var tax1_l = Math.round(tax1, 1);
-            var tax2_l = Math.round(tax2, 1);
-
-            document.getElementById("selected_units").tBodies[0].rows[i].cells[6].innerHTML = discount_l;
-            document.getElementById("selected_units").tBodies[0].rows[i].cells[8].innerHTML = tax1_l;
-            document.getElementById("selected_units").tBodies[0].rows[i].cells[10].innerHTML = tax2_l;
+        $('#PO_No').prop('disabled', true);
+        $('#Voucher_Date').prop('disabled', true);
+        $('#Invoice_No').prop('disabled', true);
+        $('#Invoice_Date').prop('disabled', true);
+        $('#Supplier').prop('disabled', true);
+        $('#Project').prop('disabled', true);
+        var final_subtotal = parseFloat(@ViewBag.Final_Subtotal);
+        var final_discount = parseFloat(@ViewBag.Final_Dis_Rs);
+        var final_igst = parseFloat(@ViewBag.Final_Igst_Rs);
+        var final_cgst = parseFloat(@ViewBag.Final_Cgst_Rs);
+        var final_sgst = parseFloat(@ViewBag.Final_Sgst_Rs);
+        var final_total = parseFloat(@ViewBag.Final_Total);
+        document.getElementById("final_Quantity").value = @ViewBag.Final_Qty;
+        document.getElementById("final_SubTotal").value = final_subtotal.toFixed(2);
+        document.getElementById("Final_Discount").value = @ViewBag.Final_Dis_Per;
+        document.getElementById("total_discount").value = final_discount.toFixed(2);
+        document.getElementById("Total_IGST").value = @ViewBag.Final_Igst_Per;
+        document.getElementById("total_igst").value = final_igst.toFixed(2);
+        document.getElementById("Total_CGST").value = @ViewBag.Final_Cgst_Per;
+        document.getElementById("total_cgst").value = final_cgst.toFixed(2);
+        document.getElementById("Total_SGST").value = @ViewBag.Final_Sgst_Per;
+        document.getElementById("total_sgst").value = final_sgst.toFixed(2);
+        document.getElementById("Final_Total").value = final_total.toFixed(2);
+        if (document.getElementById("Total_CGST").value != 0) {
+            $('#Total_IGST').prop('disabled', true);
         }
-
-        document.getElementById("total_display").innerHTML = T_subtotal.toFixed(2);
-        document.getElementById("Qty_display").innerHTML = T_qty;
-
-        var final_discount = $("#Final_Discount").val();
-        var final_tax1 = $("#Final_Tax1").val();
-        var final_tax2 = $("#Final_Tax2").val();
-
-        if (total_inc == 0) {
-            document.getElementById("Final_Total").innerHTML = total_from_db.toFixed(2);
-            document.getElementById("Final_Discount").value = discount_from_db.toFixed(2);
-            document.getElementById("Final_Tax1").value = tax1_from_db.toFixed(2);
-            document.getElementById("Final_Tax2").value = tax2_from_db.toFixed(2);
-            total_inc++;
+        if (document.getElementById("Total_SGST").value != 0) {
+            $('#Total_IGST').prop('disabled', true);
         }
-        else {
-            if (final_discount == "") {
-                var discount_val = 0;
-            }
-            else {
-                var discount_val = (T_subtotal * final_discount) / 100;
-            }
-            if (final_tax1 == "") {
-                var tax1_val = 0;
-            }
-            else {
-                var tax1_val = (T_subtotal * final_tax1) / 100;
-            }
-            if (final_tax2 == "") {
-                var tax2_val = 0;
-            }
-            else {
-                var tax2_val = (T_subtotal * final_tax2) / 100;
-            }
-            var Total = (T_subtotal - discount_val) + tax1_val + tax2_val;
-            document.getElementById("Final_Total").innerHTML = Total.toFixed(2);
-            document.getElementById("Final_Discount").value = discount_val.toFixed(2);
-            document.getElementById("Final_Tax1").value = tax1_val.toFixed(2);
-            document.getElementById("Final_Tax2").value = tax2_val.toFixed(2);
+        if (document.getElementById("Total_IGST").value != 0) {
+            $('#Total_CGST').prop('disabled', true);
+            $('#Total_SGST').prop('disabled', true);
         }
 
     }

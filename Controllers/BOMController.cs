@@ -224,7 +224,8 @@ namespace Admin.Controllers
         // Delete BOM
         public ActionResult Delete_BOM_View(int BOM_No, DateTime bomdate, string spcode)
         {
-            if (Session["userID"] != null)
+            var roll = Convert.ToInt32(Session["roll"]);
+            if (Session["userID"] != null && roll == 1)
             {
                 SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
                 _con.Open();
