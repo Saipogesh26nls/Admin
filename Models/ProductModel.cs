@@ -763,4 +763,22 @@ namespace Admin.Models
         public int project_val { get; set; }
         public string Project { get; set; }
     }
+    public class Material_Index
+    {
+        public string Part_No { get; set; }
+        [DisplayName("Part No")]
+        public string Part_No_TB { get; set; }
+        [DisplayName("Supplier/Mfr")]
+        public string Supplier_TB { get; set; }
+        [DisplayName("PO No")]
+        public string PO_No_TB { get; set; }
+        [DisplayName("PO Date")]
+        public string PO_Date_TB { get; set; }
+        [DisplayName("PV No")]
+        public string PV_No_TB { get; set; }
+        [DisplayName("PV Date")]
+        public string PV_Date_TB { get; set; }
+        [DisplayName("LeadTime (in days)")]
+        public string TimeSpan_TB { get; set; }
+    }
 }

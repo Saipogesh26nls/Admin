@@ -475,5 +475,63 @@ namespace Admin.Models
             Con.Close();
             return ItemQm;
         }
+        public List<Material_Index> Material_data(string partno)
+        {
+            List<Material_Index> list = new List<Material_Index>();
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "SELECT * FROM Purchase_Order WHERE Part_No = '" + partno + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlDataReader dr = SqlCmd1.ExecuteReader();
+            while (dr.Read())
+            {
+                list.Add(new Material_Index
+                {
+                    Part_No_TB = dr["Part_No"].ToString(),
+                    Supplier_TB = dr["Supplier_Acode"].ToString(),
+                    PO_No_TB = dr["PO_No"].ToString(),
+                    PO_Date_TB = dr["PO_date"].ToString()
+                }
+                );
+            }
+            dr.Close();
+            for (int i = 0; i < list.Count; i++)
+            {
+                string cmd3 = "select * from Purchase where Part_No = '" + list[i].Part_No_TB + "'";
+                SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
+                SqlDataReader dr2 = SqlCmd3.ExecuteReader();
+                while (dr2.Read())
+                {
+                    list[i].PV_No_TB = dr2["Voucher_No"].ToString();
+                    list[i].PV_Date_TB = dr2["Voucher_Date"].ToString();
+                }
+                dr2.Close();
+                string cmd4 = "select A_Name from Account_Master where A_code = '" + list[i].Supplier_TB + "'";
+                SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con);
+                SqlDataReader dr4 = SqlCmd4.ExecuteReader();
+                while (dr4.Read())
+                {
+                    list[i].Supplier_TB = dr4["A_Name"].ToString();
+                }
+                dr4.Close();
+                if(list[i].PO_Date_TB == null || list[i].PV_Date_TB == null)
+                {
+                    list[i].TimeSpan_TB = null;
+                }
+                else
+                {
+                    DateTime po_date = Convert.ToDateTime(list[i].PO_Date_TB);
+                    DateTime pv_date = Convert.ToDateTime(list[i].PV_Date_TB);
+                    TimeSpan timeSpan = pv_date - po_date;
+                    list[i].TimeSpan_TB = timeSpan.Days.ToString() + " days";
+                    var podate = po_date.Date;
+                    var pvdate = pv_date.Date;
+                    list[i].PO_Date_TB = podate.ToString("dd/MM/yyyy");
+                    list[i].PV_Date_TB = pvdate.ToString("dd/MM/yyyy");
+                }
+            }
+            Con.Close();
+            return list;
+        }
     }
 }

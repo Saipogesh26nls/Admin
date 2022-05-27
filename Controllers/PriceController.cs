@@ -84,7 +84,7 @@ namespace Admin.Controllers
             }
             return new SelectList(list, "Value", "Text");
         }
-        public ActionResult Stock_Statement()
+        public ActionResult Stock_Statement() // Stock Statement view
         {
             /*Price_Updation price_Updation = new Price_Updation();
             var data = price_Updation.Get_stocks();
@@ -105,16 +105,33 @@ namespace Admin.Controllers
                 return RedirectToAction("Err", "Login");
             }
         }
-        public ActionResult Data_Get(Value name) // add DB dat to Price_List View
+        public ActionResult Data_Get(Value name) // add DB data to Price_List View
         {
             Goods_RI dblogin = new Goods_RI();
             var Descp = dblogin.PM_list(name.package, name.value, name.partno, name.description);
             return Json(Descp);
         }
-        public ActionResult Purchase_Data(Inventory name)
+        public ActionResult Purchase_Data(Inventory name) // get purchase data from DB
         {
             Price_Updation dblogin = new Price_Updation();
             var list = dblogin.Receipt_Data(name.Product);
+            return Json(list);
+        }  
+        public ActionResult MaterialIndex() // Material Index view
+        {
+            if (Session["userID"] != null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Err", "Login");
+            }
+        }
+        public ActionResult Get_Partno_from_DB(Material_Index name) // Get PO and PV data from DB
+        {
+            Price_Updation price_Updation = new Price_Updation();
+            var list = price_Updation.Material_data(name.Part_No);
             return Json(list);
         }
     }

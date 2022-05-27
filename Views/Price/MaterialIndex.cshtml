@@ -1,0 +1,67 @@
+﻿@model Admin.Models.Material_Index
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/Content/Purchase.css" />
+    <style>
+        .modal-content {
+            width: 500px;
+        }
+    </style>
+</head>
+<body style="background-color: #f5f5f7;">
+    <h5 style="text-align:center"><u>MATERIAL INDEX</u></h5>
+    <p class="text-sm" style="margin-top:10px;text-align:left;"> Enter Part No : @Html.EditorFor(m => m.Part_No, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } }) <button class="btn btn-sm btn-secondary" id="Add" style="width:40px;height:30px;" onclick="product()">Go</button></p>
+
+    <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 750px;">
+        <table class="table text-sm" id="pm_list">
+            <tbody>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(m => m.Part_No_TB)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.Supplier_TB)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.PO_No_TB)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.PO_Date_TB)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.PV_No_TB)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.PV_Date_TB)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.TimeSpan_TB)
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+<script>
+    function product() {
+        var partno = document.querySelector("#Part_No").value;
+        var model = new Object();
+        model.Part_No = partno;
+        $.ajax({
+            url: '/Price/Get_Partno_from_DB',
+            data: JSON.stringify({ name: model }),
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (result) {
+                $("#pm_list").find("tr:not(:first)").remove();
+                for (var i = 0; i <= result.length - 1; i++) {
+                    var newrow = '<tr id="list"><td>' + result[i].Part_No_TB + '</td><td>' + result[i].Supplier_TB + '</td><td>' + result[i].PO_No_TB + '</td><td>' + result[i].PO_Date_TB + '</td><td>' + result[i].PV_No_TB + '</td><td>' + result[i].PV_Date_TB + '</td><td>' + result[i].TimeSpan_TB + '</td></tr>';
+                    $('#pm_list          tr:last').after(newrow);
+                }
+            }
+        });
+    }
+</script>

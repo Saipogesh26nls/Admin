@@ -127,7 +127,7 @@
                 var totalstock = 0;
                 var totalprice = 0;
                 for (var i = 0; i <= result.length - 1; i++) {
-                    var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Package + '</td><td>' + result[i].Value + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td><td>' + result[i].Current_Stock + '</td><td style="text-align:right">' + result[i].P_Cost + '</td><td style="text-align:right">' + result[i].Current_Stock * result[i].P_Cost + '</td></tr>';
+                    var newrow = '<tr id="list" onclick="List_to_View()"><td>' + result[i].P_code + '</td><td>' + result[i].Package + '</td><td>' + result[i].Value + '</td><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td><td>' + result[i].Current_Stock + '</td><td style="text-align:right">' + result[i].P_Cost + '</td><td style="text-align:right">' + (result[i].Current_Stock * result[i].P_Cost).toFixed(2) + '</td></tr>';
                     $('#pm_list tr:last').after(newrow);
                     totalstock = totalstock + result[i].Current_Stock;
                     totalprice = totalprice + (result[i].Current_Stock * result[i].P_Cost)

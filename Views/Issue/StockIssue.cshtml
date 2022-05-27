@@ -22,15 +22,15 @@
 </head>
 <body onload="onload()">
     <div>
-        <br />
-        <div>
+        <h5 style="text-align:center"><u>STOCK INDENT</u></h5>
+        <div style="margin-top:15px;">
             <p class="text-sm">
-                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Indent No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:13%;", @class = " uppercase" } })   &nbsp &nbsp &nbsp &nbsp   Indent Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
+                &nbsp &nbsp Indent No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:13%;", @class = " uppercase" } })   &nbsp &nbsp &nbsp &nbsp   Indent Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:8%;margin-left:1%;" })
                 &nbsp &nbsp &nbsp &nbsp Reason: &nbsp &nbsp @Html.DropDownListFor(model => model.GI_Tag, ViewBag.GI as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })   &nbsp &nbsp &nbsp &nbsp  Reason for Process :  &nbsp &nbsp @Html.DropDownListFor(model => model.Process_Tag, ViewBag.Process as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
-                &nbsp &nbsp &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })  &nbsp &nbsp &nbsp &nbsp Requested By : &nbsp &nbsp  @Html.DropDownListFor(model => model.Employee, ViewBag.Employee as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
+                &nbsp &nbsp &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })  &nbsp &nbsp &nbsp &nbsp Requested By : &nbsp &nbsp  @Html.DropDownListFor(model => model.Employee, ViewBag.Employee as SelectList)
             </p>
             <p class="text-sm">
-                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Note : &nbsp &nbsp @Html.TextAreaFor(model => model.Note, new { @style = "color:black; width:32%; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })  &nbsp &nbsp &nbsp &nbsp Part No : &nbsp &nbsp @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:1%"></i>  &nbsp &nbsp &nbsp &nbsp &nbsp Quantity : &nbsp &nbsp <input id="Quantity" type="number" style="border: 1px solid gray; margin-right: 10.75%;" placeholder="Quantity"> <button class="btn btn-sm btn-secondary" id="Add" style="width:75px;">Add</button>
+                &nbsp &nbsp Note : &nbsp &nbsp @Html.TextAreaFor(model => model.Note, new { @style = "color:black; width:32%; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })  &nbsp &nbsp &nbsp &nbsp Part No : &nbsp &nbsp @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:1%"></i>  &nbsp &nbsp &nbsp &nbsp &nbsp Quantity : &nbsp &nbsp <input id="Quantity" type="number" style="border: 1px solid gray; margin-right: 10.75%;" placeholder="Quantity"> <button class="btn btn-sm btn-secondary" id="Add" style="width:75px;">Add</button>
             </p>
             <p id="value" style="margin-left:2%;"></p>
         </div>
