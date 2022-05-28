@@ -163,7 +163,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 300px;">
+                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 250px;">
                                 <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
                                     <thead>
                                         <tr>
@@ -798,6 +798,9 @@
         document.getElementById("Add_SellPrice").value = "";
     }
     span.onclick = function () {
+        document.getElementById("Partno_letter").value = "";
+        document.getElementById("Value_letter").value = "";
+        document.getElementById("Package_letter").value = "";
         modal.style.display = "none";
     }
     span1.onclick = function () {
@@ -813,6 +816,9 @@
     }
     window.onclick = function (event) {
         if (event.target == modal) {
+            document.getElementById("Partno_letter").value = "";
+            document.getElementById("Value_letter").value = "";
+            document.getElementById("Package_letter").value = "";
             modal.style.display = "none";
         }
     }
@@ -862,6 +868,9 @@
                 document.getElementById("Part_No").value = partno;
                 document.getElementById("value").innerHTML = descp;
                 document.getElementById("P_Rate").value = cost;
+                document.getElementById("Partno_letter").value = "";
+                document.getElementById("Value_letter").value = "";
+                document.getElementById("Package_letter").value = "";
                 modal.style.display = "none";
             });
         }

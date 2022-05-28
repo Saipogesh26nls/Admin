@@ -359,6 +359,9 @@
         modal1.style.display = "block";
     }
     span.onclick = function () {
+        document.getElementById("Partno_letter").value = "";
+        document.getElementById("Value_letter").value = "";
+        document.getElementById("Package_letter").value = "";
         modal.style.display = "none";
     }
     span1.onclick = function () {
@@ -374,6 +377,9 @@
     }
     window.onclick = function (event) {
         if (event.target == modal) {
+            document.getElementById("Partno_letter").value = "";
+            document.getElementById("Value_letter").value = "";
+            document.getElementById("Package_letter").value = "";
             modal.style.display = "none";
         }
     }
@@ -431,6 +437,9 @@
                 var descp = this.cells[4].innerHTML;
                 document.getElementById("Part_No").value = partno;
                 document.getElementById("value").innerHTML = descp;
+                document.getElementById("Partno_letter").value = "";
+                document.getElementById("Value_letter").value = "";
+                document.getElementById("Package_letter").value = "";
                 modal.style.display = "none";
             });
         }

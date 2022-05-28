@@ -58,7 +58,6 @@
 </head>
 <body>
     <div class="container-fluid">
-        <br />
         <h5 style="text-align: center; font-weight: bold;"><u>BILL OF MATERIALS</u></h5>
         <div id="ui-view" data-select2-id="ui-view">
             <div>
@@ -348,18 +347,40 @@
         modal1.style.display = "block";
     }
     span.onclick = function () {
+        document.getElementById("Partno_letter").value = "";
+        document.getElementById("Value_letter").value = "";
+        document.getElementById("Package_letter").value = "";
         modal.style.display = "none";
     }
     span1.onclick = function () {
+        document.getElementById("Add_Name").value = "";
+        document.getElementById("Add_Package").value = "";
+        document.getElementById("Add_Value").value = "";
+        document.getElementById("Add_PartNo").value = "";
+        document.getElementById("Add_Description").value = "";
+        document.getElementById("Add_Cost").value = "";
+        document.getElementById("Add_MRP").value = "";
+        document.getElementById("Add_SellPrice").value = "";
         modal1.style.display = "none";
     }
     window.onclick = function (event) {
         if (event.target == modal) {
+            document.getElementById("Partno_letter").value = "";
+            document.getElementById("Value_letter").value = "";
+            document.getElementById("Package_letter").value = "";
             modal.style.display = "none";
         }
     }
     window.onclick = function (event) {
         if (event.target == modal1) {
+            document.getElementById("Add_Name").value = "";
+            document.getElementById("Add_Package").value = "";
+            document.getElementById("Add_Value").value = "";
+            document.getElementById("Add_PartNo").value = "";
+            document.getElementById("Add_Description").value = "";
+            document.getElementById("Add_Cost").value = "";
+            document.getElementById("Add_MRP").value = "";
+            document.getElementById("Add_SellPrice").value = "";
             modal1.style.display = "none";
         }
     }
@@ -403,6 +424,9 @@
                 var cost = this.cells[5].innerHTML;
                 document.getElementById("Part_No").value = partno;
                 document.getElementById("value1").innerHTML = descp;
+                document.getElementById("Partno_letter").value = "";
+                document.getElementById("Value_letter").value = "";
+                document.getElementById("Package_letter").value = "";
                 modal.style.display = "none";
             });
         }
