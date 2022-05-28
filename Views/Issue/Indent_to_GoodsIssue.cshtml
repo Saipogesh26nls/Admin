@@ -56,13 +56,14 @@
 <body onload="vno();">
     <div class="container-fluid">
         <br />
+        <h5 style="text-align: center; font-weight: bold;"><u>STOCK INDENT ISSUE</u></h5>
         <div id="ui-view" data-select2-id="ui-view">
             <div>
                 <div class="card">
                     <div class="card-header">
                         <p class="text-sm">Voucher Type : &nbsp &nbsp @Html.DropDownListFor(model => model.Index_Type, ViewBag.Index as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })</p>
                         <p class="text-sm">
-                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:13%;margin-left:1%;"} })  Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;"})
+                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:13%;margin-left:1%;" } })  Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
                             Reference No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:13%;" } })    Reference Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
                         </p>
                         <p class="text-sm">
@@ -162,23 +163,23 @@
                                         @{ int i = 0; }
                                         @foreach (System.Data.DataRow dr in ViewBag.Goods.Rows)
                                         {
-                                        <tr id="@i">
-                                            <td class="row-data">@dr["PartNo"].ToString()</td>
-                                            <td class="row-data">@dr["Description"].ToString()</td>
-                                            <td class="row-data text-sm-left">@dr["Quantity"].ToString()</td>
-                                            <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row1(this);"></i> </td>
-                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Voucher_Date)</td>
-                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Index_Type)</td>
-                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Ref_No)</td>
-                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Ref_Date)</td>
-                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.GI_Tag)</td>
-                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Process_Tag)</td>
-                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Project)</td>
-                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Employee)</td>
-                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Note)</td>
-                                            <td class="row-data" style="display:none;">@dr["P_code"].ToString()</td>
-                                            <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Voucher_No)</td>
-                                        </tr>
+                                            <tr id="@i">
+                                                <td class="row-data">@dr["PartNo"].ToString()</td>
+                                                <td class="row-data">@dr["Description"].ToString()</td>
+                                                <td class="row-data text-sm-left">@dr["Quantity"].ToString()</td>
+                                                <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row1(this);"></i> </td>
+                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Voucher_Date)</td>
+                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Index_Type)</td>
+                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Ref_No)</td>
+                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Ref_Date)</td>
+                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.GI_Tag)</td>
+                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Process_Tag)</td>
+                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Project)</td>
+                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Employee)</td>
+                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Note)</td>
+                                                <td class="row-data" style="display:none;">@dr["P_code"].ToString()</td>
+                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Voucher_No)</td>
+                                            </tr>
                                             i++;
                                         }
                                     </tbody>

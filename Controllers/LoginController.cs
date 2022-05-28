@@ -51,7 +51,7 @@ namespace Admin.Controllers
                 var add = Convert.ToInt32(Session["Add"]);
                 var edit = Convert.ToInt32(Session["Edit"]);
                 var delete = Convert.ToInt32(Session["Delete"]);
-                return RedirectToAction("ProductEntry", "Product");
+                return RedirectToAction("Initial_Screen", "Product");
             }
             else
             {

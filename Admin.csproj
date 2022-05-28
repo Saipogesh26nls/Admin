@@ -2408,6 +2408,7 @@
     <Content Include="Views\NewPurchase\PO_Delete.cshtml" />
     <Content Include="Views\BOM\Delete_BOM_View.cshtml" />
     <Content Include="Views\Price\MaterialIndex.cshtml" />
+    <Content Include="Views\Product\Initial_Screen.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

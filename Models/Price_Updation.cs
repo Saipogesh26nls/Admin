@@ -497,7 +497,7 @@ namespace Admin.Models
             dr.Close();
             for (int i = 0; i < list.Count; i++)
             {
-                string cmd3 = "select * from Purchase where Part_No = '" + list[i].Part_No_TB + "'";
+                string cmd3 = "select * from Purchase where Part_No = '" + list[i].Part_No_TB + "' and PO_No = "+list[i].PO_No_TB+"";
                 SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
                 SqlDataReader dr2 = SqlCmd3.ExecuteReader();
                 while (dr2.Read())

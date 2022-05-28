@@ -181,8 +181,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-light-gray-dark elevation-4">
             <!-- Brand Logo -->
-            <a href="index3.html" class="brand-link">
-                <img src="~/adminlte/img/credit/logo.png" alt="AdminLTE Logo"  style=" margin-left:15%;">
+            <a href="@Url.Action("Initial_Screen", "Product")" class="brand-link">
+                <img src="~/adminlte/img/credit/logo.png" alt="Samtech Devices India Pvt Ltd"  style=" margin-left:15%;">
                 <!--<span class="brand-text font-weight-light">Geriahco</span>-->
             </a>
 
@@ -336,7 +336,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </li>*@
                                         <li class="nav-item">
                                             <a href="@Url.Action("New_Purchase","NewPurchase")" class="nav-link">
-                                                <i class="nav-icon fas fa-list"></i>
+                                                <i class="nav-icon fas fa-shopping-cart"></i>
                                                 <p @*style="font-weight:bold"*@>
                                                     Purchase
                                                 </p>
@@ -352,7 +352,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </li>
                                         <li class="nav-item">
                                             <a href="@Url.Action("Goods_Receipt_Issue","NewPurchase")" class="nav-link">
-                                                <i class="nav-icon fas fa-shopping-cart"></i>
+                                                <i class="nav-icon fas fa-shopping-bag"></i>
                                                 <p>
                                                     Goods Recipt / Issue
                                                 </p>
@@ -392,7 +392,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </li>
                                         <li class="nav-item">
                                             <a href="@Url.Action("Stock_Statement","Price")" class="nav-link">
-                                                <i class="nav-icon fas fa-network-wired"></i>
+                                                <i class="nav-icon fas fa-money-bill-wave"></i>
                                                 <p @*style="font-weight:bold"*@>
                                                     Stock Statement
                                                 </p>

@@ -23,7 +23,7 @@
 </head>
 <body onload="vno()">
     <div class="container-fluid">
-        <h5 style="text-align:center"><u>PURCHASE ORDER ENTRY</u></h5>
+        <h5 style="text-align: center; font-weight: bold;"><u>PURCHASE ORDER ENTRY</u></h5>
         <div id="ui-view" data-select2-id="ui-view">
             <div>
                 <div class="card">
@@ -268,6 +268,7 @@
         if (_partno == "" || _qty == "" || _price == "") {
             document.getElementById("final_Quantity").value = 0;
             document.getElementById("final_SubTotal").value = "0.00";
+            document.getElementById("Final_Total").value = "0.00";
         }
         else {
             qty = qty + _qty;
@@ -275,6 +276,7 @@
             total = total + Total;
             document.getElementById("final_Quantity").value = qty;
             document.getElementById("final_SubTotal").value = total.toFixed(2);
+            document.getElementById("Final_Total").value = total.toFixed(2);
         }
         var model = new Object();
             model.Part_No = document.getElementById("Part_No").value;
@@ -325,31 +327,66 @@
     }
 
     function final_calculation() {
-        var sub_total = document.getElementById("total_display").innerHTML;
-        var final_discount = $("#Final_Discount").val();
-        var final_tax1 = $("#Final_Tax1").val();
-        var final_tax2 = $("#Final_Tax2").val();
-        if (final_discount == "") {
-            var discount_val = 0;
+        var table = document.getElementById("selected_units");
+        var tbodyRowCount = table.tBodies[0].rows.length;
+        var T_qty = 0;
+        var T_subtotal = 0;
+        for (i = 0; i <= tbodyRowCount - 1; i++) {
+            var p_qty = document.getElementById("selected_units").tBodies[0].rows[i].cells[2].innerHTML;
+            var p_total = document.getElementById("selected_units").tBodies[0].rows[i].cells[13].innerHTML;
+            T_qty = T_qty + parseFloat(p_qty);
+            T_subtotal = T_subtotal + parseFloat(p_total);
         }
-        else {
-            var discount_val = (sub_total * final_discount) / 100;
+        var _discount_per = $('#Final_Discount').val();
+        var _igst_per = $('#Total_IGST').val();
+        var _cgst_per = $('#Total_CGST').val();
+        var _sgst_per = $('#Total_SGST').val();
+
+        var _discount_val;
+        var _igst_val;
+        var _cgst_val;
+        var _sgst_val;
+        switch (true) {
+            case _discount_per == "":
+                _discount_val = 0;
+                _discount_per = 0;
+                break;
+            default:
+                _discount_val = (T_subtotal * _discount_per) / 100;
         }
-        if (final_tax1 == "") {
-            var tax1_val = 0;
+        switch (true) {
+            case _igst_per == "":
+                _igst_val = 0;
+                _igst_per = 0;
+                break;
+            default:
+                _igst_val = (T_subtotal * _igst_per) / 100;
         }
-        else {
-            var tax1_val = (sub_total * final_tax1) / 100;
-            document.getElementById("total_tax").innerHTML = tax1_val.toFixed(2);
+        switch (true) {
+            case _cgst_per == "":
+                _cgst_val = 0;
+                _cgst_per = 0;
+                break;
+            default:
+                _cgst_val = (T_subtotal * _cgst_per) / 100;
         }
-        if (final_tax2 == "") {
-            var tax2_val = 0;
+        switch (true) {
+            case _sgst_per == "":
+                _sgst_val = 0;
+                _sgst_per = 0;
+                break;
+            default:
+                _sgst_val = (T_subtotal * _sgst_per) / 100;
         }
-        else {
-            var tax2_val = (sub_total * final_tax2) / 100;
-        }
-        var Total = (sub_total - discount_val) + tax1_val + tax2_val;
-        document.getElementById("Final_Total").innerHTML = Total.toFixed(2);
+
+        var _total = (T_subtotal - _discount_val) + _igst_val + _cgst_val + _sgst_val;
+        document.getElementById("final_Quantity").value = T_qty;
+        document.getElementById("final_SubTotal").value = T_subtotal.toFixed(2);
+        document.getElementById("total_discount").value = _discount_val.toFixed(2);
+        document.getElementById("total_igst").value = _igst_val.toFixed(2);
+        document.getElementById("total_cgst").value = _cgst_val.toFixed(2);
+        document.getElementById("total_sgst").value = _sgst_val.toFixed(2);
+        document.getElementById("Final_Total").value = _total.toFixed(2);
     }
 
     $('#Submit').click(function (e) {
@@ -461,17 +498,17 @@
         var CGST = parseFloat(document.getElementById("total_cgst").value);
         var SGST = parseFloat(document.getElementById("total_sgst").value);
         var discount = document.getElementById("Final_Discount").value;
-        if (discount > 0) {
+        if(discount == 0) {
+            var _discount = parseFloat(document.getElementById("total_discount").value);
+            var final_total = parseFloat(document.getElementById("Final_Total").value);
+            document.getElementById("Final_Total").value = (final_total + _discount).toFixed(2);
+            document.getElementById("total_discount").value = "0.00";
+        }
+        else {
             var final_discount = (subtotal * discount) / 100;
             var final_total = (subtotal - final_discount) + IGST + CGST + SGST;
             document.getElementById("total_discount").value = final_discount.toFixed(2);
             document.getElementById("Final_Total").value = final_total.toFixed(2);
-        }
-        else {
-            var _discount = document.getElementById("total_discount").value;
-            var final_total = document.getElementById("Final_Total").value;
-            document.getElementById("Final_Total").value = (final_total + _discount).toFixed(2);
-            document.getElementById("total_discount").value = "0.00";
         }
     });
     $('input[name=Total_IGST]').change(function () {

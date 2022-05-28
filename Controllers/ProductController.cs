@@ -82,6 +82,19 @@ namespace Admin.Controllers
             }
             
         }
+
+        public ActionResult Initial_Screen()
+        {
+            if (Session["userID"] != null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Err", "Login");
+
+            }
+        }
         /*[HttpPost]
         public ActionResult bar(ProductModel barcode)
         {

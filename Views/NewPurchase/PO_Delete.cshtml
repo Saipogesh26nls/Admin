@@ -57,7 +57,7 @@
 </head>
 <body onload="total_cal(); hover();">
     <div class="container-fluid">
-        <h5 style="text-align:center"><u>PURCHASE ORDER ENTRY</u></h5>
+        <h5 style="text-align: center; font-weight: bold;"><u>PURCHASE ORDER ENTRY</u></h5>
         <div id="ui-view" data-select2-id="ui-view">
             <div>
                 <div class="card">
@@ -223,7 +223,7 @@
 
     $('#yes').click(function (e) {
         var part = document.getElementById("selected_units").tBodies[0].rows.length;
-        if (part == 1) {
+        if (part == 0) {
             document.getElementById("Enter_Inv_No").innerHTML = "Table is Empty !!!";
             return;
         }

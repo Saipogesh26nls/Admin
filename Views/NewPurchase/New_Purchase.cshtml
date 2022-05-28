@@ -57,7 +57,7 @@
 </head>
 <body>
     <div class="container-fluid">
-        <h5 style="text-align:center"><u>PURCHASE ENTRY</u></h5>
+        <h5 style="text-align: center; font-weight: bold;"><u>PURCHASE ENTRY</u></h5>
         <div id="ui-view" data-select2-id="ui-view">
             <div>
                 <div class="card">
@@ -316,6 +316,7 @@
         if (_partno == "" || _qty == "" || _price == "") {
             document.getElementById("final_Quantity").value = 0;
             document.getElementById("final_SubTotal").value = "0.00";
+            document.getElementById("Final_Total").value = "0.00";
         }
         else {
             qty = qty + _qty;
@@ -323,6 +324,7 @@
             total = total + Total;
             document.getElementById("final_Quantity").value = qty;
             document.getElementById("final_SubTotal").value = total.toFixed(2);
+            document.getElementById("Final_Total").value = total.toFixed(2);
         }
         var model = new Object();
         model.Part_No = document.getElementById("Part_No").value;
@@ -348,6 +350,7 @@
                     document.getElementById("value").innerHTML = val;
                     var newrow = '<tr id="data" name="data" style="font-size:13px;"><td>' + _partno + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + _qty + '</td><td>' + _price + '</td><td>' + _discount_per + '</td><td>' + _discount_val.toFixed(2) + '</td><td>' + _igst_per + '</td><td>' + _igst_val.toFixed(2) + '</td><td>' + _cgst_per + '</td><td>' + _cgst_val.toFixed(2) + '</td><td>' + _sgst_per + '</td><td>' + _sgst_val.toFixed(2) + '</td><td>' + _subtotal.toFixed(2) + '</td><td id="total' + i + '">' + _total.toFixed(2) + '</td><td class="row-data" style="display:none;"><i class="fas fa-edit" onclick="Toshow()"></i></td><td style="display:none;" id="Ino">' + _InvNo + '</td><td style="display:none;" id="Idate">' + _InvDate + '</td><td style="display:none;" id="Vdate">' + _VDate + '</td><td style="display:none;">' + _ILedger + '</td><td style="display:none;">' + _ALedger + '</td><td style="display:none;" id="_final_qty"></td><td style="display:none;" id="_final_subtotal"></td><td style="display:none;" id="_final_total"></td><td style="display:none;" id="_final_dis_per"></td><td style="display:none;" id="_final_dis_val"></td><td style="display:none;" id="_final_igst_per"></td><td style="display:none;" id="_final_igst_val"></td><td style="display:none;" id="_final_cgst_per"></td><td style="display:none;" id="_final_cgst_val"></td><td style="display:none;" id="_final_sgst_per"></td><td style="display:none;" id="_final_sgst_val"></td><td style="display:none;">' + _supplier + '</td><td style="display:none;">' + _project + '</td><td style="display:none;">' + _billto + '</td><td style="display:none;">' + _PO_No + '</td></tr>';
                     $('#selected_units tr:last').after(newrow);
+                    total_cal_PO();
                     formClear();
                     i++;
                 }
@@ -576,17 +579,17 @@
         var CGST = parseFloat(document.getElementById("total_cgst").value);
         var SGST = parseFloat(document.getElementById("total_sgst").value);
         var discount = document.getElementById("Final_Discount").value;
-        if (discount > 0) {
+        if (discount == 0) {
+            var _discount = parseFloat(document.getElementById("total_discount").value);
+            var final_total = parseFloat(document.getElementById("Final_Total").value);
+            document.getElementById("Final_Total").value = (final_total + _discount).toFixed(2);
+            document.getElementById("total_discount").value = "0.00";
+        }
+        else {
             var final_discount = (subtotal * discount) / 100;
             var final_total = (subtotal - final_discount) + IGST + CGST + SGST;
             document.getElementById("total_discount").value = final_discount.toFixed(2);
             document.getElementById("Final_Total").value = final_total.toFixed(2);
-        }
-        else {
-            var _discount = document.getElementById("total_discount").value;
-            var final_total = document.getElementById("Final_Total").value;
-            document.getElementById("Final_Total").value = (final_total + _discount).toFixed(2);
-            document.getElementById("total_discount").value = "0.00";
         }
     });
     $('input[name=Total_IGST]').change(function () {

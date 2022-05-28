@@ -61,7 +61,7 @@ namespace Admin.Controllers
             SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             _con.Open();
             List<int> vno = new List<int>();
-            string cmd = "SELECT PO_No FROM Purchase where PO_No >0 GROUP BY PO_No HAVING COUNT(*)>0";
+            string cmd = "SELECT PO_No FROM Purchase where PO_No > 0 GROUP BY PO_No HAVING COUNT(*)>0";
             SqlCommand SqlCmd = new SqlCommand(cmd, _con);
             SqlDataReader dr = SqlCmd.ExecuteReader();
             while (dr.Read())
@@ -83,6 +83,7 @@ namespace Admin.Controllers
                 if (vno.Contains(Convert.ToInt32(list[i].Value)))
                 {
                     list.Remove(list[i]);
+                    i = i - 1;
                 }
             }
             _con.Close();

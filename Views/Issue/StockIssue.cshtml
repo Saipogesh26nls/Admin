@@ -22,7 +22,7 @@
 </head>
 <body onload="onload()">
     <div>
-        <h5 style="text-align:center"><u>STOCK INDENT</u></h5>
+        <h5 style="text-align: center; font-weight: bold;"><u>STOCK INDENT</u></h5>
         <div style="margin-top:15px;">
             <p class="text-sm">
                 &nbsp &nbsp Indent No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:13%;", @class = " uppercase" } })   &nbsp &nbsp &nbsp &nbsp   Indent Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:8%;margin-left:1%;" })
