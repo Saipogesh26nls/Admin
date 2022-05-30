@@ -63,7 +63,11 @@
             <div>
                 <div class="card">
                     <div class="card-header">
-                        <p class="text-sm">BOM No : @Html.EditorFor(model => model.BOM_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1.8%;margin-right:3%", @readonly = "readonly" } }) BOM Date : @Html.TextBoxFor(x => x.BOM_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })</p>
+                        <p class="text-sm">
+                            BOM No : @Html.EditorFor(model => model.BOM_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1.8%;margin-right:3%", @readonly = "readonly" } }) BOM Date : @Html.TextBoxFor(x => x.BOM_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" }) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            @Html.DropDownListFor(m => m.BOM_DD, ViewBag.BOM as SelectList) &nbsp; &nbsp;  <button class="btn btn-sm btn-secondary" id="Import" onclick="Import_BOM()">Import</button>
+                        </p>
                         <p class="text-sm">SP Part No : @Html.EditorFor(model => model.SP_Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:3%", @readonly = "readonly" } }) <button class="btn btn-sm btn-secondary" id="insert" onclick="SP_part_no();">Insert</button></p> <p id="value" class="text-sm" style="width:50%"></p>
                     </div>
                     <div class="card-body table-responsive">
@@ -83,7 +87,7 @@
                                     <p id="delete" style="text-align:center;"></p>
                                 </div>
                             </div>
-                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 400px;width:70%;">
+                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 550px;width:70%;">
                                 <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
                                     <thead>
                                         <tr>

@@ -141,6 +141,8 @@ namespace Admin.Models
         public string Package_letter { get; set; }
         public string Value_letter { get; set; }
         public string Descp_letter { get; set; }
+        public string BOM_DD { get; set; }
+
     }
     public class BOM_Table
     {

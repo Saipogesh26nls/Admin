@@ -17,8 +17,8 @@ namespace Admin.Controllers
         // Add New BOM
         public ActionResult BOM_Add_Data(BOMFields data) // BOM Add Data View
         {
-            if (Session["userID"] != null)
-            {
+            /*if (Session["userID"] != null)
+            {*/
                 data.BOM_Date = DateTime.Today;
                 SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
                 _con.Open();
@@ -30,13 +30,54 @@ namespace Admin.Controllers
                 DataTable _dt1 = new DataTable();
                 _da1.Fill(_dt1);
                 ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
+                // To import other BOM
+                SqlDataAdapter _da3 = new SqlDataAdapter("SELECT BOM_No FROM BOM GROUP BY BOM_No HAVING COUNT(*)>0", _con);
+                DataTable _dt3 = new DataTable();
+                _da3.Fill(_dt3);
                 _con.Close();
+                ViewBag.BOM = ToBOMList(_dt3, "BOM_No", "BOM_No");
                 return View(data);
-            }
+            /*}
             else
             {
                 return RedirectToAction("Err", "Login");
+            }*/
+        }
+        [NonAction]
+        public SelectList ToBOMList(DataTable table, string valueField, string textField) // For making Dropdown list
+        {
+            SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            _con.Open();
+            List<SelectListItem> list = new List<SelectListItem>();
+            foreach (DataRow row in table.Rows)
+            {
+                list.Add(new SelectListItem()
+                {
+                    Text = row[textField].ToString(),
+                    Value = row[valueField].ToString()
+                });
             }
+            List<BOM_List> ItemQm = new List<BOM_List>();
+            for (int i = 0; i < list.Count; i++)
+            {
+                string cmd = "SELECT Top 1 Name = Product_Master.P_Disp_Name,MP_Code = BOM.MP_Code, BOM_No = BOM.BOM_No FROM Product_Master INNER JOIN BOM ON Product_Master.P_code = BOM.MP_Code where BOM_No = "+list[i].Value+"";
+                SqlCommand SqlCmd1 = new SqlCommand(cmd, _con);
+                SqlDataReader dr = SqlCmd1.ExecuteReader();
+                while (dr.Read())
+                {
+                    ItemQm.Add(new BOM_List
+                    {
+                        Product_Name = dr["Name"].ToString(),
+                        BOM_No = (int)dr["BOM_No"]
+                    }
+                    );
+                }
+                list[i].Text = ItemQm[i].Product_Name;
+                list[i].Value = ItemQm[i].BOM_No.ToString();
+                dr.Close();
+            }
+            _con.Close();
+            return new SelectList(list, "Value", "Text");
         }
         [NonAction]
         public SelectList ToSelectList(DataTable table, string valueField, string textField) // For making Dropdown list
@@ -70,13 +111,19 @@ namespace Admin.Controllers
             var Descp = dblogin.Descp_Qty(name.Part_No);
             return Json(Descp, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult Add_BOM(BOM_List name)
+        {
+            BOM_Insert bOM_Insert = new BOM_Insert();
+            var data = bOM_Insert.Add_BOM_Fields(name.BOM_No);
+            return Json(data);
+        }
 
         // BOM List
         [HttpGet]
         public ActionResult BOM_List() // BOM List View
         {
-            if (Session["userID"] != null)
-            {
+            /*if (Session["userID"] != null)
+            {*/
                 List<BOM_List> ItemQm = new List<BOM_List>();
                 List<int> bom_no = new List<int>();
                 SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
@@ -131,19 +178,19 @@ namespace Admin.Controllers
                     Con.Close();
                     return View(ItemQm);
                 }
-            }
+            /*}
             else
             {
                 return RedirectToAction("Err", "Login");
-            }
+            }*/
         }
 
         // Edit BOM
         [HttpGet]
         public ActionResult BOM_Edit_Delete(int BOM_No, DateTime bomdate, string spcode) // BOM Edit Delete View
         {
-            if (Session["userID"] != null)
-            {
+            /*if (Session["userID"] != null)
+            {*/
                 SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
                 _con.Open();
                 SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
@@ -154,7 +201,12 @@ namespace Admin.Controllers
                 DataTable _dt1 = new DataTable();
                 _da1.Fill(_dt1);
                 ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
+                // To import other BOM
+                SqlDataAdapter _da3 = new SqlDataAdapter("SELECT BOM_No FROM BOM GROUP BY BOM_No HAVING COUNT(*)>0", _con);
+                DataTable _dt3 = new DataTable();
+                _da3.Fill(_dt3);
                 _con.Close();
+                ViewBag.BOM = ToBOMList(_dt3, "BOM_No", "BOM_No");
                 BOMFields bOMFields = new BOMFields();
                 DataSet ds = bOMFields.EditBOM(BOM_No, spcode);
                 ds.Tables[0].Columns.Add("P_Part_No");
@@ -174,11 +226,11 @@ namespace Admin.Controllers
                 bOMFields.BOM_Date = bomdate;
                 ViewBag.Goods = ds.Tables[0];
                 return View(bOMFields);
-            }
+            /*}
             else
             {
                 return RedirectToAction("Err", "Login");
-            }
+            }*/
         }
         public ActionResult Add_Product(GoodsRI name) // add new products to db
         {
@@ -224,9 +276,9 @@ namespace Admin.Controllers
         // Delete BOM
         public ActionResult Delete_BOM_View(int BOM_No, DateTime bomdate, string spcode)
         {
-            var roll = Convert.ToInt32(Session["roll"]);
+            /*var roll = Convert.ToInt32(Session["roll"]);
             if (Session["userID"] != null && roll == 1)
-            {
+            {*/
                 SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
                 _con.Open();
                 SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
@@ -237,7 +289,12 @@ namespace Admin.Controllers
                 DataTable _dt1 = new DataTable();
                 _da1.Fill(_dt1);
                 ViewBag.MfdList = ToSelectList(_dt1, "A_code", "A_Name");
+                // To import other BOM
+                SqlDataAdapter _da3 = new SqlDataAdapter("SELECT BOM_No FROM BOM GROUP BY BOM_No HAVING COUNT(*)>0", _con);
+                DataTable _dt3 = new DataTable();
+                _da3.Fill(_dt3);
                 _con.Close();
+                ViewBag.BOM = ToBOMList(_dt3, "BOM_No", "BOM_No");
                 BOMFields bOMFields = new BOMFields();
                 DataSet ds = bOMFields.EditBOM(BOM_No, spcode);
                 ds.Tables[0].Columns.Add("P_Part_No");
@@ -257,11 +314,11 @@ namespace Admin.Controllers
                 bOMFields.BOM_Date = bomdate;
                 ViewBag.Goods = ds.Tables[0];
                 return View(bOMFields);
-            }
+           /*}
             else
             {
                 return RedirectToAction("Err", "Login");
-            }
+            }*/
         } // Delete BOM View
         public ActionResult Remove_BOM(List<BOMEdit> data)
         {

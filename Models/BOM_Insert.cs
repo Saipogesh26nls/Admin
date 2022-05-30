@@ -94,9 +94,9 @@ namespace Admin.Models
                 SqlCommand sql_cmnd = new SqlCommand("[dbo].[BOM_Prod]", Con1);
                 sql_cmnd.CommandType = CommandType.StoredProcedure;
                 sql_cmnd.Parameters.AddWithValue("@bom_no", SqlDbType.Int).Value = BOM_No;
-                sql_cmnd.Parameters.AddWithValue("@bom_date", SqlDbType.NVarChar).Value = orderDetail[i].BOM_Date;
+                sql_cmnd.Parameters.AddWithValue("@bom_date", SqlDbType.NVarChar).Value = orderDetail[0].BOM_Date;
                 sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = orderDetail[i].Part_No.ToUpper();
-                sql_cmnd.Parameters.AddWithValue("@mp_partno", SqlDbType.NVarChar).Value = orderDetail[i].SP_Part_No.ToUpper();
+                sql_cmnd.Parameters.AddWithValue("@mp_partno", SqlDbType.NVarChar).Value = orderDetail[0].SP_Part_No.ToUpper();
                 sql_cmnd.Parameters.AddWithValue("@quantity", SqlDbType.NVarChar).Value = orderDetail[i].Quantity;
                 sql_cmnd.ExecuteNonQuery();
                 i++;
@@ -121,6 +121,7 @@ namespace Admin.Models
                 }
                 );
             }
+            Con.Close();
             return ItemQm;
         }
         public int EditOrder(List<BOMEdit> orderDetail, string bom_date)
@@ -143,10 +144,10 @@ namespace Admin.Models
                 }
                 SqlCommand sql_cmnd = new SqlCommand("[dbo].[BOM_Prod]", Con1);
                 sql_cmnd.CommandType = CommandType.StoredProcedure;
-                sql_cmnd.Parameters.AddWithValue("@bom_no", SqlDbType.Int).Value = orderDetail[i].BOM_No;
+                sql_cmnd.Parameters.AddWithValue("@bom_no", SqlDbType.Int).Value = orderDetail[0].BOM_No;
                 sql_cmnd.Parameters.AddWithValue("@bom_date", SqlDbType.NVarChar).Value = bom_date;
                 sql_cmnd.Parameters.AddWithValue("@part_no", SqlDbType.NVarChar).Value = orderDetail[i].Part_No.ToUpper();
-                sql_cmnd.Parameters.AddWithValue("@mp_partno", SqlDbType.NVarChar).Value = orderDetail[i].SP_Part_No.ToUpper();
+                sql_cmnd.Parameters.AddWithValue("@mp_partno", SqlDbType.NVarChar).Value = orderDetail[0].SP_Part_No.ToUpper();
                 sql_cmnd.Parameters.AddWithValue("@quantity", SqlDbType.NVarChar).Value = orderDetail[i].Quantity;
                 sql_cmnd.ExecuteNonQuery();
                 i++;
@@ -177,6 +178,49 @@ namespace Admin.Models
             SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con1);
             SqlCmd3.ExecuteNonQuery();
             Con1.Close();
+        }
+        public List<BOMFields> Add_BOM_Fields(int bomno)
+        {
+            List<BOMFields> BomFields = new List<BOMFields>();
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "select * from BOM where BOM_No = '" + bomno + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            SqlDataReader dr = SqlCmd1.ExecuteReader();
+            while (dr.Read())
+            {
+                BomFields.Add(new BOMFields
+                {
+                    P_code = dr["SP_Code"].ToString(),
+                    Quantity = dr["Quantity"].ToString(),
+                    SP_Part_No = dr["MP_Code"].ToString(),
+                    BOM_Date = Convert.ToDateTime(dr["BOM_Date"])
+                }
+                );
+            }
+            dr.Close();
+            for (int j = 0; j < BomFields.Count(); j++)
+            {
+                string cmd3 = "select * from Product_Master where P_code = '" + BomFields[j].P_code + "'";
+                SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
+                SqlDataReader dr2 = SqlCmd3.ExecuteReader();
+                while (dr2.Read())
+                {
+                    BomFields[j].Part_No = dr2["P_Part_No"].ToString();
+                    BomFields[j].Description = dr2["P_Description"].ToString();
+                }
+                dr2.Close();
+                string cmd2 = "select * from Product_Master where P_code = '" + BomFields[j].SP_Part_No + "'";
+                SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+                SqlDataReader dr1 = SqlCmd3.ExecuteReader();
+                while (dr1.Read())
+                {
+                    BomFields[j].SP_Part_No = dr1["P_Part_No"].ToString();
+                }
+                dr1.Close();
+            }
+            Con.Close();
+            return BomFields;
         }
 
     } 

@@ -63,7 +63,11 @@
             <div>
                 <div class="card">
                     <div class="card-header">
-                        <p class="text-sm">BOM No : @Html.EditorFor(model => model.BOM_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1.8%;margin-right:3%", @readonly = "readonly" } }) BOM Date : @Html.TextBoxFor(x => x.BOM_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })</p>
+                        <p class="text-sm">
+                            BOM No : @Html.EditorFor(model => model.BOM_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1.8%;margin-right:3%", @readonly = "readonly" } }) BOM Date : @Html.TextBoxFor(x => x.BOM_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" }) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            @Html.DropDownListFor(m => m.BOM_DD, ViewBag.BOM as SelectList) &nbsp; &nbsp;  <button class="btn btn-sm btn-secondary" id="Import" onclick="Import_BOM()">Import</button>
+                        </p>
                         <p class="text-sm">SP Part No : @Html.EditorFor(model => model.SP_Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:3%", @readonly = "readonly" } }) <button class="btn btn-sm btn-secondary" id="insert" onclick="SP_part_no();">Insert</button></p> <p id="value" class="text-sm" style="width:50%"></p>
                     </div>
                     <div class="card-body table-responsive">
@@ -135,7 +139,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 400px;width:70%;">
+                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 550px;width:70%;">
                                 <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
                                     <thead>
                                         <tr>
@@ -157,9 +161,9 @@
                                                 <td class="row-data" style="width:550px;">@dr["P_Description"].ToString()</td>
                                                 <td class="row-data text-sm-left" style="width:50px;">@dr["Quantity"].ToString()</td>
                                                 <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i> </td>
-                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.SP_Part_No)</td>
-                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.BOM_No)</td>
-                                                <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.BOM_Date)</td>
+                                                <td class="row-data" style="display:none;" id="sp_partno">@Html.DisplayFor(model => model.SP_Part_No)</td>
+                                                <td class="row-data" style="display:none;" id="bom_no">@Html.DisplayFor(model => model.BOM_No)</td>
+                                                <td class="row-data" style="display:none;" id="bom_date">@Html.DisplayFor(model => model.BOM_Date)</td>
                                             </tr>
                                             i++;
                                         }
@@ -233,7 +237,7 @@
                     return;
                 }
                 var l_row = last_row - 1;
-                var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td class="row-data">' + partno + '</td><td class="row-data">' + data[0].Description + '</td><td class="row-data">' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td style="display:none;">' + sp_partno + '</td><td style="display:none;">' + bomno + '</td><td style="display:none;">' + bomdate + '</td></tr>';
+                var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td class="row-data">' + partno + '</td><td class="row-data">' + data[0].Description + '</td><td class="row-data">' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td style="display:none;" id="sp_partno">' + sp_partno + '</td><td style="display:none;" id="bom_no">' + bomno + '</td><td style="display:none;" id="bom_date">' + bomdate + '</td></tr>';
                 $('#selected_units tr:last').after(newrow);
             },
             failure: function (errMsg) {
@@ -259,6 +263,12 @@
             return;
         }
         else {
+            var bomdate = document.getElementById("BOM_Date").value;
+            var sppartno = document.getElementById("SP_Part_No").value;
+            var bomno = document.getElementById("BOM_No").value;
+            document.getElementById("bom_date").innerHTML = bomdate;
+            document.getElementById("sp_partno").innerHTML = sppartno;
+            document.getElementById("bom_no").innerHTML = bomno;
             document.getElementById("Enter_Inv_No").innerHTML = Null;
             var myRows = [];
             var headersText = [];
@@ -330,6 +340,59 @@
         }
     });
 
+    function Import_BOM() {
+        var bomno = document.querySelector("#BOM_DD").value;
+        var model = new Object();
+        model.BOM_No = bomno;
+        $.ajax({
+            url: '/BOM/Add_BOM',
+            data: JSON.stringify({ name: model }),
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (result) {
+                document.getElementById("value").innerHTML = "";
+                document.getElementById("value1").innerHTML = "";
+                var key = 1;
+                for (var i = 0; i <= result.length - 1; i++) {
+                    var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+                    var l_row1 = last_row1 - 1;
+                    var count = 1;
+                    for (var j = 0; j < l_row1; j++) {
+                        var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
+                        if (e_part_no == "") {
+                            return;
+                        }
+                        else {
+                            var e_partno = result[i].Part_No;
+                            if (e_part_no == e_partno) {
+                                var quantity = parseInt(document.getElementById("selected_units").tBodies[0].rows[count].cells[2].innerHTML);
+                                var db_qty = parseInt(result[i].Quantity);
+                                var tb_qty = quantity + db_qty;
+                                document.getElementById("selected_units").tBodies[0].rows[count].cells[2].innerHTML = tb_qty;
+                                key = 2;
+                            }
+                        }
+                        count++;
+                    }
+                    if (key == 1) {
+                        var l_row = last_row - 1;
+                        var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td class="row-data">' + result[i].Part_No + '</td><td class="row-data">' + result[i].Description + '</td><td class="row-data">' + result[i].Quantity + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td style="display:none;" id="sp_partno"></td><td style="display:none;" id="bom_no"></td><td style="display:none;" id="bom_date"></td></tr>';
+                        $('#selected_units tr:last').after(newrow);
+                    }
+                }
+                var modal2 = document.getElementById("myModal2");
+                modal2.style.display = "block";
+                var submit = '<p style="color:red;font-weight:bold;">Data from BOM No : ' + bomno + ' added successfully !!!<p/>';
+                document.getElementById("submit_view").innerHTML = submit;
+                setTimeout(function () {
+                    modal2.style.display = "none";
+                }, 2000);
+
+            }
+        });
+    }
+
     function SP_part_no() {
         {
             var model = new Object();
@@ -360,11 +423,13 @@
             });
         }
     }
+
     function freeze() {
         $('#BOM_No').prop('disabled', true);
         $('#BOM_Date').prop('disabled', true);
         $('#SP_Part_No').prop('disabled', true);
     }
+
     var modal = document.getElementById("myModal");
     var modal1 = document.getElementById("myModal1");
     var btn = document.getElementById("myBtn");
@@ -517,6 +582,7 @@
             }
         });
     }
+
     function del_row(node) {
         a = node.parentNode.parentNode;
         r = node.parentNode.parentNode.cells[0].innerHTML;
@@ -577,12 +643,12 @@
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({ name: model }),
             success: function (data1) {
-                if (qty > data1[0].Quantity) {
+                @*if (qty > data1[0].Quantity) {
                     var qty_err = '<p style="color:red;">Out of Stock !!! Available Quantity is <b>' + data1[0].Quantity + '</b><p/>';
                     document.getElementById("value1").innerHTML = qty_err;
                     return;
-                }
-                else if (d2 == 0 ) {
+                }*@
+                if (d2 == 0 ) {
                     var qty_err = '<p style="color:red;">Quantity should not be less than 0 !!!<p/>';
                     document.getElementById("value1").innerHTML = qty_err;
                     return;

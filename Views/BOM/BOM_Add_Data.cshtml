@@ -63,7 +63,11 @@
             <div>
                 <div class="card">
                     <div class="card-header">
-                        <p class="text-sm">BOM No : @Html.EditorFor(model => model.BOM_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1.8%;margin-right:3%", @readonly = "readonly" } }) BOM Date : @Html.TextBoxFor(x => x.BOM_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })</p>
+                        <p class="text-sm">
+                            BOM No : @Html.EditorFor(model => model.BOM_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1.8%;margin-right:3%", @readonly = "readonly" } }) BOM Date : @Html.TextBoxFor(x => x.BOM_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" }) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            @Html.DropDownListFor(m => m.BOM_DD, ViewBag.BOM as SelectList) &nbsp; &nbsp;  <button class="btn btn-sm btn-secondary" id="Import" onclick="Import_BOM()">Import</button>
+                        </p>
                         <p class="text-sm">Sub-Assembly Part No : @Html.EditorFor(model => model.SP_Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:3%", @class = " uppercase" } }) <button class="btn btn-sm btn-secondary" id="insert" onclick="SP_part_no();">Insert</button></p> <p id="value" class="text-sm" style="width:50%"></p>
                     </div>
                     <div class="card-body table-responsive">
@@ -135,7 +139,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 400px;width:70%;">
+                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 550px;width:70%;">
                                 <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
                                     <tbody>
                                         <tr>
@@ -153,7 +157,6 @@
                 </div>
                 <p id="voucher" style="background-color:yellow;width:20%"></p>
                 <p id="Enter_Inv_No"></p>
-                @*<p><a href="@Url.Action("BOM_List", "BOM")"> <button class="btn btn-sm btn-secondary" style="width:8%;" id="Edit">Edit</button> </a> </p>*@
             </div>
         </div>
     </div>
@@ -174,7 +177,7 @@
             var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
             var e_partno = document.getElementById("Part_No").value;
             if (e_part_no == e_partno) {
-                var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
+                var qty_err = '<p style="color:red;font-weight:bold;">Part No is already exists !!!<p/>';
                 document.getElementById("value1").innerHTML = qty_err;
                 return;
             }
@@ -196,22 +199,24 @@
                     return;
                 }*@
                 if (partno == "" && d2 == "") {
-                    var qty_err = '<p style="color:red;">Enter Part No and Quantity !!!<p/>';
+                    var qty_err = '<p style="color:red;font-weight:bold;">Enter Part No and Quantity !!!<p/>';
                     document.getElementById("value1").innerHTML = qty_err;
                     return;
                 }
                 else if (d2 == "") {
-                    var qty_err = '<p style="color:red;">Enter Quantity !!!<p/>';
+                    var qty_err = '<p style="color:red;font-weight:bold;">Enter Quantity !!!<p/>';
                     document.getElementById("value1").innerHTML = qty_err;
                     return;
                 }
                 else if (partno == "") {
-                    var qty_err = '<p style="color:red;">Enter Part No !!!<p/>';
+                    var qty_err = '<p style="color:red;font-weight:bold;">Enter Part No !!!<p/>';
                     document.getElementById("value1").innerHTML = qty_err;
                     return;
                 }
-                var newrow = '<tr id="data" style="font-size:13px;"><td>' + partno + '</td><td>' + data[0].Description + '</td><td>' + qty + '</td><td style="display:none;">' + sp_partno + '</td><td style="display:none;">' + bomdate + '</td></tr>';
+                var newrow = '<tr id="data" style="font-size:13px;"><td>' + partno + '</td><td>' + data[0].Description + '</td><td>' + qty + '</td><td style="display:none;" id="sp_partno">' + sp_partno + '</td><td style="display:none;" id="bom_date">' + bomdate + '</td></tr>';
                 $('#selected_units tr:last').after(newrow);
+                document.getElementById("value").innerHTML = "";
+                document.getElementById("value1").innerHTML = "";
         },
         failure: function (errMsg) {
             alert(errMsg);
@@ -229,45 +234,106 @@
     }
 
     $('#Submit').click(function (e) {
-        var myRows = [];
-        var headersText = [];
-        var $headers = $("#selected_units th");
-        var $rows = $("#selected_units tbody #data").each(function (index) {
-            $cells = $(this).find("td");
-            myRows[index] = {};
+        var sp_part_no = document.getElementById("SP_Part_No").value;
+        if (sp_part_no == "") {
+            document.getElementById("value").innerHTML = '<p style="color:red;font-weight:bold;">Enter Sub-Assembly Part No !!!<p/>';
+        }
+        else {
+            var bomdate = document.getElementById("BOM_Date").value;
+            var sppartno = document.getElementById("SP_Part_No").value;
+            document.getElementById("bom_date").innerHTML = bomdate;
+            document.getElementById("sp_partno").innerHTML = sppartno;
+            var myRows = [];
+            var headersText = [];
+            var $headers = $("#selected_units th");
+            var $rows = $("#selected_units tbody #data").each(function (index) {
+                $cells = $(this).find("td");
+                myRows[index] = {};
 
-            $cells.each(function (cellIndex) {
-                if (headersText[cellIndex] === undefined) {
-                    headersText[cellIndex] = $($headers[cellIndex]).text();
-                }
-                myRows[index][headersText[cellIndex]] = $(this).text();
+                $cells.each(function (cellIndex) {
+                    if (headersText[cellIndex] === undefined) {
+                        headersText[cellIndex] = $($headers[cellIndex]).text();
+                    }
+                    myRows[index][headersText[cellIndex]] = $(this).text();
+                });
             });
-        });
 
-        var myObj = {
-            "myrows": myRows
-        };
+            var myObj = {
+                "myrows": myRows
+            };
+            $.ajax({
+                url: '/BOM/Order',
+                data: JSON.stringify(myRows),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+                    var modal2 = document.getElementById("myModal2");
+                    modal2.style.display = "block";
+                    var data = result;
+                    var vno = '<p style="background-color:yellow;width:20%;font-weight:bold;">Your BOM.No is ' + data + '<p/>';
+                    document.getElementById("voucher_view").innerHTML = "Your BOM.No is " + data + "";
+                    var submit = '<p style="color:red;font-weight:bold;">Submitted Successfully !!!<p/>';
+                    document.getElementById("submit_view").innerHTML = submit;
+                    setTimeout(function () {
+                        window.location.reload(1);
+                    }, 2000);
+                }
+            });
+        }
+    });
+
+    function Import_BOM() {
+        var bomno = document.querySelector("#BOM_DD").value;
+        var model = new Object();
+        model.BOM_No = bomno;
         $.ajax({
-            url: '/BOM/Order',
-            data: JSON.stringify(myRows),
+            url: '/BOM/Add_BOM',
+            data: JSON.stringify({ name: model }),
             type: 'POST',
             contentType: 'application/json;',
             dataType: 'json',
             success: function (result) {
+                document.getElementById("value").innerHTML = "";
+                document.getElementById("value1").innerHTML = "";
+                var key = 1;
+                for (var i = 0; i <= result.length - 1; i++) {
+                    var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+                    var l_row1 = last_row1 - 1;
+                    var count = 1;
+                    for (var j = 0; j < l_row1; j++) {
+                        var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
+                        if (e_part_no == "") {
+                            return;
+                        }
+                        else {
+                            var e_partno = result[i].Part_No;
+                            if (e_part_no == e_partno) {
+                                var quantity = parseInt(document.getElementById("selected_units").tBodies[0].rows[count].cells[2].innerHTML);
+                                var db_qty = parseInt(result[i].Quantity);
+                                var tb_qty = quantity + db_qty;
+                                document.getElementById("selected_units").tBodies[0].rows[count].cells[2].innerHTML = tb_qty;
+                                key = 2;
+                            }
+                        }
+                        count++;
+                    }
+                    if (key == 1) {
+                        var newrow = '<tr id="data"><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td><td>' + result[i].Quantity + '</td><td id="sp_partno" style="display:none"></td><td id="bom_date" style="display:none"></td></tr>';
+                        $('#selected_units tr:last').after(newrow);
+                    }
+                }
                 var modal2 = document.getElementById("myModal2");
                 modal2.style.display = "block";
-                var data = result;
-                var vno = '<p style="background-color:yellow;width:20%">Your BOM.No is ' + data + '<p/>';
-                document.getElementById("voucher_view").innerHTML = "Your BOM.No is " + data + "";
-                var submit = '<p style="color:red;">Submitted Successfully !!!<p/>';
+                var submit = '<p style="color:red;font-weight:bold;">Data from BOM No : ' + bomno+' added successfully !!!<p/>';
                 document.getElementById("submit_view").innerHTML = submit;
                 setTimeout(function () {
-                    window.location.reload(1);
-                }, 3000);
+                    modal2.style.display = "none";
+                }, 2000);
+
             }
         });
-        @*document.getElementById("json_op").innerHTML = JSON.stringify(myRows, undefined, 2);*@
-    });
+    }
 
     document.addEventListener('keydown', function (event) {
         if (event.keyCode === 9) {
@@ -445,12 +511,12 @@
         var SellPrice = document.getElementById("Add_SellPrice").value;
 
         if (Name == "") {
-            var qty_err = '<p style="color:red;">Field Product Name is required !!!<p/>';
+            var qty_err = '<p style="color:red;font-weight:bold;">Field Product Name is required !!!<p/>';
             document.getElementById("message").innerHTML = qty_err;
             return;
         }
         else if (PartNo == "") {
-            var qty_err = '<p style="color:red;">Field Part No is required !!!<p/>';
+            var qty_err = '<p style="color:red;font-weight:bold;">Field Part No is required !!!<p/>';
             document.getElementById("message").innerHTML = qty_err;
             return;
         }
@@ -473,12 +539,12 @@
             dataType: 'json',
             success: function (result) {
                 if (result != "") {
-                    var qty_err = '<p style="color:red;">Part No already exists !!!<p/>';
+                    var qty_err = '<p style="color:red;font-weight:bold;">Part No already exists !!!<p/>';
                     document.getElementById("message").innerHTML = qty_err;
                     return;
                 }
                 else {
-                    var qty_err = '<p style="color:red;">Submitted Successfully !!!<p/>';
+                    var qty_err = '<p style="color:red;font-weight:bold;">Submitted Successfully !!!<p/>';
                     document.getElementById("message").innerHTML = qty_err;
                     return;
                 }
