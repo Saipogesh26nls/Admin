@@ -376,7 +376,7 @@
                         count++;
                     }
                     if (key == 1) {
-                        var l_row = last_row - 1;
+                        var l_row = last_row1 - 1;
                         var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td class="row-data">' + result[i].Part_No + '</td><td class="row-data">' + result[i].Description + '</td><td class="row-data">' + result[i].Quantity + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td style="display:none;" id="sp_partno"></td><td style="display:none;" id="bom_no"></td><td style="display:none;" id="bom_date"></td></tr>';
                         $('#selected_units tr:last').after(newrow);
                     }

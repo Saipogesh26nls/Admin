@@ -157,9 +157,9 @@ namespace Admin.Models
         public int BOM_No { get; set; }
         public string BOM_Date { get; set; }
         public string SP_code { get; set; }
-        [DisplayName("Sub-Assembly PartNo")]
+        [DisplayName("Product No")]
         public string Part_No { get; set; }
-        [DisplayName("Sub-Assembly Product Name")]
+        [DisplayName("Product Name")]
         public string Product_Name { get; set; }
     }
     public class BOMEdit
