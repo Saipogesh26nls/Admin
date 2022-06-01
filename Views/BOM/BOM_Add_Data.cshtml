@@ -144,7 +144,7 @@
                             </div>
                             <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 550px;">
                                 <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
-                                    <tbody>
+                                    <thead>
                                         <tr>
                                             <th style="padding-right:100px">Part_No</th>
                                             <th style="padding-right:100px">Description</th>
@@ -152,6 +152,9 @@
                                             <th style="display:none;">SP_Part_No</th>
                                             <th style="display:none;">BOM_Date</th>
                                         </tr>
+                                    </thead>
+                                    <tbody>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -166,6 +169,7 @@
 </body>
 </html>
 <script>
+    var last_row = document.getElementById("selected_units").tBodies[0].rows.length;
     $('#add').click(function () {
         var partno = $('#Part_No').val();
         var d2 = document.getElementById("Quantity").value;
@@ -174,8 +178,8 @@
         var qty = parseInt(d2);
         var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
         var l_row1 = last_row1 - 1;
-        var count = 1;
-        for (var i = 0; i < l_row1; i++) {
+        var count = 0;
+        for (var i = 0; i <= l_row1; i++) {
             var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
             var e_partno = document.getElementById("Part_No").value;
             if (e_part_no == e_partno) {
@@ -183,11 +187,13 @@
                 document.getElementById("value1").innerHTML = qty_err;
                 var textboxValue = $('#Part_No').val();
                 $('#selected_units td').each(function () {
-
                     if ($(this).text() === textboxValue) {
                         $(this).addClass('highlight');
-                        $(this).parent().prependTo("#selected_units tbody tr #data");
-
+                        $(this).parent().prependTo("#selected_units tbody");
+                        var len_row = document.getElementById("selected_units").tBodies[0].rows.length;
+                        for (var i = 0; i <= len_row - 1; i++) {
+                            document.getElementById("selected_units").tBodies[0].rows[i].id = i;
+                        }
                     } else {
                         $(this).removeClass('highlight');
                     }
@@ -231,8 +237,9 @@
                     document.getElementById("value1").innerHTML = qty_err;
                     return;
                 }
-                var newrow = '<tr id="data" style="font-size:13px;"><td>' + partno + '</td><td>' + data[0].Description + '</td><td>' + qty + '</td><td style="display:none;" id="sp_partno">' + sp_partno + '</td><td style="display:none;" id="bom_date">' + bomdate + '</td></tr>';
-                $('#selected_units tr:last').after(newrow);
+                var l_row = last_row1;
+                var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td>' + partno + '</td><td>' + data[0].Description + '</td><td>' + qty + '</td><td style="display:none;" id="sp_partno">' + sp_partno + '</td><td style="display:none;" id="bom_date">' + bomdate + '</td></tr>';
+                $('#selected_units tbody').append(newrow);
                 document.getElementById("value").innerHTML = "";
                 document.getElementById("value1").innerHTML = "";
         },
@@ -264,7 +271,7 @@
             var myRows = [];
             var headersText = [];
             var $headers = $("#selected_units th");
-            var $rows = $("#selected_units tbody #data").each(function (index) {
+            var $rows = $("#selected_units tbody tr").each(function (index) {
                 $cells = $(this).find("td");
                 myRows[index] = {};
 
@@ -318,8 +325,8 @@
                 for (var i = 0; i <= result.length - 1; i++) {
                     var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
                     var l_row1 = last_row1 - 1;
-                    var count = 1;
-                    for (var j = 0; j < l_row1; j++) {
+                    var count = 0;
+                    for (var j = 0; j <= l_row1; j++) {
                         var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
                         if (e_part_no == "") {
                             return;
@@ -337,10 +344,14 @@
                         count++;
                     }
                     if (key == 1) {
-                        var newrow = '<tr id="data"><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td><td>' + result[i].Quantity + '</td><td id="sp_partno" style="display:none"></td><td id="bom_date" style="display:none"></td></tr>';
-                        $('#selected_units tr:last').after(newrow);
+                        var l_row = last_row1;
+                        var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td>' + result[i].Part_No + '</td><td>' + result[i].Description + '</td><td>' + result[i].Quantity + '</td><td id="sp_partno" style="display:none"></td><td id="bom_date" style="display:none"></td></tr>';
+                        $('#selected_units tbody').append(newrow);
                     }
                 }
+                $('#selected_units td').each(function () {
+                    $(this).removeClass('highlight');
+                });
                 var modal2 = document.getElementById("myModal2");
                 modal2.style.display = "block";
                 var submit = '<p style="color:red;font-weight:bold;">Data from BOM No : ' + bomno+' added successfully !!!<p/>';

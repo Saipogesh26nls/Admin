@@ -73,7 +73,7 @@
                     <div class="card-body table-responsive">
                         <div class="table-responsive">
                             <p class="text-sm" id="ToHide">
-                                Part_No:@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:1%" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:3%"></i> Quantity : @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:15%;margin-right:3%;" } }) <button class="btn btn-sm btn-secondary" id="add">Add</button><button class="btn btn-sm btn-secondary float-right" id="Submit" style="width: 7%; margin-left: 2%;">Submit</button>
+                                Part_No:@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:1%" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:3%"></i> Quantity : @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:15%;margin-right:3%;" } }) <button class="btn btn-sm btn-secondary" id="add">Add</button><button class="btn btn-sm btn-secondary" style="display:none;" id="add_edit">Add</button><button class="btn btn-sm btn-secondary float-right" id="Submit" style="width: 7%; margin-left: 2%;">Submit</button>
                             </p>
                             <p id="value1" class="text-sm" style="width:50%"></p>
                             @*<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 10px; margin-bottom: 10px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>*@
@@ -105,8 +105,8 @@
                                         {
                                             <tr id="@i" style="font-size:13px;">
                                                 <td class="row-data">@dr["P_Part_No"].ToString()</td>
-                                                <td class="row-data" style="width:550px;">@dr["P_Description"].ToString()</td>
-                                                <td class="row-data text-sm-left" style="width:50px;">@dr["Quantity"].ToString()</td>
+                                                <td class="row-data">@dr["P_Description"].ToString()</td>
+                                                <td class="row-data text-sm-left">@dr["Quantity"].ToString()</td>
                                                 <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i> </td>
                                                 <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.SP_Part_No)</td>
                                                 <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.BOM_No)</td>

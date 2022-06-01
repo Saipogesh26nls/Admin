@@ -76,7 +76,7 @@
                     <div class="card-body table-responsive">
                         <div class="table-responsive">
                             <p class="text-sm" id="ToHide">
-                                Part_No:@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:1%" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:3%"></i> Quantity : @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:15%;margin-right:3%;" } }) <button class="btn btn-sm btn-secondary" id="add">Add</button><button class="btn btn-sm btn-secondary float-right" id="Submit" style="width: 7%; margin-left: 2%;">Submit</button>
+                                Part_No:@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:1%" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:3%"></i> Quantity : @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:15%;margin-right:3%;" } }) <button class="btn btn-sm btn-secondary" id="add">Add</button><button class="btn btn-sm btn-secondary" style="display:none;" id="add_edit" onclick="ToAdd()">Add</button><button class="btn btn-sm btn-secondary float-right" id="Submit" style="width: 7%; margin-left: 2%;">Submit</button>
                             </p>
                             <p id="value1" class="text-sm" style="width:50%"></p>
                             @*<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 10px; margin-bottom: 10px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>*@
@@ -160,9 +160,9 @@
                                         {
                                             <tr id="@i" style="font-size:13px;">
                                                 <td class="row-data">@dr["P_Part_No"].ToString()</td>
-                                                <td class="row-data" style="width:550px;">@dr["P_Description"].ToString()</td>
-                                                <td class="row-data text-sm-left" style="width:50px;">@dr["Quantity"].ToString()</td>
-                                                <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i> </td>
+                                                <td class="row-data">@dr["P_Description"].ToString()</td>
+                                                <td class="row-data text-sm-left">@dr["Quantity"].ToString()</td>
+                                                <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i>@* | <i class="fa fa-trash" onclick="del_row(this);"></i> *@</td>
                                                 <td class="row-data" style="display:none;" id="sp_partno">@Html.DisplayFor(model => model.SP_Part_No)</td>
                                                 <td class="row-data" style="display:none;" id="bom_no">@Html.DisplayFor(model => model.BOM_No)</td>
                                                 <td class="row-data" style="display:none;" id="bom_date">@Html.DisplayFor(model => model.BOM_Date)</td>
@@ -196,8 +196,8 @@
 
         var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
         var l_row1 = last_row1 - 1;
-        var count = 1;
-        for (var i = 0; i < l_row1; i++) {
+        var count = 0;
+        for (var i = 0; i <= l_row1; i++) {
             var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
             var e_partno = document.getElementById("Part_No").value;
             if (e_part_no == e_partno) {
@@ -205,10 +205,13 @@
                 document.getElementById("value1").innerHTML = qty_err;
                 var textboxValue = $('#Part_No').val();
                 $('#selected_units td').each(function () {
-
                     if ($(this).text() === textboxValue) {
                         $(this).addClass('highlight');
-                        $(this).parent().prependTo("#selected_units");
+                        $(this).parent().prependTo("#selected_units tbody");
+                        var len_row = document.getElementById("selected_units").tBodies[0].rows.length;
+                        for (var i = 0; i <= len_row - 1; i++) {
+                            document.getElementById("selected_units").tBodies[0].rows[i].id = i;
+                        }
                     } else {
                         $(this).removeClass('highlight');
                     }
@@ -254,7 +257,7 @@
                     return;
                 }
                 var l_row = last_row - 1;
-                var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td class="row-data">' + partno + '</td><td class="row-data">' + data[0].Description + '</td><td class="row-data">' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td style="display:none;" id="sp_partno">' + sp_partno + '</td><td style="display:none;" id="bom_no">' + bomno + '</td><td style="display:none;" id="bom_date">' + bomdate + '</td></tr>';
+                var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td class="row-data">' + partno + '</td><td class="row-data">' + data[0].Description + '</td><td class="row-data">' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > <i class="fa fa-trash" onclick="del_row1(this);" style="display:none;"></i></td ><td style="display:none;" id="sp_partno">' + sp_partno + '</td><td style="display:none;" id="bom_no">' + bomno + '</td><td style="display:none;" id="bom_date">' + bomdate + '</td></tr>';
                 $('#selected_units tr:last').after(newrow);
             },
             failure: function (errMsg) {
@@ -374,8 +377,8 @@
                 for (var i = 0; i <= result.length - 1; i++) {
                     var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
                     var l_row1 = last_row1 - 1;
-                    var count = 1;
-                    for (var j = 0; j < l_row1; j++) {
+                    var count = 0;
+                    for (var j = 0; j <= l_row1; j++) {
                         var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
                         if (e_part_no == "") {
                             return;
@@ -394,7 +397,7 @@
                     }
                     if (key == 1) {
                         var l_row = last_row1 - 1;
-                        var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td class="row-data">' + result[i].Part_No + '</td><td class="row-data">' + result[i].Description + '</td><td class="row-data">' + result[i].Quantity + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td style="display:none;" id="sp_partno"></td><td style="display:none;" id="bom_no"></td><td style="display:none;" id="bom_date"></td></tr>';
+                        var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td class="row-data">' + result[i].Part_No + '</td><td class="row-data">' + result[i].Description + '</td><td class="row-data">' + result[i].Quantity + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > <i class="fa fa-trash" onclick="del_row1(this);" style="display:none;"></i></td ><td style="display:none;" id="sp_partno"></td><td style="display:none;" id="bom_no"></td><td style="display:none;" id="bom_date"></td></tr>';
                         $('#selected_units tr:last').after(newrow);
                     }
                 }
