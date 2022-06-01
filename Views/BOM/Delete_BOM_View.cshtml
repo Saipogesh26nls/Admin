@@ -72,12 +72,11 @@
                     </div>
                     <div class="card-body table-responsive">
                         <div class="table-responsive">
-                            <p class="text-sm">
-                                Part_No:@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:1%" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:3%"></i> Quantity : @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:15%;margin-right:3%;" } }) <button class="btn btn-sm btn-secondary" id="add">Add</button><button class="btn btn-sm btn-secondary" onclick="ToAdd()" id="add_edit" style="display:none;">Add</button>
+                            <p class="text-sm" id="ToHide">
+                                Part_No:@Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;margin-right:1%" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:3%"></i> Quantity : @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:15%;margin-right:3%;" } }) <button class="btn btn-sm btn-secondary" id="add">Add</button><button class="btn btn-sm btn-secondary float-right" id="Submit" style="width: 7%; margin-left: 2%;">Submit</button>
                             </p>
                             <p id="value1" class="text-sm" style="width:50%"></p>
-                            <button class="btn btn-sm btn-secondary float-right" id="Submit" style="width: 7%; margin-left: 2%; margin-top: 10px; margin-bottom: 10px;">Submit</button>
-                            <a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 10px; margin-bottom: 10px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>
+                            @*<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 10px; margin-bottom: 10px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>*@
                             <div id="myModal" class="modal">
 
                                 <!-- Modal content -->
@@ -87,7 +86,7 @@
                                     <p id="delete" style="text-align:center;"></p>
                                 </div>
                             </div>
-                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 550px;width:70%;">
+                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 550px;">
                                 <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
                                     <thead>
                                         <tr>

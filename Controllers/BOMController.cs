@@ -17,8 +17,8 @@ namespace Admin.Controllers
         // Add New BOM
         public ActionResult BOM_Add_Data(BOMFields data) // BOM Add Data View
         {
-            if (Session["userID"] != null)
-            {
+            /*if (Session["userID"] != null)
+            {*/
                 data.BOM_Date = DateTime.Today;
                 SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
                 _con.Open();
@@ -37,11 +37,11 @@ namespace Admin.Controllers
                 _con.Close();
                 ViewBag.BOM = ToBOMList(_dt3, "BOM_No", "BOM_No");
                 return View(data);
-            }
+            /*}
             else
             {
                 return RedirectToAction("Err", "Login");
-            }
+            }*/
         }
         [NonAction]
         public SelectList ToBOMList(DataTable table, string valueField, string textField) // For making Dropdown list
@@ -116,7 +116,7 @@ namespace Admin.Controllers
             BOM_Insert bOM_Insert = new BOM_Insert();
             var data = bOM_Insert.Add_BOM_Fields(name.BOM_No);
             return Json(data);
-        }
+        } // add BOM to DB
 
         // BOM List
         [HttpGet]
@@ -189,8 +189,8 @@ namespace Admin.Controllers
         [HttpGet]
         public ActionResult BOM_Edit_Delete(int BOM_No, DateTime bomdate, string spcode) // BOM Edit Delete View
         {
-            if (Session["userID"] != null)
-            {
+            /*if (Session["userID"] != null)
+            {*/
                 SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
                 _con.Open();
                 SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
@@ -226,11 +226,11 @@ namespace Admin.Controllers
                 bOMFields.BOM_Date = bomdate;
                 ViewBag.Goods = ds.Tables[0];
                 return View(bOMFields);
-            }
+            /*}
             else
             {
                 return RedirectToAction("Err", "Login");
-            }
+            }*/
         }
         public ActionResult Add_Product(GoodsRI name) // add new products to db
         {
@@ -276,9 +276,9 @@ namespace Admin.Controllers
         // Delete BOM
         public ActionResult Delete_BOM_View(int BOM_No, DateTime bomdate, string spcode)
         {
-            var roll = Convert.ToInt32(Session["roll"]);
+            /*var roll = Convert.ToInt32(Session["roll"]);
             if (Session["userID"] != null && roll == 1)
-            {
+            {*/
                 SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
                 _con.Open();
                 SqlDataAdapter _da4 = new SqlDataAdapter("Select * From Product_Master where P_Level>1", _con);
@@ -314,11 +314,11 @@ namespace Admin.Controllers
                 bOMFields.BOM_Date = bomdate;
                 ViewBag.Goods = ds.Tables[0];
                 return View(bOMFields);
-           }
+           /*}
             else
             {
                 return RedirectToAction("Err", "Login");
-            }
+            }*/
         } // Delete BOM View
         public ActionResult Remove_BOM(List<BOMEdit> data)
         {
@@ -329,6 +329,6 @@ namespace Admin.Controllers
             SqlCmd1.ExecuteNonQuery();
             Con.Close();
             return Json(data);
-        }
+        } // delete BOM from DB
     }
 }
