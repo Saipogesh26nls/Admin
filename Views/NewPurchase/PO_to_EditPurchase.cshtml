@@ -53,6 +53,9 @@
         #add_submit{
             width:30%;
         }
+        .highlight {
+            background-color: yellow;
+        }
     </style>
 </head>
 <body onload="total_cal()">
@@ -294,14 +297,32 @@
 
         var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
         var l_row1 = last_row1 - 1;
-        var count = 1;
-        for (var i = 0; i < l_row1; i++) {
+        var count = 0;
+        for (var i = 0; i <= l_row1; i++) {
             var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
             var e_partno = document.getElementById("Part_No").value;
             if (e_part_no == e_partno) {
-                var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
+                var qty_err = '<p style="color:red;font-weight:bold;">Part No is already exists !!!<p/>';
                 document.getElementById("value").innerHTML = qty_err;
+                var textboxValue = $('#Part_No').val();
+                $('#selected_units td').each(function () {
+                    if ($(this).text() === textboxValue) {
+                        $(this).addClass('highlight');
+                        $(this).parent().prependTo("#selected_units tbody");
+                        var len_row = document.getElementById("selected_units").tBodies[0].rows.length;
+                        for (var i = 0; i <= len_row - 1; i++) {
+                            document.getElementById("selected_units").tBodies[0].rows[i].id = i;
+                        }
+                    } else {
+                        $(this).removeClass('highlight');
+                    }
+                });
                 return;
+            }
+            else {
+                $('#selected_units td').each(function () {
+                    $(this).removeClass('highlight');
+                });
             }
             count++;
         }

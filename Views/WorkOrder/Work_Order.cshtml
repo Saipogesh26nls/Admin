@@ -1,0 +1,46 @@
+﻿@model Admin.Models.Workorder
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body onload="mfr_val()">
+    <h5 style="text-align: center; font-weight: bold;"><u>WORK ORDER</u></h5>
+    <div style="margin-top: 15px; text-align: center;">
+        <p class="text-sm">
+            &nbsp; &nbsp; Work Order No &nbsp; : &nbsp; @Html.EditorFor(m => m.WO_No, new { htmlAttributes = new { style = "width:13%;" } })
+            &nbsp; &nbsp; &nbsp; &nbsp; Work Order Date &nbsp; : &nbsp; @Html.TextBoxFor(x => x.WO_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:8%;margin-left:1%;" })
+            &nbsp; &nbsp; &nbsp; &nbsp; Process &nbsp; : &nbsp; @Html.DropDownListFor(m => m.Process, ViewBag.Process as SelectList)
+            &nbsp; &nbsp; &nbsp; &nbsp; Manufacturer &nbsp; : &nbsp; @Html.DropDownListFor(m => m.Mfr_option, ViewBag.MfrOpt as SelectList, new { @onchange = "DD_Change(this.value);", @value = "00134" })
+            &nbsp; &nbsp; @Html.DropDownListFor(m => m.Mfr, ViewBag.MfdList as SelectList)
+            &nbsp; &nbsp; &nbsp; &nbsp; Note &nbsp; : &nbsp; @Html.TextAreaFor(m => m.Note, new { @style = "color:black; width:200px; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })
+        </p>
+    </div>
+    <div style="margin-top: 50px;">
+        <p class="text-sm">
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            Part No : @Html.EditorFor(model => model.PartNo, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:8%"></i>
+            Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 5%;" placeholder="Quantity">
+            <button class="btn btn-sm btn-secondary" id="Insert">Insert</button>
+            <button class="btn btn-sm btn-secondary float-right" id="Submit" style="width:100px;margin-right:4.5%;">Submit</button>
+        </p>
+        <p id="value" style="margin-left:2%;"></p>
+    </div>
+</body>
+</html>
+<script>
+    function DD_Change(value) {
+        if (value == "1") {
+            $('#Mfr').prop('disabled', true);
+            document.getElementById("Mfr").value = "00134";
+        }
+        else {
+            $('#Mfr').prop('disabled', false);
+        }
+    }
+    function mfr_val() {
+        document.getElementById("WO_No").value = "";
+        document.getElementById("Mfr").value = "00134";
+        $('#Mfr').prop('disabled', true);
+    }
+</script>

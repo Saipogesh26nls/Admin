@@ -246,6 +246,7 @@
     <Compile Include="Controllers\PriceController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\WorkOrderController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -2409,6 +2410,7 @@
     <Content Include="Views\BOM\Delete_BOM_View.cshtml" />
     <Content Include="Views\Price\MaterialIndex.cshtml" />
     <Content Include="Views\Product\Initial_Screen.cshtml" />
+    <Content Include="Views\WorkOrder\Work_Order.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

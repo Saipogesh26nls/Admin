@@ -783,4 +783,15 @@ namespace Admin.Models
         [DisplayName("LeadTime (in days)")]
         public string TimeSpan_TB { get; set; }
     }
+    public class Workorder
+    {
+        public int WO_No { get; set; }
+        public DateTime WO_Date { get; set; }
+        public string Process { get; set; }
+        public string Mfr_option { get; set; }
+        public string Mfr { get; set; }
+        public string Note { get; set; }
+        public string PartNo { get; set; }
+        public string Quantity { get; set; }
+    }
 }

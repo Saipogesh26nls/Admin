@@ -53,6 +53,9 @@
         #add_submit {
             width: 30%;
         }
+        .highlight {
+            background-color: yellow;
+        }
     </style>
 </head>
 <body onload="vno()">
@@ -77,10 +80,10 @@
                     </div>
                     <div class="card-body table-responsive">
                         <div class="table-responsive">
-                            <p class="text-sm" id="ToHide">Part No : @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:8%"></i>Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 5%;" placeholder="Quantity"><button class="btn btn-sm btn-secondary" id="Insert">Insert</button>@*<i class="fa fa-search" id="myBtn" style="margin-right:5%"></i>*@</p><p id="value" class="text-sm" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
+                            <p class="text-sm" id="ToHide">Part No : @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:8%"></i>Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 5%;" placeholder="Quantity"><button class="btn btn-sm btn-secondary" id="Insert">Insert</button>@*<i class="fa fa-search" id="myBtn" style="margin-right:5%"></i>*@<button class="btn btn-sm btn-secondary float-right" id="Submit" style="width:8%;margin-left:2%;">Submit</button></p><p id="value" class="text-sm" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
 
-                            <p id="ToHide"><button class="btn btn-sm btn-secondary float-right" id="Submit" style="width:8%;margin-left:2%;margin-top:30px;">Submit</button></p>
-                            <a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 30px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>
+                            @*<p id="ToHide"></p>
+                            <a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 30px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>*@
                             <div id="myModal" class="modal">
                                 <div class="modal-content">
                                     <i class="close" id="close">&times;</i>
@@ -137,9 +140,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 400px;width:70%;">
+                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 450px;">
                                 <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
-                                    <tbody>
+                                    <thead>
                                         <tr>
                                             <th style="padding-right:100px">Part_No</th>
                                             <th style="padding-right:100px">Description</th>
@@ -155,6 +158,9 @@
                                             <th style="display: none;">Employee</th>
                                             <th style="display: none;">Note</th>
                                         </tr>
+                                    </thead>
+                                    <tbody>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -185,6 +191,38 @@
         var note = $('#Note').val();
         var qty = parseInt(d2);
 
+        var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+        var l_row1 = last_row1 - 1;
+        var count = 0;
+        for (var i = 0; i <= l_row1; i++) {
+            var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
+            var e_partno = document.getElementById("Part_No").value;
+            if (e_part_no == e_partno) {
+                var qty_err = '<p style="color:red;font-weight:bold;">Part No is already exists !!!<p/>';
+                document.getElementById("value").innerHTML = qty_err;
+                var textboxValue = $('#Part_No').val();
+                $('#selected_units td').each(function () {
+                    if ($(this).text() === textboxValue) {
+                        $(this).addClass('highlight');
+                        $(this).parent().prependTo("#selected_units tbody");
+                        var len_row = document.getElementById("selected_units").tBodies[0].rows.length;
+                        for (var i = 0; i <= len_row - 1; i++) {
+                            document.getElementById("selected_units").tBodies[0].rows[i].id = i;
+                        }
+                    } else {
+                        $(this).removeClass('highlight');
+                    }
+                });
+                return;
+            }
+            else {
+                $('#selected_units td').each(function () {
+                    $(this).removeClass('highlight');
+                });
+            }
+            count++;
+        }
+
         var model = new Object();
             model.Part_No = document.getElementById("Part_No").value;
 
@@ -200,11 +238,11 @@
                         document.getElementById("value").innerHTML = qty_err;
                         return;
                     }
-                    else if (ref_no == "") {
+                    @*else if (ref_no == "") {
                         var qty_err = '<p style="color:red;">Enter Reference No !!!<p/>';
                         document.getElementById("value").innerHTML = qty_err;
                         return;
-                    }
+                    }*@
                     else if (d1 == "" && d2 == "") {
                         var qty_err = '<p style="color:red;">Enter Part No and Quantity !!!<p/>';
                         document.getElementById("value").innerHTML = qty_err;
@@ -220,21 +258,10 @@
                         document.getElementById("value").innerHTML = qty_err;
                         return;
                     }
-                    var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
-                    var l_row1 = last_row1 - 1;
-                    var count = 1;
-                    for (var i = 0; i < l_row1; i++) {
-                        var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
-                        var e_partno = document.getElementById("Part_No").value;
-                        if (e_part_no == e_partno) {
-                            var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
-                            document.getElementById("value").innerHTML = qty_err;
-                            return;
-                        }
-                        count++;
-                    }
-                    var newrow = '<tr id="data" style="font-size:13px;"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td>' + qty + '</td><td style="display:none;">' + v_no + '</td><td style="display:none;">' + v_date + '</td><td style="display:none;">' + index_type + '</td><td style="display:none;">' + ref_no + '</td><td style="display:none;">' + ref_date + '</td><td style="display:none;">' + GI + '</td><td style="display:none;">' + process + '</td><td style="display:none;">' + project + '</td><td style="display:none;">' + emp + '</td><td style="display:none;">' + note + '</td></tr>';
-                    $('#selected_units tr:last').after(newrow);
+                    
+                    var l_row = last_row1;
+                    var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td>' + d1 + '</td><td>' + data[0].Description + '</td><td>' + qty + '</td><td style="display:none;">' + v_no + '</td><td style="display:none;">' + v_date + '</td><td style="display:none;">' + index_type + '</td><td style="display:none;">' + ref_no + '</td><td style="display:none;">' + ref_date + '</td><td style="display:none;">' + GI + '</td><td style="display:none;">' + process + '</td><td style="display:none;">' + project + '</td><td style="display:none;">' + emp + '</td><td style="display:none;">' + note + '</td></tr>';
+                    $('#selected_units tbody').append(newrow);
             },
             failure: function (errMsg) {
                 alert(errMsg);
@@ -254,11 +281,11 @@
         var part = document.getElementById("selected_units").tBodies[0].rows.length;
         var Null = "";
         var ref_no = $('#Ref_No').val();
-        if (ref_no == "") {
+        @*if (ref_no == "") {
             document.getElementById("Enter_Inv_No").innerHTML = "Enter Reference No !!!";
             return;
-        }
-        else if (part == 1) {
+        }*@
+        if (part == 1) {
             document.getElementById("Enter_Inv_No").innerHTML = "Table is Empty !!!";
             return;
         }
@@ -267,7 +294,7 @@
             var myRows = [];
             var headersText = [];
             var $headers = $(" #selected_units th");
-            var $rows = $("#selected_units tbody #data").each(function (index) {
+            var $rows = $("#selected_units tbody tr").each(function (index) {
                 $cells = $(this).find("td");
                 myRows[index] = {};
 

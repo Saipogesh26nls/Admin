@@ -55,6 +55,9 @@
         #add_submit {
             width: 30%;
         }
+        .highlight {
+            background-color: yellow;
+        }
     </style>
 </head>
 <body onload="freeze();">
@@ -79,11 +82,11 @@
                     </div>
                     <div class="card-body table-responsive">
                         <div class="table-responsive">
-                            <p class="text-sm">Part No : @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:8%"></i>Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 5%;" placeholder="Quantity"><button class="btn btn-sm btn-secondary" id="Insert">Insert</button><button class="btn btn-sm btn-secondary" style="display: none; margin-top: 10px;" id="Add" onclick="ToAdd()">Add</button>@*<i class="fa fa-search" id="myBtn" style="margin-right:5%"></i>*@</p><p id="value" class="text-sm" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
+                            <p class="text-sm">Part No : @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:8%"></i>Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 5%;" placeholder="Quantity"><button class="btn btn-sm btn-secondary" id="Insert">Insert</button><button class="btn btn-sm btn-secondary" style="display: none; margin-top: 10px;" id="Add" onclick="ToAdd()">Add</button>@*<i class="fa fa-search" id="myBtn" style="margin-right:5%"></i>*@<button class="btn btn-sm btn-secondary float-right" id="Submit" style="width:8%;margin-left:2%;">Submit</button></p>
+                            <p id="value" class="text-sm" style="width:50%"></p>@Html.DisplayFor(model => model.Part_No)
 
-                            <button class="btn btn-sm btn-secondary float-right" id="Submit" style="width:8%;margin-left:2%;margin-top:30px;">Submit</button>
-                            <a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 30px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>
-                            <div id="myModal" class="modal">
+                            @*<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" style="margin-top: 30px;" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>
+                            *@<div id="myModal" class="modal">
 
                                 <!-- Modal content -->
                                 <div class="modal-content">
@@ -141,7 +144,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 400px;width:70%;">
+                            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 450px;">
                                 <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
                                     <thead>
                                         <tr>
@@ -168,8 +171,8 @@
                                         {
                                             <tr id="@i" style="font-size:13px;">
                                                 <td class="row-data">@dr["P_Part_No"].ToString()</td>
-                                                <td class="row-data" style="width:550px;">@dr["P_Description"].ToString()</td>
-                                                <td class="row-data text-sm-left" style="width:50px;">@dr["Purchase_Qty"].ToString()</td>
+                                                <td class="row-data">@dr["P_Description"].ToString()</td>
+                                                <td class="row-data text-sm-left">@dr["Purchase_Qty"].ToString()</td>
                                                 <td class="row-data" style="margin-right:auto"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row(this);"></i> </td>
                                                 <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Voucher_No)</td>
                                                 <td class="row-data" style="display:none;">@Html.DisplayFor(model => model.Voucher_Date)</td>
@@ -215,6 +218,38 @@
         var emp = $('#Employee').val();
         var note = $('#Note').val();
         var qty = parseInt(d2);
+
+        var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
+        var l_row1 = last_row1 - 1;
+        var count = 0;
+        for (var i = 0; i <= l_row1; i++) {
+            var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
+            var e_partno = document.getElementById("Part_No").value;
+            if (e_part_no == e_partno) {
+                var qty_err = '<p style="color:red;font-weight:bold;">Part No is already exists !!!<p/>';
+                document.getElementById("value").innerHTML = qty_err;
+                var textboxValue = $('#Part_No').val();
+                $('#selected_units td').each(function () {
+                    if ($(this).text() === textboxValue) {
+                        $(this).addClass('highlight');
+                        $(this).parent().prependTo("#selected_units tbody");
+                        var len_row = document.getElementById("selected_units").tBodies[0].rows.length;
+                        for (var i = 0; i <= len_row - 1; i++) {
+                            document.getElementById("selected_units").tBodies[0].rows[i].id = i;
+                        }
+                    } else {
+                        $(this).removeClass('highlight');
+                    }
+                });
+                return;
+            }
+            else {
+                $('#selected_units td').each(function () {
+                    $(this).removeClass('highlight');
+                });
+            }
+            count++;
+        }
 
         var model = new Object();
             model.Part_No = document.getElementById("Part_No").value;
@@ -262,19 +297,6 @@
                         document.getElementById("value").innerHTML = qty_err;
                         return;
                     }
-                    var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
-                    var l_row1 = last_row1 - 1;
-                    var count = 0;
-                    for (var i = 0; i <= l_row1; i++) {
-                        var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
-                        var e_partno = document.getElementById("Part_No").value;
-                        if (e_part_no == e_partno) {
-                            var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
-                            document.getElementById("value").innerHTML = qty_err;
-                            return;
-                        }
-                        count++;
-                    }
                     var l_row = last_row - 1;
                     var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td class="row-data">' + d1 + '</td><td class="row-data">' + data[0].Description + '</td><td class="row-data">' + qty + '</td><td class="row-data" style="margin-right:auto"> <i class="fas fa-edit" onclick = "Toshow()" ></i > | <i class="fa fa-trash" onclick="del_row1(this);"></i></td ><td class="row-data" style="display:none;">' + v_no + '</td><td class="row-data" style="display:none;">' + v_date + '</td><td class="row-data" style="display:none;">' + index_type + '</td><td class="row-data" style="display:none;">' + ref_no + '</td><td class="row-data" style="display:none;">' + ref_date + '</td><td class="row-data" style="display:none;">' + GI + '</td><td class="row-data" style="display:none;">' + process + '</td><td class="row-data" style="display:none;">' + project + '</td><td class="row-data" style="display:none;">' + emp + '</td><td class="row-data" style="display:none;">' + note + '</td><td class="row-data" style="display:none;">' + data[0].P_code + '</td></tr>';
                     $('#selected_units tr:last').after(newrow);
@@ -297,11 +319,11 @@
         var part = document.getElementById("selected_units").tBodies[0].rows.length;
         var Null = "";
         var ref_no = $('#Ref_No').val();
-        if (ref_no == "") {
+        @*if (ref_no == "") {
             document.getElementById("Enter_Inv_No").innerHTML = "Enter Reference No !!!";
             return;
-        }
-        else if (part == 0) {
+        }*@
+        if (part == 0) {
             document.getElementById("Enter_Inv_No").innerHTML = "Table is Empty !!!";
             return;
         }

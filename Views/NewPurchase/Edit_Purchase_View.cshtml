@@ -52,13 +52,14 @@
         #list:hover {
             background-color: aliceblue;
         }
-
         #add_pd {
             width: 500px;
         }
-
         #add_submit {
             width: 30%;
+        }
+        .highlight {
+            background-color: yellow;
         }
     </style>
 </head>
@@ -299,9 +300,9 @@
         var _POno = $('#PO_No').val();
         var _InvNo = $('#Invoice_No').val();
         var _InvDate = $('#Invoice_Date').val();
-        var _supplier = $('#sup_val').val();
-        var _billto = $('#billval').val();
-        var _project = $('#project_val').val();
+        var _supplier = $('#Supplier').val();
+        var _billto = $('#Supplier').val();
+        var _project = $('#Project').val();
         var _partno = $('#Part_No').val();
         var _qty = parseInt(document.getElementById("Quantity").value);
         var _price = $('#Purchase_Rate').val();
@@ -314,14 +315,32 @@
 
         var last_row1 = document.getElementById("selected_units").tBodies[0].rows.length;
         var l_row1 = last_row1 - 1;
-        var count = 1;
-        for (var i = 0; i < l_row1; i++) {
+        var count = 0;
+        for (var i = 0; i <= l_row1; i++) {
             var e_part_no = document.getElementById("selected_units").tBodies[0].rows[count].cells[0].innerHTML;
             var e_partno = document.getElementById("Part_No").value;
             if (e_part_no == e_partno) {
-                var qty_err = '<p style="color:red;">Part No is already exists !!!<p/>';
+                var qty_err = '<p style="color:red;font-weight:bold;">Part No is already exists !!!<p/>';
                 document.getElementById("value").innerHTML = qty_err;
+                var textboxValue = $('#Part_No').val();
+                $('#selected_units td').each(function () {
+                    if ($(this).text() === textboxValue) {
+                        $(this).addClass('highlight');
+                        $(this).parent().prependTo("#selected_units tbody");
+                        var len_row = document.getElementById("selected_units").tBodies[0].rows.length;
+                        for (var i = 0; i <= len_row - 1; i++) {
+                            document.getElementById("selected_units").tBodies[0].rows[i].id = i;
+                        }
+                    } else {
+                        $(this).removeClass('highlight');
+                    }
+                });
                 return;
+            }
+            else {
+                $('#selected_units td').each(function () {
+                    $(this).removeClass('highlight');
+                });
             }
             count++;
         }
@@ -399,7 +418,7 @@
                     return;
                 }
                 else {
-                    document.getElementById("value").innerHTML = val;
+                    document.getElementById("value").innerHTML = "";
                     var l_row = last_row - 1;
                     var newrow = '<tr id="' + l_row + '" style="font-size:13px;"><td class="row-data">' + _partno + '</td><td class="row-data">' + data[0].Description + '</td><td id="Qty' + i + '" class="row-data">' + _qty + '</td><td class="row-data">' + _price + '</td><td class="row-data">' + _discount_per + '</td><td class="row-data">' + _discount_val.toFixed(2) + '</td><td class="row-data">' + _igst_per + '</td><td class="row-data">' + _igst_val.toFixed(2) + '</td><td class="row-data">' + _cgst_per + '</td><td class="row-data">' + _cgst_val.toFixed(2) + '</td><td class="row-data">' + _sgst_per + '</td><td class="row-data">' + _sgst_val.toFixed(2) + '</td><td class="row-data">' + _subtotal.toFixed(2) + '</td><td id="total' + i + '" class="row-data">' + _total.toFixed(2) + '</td><td class="row-data"><i class="fas fa-edit" onclick="Toshow()"></i> | <i class="fa fa-trash" onclick="del_row1(this);"></i></td><td style="display:none;">' + _InvNo + '</td><td style="display:none;">' + _InvDate + '</td><td style="display:none;" id="_final_qty"></td><td style="display:none;" id="_final_subtotal"></td><td style="display:none;" id="_final_total"></td><td style="display:none;" id="_final_dis_per"></td><td style="display:none;" id="_final_dis_val"></td><td style="display:none;" id="_final_igst_per"></td><td style="display:none;" id="_final_igst_val"></td><td style="display:none;" id="_final_cgst_per"></td><td style="display:none;" id="_final_cgst_val"></td><td style="display:none;" id="_final_sgst_per"></td><td style="display:none;" id="_final_sgst_val"></td><td style="display:none;">' + _supplier + '</td><td style="display:none;">' + _project + '</td><td style="display:none;">' + _POno + '</td><td style="display:none;">' + _billto + '</td><td style="display:none;">' + _Vno + '</td><td style="display:none;">' + _Vdate + '</td></tr>';
                     $('#selected_units tr:last').after(newrow);
@@ -489,7 +508,7 @@
 
     $('#Submit').click(function (e) {
         var part = document.getElementById("selected_units").tBodies[0].rows.length;
-        if (part == 1) {
+        if (part == 0) {
             document.getElementById("Enter_Inv_No").innerHTML = "Table is Empty !!!";
             return;
         }
