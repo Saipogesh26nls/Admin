@@ -792,6 +792,26 @@ namespace Admin.Models
         public string Mfr { get; set; }
         public string Note { get; set; }
         public string PartNo { get; set; }
+        public string Description { get; set; }
         public string Quantity { get; set; }
+        public string Add_Name { get; set; }
+        public string Add_Group { get; set; }
+        public string Add_Manufacturer { get; set; }
+        public string Add_Package { get; set; }
+        public string Add_Value { get; set; }
+        public string Add_PartNo { get; set; }
+        public string Add_Description { get; set; }
+        public double Add_Cost { get; set; }
+        public double Add_MRP { get; set; }
+        public double Add_SellPrice { get; set; }
+        public double Current_Stock { get; set; }
+        public double P_MRP { get; set; }
+        public string Package { get; set; }
+        public string Value { get; set; }
+        public string Partno_letter { get; set; }
+        public string Package_letter { get; set; }
+        public string Value_letter { get; set; }
+        public string Descp_letter { get; set; }
+        public string Product { get; set; }
     }
 }

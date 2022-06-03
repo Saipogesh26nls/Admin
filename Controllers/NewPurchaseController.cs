@@ -107,7 +107,8 @@ namespace Admin.Controllers
         public ActionResult Table_Data(List<PurchaseTable> Purchase) // For Adding Purchase Data to DB
         {
             NewPurchase_Insert purchase = new NewPurchase_Insert();
-            int v_no = purchase.Add_Data(Purchase);
+            var id = Convert.ToInt32(Session["userID"]);
+            int v_no = purchase.Add_Data(Purchase,id);
             return Json(v_no);
         }
         public ActionResult Partno_to_Descp(BOMFields name) // conversion of part_no to description
@@ -198,7 +199,6 @@ namespace Admin.Controllers
         }
 
         //Edit Purchase
-        static int V_no = 0;
         public ActionResult Edit_Purchase_View(int v_no, DateTime v_date, string inv_no, DateTime inv_date, string a_code, string data, string po_no) // edit purchase view
         {
             if (Session["userID"] != null)
@@ -271,7 +271,8 @@ namespace Admin.Controllers
         public ActionResult Edited_Table_Data(List<PurchaseTable> Purchase) // For Edit and Delete the purchase list in DB
         {
             NewPurchase_Insert purchase = new NewPurchase_Insert();
-            purchase.Edit_and_Delete(Purchase);
+            var id = Convert.ToInt32(Session["userID"]);
+            purchase.Edit_and_Delete(Purchase, id);
             return Json(Purchase);
         }
         public ActionResult Purchase_ED(GoodsRI name) // For Delete individual row from DB

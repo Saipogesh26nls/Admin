@@ -129,7 +129,7 @@ namespace Admin.Models
             Con.Close();
             return ItemQm;
         }
-        public int Add_Data(List<PurchaseTable> data)
+        public int Add_Data(List<PurchaseTable> data, int id)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
@@ -192,6 +192,7 @@ namespace Admin.Models
                 sql_cmnd.Parameters.AddWithValue("@aledger", SqlDbType.Int).Value = data[i].ALedger;
                 sql_cmnd.Parameters.AddWithValue("@goodsissue", SqlDbType.NVarChar).Value = null;
                 sql_cmnd.Parameters.AddWithValue("@time", SqlDbType.Time).Value = now.ToLongTimeString();
+                sql_cmnd.Parameters.AddWithValue("@employee", SqlDbType.Int).Value = id;
 
                 if (j == data.Count() - 1)
                 {
@@ -274,7 +275,7 @@ namespace Admin.Models
             Con.Close();
             return ItemQm;
         }
-        public void Edit_and_Delete(List<PurchaseTable> data)
+        public void Edit_and_Delete(List<PurchaseTable> data, int id)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
@@ -354,6 +355,7 @@ namespace Admin.Models
                 sql_cmnd.Parameters.AddWithValue("@aledger", SqlDbType.Int).Value = aledger;
                 sql_cmnd.Parameters.AddWithValue("@goodsissue", SqlDbType.NVarChar).Value = null;
                 sql_cmnd.Parameters.AddWithValue("@time", SqlDbType.Time).Value = now.ToLongTimeString();
+                sql_cmnd.Parameters.AddWithValue("@employee", SqlDbType.Int).Value = id;
 
                 if (j == data.Count() - 1)
                 {

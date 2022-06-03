@@ -259,6 +259,7 @@
     <Compile Include="Models\ProductInsert.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\Stock_Issue_Insert.cs" />
+    <Compile Include="Models\WO_Insert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValuesController1.cs" />
   </ItemGroup>
