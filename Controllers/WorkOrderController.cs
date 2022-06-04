@@ -69,13 +69,25 @@ namespace Admin.Controllers
             var Descp = dblogin.Descp_Qty(name.Part_No);
             return Json(Descp, JsonRequestBehavior.AllowGet);
         }
-
         public ActionResult Add_WO_to_DB(List<Workorder> name)
         {
             WO_Insert wO_Insert = new WO_Insert();
             var id = Convert.ToInt32(Session["userID"]);
             var wono = wO_Insert.Add_WO(name, id);
             return Json(wono);
+        }
+        public ActionResult WorkOrder_list()
+        {
+            if (Session["userID"] != null)
+            {
+                WO_Insert wO_Insert=new WO_Insert();
+                var list = wO_Insert.WO_List();
+                return View(list);
+            }
+            else
+            {
+                return RedirectToAction("Err", "Login");
+            }
         }
 
     }

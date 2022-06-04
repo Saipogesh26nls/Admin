@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Admin.Models.WO_List>
+
+@{
+    ViewBag.Title = "WorkOrder_list";
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.WO_No)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.WO_Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Product)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Process)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Mfr_Option)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Mfr)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.WO_No)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.WO_Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Product)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Process)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Mfr_Option)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Mfr)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

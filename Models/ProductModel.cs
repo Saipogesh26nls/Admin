@@ -814,4 +814,13 @@ namespace Admin.Models
         public string Descp_letter { get; set; }
         public string Product { get; set; }
     }
+    public class WO_List
+    {
+        public int WO_No { get; set; }
+        public string WO_Date { get; set; }
+        public string Product { get; set; }
+        public string Process { get; set; }
+        public string Mfr_Option { get; set; }
+        public string Mfr { get; set; }
+    }
 }

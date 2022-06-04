@@ -242,7 +242,7 @@
                                                 <td style="display:none;">@dr["PO_No"]</td>
                                                 <td style="display:none;" id="bill_v">@dr["BillTo_Acode"]</td>
                                                 <td style="display:none;">@dr["Voucher_No"]</td>
-                                                <td style="display:none;">@dr["Voucher_Date"]</td>
+                                                <td style="display:none;" id="VDate">@dr["Voucher_Date"]</td>
                                             </tr>
                                             i++;
                                         }
@@ -524,6 +524,7 @@
             var __final_sgst_per = document.getElementById("Total_SGST").value;
             var __final_sgst_val = document.getElementById("total_sgst").value;
             var __final_total = document.getElementById("Final_Total").value;
+            var Vdate = document.getElementById("Voucher_Date").value;
             document.getElementById("_final_qty").innerHTML = __final_qty;
             document.getElementById("_final_subtotal").innerHTML = __final_subtotal;
             document.getElementById("_final_dis_per").innerHTML = __final_dis_per;
@@ -535,6 +536,7 @@
             document.getElementById("_final_sgst_per").innerHTML = __final_sgst_per;
             document.getElementById("_final_sgst_val").innerHTML = __final_sgst_val;
             document.getElementById("_final_total").innerHTML = __final_total;
+            document.getElementById("VDate").innerHTML = Vdate;
 
             var submit1 = "";
             document.getElementById("Enter_Inv_No").innerHTML = submit1;
@@ -886,7 +888,7 @@
                 var cost = this.cells[5].innerHTML;
                 document.getElementById("Part_No").value = partno;
                 document.getElementById("value").innerHTML = descp;
-                document.getElementById("P_Rate").value = cost;
+                document.getElementById("Purchase_Rate").value = cost;
                 document.getElementById("Partno_letter").value = "";
                 document.getElementById("Value_letter").value = "";
                 document.getElementById("Package_letter").value = "";

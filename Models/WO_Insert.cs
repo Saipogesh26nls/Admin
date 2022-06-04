@@ -73,5 +73,85 @@ namespace Admin.Models
             Con.Close();
             return ItemQm;
         }
+        public List<WO_List> WO_List()
+        {
+            List<WO_List> ItemQm = new List<WO_List>();
+            List<int> vno = new List<int>();
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd2 = "SELECT WO_No FROM Work_Order GROUP BY WO_No HAVING COUNT(*)>0";
+            SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
+            SqlDataReader dr1 = SqlCmd2.ExecuteReader();
+            while (dr1.Read())
+            {
+                vno.Add(Convert.ToInt32(dr1["WO_No"]));
+            }
+            dr1.Close();
+            if (vno.Count == 0)
+            {
+                Con.Close();
+                return ItemQm;
+            }
+            else
+            {
+                for (int i = 0; i < vno.Count; i++)
+                {
+                    string cmd1 = "select Top 1 * from Work_Order where WO_No = '" + vno[i] + "' ORDER BY WO_No Asc;";
+                    SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                    SqlDataReader dr = SqlCmd1.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        ItemQm.Add(new WO_List
+                        {
+                            WO_No = (int)dr["WO_No"],
+                            WO_Date = dr["WO_Date"].ToString(),
+                            Product = dr["P_code"].ToString(),
+                            Process = dr["Process"].ToString(),
+                            Mfr_Option = dr["Mfr_Option"].ToString(),
+                            Mfr = dr["Mfr"].ToString()
+                        }
+                        );
+                    }
+                    dr.Close();
+                }
+                for (int i = 0; i < ItemQm.Count; i++)
+                {
+                    string cmd1 = "select A_Name from Account_Master where A_code = '" + ItemQm[i].Mfr + "'";
+                    SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                    SqlDataReader dr = SqlCmd1.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        string Mfr = dr["A_Name"].ToString();
+                        ItemQm[i].Mfr = Mfr;
+                    }
+                    dr.Close();
+                }
+                for (int i = 0; i < ItemQm.Count; i++)
+                {
+                    string cmd1 = "select P_Name from Product_Master where P_code = '" + ItemQm[i].Product + "'";
+                    SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                    SqlDataReader dr = SqlCmd1.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        ItemQm[i].Product = dr["P_Name"].ToString();
+                    }
+                    dr.Close();
+                }
+                for (int i = 0; i < ItemQm.Count; i++)
+                {
+                    string cmd1 = "select Process_Name from Process_Tag where Process_Id = " + ItemQm[i].Process + "";
+                    SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                    SqlDataReader dr = SqlCmd1.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        ItemQm[i].Process = dr["Process_Name"].ToString();
+                    }
+                    dr.Close();
+                }
+                Con.Close();
+                return ItemQm;
+            }
+        }
+
     }
 }

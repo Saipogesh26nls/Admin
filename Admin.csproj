@@ -2412,6 +2412,7 @@
     <Content Include="Views\Price\MaterialIndex.cshtml" />
     <Content Include="Views\Product\Initial_Screen.cshtml" />
     <Content Include="Views\WorkOrder\Work_Order.cshtml" />
+    <Content Include="Views\WorkOrder\WorkOrder_list.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
