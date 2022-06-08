@@ -260,7 +260,7 @@ namespace Admin.Models
             List<New_Purchase> ItemQm = new List<New_Purchase>();
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd1 = "select P_Part_No,P_Description from Product_Master where P_code = '" + data + "'";
+            string cmd1 = "select P_Part_No,P_Description,P_Closing_Balance from Product_Master where P_code = '" + data + "'";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
             SqlDataReader dr = SqlCmd1.ExecuteReader();
             while (dr.Read())
@@ -268,7 +268,8 @@ namespace Admin.Models
                 ItemQm.Add(new New_Purchase
                 {
                     P_Part_No = dr["P_Part_No"].ToString(),
-                    P_Description = dr["P_Description"].ToString()
+                    P_Description = dr["P_Description"].ToString(),
+                    P_Close_Bal = Convert.ToInt32(dr["P_Closing_Balance"])
                 }
                 );
             }

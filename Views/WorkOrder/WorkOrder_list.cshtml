@@ -3,56 +3,111 @@
 @{
     ViewBag.Title = "WorkOrder_list";
 }
+<!DOCTYPE html>
+<html>
+<head>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.WO_No)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.WO_Date)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Product)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Process)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Mfr_Option)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Mfr)
-        </th>
-        <th></th>
-    </tr>
+</head>
+<body onload="colour()">
+    <table class="table" id="WO_Table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.WO_No)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.WO_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Product)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Process)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Mfr_Option)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Mfr)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Quantity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BOM_No)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ 
+                int i = 0;}
+            @foreach (var item in Model)
+            {
+                <tr id="@i" class="row-data">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WO_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WO_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Product)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Process)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Mfr_Option)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Mfr)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BOM_No)
+                    </td>
+                    <td id="@i+status">
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td id="@i+preview">
+                        @Html.ActionLink("Preview", "WO_to_BOM", new { wono = item.WO_No, wodate = item.WO_Date, bomno = item.BOM_No }) @*|
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                    </td>
+                </tr>
+                i++;
+            }
+        </tbody>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.WO_No)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.WO_Date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Product)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Process)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Mfr_Option)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Mfr)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
-    </tr>
-}
-
-</table>
+    </table>
+</body>
+</html>
+<script>
+    var table = document.getElementById("WO_Table");
+    var tbodyRowCount = table.tBodies[0].rows.length;
+    function colour() {
+        for (i = 0; i <= tbodyRowCount - 1; i++) {
+            var status = document.getElementById("WO_Table").tBodies[0].rows[i].cells[8].innerHTML;
+            let text = status.trim();
+            if (text == "Open") {
+                document.getElementById(i+"+status").style.color = "green";
+                document.getElementById(i+"+status").style.fontWeight = "bold";
+            }
+            if (text == "Closed") {
+                document.getElementById(i + "+status").style.color = "red";
+                document.getElementById(i + "+status").style.fontWeight = "bold";
+            }
+            var bomno = document.getElementById("WO_Table").tBodies[0].rows[i].cells[7].innerHTML;
+            let bom = bomno.trim();
+            if (bom == "NULL") {
+                document.getElementById(i + "+preview").innerHTML = "";
+            }
+        }
+    }
+</script>

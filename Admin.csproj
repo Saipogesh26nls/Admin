@@ -2413,6 +2413,7 @@
     <Content Include="Views\Product\Initial_Screen.cshtml" />
     <Content Include="Views\WorkOrder\Work_Order.cshtml" />
     <Content Include="Views\WorkOrder\WorkOrder_list.cshtml" />
+    <Content Include="Views\WorkOrder\WO_to_BOM.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

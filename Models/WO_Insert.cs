@@ -108,7 +108,9 @@ namespace Admin.Models
                             Product = dr["P_code"].ToString(),
                             Process = dr["Process"].ToString(),
                             Mfr_Option = dr["Mfr_Option"].ToString(),
-                            Mfr = dr["Mfr"].ToString()
+                            Mfr = dr["Mfr"].ToString(),
+                            Status = dr["Status"].ToString(),
+                            Quantity = dr["Quantity"].ToString()
                         }
                         );
                     }
@@ -125,6 +127,21 @@ namespace Admin.Models
                         ItemQm[i].Mfr = Mfr;
                     }
                     dr.Close();
+                }
+                for (int i = 0; i < ItemQm.Count; i++)
+                {
+                    string cmd1 = "select BOM_No from BOM where MP_Code = '" + ItemQm[i].Product + "'";
+                    SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+                    SqlDataReader dr = SqlCmd1.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        ItemQm[i].BOM_No = dr["BOM_No"].ToString();
+                    }
+                    dr.Close();
+                    if(ItemQm[i].BOM_No == null)
+                    {
+                        ItemQm[i].BOM_No = "NULL";
+                    }
                 }
                 for (int i = 0; i < ItemQm.Count; i++)
                 {

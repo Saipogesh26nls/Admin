@@ -368,6 +368,7 @@ namespace Admin.Models
         public string Supplier { get; set; }
         public string PO_No { get; set; }
         public double P_Cost { get; set; }
+        public int P_Close_Bal { get; set; }
         public DataSet EditPurchase(int id)
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
@@ -793,7 +794,7 @@ namespace Admin.Models
         public string Note { get; set; }
         public string PartNo { get; set; }
         public string Description { get; set; }
-        public string Quantity { get; set; }
+        public int Quantity { get; set; }
         public string Add_Name { get; set; }
         public string Add_Group { get; set; }
         public string Add_Manufacturer { get; set; }
@@ -813,14 +814,34 @@ namespace Admin.Models
         public string Value_letter { get; set; }
         public string Descp_letter { get; set; }
         public string Product { get; set; }
+        public string BOM_No { get; set; }
+        public DataSet WO_BOM(int bomno)
+        {
+            SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            Con.Open();
+            string cmd1 = "select SP_code,Quantity from BOM where BOM_No = '" + bomno + "'";
+            SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
+            DataSet ds = new DataSet();
+            SqlDataAdapter da = new SqlDataAdapter(SqlCmd1);
+            da.Fill(ds);
+            Con.Close();
+            return ds;
+        }
     }
     public class WO_List
     {
+        [DisplayName("WorkOrder No")]
         public int WO_No { get; set; }
+        [DisplayName("WorkOrder Date")]
         public string WO_Date { get; set; }
         public string Product { get; set; }
         public string Process { get; set; }
+        [DisplayName("Option")]
         public string Mfr_Option { get; set; }
+        [DisplayName("Manufacturer")]
         public string Mfr { get; set; }
+        public string Status { get; set; }
+        public string Quantity { get; set; }
+        public string BOM_No { get; set; }
     }
 }
