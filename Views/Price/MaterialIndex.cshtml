@@ -59,7 +59,7 @@
                 $("#pm_list").find("tr:not(:first)").remove();
                 for (var i = 0; i <= result.length - 1; i++) {
                     var newrow = '<tr id="list"><td>' + result[i].Part_No_TB + '</td><td>' + result[i].Supplier_TB + '</td><td>' + result[i].PO_No_TB + '</td><td>' + result[i].PO_Date_TB + '</td><td>' + result[i].PV_No_TB + '</td><td>' + result[i].PV_Date_TB + '</td><td>' + result[i].TimeSpan_TB + '</td></tr>';
-                    $('#pm_list          tr:last').after(newrow);
+                    $('#pm_list tr:last').after(newrow);
                 }
             }
         });

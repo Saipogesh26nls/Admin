@@ -282,7 +282,7 @@ namespace Admin.Models
             Con.Open();
             for (int k = 0; k <= data.Count - 1; k++)
             {
-                string cmd4 = "select Purchase_Qty from Purchase where Voucher_No = '" + data[k].Voucher_No + "' and Part_No = '" + data[k].Part_No+"'";
+                string cmd4 = "select Purchase_Qty from Purchase where Voucher_No = " + data[k].Voucher_No + " and Part_No = '" + data[k].Part_No+"'";
                 SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con);
                 SqlDataReader dr2 = SqlCmd4.ExecuteReader();
                 while (dr2.Read())
@@ -290,7 +290,7 @@ namespace Admin.Models
                     data[k].I_Qty = (int)dr2["Purchase_Qty"];
                 }
                 dr2.Close();
-                string cmd5 = "update Product_Master set P_Closing_Balance = P_Closing_Balance - '" + data[k].Quantity + "' where P_Part_No = '" + data[k].Part_No + "'";
+                string cmd5 = "update Product_Master set P_Closing_Balance = P_Closing_Balance - " + data[k].Quantity + " where P_Part_No = '" + data[k].Part_No + "'";
                 SqlCommand SqlCmd5 = new SqlCommand(cmd5, Con);
                 SqlCmd5.ExecuteNonQuery();
             }

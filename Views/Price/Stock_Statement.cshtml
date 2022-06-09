@@ -133,7 +133,7 @@
                     totalprice = totalprice + (result[i].Current_Stock * result[i].P_Cost)
                 }
                 document.getElementById("tot_stock").innerHTML = totalstock;
-                document.getElementById("tot_price").innerHTML = totalprice + "/-";
+                document.getElementById("tot_price").innerHTML = totalprice.toFixed(2) + "/-";
             }
         });
     })

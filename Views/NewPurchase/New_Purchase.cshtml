@@ -375,7 +375,9 @@
                     var l_row = last_row1;
                     var newrow = '<tr id="' + l_row + '" name="data" style="font-size:13px;"><td>' + _partno + '</td><td>' + data[0].Description + '</td><td id="Qty' + i + '">' + _qty + '</td><td>' + _price + '</td><td>' + _discount_per + '</td><td>' + _discount_val.toFixed(2) + '</td><td>' + _igst_per + '</td><td>' + _igst_val.toFixed(2) + '</td><td>' + _cgst_per + '</td><td>' + _cgst_val.toFixed(2) + '</td><td>' + _sgst_per + '</td><td>' + _sgst_val.toFixed(2) + '</td><td>' + _subtotal.toFixed(2) + '</td><td id="total' + i + '">' + _total.toFixed(2) + '</td><td class="row-data" style="display:none;"><i class="fas fa-edit" onclick="Toshow()"></i></td><td style="display:none;" id="Ino">' + _InvNo + '</td><td style="display:none;" id="Idate">' + _InvDate + '</td><td style="display:none;" id="Vdate">' + _VDate + '</td><td style="display:none;">' + _ILedger + '</td><td style="display:none;">' + _ALedger + '</td><td style="display:none;" id="_final_qty"></td><td style="display:none;" id="_final_subtotal"></td><td style="display:none;" id="_final_total"></td><td style="display:none;" id="_final_dis_per"></td><td style="display:none;" id="_final_dis_val"></td><td style="display:none;" id="_final_igst_per"></td><td style="display:none;" id="_final_igst_val"></td><td style="display:none;" id="_final_cgst_per"></td><td style="display:none;" id="_final_cgst_val"></td><td style="display:none;" id="_final_sgst_per"></td><td style="display:none;" id="_final_sgst_val"></td><td style="display:none;">' + _supplier + '</td><td style="display:none;">' + _project + '</td><td style="display:none;">' + _billto + '</td><td style="display:none;">' + _PO_No + '</td></tr>';
                     $('#selected_units tbody').append(newrow);
-                    total_cal_PO();
+                    if (_PO_No > 0) {
+                        total_cal_PO();
+                    }
                     formClear();
                     i++;
                 }
@@ -425,7 +427,7 @@
 
     $('#Submit').click(function (e) {
         var part = document.getElementById("selected_units").tBodies[0].rows.length;
-        if (part==1) {
+        if (part==0) {
             document.getElementById("Enter_Inv_No").innerHTML = "Table is Empty !!!";
             return;
         }

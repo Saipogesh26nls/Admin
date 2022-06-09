@@ -78,20 +78,22 @@ namespace Admin.Controllers
         }
         public ActionResult WorkOrder_list()
         {
-            /*if (Session["userID"] != null)
-            {*/
+            if (Session["userID"] != null)
+            {
                 WO_Insert wO_Insert=new WO_Insert();
                 var list = wO_Insert.WO_List();
                 return View(list);
-            /*}
+            }
             else
             {
                 return RedirectToAction("Err", "Login");
-            }*/
+            }
         }
         public ActionResult WO_to_BOM(int wono, DateTime wodate, string bomno)
         {
-            SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
+            if (Session["userID"] != null)
+            {
+                SqlConnection _con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             _con.Open();
             SqlDataAdapter _da1 = new SqlDataAdapter("Select * From Process_Tag", _con);
             DataTable _dt1 = new DataTable();
@@ -169,7 +171,11 @@ namespace Admin.Controllers
             dr3.Close();
             _con.Close();
             return View(workorder);
+            }
+            else
+            {
+                return RedirectToAction("Err", "Login");
+            }
         }
-
     }
 }

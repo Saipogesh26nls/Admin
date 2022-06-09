@@ -447,30 +447,51 @@ namespace Admin.Models
             dr1.Close();
             for (int i = 0; i < ItemQm.Count; i++)
             {
-                string cmd3 = "select Project_Name from Project_Master where Project_Id = '" + int.Parse(ItemQm[i].Project) + "'";
-                SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
-                SqlDataReader dr2 = SqlCmd3.ExecuteReader();
-                while (dr2.Read())
+                if(ItemQm[i].Project == "")
                 {
-                    ItemQm[i].Project = dr2["Project_Name"].ToString();
+                    ItemQm[i].Project = "NULL";
                 }
-                dr2.Close();
-                string cmd4 = "select Process_Name from Process_Tag where Process_Id = '" + int.Parse(ItemQm[i].Process) + "'";
-                SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con);
-                SqlDataReader dr4 = SqlCmd4.ExecuteReader();
-                while (dr4.Read())
+                else
                 {
-                    ItemQm[i].Process = dr4["Process_Name"].ToString();
+                    string cmd3 = "select Project_Name from Project_Master where Project_Id = '" + int.Parse(ItemQm[i].Project) + "'";
+                    SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con);
+                    SqlDataReader dr2 = SqlCmd3.ExecuteReader();
+                    while (dr2.Read())
+                    {
+                        ItemQm[i].Project = dr2["Project_Name"].ToString();
+                    }
+                    dr2.Close();
                 }
-                dr4.Close();
-                string cmd5 = "select Employee_Name from Employee_Master where Id = '" + int.Parse(ItemQm[i].User) + "'";
-                SqlCommand SqlCmd5 = new SqlCommand(cmd5, Con);
-                SqlDataReader dr5 = SqlCmd5.ExecuteReader();
-                while (dr5.Read())
+                if(ItemQm[i].Process == "")
                 {
-                    ItemQm[i].User = dr5["Employee_Name"].ToString();
+                    ItemQm[i].Process = "NULL";
                 }
-                dr5.Close();
+                else
+                {
+                    string cmd4 = "select Process_Name from Process_Tag where Process_Id = '" + int.Parse(ItemQm[i].Process) + "'";
+                    SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con);
+                    SqlDataReader dr4 = SqlCmd4.ExecuteReader();
+                    while (dr4.Read())
+                    {
+                        ItemQm[i].Process = dr4["Process_Name"].ToString();
+                    }
+                    dr4.Close();
+                }
+                if(ItemQm[i].User == "")
+                {
+                    ItemQm[i].User = "NULL";
+                }
+                else
+                {
+                    string cmd5 = "select Employee_Name from Employee_Master where Id = '" + int.Parse(ItemQm[i].User) + "'";
+                    SqlCommand SqlCmd5 = new SqlCommand(cmd5, Con);
+                    SqlDataReader dr5 = SqlCmd5.ExecuteReader();
+                    while (dr5.Read())
+                    {
+                        ItemQm[i].User = dr5["Employee_Name"].ToString();
+                    }
+                    dr5.Close();
+                }
             }
             Con.Close();
             return ItemQm;

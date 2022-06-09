@@ -22,6 +22,9 @@
         .highlight {
             background-color: yellow;
         }
+        .modal-content {
+            width: 60%;
+        }
     </style>
 </head>
 <body onload="addStock()">
@@ -41,11 +44,46 @@
             &nbsp; &nbsp; @Html.DisplayFor(m => m.Mfr)
             &nbsp; &nbsp; &nbsp; &nbsp; Quantity : &nbsp; @Html.EditorFor(m => m.Quantity, new { htmlAttributes = new { @readonly = "readonly" } })
             @*&nbsp; &nbsp; &nbsp; &nbsp; Note &nbsp; : &nbsp; @Html.TextAreaFor(m => m.Note, new { @style = "color:black; width:200px; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })
-        Part No : &nbsp; @Html.EditorFor(model => model.PartNo, new { htmlAttributes = new { @style = "width:14%;margin-right:1%;", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:8%"></i>
-        <button class="btn btn-sm btn-secondary" id="Insert">Insert</button>*@
+                Part No : &nbsp; @Html.EditorFor(model => model.PartNo, new { htmlAttributes = new { @style = "width:14%;margin-right:1%;", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:8%"></i>
+                <button class="btn btn-sm btn-secondary" id="Insert">Insert</button>*@
         </p>
         <p id="value" style="margin-left:2%;font-size:13px;"></p>
         <p id="Enter_Inv_No" style="font-weight:bold;text-align:center;"></p>
+    </div>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <button class="btn btn-sm btn-secondary" style="width:75px;" id="myBtn">Close</button>
+            <br />
+            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 400px;">
+                <table class="table text-sm" id="pm_list">
+                    <tbody>
+                        <tr>
+                            <th>
+                                Part No
+                            </th>
+                            <th>
+                                Supplier/Mfr
+                            </th>
+                            <th>
+                                PO No
+                            </th>
+                            <th>
+                                PO Date
+                            </th>
+                            <th>
+                                PV No
+                            </th>
+                            <th>
+                                PV Date
+                            </th>
+                            <th>
+                                LeadTime (in days)
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 550px;">
         <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;">
@@ -69,7 +107,7 @@
                 @{ int i = 0; }
                 @foreach (System.Data.DataRow dr in ViewBag.BOM.Rows)
                 {
-                    <tr id="@i" style="font-size:13px;">
+                    <tr id="@i" style="font-size:13px;" onclick="List_to_View()">
                         <td class="row-data">@dr["P_Part_No"].ToString()</td>
                         <td class="row-data text-sm-left">@dr["P_Description"].ToString()</td>
                         <td class="row-data">@dr["Quantity"].ToString()</td>
@@ -88,7 +126,7 @@
             </tbody>
         </table>
     </div>
-    <button class="btn btn-sm btn-secondary float-left" id="Submit" style="width:100px;margin-left:1.5%;margin-top:25px;">Submit</button>
+    @*<button class="btn btn-sm btn-secondary float-left" id="Submit" style="width:100px;margin-left:1.5%;margin-top:25px;">Submit</button>*@
 </body>
 </html>
 <script>
@@ -111,6 +149,43 @@
             var req_qty = tot_qty - cur_qty;
             data[2].innerHTML = tot_qty;
             data[4].innerHTML = req_qty;
+        }
+    }
+    function List_to_View() {
+        var table = document.getElementById('selected_units');
+        for (var i = 0; i < table.rows.length; i++) {
+            table.rows[i].addEventListener('click', function () {
+                var partno = this.cells[0].innerHTML;
+                var model = new Object();
+                model.Part_No = partno;
+                $.ajax({
+                    url: '/Price/Get_Partno_from_DB',
+                    data: JSON.stringify({ name: model }),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (result) {
+                        $("#pm_list").find("tr:not(:first)").remove();
+                        for (var i = 0; i <= result.length - 1; i++) {
+                            var newrow = '<tr id="list"><td>' + result[i].Part_No_TB + '</td><td>' + result[i].Supplier_TB + '</td><td>' + result[i].PO_No_TB + '</td><td>' + result[i].PO_Date_TB + '</td><td>' + result[i].PV_No_TB + '</td><td>' + result[i].PV_Date_TB + '</td><td>' + result[i].TimeSpan_TB + '</td></tr>';
+                            $('#pm_list tr:last').after(newrow);
+                        }
+                    }
+                });
+            });
+        }
+        modal.style.display = "block";
+    }
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("myBtn");
+    btn.onclick = function () {
+        $("#pm_list").find("tr:not(:first)").remove();
+        modal.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            $("#pm_list").find("tr:not(:first)").remove();
+            modal.style.display = "none";
         }
     }
 </script>
