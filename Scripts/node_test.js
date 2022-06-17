@@ -41,7 +41,7 @@
                 }
             },
             error: function (response) {
-                alert('server error occured')
+                alert('server error occured');
             }
         });
     });
