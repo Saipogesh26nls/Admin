@@ -95,6 +95,11 @@ namespace Admin.Controllers
 
             }
         }
+
+        public ActionResult nodejs_test()
+        {
+            return View();
+        }
         /*[HttpPost]
         public ActionResult bar(ProductModel barcode)
         {

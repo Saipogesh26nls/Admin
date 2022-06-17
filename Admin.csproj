@@ -233,7 +233,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -261,7 +260,6 @@
     <Compile Include="Models\Stock_Issue_Insert.cs" />
     <Compile Include="Models\WO_Insert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ValuesController1.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="adminlte\css\adminlte.css" />
@@ -2280,6 +2278,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\JS_Files\PO_Entry.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\node_test.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
@@ -2414,6 +2413,7 @@
     <Content Include="Views\WorkOrder\Work_Order.cshtml" />
     <Content Include="Views\WorkOrder\WorkOrder_list.cshtml" />
     <Content Include="Views\WorkOrder\WO_to_BOM.cshtml" />
+    <Content Include="Views\Product\nodejs_test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
