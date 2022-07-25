@@ -62,8 +62,10 @@ namespace Admin.Controllers
         public ActionResult Logout()
         {
             LoginField dbLogin = new LoginField();
-            dbLogin.AddLogUser(Session["userid"].ToString(), 2);
+            dbLogin.AddLogUser(Session["userID"].ToString(), 2);
             Session.Abandon();
+            Session["roll"] = null;
+            Session["userID"] = null;
             return RedirectToAction("Login", "Login");
         } // Logout and show Login View
         public ActionResult Err()

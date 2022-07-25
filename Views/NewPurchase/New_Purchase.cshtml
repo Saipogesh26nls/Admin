@@ -1,7 +1,7 @@
 ﻿@model Admin.Models.New_Purchase
-    @{ 
-        var models = ViewBag.PM;
-    }
+@{ 
+    var models = ViewBag.PM;
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,31 +15,25 @@
             border: 2px solid black;
             width: auto;
         }
-
             table.scroll tbody,
             table.scroll thead {
                 display: block;
             }
-
         thead tr th {
             height: 20px;
             line-height: 20px;
         }
-
         table.scroll tbody {
             height: 200px;
             overflow-y: auto;
             overflow-x: auto;
         }
-
         tbody {
             border-top: 2px solid black;
         }
-
             tbody td, thead th {
                 border-right: 1px solid black;
             }
-
                 tbody td:last-child, thead th:last-child {
                     border-right: none;
                 }*@
@@ -352,7 +346,7 @@
         }
         var model = new Object();
         model.Part_No = document.getElementById("Part_No").value;
-
+    
         jQuery.ajax({
         type: "POST",
         url: "@Url.Action("P_to_DQ")",
