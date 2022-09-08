@@ -52,6 +52,9 @@
         #list:hover {
             background-color: aliceblue;
         }
+        p{
+            font-size:12px;
+        }
     </style>
 </head>
 <body onload="total_cal(); hover();">
@@ -68,7 +71,8 @@
                     </div>
                     <div class="card-header">
                         <p class="text-sm">
-                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;" } })    Voucher Date :  @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:0.25%;" })
+                            Voucher No:@Html.EditorFor(model => model.Voucher_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;" } }) 
+                            Voucher Date : @Html.TextBoxFor(x => x.Voucher_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:0.25%;" })
                             Invoice No:@Html.EditorFor(model => model.Invoice_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:1%;width:15%;", id = "Invoice_No" } })    Invoice Date :  @Html.TextBoxFor(x => x.Invoice_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
                         </p>
                         <p class="text-sm"> &nbsp &nbsp Supplier : &nbsp &nbsp @Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } }) &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })@*<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>*@</p>
@@ -99,7 +103,8 @@
                                 <!-- Modal content -->
                                 <div class="modal-content">
                                     <p class="text-sm" style="text-align:center;"> Are you sure, you want to delete ?</p>
-                                    <p class="text-sm" style="text-align:center;"><button class="btn btn-sm btn-secondary" style="width:5%;" id="yes">Yes</button><a href="@Url.Action("PurchaseList", "NewPurchase")"> <button class="btn btn-sm btn-secondary" style="width:5%;">No</button> </a> </p>
+                                    <p class="text-sm" style="text-align:center;"><button class="btn btn-sm btn-secondary" style="width:10%;" id="yes">Yes</button>
+                                    <a href="@Url.Action("PurchaseList", "NewPurchase")"> <button class="btn btn-sm btn-secondary" style="width:10%;">No</button> </a> </p>
                                     <p id="delete" style="text-align:center;"></p>
                                 </div>
                             </div>

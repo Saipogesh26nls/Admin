@@ -39,7 +39,7 @@ namespace Admin.Models
                 sql_cmnd.Parameters.AddWithValue("@process", SqlDbType.Int).Value = data[i].Process;
                 sql_cmnd.Parameters.AddWithValue("@qty", SqlDbType.Int).Value = data[i].Quantity;
                 sql_cmnd.Parameters.AddWithValue("@mfropt", SqlDbType.NVarChar).Value = data[i].Mfr_option;
-                sql_cmnd.Parameters.AddWithValue("@mfr",SqlDbType.NVarChar).Value=data[i].Mfr;
+                sql_cmnd.Parameters.AddWithValue("@mfr", SqlDbType.NVarChar).Value = data[i].Mfr;
                 sql_cmnd.Parameters.AddWithValue("@note", SqlDbType.NVarChar).Value = data[i].Note;
                 sql_cmnd.Parameters.AddWithValue("@time", SqlDbType.Time).Value = now.ToLongTimeString();
                 sql_cmnd.Parameters.AddWithValue("@employee", SqlDbType.Int).Value = id;
@@ -138,7 +138,7 @@ namespace Admin.Models
                         ItemQm[i].BOM_No = dr["BOM_No"].ToString();
                     }
                     dr.Close();
-                    if(ItemQm[i].BOM_No == null)
+                    if (ItemQm[i].BOM_No == null)
                     {
                         ItemQm[i].BOM_No = "NULL";
                     }

@@ -11,9 +11,13 @@
 <body style="background-color: #f5f5f7;">
     <br />
 
+    <p style="margin:auto;">
+        &nbsp; @Html.LabelFor(model => model.DisplayName) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.DisplayName, new { htmlAttributes = new { @style = "width:200px;" } })
+        &nbsp; &nbsp; @Html.LabelFor(model => model.UserName) &nbsp; &nbsp; : &nbsp; @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @style = "width:150px;" } })
+        &nbsp; &nbsp;@Html.LabelFor(model => model.Password) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @style = "width:200px;" } })
+    </p>
     <p>
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; @Html.LabelFor(model => model.DisplayName) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.DisplayName, new { htmlAttributes = new { @style = "width:200px;" } }) &nbsp; &nbsp; @Html.LabelFor(model => model.UserName) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @style = "width:200px;" } })
-        &nbsp; &nbsp; @Html.LabelFor(model => model.Password) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @style = "width:200px;" } }) &nbsp; &nbsp; @Html.LabelFor(model => model.Roll) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.DropDownListFor(model => model.Roll, ViewBag.LROLL as SelectList, new { htmlAttributes = new { } }) &nbsp; &nbsp; &nbsp; Select-all &nbsp; <input type="checkbox" id="select-all">
+        &nbsp; &nbsp;@Html.LabelFor(model => model.Roll) &nbsp; &nbsp; : &nbsp; &nbsp; @Html.DropDownListFor(model => model.Roll, ViewBag.LROLL as SelectList, new { htmlAttributes = new { } }) &nbsp; &nbsp; &nbsp; Select-all &nbsp; <input type="checkbox" id="select-all">
     </p>
     <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 600px;">
         <table id="selected_units" class="table text-sm font-weight-normal" style="margin-top:10px;text-align:center;">
@@ -40,7 +44,6 @@
                 @{ int i = 0; }
                 @foreach (System.Data.DataRow dr in ViewBag.PL.Rows)
                 {
-
                     <tr id="data" style="font-size:13px;">
                         <td class="row-data">@dr["Menu"].ToString()</td>
                         <td class="row-data"> &nbsp; View @Html.CheckBoxFor(model => model.View, htmlAttributes: new { @id = "view+" + i }) &nbsp;</td>

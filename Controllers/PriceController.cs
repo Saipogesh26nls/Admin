@@ -22,7 +22,7 @@ namespace Admin.Controllers
             }
             else
             {
-                return RedirectToAction("Err","Login");
+                return RedirectToAction("Err", "Login");
             }
         }
         public ActionResult List_Update(Price_List name) // add DB dat to Price_List View
@@ -116,7 +116,7 @@ namespace Admin.Controllers
             Price_Updation dblogin = new Price_Updation();
             var list = dblogin.Receipt_Data(name.Product);
             return Json(list);
-        }  
+        }
         public ActionResult MaterialIndex() // Material Index view
         {
             if (Session["userID"] != null)

@@ -29,7 +29,7 @@ namespace Admin.Controllers
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd1 = "select Employee_Name from Employee_Master where Employee_Id = '"+name.Employee_Id+"'";
+            string cmd1 = "select Employee_Name from Employee_Master where Employee_Id = '" + name.Employee_Id + "'";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
             SqlDataReader dr = SqlCmd1.ExecuteReader();
             string ItemQm = string.Empty;

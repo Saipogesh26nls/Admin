@@ -10,17 +10,11 @@
     <script type="text/javascript" src="~/Scripts/jquery-3.5.1.min.js"></script>
     <link rel="stylesheet" href="~/Content/Purchase.css" />
     <style>
-        #list:hover {
-            background-color: aliceblue;
+        th{
+            font-size:12px;
         }
-        #add_pd {
-            width: 500px;
-        }
-        #add_submit{
-            width:30%;
-        }
-        .highlight {
-            background-color: yellow;
+        p{
+            font-size:12px;
         }
     </style>
 </head>
@@ -32,16 +26,28 @@
                 <div class="card">
                     <div class="card-header">
                         <p class="text-sm">
-                            Purchase Order No:@Html.EditorFor(model => model.Purchase_Order_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;", @readonly = "readonly" } })    Purchase Order Date :  @Html.TextBoxFor(x => x.Purchase_Order_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
-                            Reference No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:1%;width:15%;" } })    Reference Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
+                            Purchase Order No:@Html.EditorFor(model => model.Purchase_Order_No, new { htmlAttributes = new { @style = "width:15%;margin-left:1%;", @readonly = "readonly" } })
+                            &nbsp; Purchase Order Date :  @Html.TextBoxFor(x => x.Purchase_Order_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
+                            &nbsp; Reference No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { @class = "uppercase", required = "required", style = "margin-left:1%;width:15%;" } })
                         </p>
-                        <p class="text-sm"> &nbsp &nbsp Supplier : &nbsp &nbsp @Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } }) &nbsp &nbsp Bill To : &nbsp &nbsp @Html.DropDownListFor(model => model.BillTo, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:1%;" } }) &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:20%;margin-left:10%;" } })@*<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>*@</p>
+                        <p class="text-sm">
+                            Reference Date :&nbsp; @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:10%;margin-left:1%;" })
+                            &nbsp; Supplier :&nbsp; @Html.DropDownListFor(model => model.Supplier, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:10%; margin-left:1%;" } })
+                            &nbsp; Project :&nbsp; @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:15%; margin-left:1%;" } })
+                        </p>
+                        <p class="text-sm">
+                            Bill To : @Html.DropDownListFor(model => model.BillTo, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:15%; margin-left:1%;" } })
+                        </p>
+                            @*<a id="ToHide" class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-ng-style="true"><i class="fa fa-print"></i> Print</a>*@
+                            
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <p class="text-sm">
-                                Part No : <input id="Part_No" type="text" style="border: 1px solid gray;margin-left:0.5%;margin-right: 1%;width:15%;" class="uppercase" placeholder="Part No"><i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:3%"></i>@Html.DisplayFor(model => model.Part_No)
-                                Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right: 6%; width: 10%;" placeholder="Quantity">
+                                Part No : <input id="Part_No" type="text" style="border: 1px solid gray; margin-right: 1%;width:15%;" class="uppercase" placeholder="Part No">
+                                <i class="fa fa-search" id="myBtn" style="margin-right:1%"></i>
+                                <i class="fa fa-plus" id="addproduct" style="margin-right:3%"></i>@Html.DisplayFor(model => model.Part_No)
+                                Quantity : <input id="Quantity" type="text" style="border: 1px solid gray; margin-right:2%; width: 10%;" placeholder="Quantity">
                                 Price Per Unit : <input id="Purchase_Rate" type="text" style="border: 1px solid gray; width: 10%; margin-right: 2%;" placeholder="Purchase Rate">
                             </p>
                             <div>
@@ -49,10 +55,10 @@
                             </div>
                             <div>
                                 <p class="text-sm">
-                                    Discount(%) : <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 1.5%; width: 10%;" placeholder="Discount">
-                                    IGST(%) : <input id="IGST" name="IGST" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 1.5%; width: 10%;" placeholder="IGST">
-                                    CGST(%) : <input id="CGST" name="CGST" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 1.5%; width: 10%;" placeholder="CGST">
-                                    SGST(%) : <input id="SGST" name="SGST" type="text" style="border: 1px solid gray; margin-top: 10px; margin-right: 4%; width: 10%;" placeholder="SGST">
+                                    Discount(%) : <input id="Discount" type="text" style="border: 1px solid gray; margin-top: 5px; margin-right: 1.5%; width: 15%;" placeholder="Discount">
+                                    IGST(%) : <input id="IGST" name="IGST" type="text" style="border: 1px solid gray; margin-top: 5px; margin-right: 1.5%; width: 10%;" placeholder="IGST">
+                                    CGST(%) : <input id="CGST" name="CGST" type="text" style="border: 1px solid gray; margin-top: 5px; margin-right: 1.5%; width: 10%;" placeholder="CGST">
+                                    SGST(%) : <input id="SGST" name="SGST" type="text" style="border: 1px solid gray; margin-top: 5px; margin-right: 1%; width: 10%;" placeholder="SGST">
                                     <button class="btn btn-sm btn-secondary" id="Insert">Insert</button>
                                 </p>
                             </div>

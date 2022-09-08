@@ -60,7 +60,7 @@ namespace Admin.Controllers
             {
                 ItemQm = dr["P_Disp_Name"].ToString();
             }
-            if(ItemQm != name.P_Disp_Name)
+            if (ItemQm != name.P_Disp_Name)
             {
                 GroupInsert dblogin = new GroupInsert();
                 int userid = dblogin.AddData(name.P_Name, name.P_Disp_Name, name.P_Manufacturer, name.P_Region, name.P_Part_No, name.P_Description, name.P_Cost, name.P_MRP, name.P_SP);
@@ -71,7 +71,7 @@ namespace Admin.Controllers
                 Con.Close();
                 return Json(ItemQm);
             }
-            
+
         }
     }
 }

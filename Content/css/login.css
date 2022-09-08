@@ -1,0 +1,41 @@
+﻿@media screen and (max-width: 620px) {
+    #login-div {
+        position: absolute;
+        background-color: lightblue;
+        left: 5%;
+        top: 30%;
+        border: 1px solid #ccc;
+        padding: 80px 10px;
+        box-shadow: 0px 10px 20px rgba(198, 198, 198, 0.15);
+        border-radius: 12px;
+    }
+
+    table, tr, td {
+        border: hidden;
+    }
+
+    #logo {
+        margin-left: 15%;
+    }
+}
+
+@media screen and (max-width: 2700px) {
+    #login-div {
+        position: absolute;
+        background-color: lightblue;
+        left: 40%;
+        top: 10%;
+        border: 1px solid #ccc;
+        padding: 80px 30px;
+        box-shadow: 0px 10px 20px rgba(198, 198, 198, 0.15);
+        border-radius: 12px;
+    }
+
+    table, tr, td {
+        border: hidden;
+    }
+
+    #logo {
+        margin-left: 15%;
+    }
+}

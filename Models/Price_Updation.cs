@@ -20,12 +20,15 @@ namespace Admin.Models
                 SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
                 SqlCmd1.ExecuteNonQuery();
             }
+
+            /*
             if (P_Price_USD >= 0)
             {
                 string cmd1 = "update Product_Master set P_Price(USD) = '" + P_Price_USD + "' where P_Part_No = '" + Part_No + "'";
                 SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
                 SqlCmd1.ExecuteNonQuery();
             }
+            */
             if (P_MRP > 0)
             {
                 string cmd1 = "update Product_Master set P_MRP = '" + P_MRP + "' where P_Part_No = '" + Part_No + "'";

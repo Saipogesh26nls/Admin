@@ -368,7 +368,7 @@ namespace Admin.Controllers
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd = "Delete from Users where user_id = "+name.Id+"";
+            string cmd = "Delete from Users where user_id = " + name.Id + "";
             SqlCommand SqlCmd = new SqlCommand(cmd, Con);
             SqlCmd.ExecuteNonQuery();
             Con.Close();
@@ -388,6 +388,6 @@ namespace Admin.Controllers
             }
             return new SelectList(list, "Value", "Text");
         }
-        
+
     }
 }

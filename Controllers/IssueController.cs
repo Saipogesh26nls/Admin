@@ -134,7 +134,7 @@ namespace Admin.Controllers
             _con.Close();
             Stock_Issue_Insert dblogin = new Stock_Issue_Insert();
             dblogin.StockIssue_add(data);
-            return Json(data);        
+            return Json(data);
         }
         [HttpGet]
         public ActionResult IndentList() // To show full Indent list view
@@ -219,7 +219,7 @@ namespace Admin.Controllers
                     vno = (int)dr2["GI_VoucherNo"];
                 }
                 dr2.Close();
-                if(vno > 0)
+                if (vno > 0)
                 {
                     Model.Voucher_No = vno;
                 }

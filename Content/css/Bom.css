@@ -1,0 +1,62 @@
+﻿@media screen and (min-width: 750px) {
+    body {
+        background-color: Silver;
+        font-size: 12px;
+    }
+
+    #list:hover {
+        background-color: aliceblue;
+    }
+
+    #add_pd {
+        width: 500px;
+    }
+
+    #add_submit {
+        width: 30%;
+        color: #ffd800;
+    }
+    /*BOM_EDIT_DELETE*/
+
+    #list:hover {
+        background-color: aliceblue;
+    }
+
+
+    .highlight {
+        background-color: yellow;
+    }
+
+    /* BOM_ADD_DATA*/
+    table.scroll {
+        border-spacing: 0;
+        border: 2px solid black;
+        width: auto;
+    }
+
+        table.scroll tbody,
+        table.scroll thead {
+            display: block;
+        }
+
+    thead tr th {
+        height: 20px;
+        line-height: 20px;
+    }
+
+    table.scroll tbody {
+        height: 200px;
+        overflow-y: auto;
+        overflow-x: auto;
+    }
+
+    tbody {
+        border-top: 2px solid black;
+    }
+
+        tbody td, thead th {
+            border-right: 1px solid black;
+        }
+
+   
+}

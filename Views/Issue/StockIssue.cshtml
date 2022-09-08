@@ -18,45 +18,52 @@
         #add_submit {
             width: 30%;
         }
-    </style>
+
+        p {
+            font-size: 10px;
+        }
+</style>
 </head>
 <body onload="onload()">
     <div>
         <h5 style="text-align: center; font-weight: bold;"><u>STOCK INDENT</u></h5>
         <div style="margin-top:15px;">
             <p class="text-sm">
-                &nbsp &nbsp Indent No:@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:13%;", @class = " uppercase" } })   &nbsp &nbsp &nbsp &nbsp   Indent Date :  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:8%;margin-left:1%;" })
-                &nbsp &nbsp &nbsp &nbsp Reason: &nbsp &nbsp @Html.DropDownListFor(model => model.GI_Tag, ViewBag.GI as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })   &nbsp &nbsp &nbsp &nbsp  Reason for Process :  &nbsp &nbsp @Html.DropDownListFor(model => model.Process_Tag, ViewBag.Process as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
-                &nbsp &nbsp &nbsp &nbsp Project : &nbsp &nbsp @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })  &nbsp &nbsp &nbsp &nbsp Requested By : &nbsp &nbsp  @Html.DropDownListFor(model => model.Employee, ViewBag.Employee as SelectList)
+                Indent No  &nbsp;:  &nbsp;@Html.EditorFor(model => model.Ref_No, new { htmlAttributes = new { required = "required", style = "margin-left:1%;width:13%;", @class = " uppercase" } })
+                &nbsp;  Indent Date  &nbsp;: &nbsp;  @Html.TextBoxFor(x => x.Ref_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:15%;margin-left:1%;" })
+                &nbsp; Reason  &nbsp;: &nbsp; &nbsp; @Html.DropDownListFor(model => model.GI_Tag, ViewBag.GI as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
             </p>
             <p class="text-sm">
-                &nbsp &nbsp Note : &nbsp &nbsp @Html.TextAreaFor(model => model.Note, new { @style = "color:black; width:32%; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })  &nbsp &nbsp &nbsp &nbsp Part No : &nbsp &nbsp @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:1%"></i>  &nbsp &nbsp &nbsp &nbsp &nbsp Quantity : &nbsp &nbsp <input id="Quantity" type="number" style="border: 1px solid gray; margin-right: 10.75%;" placeholder="Quantity"> <button class="btn btn-sm btn-secondary" id="Add" style="width:75px;">Add</button>
+                Reason for Process  &nbsp;:  &nbsp; &nbsp; @Html.DropDownListFor(model => model.Process_Tag, ViewBag.Process as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })
+                &nbsp; &nbsp; &nbsp; &nbsp; Project : &nbsp; &nbsp; @Html.DropDownListFor(model => model.Project, ViewBag.Project as SelectList, new { htmlAttributes = new { @style = "width:15%;margin-left:10%;" } })  &nbsp; &nbsp; &nbsp; &nbsp; Requested By : &nbsp; &nbsp;  @Html.DropDownListFor(model => model.Employee, ViewBag.Employee as SelectList)
+                &nbsp; &nbsp; Note  &nbsp;: &nbsp; &nbsp; @Html.TextAreaFor(model => model.Note, new { @style = "color:black; width:32%; height:30px;", @placeholder = "Enter your text here", @class = " uppercase" })
+            </p>
+
+            <p class="text-sm">
+                Part No  &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.Part_No, new { htmlAttributes = new { @style = "width:25%;margin-right:1%;", @class = " uppercase" } })
+                <i class="fa fa-search" id="myBtn" style="margin-right:1%"></i>
+                <i class="fa fa-plus" id="addproduct" style="margin-right:1%"></i>
+                &nbsp; Quantity : &nbsp; &nbsp; <input id="Quantity" type="number" style="border: 1px solid gray; margin-right: 10.75%;" placeholder="Quantity"> <button class="btn btn-sm btn-secondary" id="Add" style="width:75px;">Add</button>
             </p>
             <p id="value" style="margin-left:2%;"></p>
         </div>
-        <div id="myModal" class="modal">
-            <div class="modal-content">
+        <div id="myModal" class="modal" >
+            <div class="modal-content" style="width:100%; text-align:center;">
                 <i class="close" id="close">&times;</i>
-                <p class="text-sm" style="margin-top:10px;text-align:center;"> Package : @Html.EditorFor(model => model.Package_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Value : @Html.EditorFor(model => model.Value_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Part No : @Html.EditorFor(model => model.Partno_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } }) Description : @Html.EditorFor(model => model.Descp_letter, new { htmlAttributes = new { @style = "width:15%;margin-right:1%;", @class = " uppercase" } })</p>
-                <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 650px;">
+                <p class="text-sm" style="margin-top:10px; text-align:left;">
+                Package : @Html.EditorFor(model => model.Package_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } })
+                Value : @Html.EditorFor(model => model.Value_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } }) 
+                Part No : @Html.EditorFor(model => model.Partno_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } })
+                Description : @Html.EditorFor(model => model.Descp_letter, new { htmlAttributes = new { @style = "width:12%;margin-right:1%;", @class = " uppercase" } })</p>
+                <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 550px;">
                     <table class="table text-sm" id="pm_list">
                         <tbody>
                             <tr>
-                                <th>
-                                    Product Code
-                                </th>
-                                <th>
-                                    Package
-                                </th>
-                                <th>
-                                    Value
-                                </th>
-                                <th>
-                                    Part No
-                                </th>
-                                <th>
-                                    Description
-                                </th>
+                                <th>Product Code</th>
+                                <th>Package</th>
+                                <th>Value</th>
+                                <th>Part No</th>
+                                <th>Description</th>
                                 <th></th>
                             </tr>
                         </tbody>
@@ -75,16 +82,16 @@
             <div class="modal-content" id="add_pd">
                 <i class="close" id="close1">&times;</i>
                 <div style="margin-left:60px;">
-                    <p>Product Name &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Name, new { htmlAttributes = new { required = "required", @class = " uppercase" } })</p>
-                    <p>Group &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp:  &nbsp &nbsp @Html.DropDownListFor(model => model.Add_Group, ViewBag.ProductList as SelectList, new { htmlAttributes = new { @style = "width:10%;" } })</p>
-                    <p>Manufacturer  &nbsp &nbsp:  &nbsp &nbsp @Html.DropDownListFor(model => model.Add_Manufacturer, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:10%;" } })</p>
-                    <p>Package  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Package, new { htmlAttributes = new { @class = " uppercase" } })</p>
-                    <p>Value  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_Value, new { htmlAttributes = new { @class = " uppercase" } })</p>
-                    <p>Part No  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_PartNo, new { htmlAttributes = new { @class = " uppercase" } })</p>
-                    <p>Description &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.TextAreaFor(model => model.Add_Description, new { @style = "color:black; width:200px; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })</p>
-                    <p>Cost &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_Cost)</p>
-                    <p>MRP &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : &nbsp &nbsp @Html.EditorFor(model => model.Add_MRP)</p>
-                    <p>Sell Price &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp: &nbsp &nbsp @Html.EditorFor(model => model.Add_SellPrice)</p>
+                    <p>Product Name &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.Add_Name, new { htmlAttributes = new { required = "required", @class = " uppercase" } })</p>
+                    <p>Group &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;:  &nbsp; &nbsp; @Html.DropDownListFor(model => model.Add_Group, ViewBag.ProductList as SelectList, new { htmlAttributes = new { @style = "width:10%;" } })</p>
+                    <p>Manufacturer  &nbsp; &nbsp;:  &nbsp; &nbsp; @Html.DropDownListFor(model => model.Add_Manufacturer, ViewBag.MfdList as SelectList, new { htmlAttributes = new { @style = "width:10%;" } })</p>
+                    <p>Package  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.Add_Package, new { htmlAttributes = new { @class = " uppercase" } })</p>
+                    <p>Value  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.Add_Value, new { htmlAttributes = new { @class = " uppercase" } })</p>
+                    <p>Part No  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.Add_PartNo, new { htmlAttributes = new { @class = " uppercase" } })</p>
+                    <p>Description &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.TextAreaFor(model => model.Add_Description, new { @style = "color:black; width:200px; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })</p>
+                    <p>Cost &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.Add_Cost)</p>
+                    <p>MRP &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; &nbsp; @Html.EditorFor(model => model.Add_MRP)</p>
+                    <p>Sell Price &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; &nbsp; @Html.EditorFor(model => model.Add_SellPrice)</p>
                     <p id="message"></p>
                     <button class="btn btn-sm btn-secondary" style="width:75px;margin-left:32.5%;" id="add_Submit" onclick="Add_Prod()">Submit</button>
                 </div>
@@ -112,7 +119,7 @@
             </table>
         </div>
         <br />
-        <button class="btn btn-sm btn-secondary" id="Submit" style="width:75px;margin-left:20px">Submit</button>@* &nbsp &nbsp &nbsp &nbsp <a href="@Url.Action("IndentList", "Issue")"><button class="btn btn-sm btn-secondary" style="width:100px;margin-left:20px">Indent List</button></a>*@
+        <button class="btn btn-sm btn-secondary" id="Submit" style="width:75px;margin-left:20px">Submit</button>@* &nbsp; &nbsp; &nbsp; &nbsp; <a href="@Url.Action("IndentList", "Issue")"><button class="btn btn-sm btn-secondary" style="width:100px;margin-left:20px">Indent List</button></a>*@
     </div>
 </body>
 </html>

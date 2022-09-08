@@ -1,0 +1,12 @@
+IDAutomation.com PCL Printer Test File
+
+(70X
+
+*1234ABCD*
+
+(3@
+
+PCL Printer Test Finished
+Read pclinfo.html for instructions
+
+&l0H

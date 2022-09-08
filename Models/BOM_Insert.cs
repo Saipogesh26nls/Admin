@@ -12,6 +12,8 @@ namespace Admin.Models
 {
     public class BOM_Insert
     {
+        public int BOM_No { get; private set; }
+
         public string P_Description(string cSP_Part_No)
         {
             List<BOMFields> ItemQm = new List<BOMFields>();
@@ -79,7 +81,6 @@ namespace Admin.Models
             SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
             SqlDataReader dr = SqlCmd2.ExecuteReader();
             dr.Read();
-            int BOM_No = dr.GetInt32(0);
             Con.Close();
 
             SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);

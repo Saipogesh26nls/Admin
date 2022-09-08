@@ -1,0 +1,38 @@
+﻿body {
+    background-color: aliceblue;
+}
+
+@media screen and (max-width: 620px) {
+    .form-horizontal {
+        border: 1px solid none;
+        box-sizing: border-box;
+        /*box-shadow: 10px 20px 20px rgba(194, 183, 182);*/
+        box-shadow: 0px 10px 20px rgba(198, 198, 198, 1.15);
+        border-radius: 12px;
+        padding-left: 00px;
+        width: 50%;
+        margin: 0% 20% 0% 25%;
+    }
+
+    h5 {
+        text-align: center;
+        font-weight: bold;
+    }
+}
+
+@media screen and (max-width: 2700px) {
+    .form-horizontal {
+        border: 1px solid none;
+        box-sizing: border-box;
+        box-shadow: 0px 10px 20px rgba(198, 198, 198, 1.15);
+        border-radius: 12px;
+        padding-left: 100px;
+        width: 50%;
+        margin: 0% 20% 0% 25%;
+    }
+
+    h5 {
+        text-align: center;
+        font-weight: bold;
+    }
+}

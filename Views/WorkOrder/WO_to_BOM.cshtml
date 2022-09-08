@@ -30,21 +30,17 @@
 <body onload="addStock();">
     <h5 style="text-align: center; font-weight: bold;"><u>PURCHASE REQUIREMENT PLANNING</u></h5>
     <div style="margin-top: 15px; text-align: center;">
-        <p class="text-sm">
-            Work Order No &nbsp; : &nbsp; @Html.EditorFor(m => m.WO_No, new { htmlAttributes = new { style = "width:11%;", @readonly = "readonly" } })
-            &nbsp; &nbsp; &nbsp; &nbsp; Work Order Date &nbsp; : &nbsp; @Html.TextBoxFor(x => x.WO_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:8%;" })
-            &nbsp; &nbsp; &nbsp; &nbsp; Product &nbsp; : &nbsp; @Html.DisplayFor(m => m.Product)
-            &nbsp; &nbsp; &nbsp; &nbsp; BOM_No &nbsp; : &nbsp; @Html.EditorFor(m => m.BOM_No, new { htmlAttributes = new { style = "width:11%;", @readonly = "readonly" } })
-        </p>
-    </div>
-    <div style="margin-top: 25px; text-align: center;">
-        <p class="text-sm">
-            Process &nbsp; : &nbsp; @Html.DropDownListFor(m => m.Process, ViewBag.Process as SelectList)
-            &nbsp; &nbsp; &nbsp; &nbsp;Manufacturer &nbsp; : &nbsp; @Html.DropDownListFor(m => m.Mfr_option, ViewBag.MfrOpt as SelectList, new { @onchange = "DD_Change(this.value);", @value = "00134" })
-            &nbsp; &nbsp; @Html.DisplayFor(m => m.Mfr)
+        <p class="text">
+            Work Order No : @Html.EditorFor(m => m.WO_No, new { htmlAttributes = new { style = "width:11%;", @readonly = "readonly" } })
+            &nbsp; Work Order Date : @Html.TextBoxFor(x => x.WO_Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width:8%;" })
+            &nbsp; Product : &nbsp; @Html.DisplayFor(m => m.Product)
+            &nbsp; BOM_No : @Html.EditorFor(m => m.BOM_No, new { htmlAttributes = new { style = "width:11%;", @readonly = "readonly" } })
+            Process : &nbsp; @Html.DropDownListFor(m => m.Process, ViewBag.Process as SelectList)
+            &nbsp;Manufacturer &nbsp; : &nbsp; @Html.DropDownListFor(m => m.Mfr_option, ViewBag.MfrOpt as SelectList, new { @onchange = "DD_Change(this.value);", @value = "00134" })
+            &nbsp; @Html.DisplayFor(m => m.Mfr)
             &nbsp; &nbsp; &nbsp; &nbsp; Quantity : &nbsp; @Html.EditorFor(m => m.Quantity, new { htmlAttributes = new { @readonly = "readonly" } })
             @*&nbsp; &nbsp; &nbsp; &nbsp; Note &nbsp; : &nbsp; @Html.TextAreaFor(m => m.Note, new { @style = "color:black; width:200px; height:50px;", @placeholder = "Enter your text here", @class = " uppercase" })
-                Part No : &nbsp; @Html.EditorFor(model => model.PartNo, new { htmlAttributes = new { @style = "width:14%;margin-right:1%;", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:8%"></i>
+                Part No : &nbsp; @Html.EditorFor(model => model.PartNxo, new { htmlAttributes = new { @style = "width:14%;margin-right:1%;", @class = " uppercase" } })<i class="fa fa-search" id="myBtn" style="margin-right:1%"></i> <i class="fa fa-plus" id="addproduct" style="margin-right:8%"></i>
                 <button class="btn btn-sm btn-secondary" id="Insert">Insert</button>*@
         </p>
         <p id="value" style="margin-left:2%;font-size:13px;"></p>
@@ -54,31 +50,17 @@
         <div class="modal-content">
             <button class="btn btn-sm btn-secondary" style="width:75px;" id="myBtn">Close</button>
             <br />
-            <div style="overflow-y: auto; border-bottom: 1px solid #cacccb; height: 400px;">
+            <div style=" overflow-y: auto; border-bottom: 1px solid #cacccb; height: 400px;">
                 <table class="table text-sm" id="pm_list">
                     <tbody>
                         <tr>
-                            <th>
-                                Part No
-                            </th>
-                            <th>
-                                Supplier/Mfr
-                            </th>
-                            <th>
-                                PO No
-                            </th>
-                            <th>
-                                PO Date
-                            </th>
-                            <th>
-                                PV No
-                            </th>
-                            <th>
-                                PV Date
-                            </th>
-                            <th>
-                                LeadTime (in days)
-                            </th>
+                            <th>Part No</th>
+                            <th>Supplier/Mfr</th>
+                            <th>PO No</th>
+                            <th>PO Date</th>    
+                            <th>PV No</th>
+                            <th>PV Date</th>
+                            <th>LeadTime (in days)</th>
                         </tr>
                     </tbody>
                 </table>

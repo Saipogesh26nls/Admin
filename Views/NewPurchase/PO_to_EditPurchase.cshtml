@@ -102,24 +102,12 @@
                                         <table class="table text-sm" id="pm_list">
                                             <tbody>
                                                 <tr>
-                                                    <th>
-                                                        Product Code
-                                                    </th>
-                                                    <th>
-                                                        Package
-                                                    </th>
-                                                    <th>
-                                                        Value
-                                                    </th>
-                                                    <th>
-                                                        Part No
-                                                    </th>
-                                                    <th>
-                                                        Description
-                                                    </th>
-                                                    <th>
-                                                        Product Cost
-                                                    </th>
+                                                    <th>Product Code</th>
+                                                    <th>Package</th>
+                                                    <th>Value</th>
+                                                    <th>Part No</th>
+                                                    <th>Description</th>
+                                                    <th>Product Cost</th>
                                                     <th></th>
                                                 </tr>
                                             </tbody>
@@ -240,24 +228,13 @@
                                 Total Quantity : <input id="final_Quantity" style="font-weight: bold; width: 100px; border: none;" />
                             </div>
                             <div class="float-right" style="font-weight:bold">
-                                <div>
-                                    Sub-Total &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; : &nbsp; <input readonly id="final_SubTotal" value="0.00" style="width: 100px; border: none; font-weight: bold;" />
+                                <div>Sub-Total &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; : &nbsp; <input readonly id="final_SubTotal" value="0.00" style="width: 100px; border: none; font-weight: bold;" />
                                 </div>
-                                <div>
-                                    Discount(%)&nbsp; @Html.EditorFor(model => model.Final_Discount, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_discount" value="0.00" style="width: 100px; border: none; font-weight: bold" />
-                                </div>
-                                <div>
-                                    IGST(%) &nbsp; &nbsp; &nbsp; &nbsp; @Html.EditorFor(model => model.Total_IGST, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_igst" value="0.00" name="total_igst" style="width: 100px; border: none; font-weight: bold " />
-                                </div>
-                                <div>
-                                    CGST(%) &nbsp; &nbsp; &nbsp;&nbsp; @Html.EditorFor(model => model.Total_CGST, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_cgst" value="0.00" name="total_cgst" style="width: 100px; border: none; font-weight: bold " />
-                                </div>
-                                <div>
-                                    SGST(%) &nbsp; &nbsp; &nbsp;&nbsp; @Html.EditorFor(model => model.Total_SGST, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_sgst" value="0.00" name="total_sgst" style="width: 100px; border: none; font-weight: bold " />
-                                </div>
-                                <div>
-                                    Total &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; : &nbsp; <input readonly id="Final_Total" value="0.00" style="width: 100px; border: none; font-weight: bold" />
-                                </div>
+                                <div>Discount(%)&nbsp; @Html.EditorFor(model => model.Final_Discount, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_discount" value="0.00" style="width: 100px; border: none; font-weight: bold" /></div>
+                                <div>IGST(%) &nbsp; &nbsp; &nbsp; &nbsp; @Html.EditorFor(model => model.Total_IGST, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_igst" value="0.00" name="total_igst" style="width: 100px; border: none; font-weight: bold " /></div>
+                                <div>CGST(%) &nbsp; &nbsp; &nbsp;&nbsp; @Html.EditorFor(model => model.Total_CGST, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_cgst" value="0.00" name="total_cgst" style="width: 100px; border: none; font-weight: bold " /></div>
+                                <div>SGST(%) &nbsp; &nbsp; &nbsp;&nbsp; @Html.EditorFor(model => model.Total_SGST, new { htmlAttributes = new { style = "width:40px; border: none;border-bottom:groove" } }) &nbsp; : &nbsp; <input readonly id="total_sgst" value="0.00" name="total_sgst" style="width: 100px; border: none; font-weight: bold " /></div>
+                                <div>Total &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; : &nbsp; <input readonly id="Final_Total" value="0.00" style="width: 100px; border: none; font-weight: bold" /></div>
                             </div>
                             <p id="del"></p>
                         </div>

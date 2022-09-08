@@ -1,0 +1,92 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>How To Print PCL Fonts to a PCL Printer</title>
+</head>
+
+<body>
+
+      <TABLE bgColor=#CC0000 width="100%" cellpadding="0" cellspacing="0">
+        <TBODY>
+        <TR>
+          <TD bgcolor="#FFFFFF">
+            <p align="center"><i><b><font size="6">ID<font color="#CC0000">Automation.com,
+            Inc.</font></font></b></i>
+          </TD></TR>
+        <TR>
+          <TD>
+            <p align="center"><em><b><font face="Arial" color="#FFFFFF" size="3">Your
+            Source for Quality Symbology</font></b></em>
+          </TD></TR>
+        </TBODY></TABLE>
+
+      <table bgColor="#CC0000" width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td bgcolor="#FFFFFF">
+            <p align="center"><b><font size="3">[<a href="http://www.idautomation.com/" target="_top" style="color: #003399">IDAutomation.com
+            Home</a>]</font></b></td>
+        </tr>
+      </table>
+
+<h1><font color="#CC0000"><b>PCL Font Support Document</b></font><br>
+<font size="4">How To Print PCL Fonts to a PCL Printer</font></h1>
+<p><font face="Times">This document describes how to print PCL (HP's Printer
+Command Language) fonts to PCL compatible printer. PCL fonts can be used on any
+operating system that can send files to a PCL compatible printer in binary mode.
+In MS DOS this is performed by using the COPY command with the /B switch. </font></p>
+      <h1><font size="4">Font Naming</font></h1>
+      <p>The syntax for naming the PCL fonts is as follows: <b>Symbology +
+      height + point size&nbsp; + .SFP&quot;</b>. Fonts with the text below 
+      start with H in the font name. All of these PCL fonts are 300 DPI.</p>
+<h3><font color="#CC0000"><b>PCL FONT PRINTING EXAMPLE</b></font></h3>
+<p>NOTE: The example provided below is only one method of printing with PCL 
+fonts. We provide this example for you to test the PCL fonts and ensure they are 
+compatible with your printer. Your application will need to perform similar 
+commands to copy the escape sequences and fonts to the printer as a single chunk 
+of data. We do not 
+perform consulting services to help you with the implementation in your application because it 
+is beyond the scope of our
+<a href="http://www.idautomation.com/statementofsupport.html">support policy</a>. </p>
+<p>In the example below, the <font face="Times">Esc represents the escape
+character for your software. In DOS Edit, Esc is represented by holding down the
+CTRL key and pressing the letter P, Releasing both keys and then press the ESC
+key.&nbsp;</font></p>
+<p>To download a font to your printer and assign it an ID number of 70 you would
+send the following commands to the printer:</p>
+<ol>
+  <li><font color="#336600">&lt;Esc&gt;*c70D</font>&nbsp; tells the printer it will receive a soft font and to assign it an id of 
+  70 (provided in file <font color="#336600">c70D.txt</font>)</li>
+  <li>Copy the font file to the printer</li>
+  <li><font color="#336600">&lt;Esc&gt;*c5F</font>&nbsp;&nbsp; tells the printer to make this a permanent 
+  font (provided in file <font color="#336600">c5F.txt</font>)</li>
+  <li><font color="#336600">&lt;Esc&gt;(70X</font>&nbsp; selects the font 
+  (provided in file <font color="#336600">data.txt</font>)</li>
+</ol>
+<p>We have created test files for you to perform PCL font tests from MS DOS or a 
+Windows command prompt. To perform the commands listed below, simply run the 
+TEST.BAT file provided in the ZIP file with our PCL fonts. The TEST.BAT file assumes you have a PCL printer attached to 
+the LPT1 port of a PC. View the files c70D.txt, c5F.txt and data.txt with a
+standard text editor to view the commands in the files.</p>
+<p>You may type the copy commands manually from the prompt to select a different 
+font, for example:</p>
+<pre><font color="#336600">copy /B c70D.txt +NewFont +c5F.txt +data.txt LPT1</font></pre>
+<p>The files may also be copied to a printer on a network, for example:</p>
+<pre><font color="#336600">copy /B c70D.txt +NewFont +c5F.txt +data.txt \\flt1\mfc8500</font></pre>
+<p>This is an example of what we typed at the command line to send the micr3.sfp 
+font to a network printer:<br>
+<img border="0" src="PCL_Printer_Test_Example.gif" width="644" height="167"></p>
+<p><b>More Information:</b></p>
+<p><font face="Times">PCL defines a standard set of commands enabling programs
+to communicate with PCL or PCL compatible printers. If you need further
+information about PCL commands, you may want to obtain the Technical Reference
+Manual set, part number 5021-0377. Order the manual set from HP's Support
+Materials Organization.</font></p>
+<p><i>Copyright © 1999-2005 IDAutomation.com, Inc. All rights reserved. All 
+trademarks mentioned are the property of their respective owners.&nbsp;</i></p>
+
+</body>
+
+</html>

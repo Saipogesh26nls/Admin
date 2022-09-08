@@ -13,7 +13,7 @@ namespace Admin.Controllers
     public class ProductController : Controller
     {
         [HttpGet]
-        public ActionResult ProductEntry() // Product entry View
+        public ActionResult ProductEntry() //Product entry View
         {
             if (Session["userID"] != null)
             {
@@ -68,7 +68,7 @@ namespace Admin.Controllers
             {
                 ItemQm = dr["P_Part_No"].ToString();
             }
-            if(ItemQm != name.P_Part_No)
+            if (ItemQm != name.P_Part_No)
             {
                 ProductInsert dblogin = new ProductInsert();
                 int userid = dblogin.AddData(name.P_Name, name.P_Disp_Name, name.P_Manufacturer, name.Package, name.Value, name.P_Part_No, name.P_Description, name.P_Cost, name.P_MRP, name.P_SP);
@@ -80,7 +80,7 @@ namespace Admin.Controllers
                 Con.Close();
                 return Json(ItemQm);
             }
-            
+
         }
 
         public ActionResult Initial_Screen()

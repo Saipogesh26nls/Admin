@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Reflection;
 
 namespace Admin.Models
+
 {
     public class NewPurchase_Insert
     {
@@ -223,7 +224,7 @@ namespace Admin.Models
                 vno.Add(Convert.ToInt32(dr1["Voucher_No"]));
             }
             dr1.Close();
-            if(vno.Count == 0)
+            if (vno.Count == 0)
             {
                 Con.Close();
                 return ItemQm;
@@ -247,7 +248,7 @@ namespace Admin.Models
                             project = dr["Project"].ToString(),
                             PO_No = dr["PO_No"].ToString()
                         }
-                        ) ;
+                        );
                     }
                     dr.Close();
                 }
@@ -282,7 +283,7 @@ namespace Admin.Models
             Con.Open();
             for (int k = 0; k <= data.Count - 1; k++)
             {
-                string cmd4 = "select Purchase_Qty from Purchase where Voucher_No = " + data[k].Voucher_No + " and Part_No = '" + data[k].Part_No+"'";
+                string cmd4 = "select Purchase_Qty from Purchase where Voucher_No = " + data[k].Voucher_No + " and Part_No = '" + data[k].Part_No + "'";
                 SqlCommand SqlCmd4 = new SqlCommand(cmd4, Con);
                 SqlDataReader dr2 = SqlCmd4.ExecuteReader();
                 while (dr2.Read())
@@ -462,7 +463,7 @@ namespace Admin.Models
                     sql_cmnd.Parameters.AddWithValue("@key", SqlDbType.Int).Value = key;
                 }
                 sql_cmnd.ExecuteNonQuery();
-                
+
                 if (i == data.Count() - 1)
                 {
                     break;
@@ -477,7 +478,7 @@ namespace Admin.Models
         {
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            string cmd1 = "delete from Purchase_Order where PO_No = '"+data[0].PO_No+"'";
+            string cmd1 = "delete from Purchase_Order where PO_No = '" + data[0].PO_No + "'";
             SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
             SqlCmd1.ExecuteNonQuery();
             string cmd2 = "delete from PO_A_Ledger where PO_No = '" + data[0].PO_No + "'";
@@ -712,7 +713,7 @@ namespace Admin.Models
             Con1.Close();
             return GR_V_No;
         }
-        public List<GoodsRI> Descp_Qty (string part_no)
+        public List<GoodsRI> Descp_Qty(string part_no)
         {
             List<GoodsRI> ItemQm = new List<GoodsRI>();
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
@@ -776,7 +777,7 @@ namespace Admin.Models
                 dr2.Close();
             }
             var json = JsonConvert.SerializeObject(data);
-            string js = "{"+'"'+"myrows" +'"'+ ":" + json + "}";
+            string js = "{" + '"' + "myrows" + '"' + ":" + json + "}";
             SqlCommand sql_cmnd = new SqlCommand("[dbo].[Goods_Add_json]", Con1);
             sql_cmnd.CommandType = CommandType.StoredProcedure;
             sql_cmnd.Parameters.AddWithValue("@json", js);
@@ -809,7 +810,7 @@ namespace Admin.Models
             dr2.Close();
             int GR_vtype = 1;
             int GI_vtype = 2;
-            if(GR_Vno.Count == 0)
+            if (GR_Vno.Count == 0)
             {
                 for (int i = 0; i < GI_Vno.Count; i++)
                 {
@@ -928,7 +929,7 @@ namespace Admin.Models
             List<GoodsList> ItemQm = new List<GoodsList>();
             string cmd2 = "Select P_code from Product_Master where P_Part_No = '" + Part_No + "'";
             SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con1);
-            SqlDataReader dr = SqlCmd2.ExecuteReader(); 
+            SqlDataReader dr = SqlCmd2.ExecuteReader();
             while (dr.Read())
             {
                 ItemQm.Add(new GoodsList
@@ -937,10 +938,10 @@ namespace Admin.Models
                 }
                 );
             }
-            dr.Close ();
+            dr.Close();
             string pcode = string.Join("", ItemQm.Select(m => m.P_code));
 
-            string cmd3 = "Select Purchase_Qty from I_Ledger where Voucher_Type = '"+vtype+"' and P_code = '" + pcode + "' and Goods_Voucher_No = '"+vno+"'";
+            string cmd3 = "Select Purchase_Qty from I_Ledger where Voucher_Type = '" + vtype + "' and P_code = '" + pcode + "' and Goods_Voucher_No = '" + vno + "'";
             SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con1);
             SqlDataReader dr1 = SqlCmd3.ExecuteReader();
             int qty = 0;
@@ -953,7 +954,7 @@ namespace Admin.Models
 
             if (vtype == 1)
             {
-                string cmd1 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance - '"+qty+"' where P_code = '" + pcode + "'";
+                string cmd1 = "Update Product_Master set P_Closing_Balance = P_Closing_Balance - '" + qty + "' where P_code = '" + pcode + "'";
                 string cmd4 = "delete from I_Ledger where Voucher_Type = '" + vtype + "' and P_code = '" + pcode + "' and Goods_Voucher_No = '" + vno + "'";
                 SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con1);
                 SqlCmd1.ExecuteNonQuery();
@@ -975,19 +976,19 @@ namespace Admin.Models
         {
             SqlConnection Con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con1.Open();
-            for(int j = 0; j <= data.Count-1; j++)
+            for (int j = 0; j <= data.Count - 1; j++)
             {
-                string cmd3 = "select Purchase_Qty from I_Ledger where P_code = '" + data[j].P_code + "' and Voucher_Type = '"+data[j].Index_Type+"' and Goods_Voucher_No = '"+data[j].Voucher_No+"'";
+                string cmd3 = "select Purchase_Qty from I_Ledger where P_code = '" + data[j].P_code + "' and Voucher_Type = '" + data[j].Index_Type + "' and Goods_Voucher_No = '" + data[j].Voucher_No + "'";
                 SqlCommand SqlCmd3 = new SqlCommand(cmd3, Con1);
                 SqlDataReader dr2 = SqlCmd3.ExecuteReader();
                 while (dr2.Read())
                 {
-                    data[j].I_Qty =(int) dr2["Purchase_Qty"];
+                    data[j].I_Qty = (int)dr2["Purchase_Qty"];
                 }
                 dr2.Close();
-                if(data[j].Index_Type == 1)
+                if (data[j].Index_Type == 1)
                 {
-                    string cmd2 = "update Product_Master set P_Closing_Balance = P_Closing_Balance - '"+data[j].I_Qty+"' where P_Part_No = '"+data[j].Part_No+"'";
+                    string cmd2 = "update Product_Master set P_Closing_Balance = P_Closing_Balance - '" + data[j].I_Qty + "' where P_Part_No = '" + data[j].Part_No + "'";
                     SqlCommand SqlCmd1 = new SqlCommand(cmd2, Con1);
                     SqlCmd1.ExecuteNonQuery();
                 }
@@ -998,7 +999,7 @@ namespace Admin.Models
                     SqlCmd1.ExecuteNonQuery();
                 }
             }
-            string cmd = "delete from I_Ledger where Voucher_Type = '"+data[0].Index_Type+"' and Goods_Voucher_No = '"+data[0].Voucher_No+"'";
+            string cmd = "delete from I_Ledger where Voucher_Type = '" + data[0].Index_Type + "' and Goods_Voucher_No = '" + data[0].Voucher_No + "'";
             SqlCommand Sqlcmd = new SqlCommand(cmd, Con1);
             Sqlcmd.ExecuteNonQuery();
             int i = 0;
@@ -1035,7 +1036,7 @@ namespace Admin.Models
             List<GoodsRI> ItemQm = new List<GoodsRI>();
             SqlConnection Con = new SqlConnection(ConfigurationManager.ConnectionStrings["geriahco_db"].ConnectionString);
             Con.Open();
-            if(package == null && value == null && partno != null)
+            if (package == null && value == null && partno != null)
             {
                 string cmd1 = "SELECT * FROM Product_Master WHERE P_Part_No Like '%" + partno + "%'";
                 SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
@@ -1087,7 +1088,7 @@ namespace Admin.Models
                 Con.Close();
                 return ItemQm;
             }
-            else if(package != null && value != null && partno == null && descp == null)
+            else if (package != null && value != null && partno == null && descp == null)
             {
                 string cmd1 = "SELECT * FROM Product_Master WHERE P_Package LIKE '%" + package + "%' and P_Value Like '%" + value + "%'";
                 SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
@@ -1217,9 +1218,9 @@ namespace Admin.Models
                 Con.Close();
                 return ItemQm;
             }
-            else if(value != null && partno != null && descp == null && package != null)
+            else if (value != null && partno != null && descp == null && package != null)
             {
-                string cmd1 = "SELECT * FROM Product_Master WHERE P_Package LIKE '%" + package + "%' and P_Value Like '%" + value + "%' and P_Part_No Like '%"+partno+"%'";
+                string cmd1 = "SELECT * FROM Product_Master WHERE P_Package LIKE '%" + package + "%' and P_Value Like '%" + value + "%' and P_Part_No Like '%" + partno + "%'";
                 SqlCommand SqlCmd1 = new SqlCommand(cmd1, Con);
                 SqlDataReader dr = SqlCmd1.ExecuteReader();
                 while (dr.Read())
@@ -1269,7 +1270,7 @@ namespace Admin.Models
             dr.Close();
             for (int i = 0; i < ItemQm.Count; i++)
             {
-                string cmd2 = "select * from Product_Master where P_code = '"+ItemQm[i].P_code+"'";
+                string cmd2 = "select * from Product_Master where P_code = '" + ItemQm[i].P_code + "'";
                 SqlCommand SqlCmd2 = new SqlCommand(cmd2, Con);
                 SqlDataReader dr1 = SqlCmd2.ExecuteReader();
                 while (dr1.Read())
@@ -1288,5 +1289,5 @@ namespace Admin.Models
             return ItemQm;
         }
     }
-    
+
 }
