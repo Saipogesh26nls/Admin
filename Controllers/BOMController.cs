@@ -329,6 +329,8 @@ namespace Admin.Controllers
             SqlCmd1.ExecuteNonQuery();
             Con.Close();
             return Json(data);
+
+
         } // delete BOM from DB
     }
 }

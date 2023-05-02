@@ -264,6 +264,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
+    <Compile Include="Controllers\AssertController.cs" />
     <Compile Include="Controllers\BOMController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\IssueController.cs" />
@@ -2449,6 +2450,7 @@
     <Content Include="Views\WorkOrder\WO_to_BOM.cshtml" />
     <Content Include="Views\Product\nodejs_test.cshtml" />
     <Content Include="Views\BarCode\BarCode.cshtml" />
+    <Content Include="Views\Assert\Assert.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
